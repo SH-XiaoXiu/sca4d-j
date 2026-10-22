@@ -3,6 +3,8 @@ package com.sca4d.iot.telemetry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -14,7 +16,9 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.name.Name;
+import com.sca4d.iot.api.message.DeviceAcknowledgement;
 import com.sca4d.iot.api.message.IotMessageTypes;
+import com.sca4d.iot.api.query.DeviceEvent;
 import com.sca4d.iot.api.telemetry.TelemetryBatch;
 import com.sca4d.iot.api.telemetry.TelemetrySample;
 import com.sca4d.iot.timescale.persistence.TimescaleRepository;
@@ -110,6 +114,22 @@ class TimescaleRoutingIntegrationTest {
         }
     }
 
+    @Test
+    void routesRecentReadsToHistoryWhileMainTransactionRemainsActive() {
+        primary.update("INSERT INTO routed_messages VALUES (1)");
+        history.update("INSERT INTO routed_messages VALUES (2)");
+        TimescaleDeviceHistoryStore store = context.getBean(TimescaleDeviceHistoryStore.class);
+        JdbcTemplate routed = context.getBean(JdbcTemplate.class);
+        context.getBean(TransactionTemplate.class).executeWithoutResult(status -> {
+            assertThat(store.recentEvents(List.of(1L), 100).get(1L)).extracting(DeviceEvent::eventId)
+                    .containsExactly(2L);
+            assertThat(store.recentAcknowledgements(List.of(1L), 20).get(1L))
+                    .extracting(DeviceAcknowledgement::messageId)
+                    .containsExactly(2L);
+            assertThat(routed.queryForList("SELECT id FROM routed_messages", Long.class)).containsExactly(1L);
+        });
+    }
+
     /** 返回只连接本测试容器的指定数据库的数据源。 */
     private static DataSource source(boolean history) {
         String url = history
@@ -178,7 +198,40 @@ class TimescaleRoutingIntegrationTest {
                 }
                 return null;
             }).when(repository).addTelemetry(anyLong(), any(TelemetryBatch.class));
+            doAnswer(
+                    invocation -> Map.of(
+                            1L,
+                            List.of(
+                                    new DeviceEvent(
+                                            jdbc.queryForObject("SELECT id FROM routed_messages", Long.class),
+                                            1L,
+                                            "status",
+                                            Map.of(),
+                                            Instant.EPOCH,
+                                            Instant.EPOCH))))
+                    .when(repository)
+                    .findRecentEvents(anyCollection(), anyInt());
+            doAnswer(
+                    invocation -> Map.of(
+                            1L,
+                            List.of(
+                                    new DeviceAcknowledgement(
+                                            jdbc.queryForObject("SELECT id FROM routed_messages", Long.class),
+                                            "OK",
+                                            Map.of(),
+                                            "DEVICE",
+                                            null,
+                                            Instant.EPOCH,
+                                            Instant.EPOCH))))
+                    .when(repository)
+                    .findRecentAcknowledgements(anyCollection(), anyInt());
             return repository;
+        }
+
+        /** 注册实际历史存储，验证新增只读入口也经过数据源与事务代理。 */
+        @Bean
+        TimescaleDeviceHistoryStore historyStore(TimescaleRepository repository) {
+            return new TimescaleDeviceHistoryStore(repository);
         }
 
         /** 注册实际生产 Consumer，调用方获得 Spring 代理。 */

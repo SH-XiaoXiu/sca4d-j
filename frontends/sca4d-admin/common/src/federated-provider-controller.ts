@@ -10,6 +10,8 @@ import type {
 } from './types';
 
 import { ObservableController } from './controller';
+import { SavedResourceRefreshError } from './errors';
+import { SupersededReadError } from './errors';
 import { AdminError } from './errors';
 import { freezeLocaleCatalog } from './localized-fields';
 
@@ -36,8 +38,47 @@ export class FederatedProviderController extends ObservableController<FederatedP
     });
   }
 
+  /** 创建默认停用的 Provider，并刷新列表。 */
+  async create(
+    input: CreateFederatedProviderInput,
+  ): Promise<FederatedProvider> {
+    try {
+      const result = await this.api.post<FederatedProvider>(
+        '/system/authentication/federated-providers',
+        input,
+      );
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
+      return freezeProvider(result.data);
+    } catch (error) {
+      this.failMutation(error);
+      throw error;
+    }
+  }
+
+  /** 按 Provider 当前版本删除停用且没有绑定身份的 Provider。 */
+  async delete(provider: FederatedProvider): Promise<void> {
+    try {
+      await this.api.delete(providerPath(provider.code), {
+        'If-Match': providerTag(provider),
+      });
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
+    } catch (error) {
+      this.failMutation(error);
+      throw error;
+    }
+  }
+
   /** 读取全部未删除 Provider；停用 Provider 也会返回。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const [result, locales] = await Promise.all([
@@ -46,30 +87,21 @@ export class FederatedProviderController extends ObservableController<FederatedP
         ),
         this.api.get<LocaleCatalog>('/system/locales'),
       ]);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         detail: null,
         error: null,
         localeCatalog: freezeLocaleCatalog(locales.data),
         phase: result.data.length > 0 ? 'ready' : 'empty',
-        providers: Object.freeze(result.data.map(freezeProvider)),
+        providers: Object.freeze(
+          result.data.map((item) => freezeProvider(item)),
+        ),
         settings: null,
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error);
-      throw error;
-    }
-  }
-
-  /** 读取一个 Provider 的最新展示信息。 */
-  async require(code: string): Promise<FederatedProvider> {
-    try {
-      const result = await this.api.get<FederatedProvider>(providerPath(code));
-      const detail = freezeProvider(result.data);
-      this.publish({ ...this.state, detail, error: null });
-      return detail;
-    } catch (error) {
-      this.failMutation(error);
       throw error;
     }
   }
@@ -89,23 +121,6 @@ export class FederatedProviderController extends ObservableController<FederatedP
     }
   }
 
-  /** 创建默认停用的 Provider，并刷新列表。 */
-  async create(
-    input: CreateFederatedProviderInput,
-  ): Promise<FederatedProvider> {
-    try {
-      const result = await this.api.post<FederatedProvider>(
-        '/system/authentication/federated-providers',
-        input,
-      );
-      await this.load();
-      return freezeProvider(result.data);
-    } catch (error) {
-      this.failMutation(error);
-      throw error;
-    }
-  }
-
   /** 按 Provider 当前版本替换登录页展示设置。 */
   async replace(
     provider: FederatedProvider,
@@ -118,7 +133,11 @@ export class FederatedProviderController extends ObservableController<FederatedP
         { 'If-Match': providerTag(provider) },
       );
       const updated = freezeProvider(result.data);
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       return updated;
     } catch (error) {
       this.failMutation(error);
@@ -132,13 +151,34 @@ export class FederatedProviderController extends ObservableController<FederatedP
     input: FederatedProviderSettingsInput,
   ): Promise<void> {
     try {
-      await this.api.put<void>(
+      await this.api.put<unknown>(
         `${providerPath(provider.code)}/settings`,
         input,
         { 'If-Match': providerTag(provider) },
       );
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
+      this.failMutation(error);
+      throw error;
+    }
+  }
+
+  /** 读取一个 Provider 的最新展示信息。 */
+  async require(code: string): Promise<FederatedProvider> {
+    const read = this.beginRead('detail');
+    try {
+      const result = await this.api.get<FederatedProvider>(providerPath(code));
+      const detail = freezeProvider(result.data);
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      this.publish({ ...this.state, detail, error: null });
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      return detail;
+    } catch (error) {
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
       this.failMutation(error);
       throw error;
     }
@@ -155,20 +195,11 @@ export class FederatedProviderController extends ObservableController<FederatedP
         { status },
         { 'If-Match': providerTag(provider) },
       );
-      await this.load();
-    } catch (error) {
-      this.failMutation(error);
-      throw error;
-    }
-  }
-
-  /** 按 Provider 当前版本删除停用且没有绑定身份的 Provider。 */
-  async delete(provider: FederatedProvider): Promise<void> {
-    try {
-      await this.api.delete(providerPath(provider.code), {
-        'If-Match': providerTag(provider),
-      });
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failMutation(error);
       throw error;

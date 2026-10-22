@@ -70,15 +70,15 @@ public class IotDeviceRuntimeView {
     /** 返回一条当前 Device 连接信息。 */
     public static class Connection {
 
+        private final @NotNull Instant connectedAt;
+
+        private final @NotNull String accessMethodCode;
+
         private final @NotNull String connectionId;
 
         private final @NotNull String protocol;
 
         private final @Nullable String sessionId;
-
-        private final @NotNull String accessMethodCode;
-
-        private final @NotNull Instant connectedAt;
 
         /** 从协议无关的连接信息创建 HTTP 视图。 */
         private Connection(@NotNull DeviceConnection connection) {
@@ -118,15 +118,15 @@ public class IotDeviceRuntimeView {
     /** 返回一个 reported 字段组当前快照。 */
     public static class Reported {
 
-        private final @NotNull String groupCode;
-
-        private final @NotNull @Unmodifiable Map<String, Object> values;
-
-        private final long version;
-
         private final @NotNull Instant observedAt;
 
         private final @NotNull Instant receivedAt;
+
+        private final @NotNull @Unmodifiable Map<String, Object> values;
+
+        private final @NotNull String groupCode;
+
+        private final long version;
 
         /** 从模块 reported 快照创建 HTTP 视图。 */
         private Reported(@NotNull ReportedStateSnapshot snapshot) {
@@ -166,13 +166,13 @@ public class IotDeviceRuntimeView {
     /** 返回一个 desired 属性当前快照。 */
     public static class Desired {
 
-        private final @NotNull String propertyCode;
-
-        private final long desiredSequence;
+        private final @Nullable Instant convergedAt;
 
         private final @NotNull Object value;
 
-        private final @Nullable Instant convergedAt;
+        private final @NotNull String propertyCode;
+
+        private final long desiredSequence;
 
         /** 从模块 desired 快照创建 HTTP 视图。 */
         private Desired(@NotNull DesiredStateSnapshot snapshot) {

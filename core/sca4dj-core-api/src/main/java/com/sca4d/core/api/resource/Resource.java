@@ -5,6 +5,8 @@ import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * 表示权限判断所保护的业务资源（Resource）。
  *
@@ -30,4 +32,56 @@ public interface Resource {
      */
     @NotNull
     String id();
+
+    /** 保存 Resource 的稳定类型和标识；它是 Resource 的最小实现。 */
+    final class Ref implements Resource {
+        private final @NotNull String id;
+
+        private final @NotNull TreeCode type;
+
+        public Ref(@NotNull String type, @NotNull String id) {
+            this(TreeCode.of(type), id);
+        }
+
+        public Ref(@NotNull TreeCode type, @NotNull String id) {
+            this.type = Objects.requireNonNull(type, "资源类型不能为空");
+            this.id = Objects.requireNonNull(id, "资源标识不能为空");
+            if (id.isBlank()) {
+                throw new IllegalArgumentException("资源标识不能为空白");
+            }
+        }
+
+        public static @NotNull Ref of(@NotNull Resource resource) {
+            Resource checked = Objects.requireNonNull(resource, "资源不能为空");
+            return new Ref(checked.type(), checked.id());
+        }
+
+        @Override
+        public @NotNull TreeCode type() {
+            return type;
+        }
+
+        @Override
+        public @NotNull String id() {
+            return id;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            return this == other
+                    || other instanceof Ref reference
+                            && type.equals(reference.type)
+                            && id.equals(reference.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(type, id);
+        }
+
+        @Override
+        public @NotNull String toString() {
+            return type + ":" + id;
+        }
+    }
 }

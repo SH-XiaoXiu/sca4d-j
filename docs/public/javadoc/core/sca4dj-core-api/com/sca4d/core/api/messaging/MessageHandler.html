@@ -111,8 +111,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#handle(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handle</a><wbr>(@NotNull <a href="IncomingMessage.html" title="class in com.sca4d.core.api.messaging">IncomingMessage</a>&lt;<a href="MessageHandler.html" title="type parameter in MessageHandler">M</a>&gt;&nbsp;message)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#handlingPolicy()" class="member-name-link">handlingPolicy</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#retryRule()" class="member-name-link">retryRule</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
@@ -151,10 +151,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="handlingPolicy()">
-<h3>handlingPolicy</h3>
+<section class="detail" id="retryRule()">
+<h3>retryRule</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></span>&nbsp;<span class="element-name">handlingPolicy</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></span>&nbsp;<span class="element-name">retryRule</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前 Handler 技术失败时的再次处理策略</dd>

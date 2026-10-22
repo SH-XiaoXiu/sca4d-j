@@ -11,9 +11,9 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotProductI18nView {
 
-    private final long productId;
-
     private final @NotNull LocalizedFields i18n;
+
+    private final long productId;
 
     /** 从 Product 创建完整多语言字段视图。 */
     private IotProductI18nView(@NotNull Product product) {

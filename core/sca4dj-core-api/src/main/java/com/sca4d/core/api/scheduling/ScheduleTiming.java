@@ -1,5 +1,5 @@
 package com.sca4d.core.api.scheduling;
 
-/** 标明 JobSchedule 或 ClusterTaskSchedule 使用 Cron 或固定间隔计算原定触发时间。 */
-public interface ScheduleTiming {
+/** JobSchedule 只接受 Cron 或固定间隔两种时间定义。 */
+public sealed interface ScheduleTiming permits CronSchedule, IntervalSchedule {
 }

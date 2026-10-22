@@ -10,21 +10,21 @@ import java.util.Objects;
 /** 保存管理端展示一个代码字典或动态字典所需的数据、选项和乐观锁版本。 */
 public class ManagedDictionary {
 
+    private final List<ManagedDictionaryOption> options;
+
+    private final Long version;
+
     private final String key;
 
     private final String label;
 
     private final boolean codeDefined;
 
-    private final boolean optionsEditable;
-
     private final boolean enabled;
 
+    private final boolean optionsEditable;
+
     private final int sortOrder;
-
-    private final Long version;
-
-    private final List<ManagedDictionaryOption> options;
 
     /**
      * 创建字典管理结果。

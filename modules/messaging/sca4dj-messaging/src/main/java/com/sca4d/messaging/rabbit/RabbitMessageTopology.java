@@ -22,20 +22,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-/** 校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列、retry queue 和 DLQ。 */
+/** 校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列和 DLQ。 */
 @ApiStatus.Internal
 public class RabbitMessageTopology {
 
     private final @NotNull Key exchangeName;
 
-    private final @NotNull Key retryExchangeName;
-
     private final @NotNull Key deadLetterExchangeName;
 
-    /** 使用固定业务消息、重试和死信 exchange 名称建立拓扑定义。 */
+    /** 使用固定业务消息和死信 exchange 名称建立拓扑定义。 */
     public RabbitMessageTopology() {
         this.exchangeName = Key.of(TreeCode.ofColon("MESSAGING:MESSAGE"));
-        this.retryExchangeName = Key.of(TreeCode.ofColon("MESSAGING:RETRY"));
         this.deadLetterExchangeName = Key.of(TreeCode.ofColon("MESSAGING:DEAD_LETTER"));
     }
 
@@ -44,31 +41,22 @@ public class RabbitMessageTopology {
         return exchangeName;
     }
 
-    /** 在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。 */
-    /** @param messageCode 业务消息编码 @return 业务消息路由键 */
+    /**
+     * 在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。
+     *
+     * @param messageCode 业务消息编码
+     * @return 业务消息路由键
+     */
     public @NotNull Key routingKey(@NotNull TreeCode messageCode) {
         return Key.of(TreeCode.ofColon("MESSAGING:ROUTE").append(messageCode));
     }
 
-    /** 返回 Handler 重试路由使用的隔离名称。 */
-    /** @param handlerCode Handler 编码 @return Handler 重试路由键 */
-    public @NotNull Key retryRoutingKey(@NotNull TreeCode handlerCode) {
-        return Key.of(TreeCode.ofColon("MESSAGING:RETRY_ROUTE").append(handlerCode));
-    }
-
-    @NotNull
-    Key retryExchangeName() {
-        return retryExchangeName;
-    }
-
-    @NotNull
-    Key queueName(@NotNull RabbitHandlerDescriptor handler) {
-        return Key.of(TreeCode.ofColon("MESSAGING:HANDLER").append(handler.code()));
-    }
-
-    @NotNull
-    Key retryQueueName(@NotNull RabbitHandlerDescriptor handler) {
-        return Key.of(TreeCode.ofColon("MESSAGING:HANDLER").append(handler.code()).append(TreeCode.ofSegment("RETRY")));
+    /**
+     * @param handlerCode 已注册的 Handler 编码
+     * @return 使用当前应用隔离名称的目标主队列
+     */
+    public @NotNull Key handlerQueueName(@NotNull TreeCode handlerCode) {
+        return Key.of(TreeCode.ofColon("MESSAGING:HANDLER").append(handlerCode));
     }
 
     @NotNull
@@ -78,7 +66,7 @@ public class RabbitMessageTopology {
     }
 
     /**
-     * 根据全部 Handler 声明 exchange、队列、重试队列和死信队列。
+     * 根据全部 Handler 声明 exchange、主队列和死信队列。
      *
      * @param eventHandlers 已安装的 EventHandler
      * @param messageHandlers 已安装的 MessageHandler
@@ -89,15 +77,13 @@ public class RabbitMessageTopology {
             @NotNull List<? extends @NotNull MessageHandler<?>> messageHandlers) {
         List<RabbitHandlerDescriptor> handlers = descriptors(eventHandlers, messageHandlers);
         DirectExchange exchange = new DirectExchange(exchangeName.format(COLON), true, false);
-        DirectExchange retryExchange = new DirectExchange(retryExchangeName.format(COLON), true, false);
         DirectExchange deadLetterExchange = new DirectExchange(deadLetterExchangeName.format(COLON), true, false);
         List<Declarable> result = new ArrayList<>();
         result.add(exchange);
-        result.add(retryExchange);
         result.add(deadLetterExchange);
 
         for (RabbitHandlerDescriptor handler : handlers) {
-            Key queueName = queueName(handler);
+            Key queueName = handlerQueueName(handler.code());
             Key deadLetterQueueName = deadLetterQueueName(handler);
             Queue queue = QueueBuilder.durable(queueName.format(COLON))
                     .deadLetterExchange(deadLetterExchangeName.format(COLON))
@@ -114,21 +100,6 @@ public class RabbitMessageTopology {
             result.add(deadLetterQueue);
             result.add(binding);
             result.add(deadLetterBinding);
-
-            if (handler.handlingPolicy().maximumAttempts() > 1) {
-                long retryDelay = Math.max(1L, handler.handlingPolicy().retryDelay().toMillis());
-                Key retryQueueName = retryQueueName(handler);
-                Queue retryQueue = QueueBuilder.durable(retryQueueName.format(COLON))
-                        .ttl((int) Math.min(Integer.MAX_VALUE, retryDelay))
-                        .deadLetterExchange("")
-                        .deadLetterRoutingKey(queueName.format(COLON))
-                        .build();
-                Binding retryBinding = BindingBuilder.bind(retryQueue)
-                        .to(retryExchange)
-                        .with(retryRoutingKey(handler.code()).format(COLON));
-                result.add(retryQueue);
-                result.add(retryBinding);
-            }
         }
         return new Declarables(result);
     }

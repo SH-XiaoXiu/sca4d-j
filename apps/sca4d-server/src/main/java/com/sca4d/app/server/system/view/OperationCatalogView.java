@@ -26,9 +26,9 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 与 BaseView 通过 getter 和 @Localize source 读取响应字段。
 public class OperationCatalogView {
 
-    private final @NotNull List<@NotNull Node> tree;
-
     private final @NotNull List<@NotNull Node> items;
+
+    private final @NotNull List<@NotNull Node> tree;
 
     private final int total;
 
@@ -84,24 +84,24 @@ public class OperationCatalogView {
     /** Operation 目录中的树节点或扁平 ACTION。 */
     public static class Node extends BaseView {
 
+        private final @NotNull List<@NotNull Node> children;
+
+        private final @NotNull OperationNodeType type;
+
         private final @NotNull String code;
+
+        @Localize(source = "nameText")
+        private final @NotNull String name;
+
+        private final @NotNull String nameKey;
 
         @JsonInclude(JsonInclude.Include.ALWAYS)
         @JsonProperty("parentCode")
         private final @Nullable String parentCode;
 
-        private final @NotNull String nameKey;
-
-        @Localize(source = "nameText")
-        private final @NotNull String name;
-
-        private final @NotNull OperationNodeType type;
-
         private final boolean grantable;
 
         private final int sortOrder;
-
-        private final @NotNull List<@NotNull Node> children;
 
         private Node(
                 @NotNull String code,

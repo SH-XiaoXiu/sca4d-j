@@ -9,13 +9,13 @@ import java.util.Objects;
 /** 返回不包含完整手机号和验证码的 SMS Challenge。 */
 @SuppressWarnings("unused")
 public class SmsCodeChallengeView {
-    private final String challengeId;
-
-    private final String maskedRecipient;
-
     private final Instant expiresAt;
 
     private final Instant resendAt;
+
+    private final String challengeId;
+
+    private final String maskedRecipient;
 
     /** 创建 SMS Challenge 响应视图。 */
     private SmsCodeChallengeView(SmsCodeChallenge challenge) {

@@ -16,6 +16,7 @@ import type {
 } from './types';
 
 import { ObservableController } from './controller';
+import { SavedResourceRefreshError } from './errors';
 import { AdminError } from './errors';
 import { freezeLocaleCatalog, freezeLocalizedFields } from './localized-fields';
 
@@ -87,7 +88,11 @@ export class SystemDictionariesController extends ObservableController<SystemDic
       await this.api.delete(
         `${dictionaryPath(dictionary.key)}?version=${encodeURIComponent(dictionary.version)}`,
       );
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failMutation(error);
       throw error;
@@ -106,7 +111,11 @@ export class SystemDictionariesController extends ObservableController<SystemDic
       await this.api.delete(
         `${dictionaryPath(dictionary.key)}/options/${encodeURIComponent(option.value)}?version=${encodeURIComponent(option.version)}`,
       );
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failMutation(error);
       throw error;
@@ -115,12 +124,14 @@ export class SystemDictionariesController extends ObservableController<SystemDic
 
   /** 读取所有代码字典、动态字典及其选项。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, phase: 'loading', error: null });
     try {
       const [result, locales] = await Promise.all([
         this.api.get<SystemDictionaries>('/system/dictionaries'),
         this.api.get<LocaleCatalog>('/system/locales'),
       ]);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         dictionaries: freezeDictionaries(result.data),
@@ -129,6 +140,7 @@ export class SystemDictionariesController extends ObservableController<SystemDic
         phase: result.data.dictionaries.length > 0 ? 'ready' : 'empty',
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error);
       throw error;
     }
@@ -196,26 +208,12 @@ export class SystemDictionariesController extends ObservableController<SystemDic
     }
   }
 
-  /** 使用接口结果替换字典列表，并保留已读的业务选择项缓存。 */
-  private replaceDictionaries(data: SystemDictionaries): void {
-    const dictionaries = freezeDictionaries(data);
-    this.publish({
-      ...this.state,
-      dictionaries,
-      error: null,
-      phase: dictionaries.length > 0 ? 'ready' : 'empty',
-    });
-  }
-
   /** 将统一 HTTP 错误转换为页面可以展示的阶段。 */
   private fail(error: unknown): void {
     const value = asAdminError(error);
-    const phase =
-      value.kind === 'permission'
-        ? 'forbidden'
-        : value.kind === 'versionConflict'
-          ? 'conflict'
-          : 'error';
+    let phase: ResourcePhase = 'error';
+    if (value.kind === 'permission') phase = 'forbidden';
+    else if (value.kind === 'versionConflict') phase = 'conflict';
     this.publish({ ...this.state, error: value, phase });
   }
 
@@ -226,16 +224,24 @@ export class SystemDictionariesController extends ObservableController<SystemDic
       this.state.phase === 'ready' || this.state.phase === 'empty'
         ? this.state.phase
         : null;
+    let failurePhase: ResourcePhase = 'error';
+    if (value.kind === 'permission') failurePhase = 'forbidden';
+    else if (value.kind === 'versionConflict') failurePhase = 'conflict';
     this.publish({
       ...this.state,
       error: value,
-      phase:
-        loadedPhase ??
-        (value.kind === 'permission'
-          ? 'forbidden'
-          : value.kind === 'versionConflict'
-            ? 'conflict'
-            : 'error'),
+      phase: loadedPhase ?? failurePhase,
+    });
+  }
+
+  /** 使用接口结果替换字典列表，并保留已读的业务选择项缓存。 */
+  private replaceDictionaries(data: SystemDictionaries): void {
+    const dictionaries = freezeDictionaries(data);
+    this.publish({
+      ...this.state,
+      dictionaries,
+      error: null,
+      phase: dictionaries.length > 0 ? 'ready' : 'empty',
     });
   }
 }
@@ -269,9 +275,26 @@ export class SystemSettingsController extends ObservableController<SystemSetting
 
   /** 读取当前应用已注册的全部设置分组和当前值。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, phase: 'loading', error: null });
     try {
       const result = await this.api.get<SystemSettings>('/system/settings');
+      this.replaceSettings(result.data);
+    } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
+      this.fail(error);
+      throw error;
+    }
+  }
+
+  /** 用 Codec 可解析的 JSON 值覆盖一个非只读设置。 */
+  async replace(setting: SystemSetting, value: unknown): Promise<void> {
+    try {
+      const result = await this.api.put<SystemSettings>(
+        `/system/settings/${encodeURIComponent(setting.key)}`,
+        { value },
+        { 'If-Match': `"${setting.version}"` },
+      );
       this.replaceSettings(result.data);
     } catch (error) {
       this.fail(error);
@@ -293,19 +316,13 @@ export class SystemSettingsController extends ObservableController<SystemSetting
     }
   }
 
-  /** 用 Codec 可解析的 JSON 值覆盖一个非只读设置。 */
-  async replace(setting: SystemSetting, value: unknown): Promise<void> {
-    try {
-      const result = await this.api.put<SystemSettings>(
-        `/system/settings/${encodeURIComponent(setting.key)}`,
-        { value },
-        { 'If-Match': `"${setting.version}"` },
-      );
-      this.replaceSettings(result.data);
-    } catch (error) {
-      this.fail(error);
-      throw error;
-    }
+  /** 将统一 HTTP 错误转换为页面可以展示的阶段。 */
+  private fail(error: unknown): void {
+    const value = asAdminError(error);
+    let phase: ResourcePhase = 'error';
+    if (value.kind === 'permission') phase = 'forbidden';
+    else if (value.kind === 'versionConflict') phase = 'conflict';
+    this.publish({ ...this.state, error: value, phase });
   }
 
   /** 使用接口结果替换设置分组，并冻结所有页面可见数据。 */
@@ -325,18 +342,6 @@ export class SystemSettingsController extends ObservableController<SystemSetting
       groups,
       phase: groups.length > 0 ? 'ready' : 'empty',
     });
-  }
-
-  /** 将统一 HTTP 错误转换为页面可以展示的阶段。 */
-  private fail(error: unknown): void {
-    const value = asAdminError(error);
-    const phase =
-      value.kind === 'permission'
-        ? 'forbidden'
-        : value.kind === 'versionConflict'
-          ? 'conflict'
-          : 'error';
-    this.publish({ ...this.state, error: value, phase });
   }
 }
 

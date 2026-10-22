@@ -165,7 +165,7 @@ App 安装通用 IoT 模块，并登记两个示例 MQTT 协议：规范 JSON �
 
 Product 创建后默认停用。只有停用 Product 可以修改技术定义或发布完整物模型 JSON；启用前必须至少存在一个接入方式、一个已安装协议和一个可用物模型，且每个协议都能验证模型。
 
-Device 创建要求 `Idempotency-Key`。App 在十分钟窗口内保存请求摘要及加密创建结果；相同 key 与相同输入重放同一个 Device、Account 和一次性 secret，不同输入返回冲突。创建流程先取得 Product、Device 和幂等键对应的 Redis 分布式锁，再在事务中重新检查当前数据。App 自有 ClusterTaskSchedule 按 `expires_at` 索引使用有界 `DELETE` 清理过期结果，不使用显式行锁，幂等表不保存长期台账。新 Device、IAM Subject 和可选 Account 默认停用。Device 只有停用时才能修改展示资料、物模型/协议绑定和接入方式；启用前要求所属 Product 已启用并通过模块校验。
+Device 创建要求 `Idempotency-Key`。App 在十分钟窗口内保存请求摘要及加密创建结果；相同 key 与相同输入重放同一个 Device、Account 和一次性 secret，不同输入返回冲突。创建流程先取得 Product、Device 和幂等键对应的 Redis 分布式锁，再在事务中重新检查当前数据。App 自有无记录 `JobSchedule` 按 `expires_at` 索引使用有界 `DELETE` 清理过期结果，不使用显式行锁，幂等表不保存长期台账。新 Device、IAM Subject 和可选 Account 默认停用。Device 只有停用时才能修改展示资料、物模型/协议绑定和接入方式；启用前要求所属 Product 已启用并通过模块校验。
 
 设备停用时，App 在同一主库事务中停用 Device Profile、IAM Subject 与可选 Account，可靠发布断连消息并终止 Account Session。这里的 Device Profile 是 App 保存的启停状态，不是 IoT 模块的 Device 台账；基础资料、绑定或认证方法变化使用 `DeviceChangeArea.DEVICE` 通知浏览器重新读取。Credential 重置由 App 调用 Shared Secret 或 HMAC 通用认证方法，再终止旧 Session 与 Connection。只有启用 Device 可以修改 desired state、提交物模型 command 或创建设备定时；这些动作先保存主库事实，再通过通用 Messaging 与 EMQX MQTT 运行时发送。
 
@@ -179,15 +179,15 @@ App 把模块提交后的 Device 数据区域变化发布到 `iot.device.<device
 
 ## 可靠业务消息
 
-Messaging 在业务事务中写入 PostgreSQL Outbox，事务提交后再向 RabbitMQ 发布。它用于需要被其他业务 Consumer 处理的消息；发布失败会重试，Consumer 按自己的 HandlingPolicy 重试或进入 DLQ。Outbox 派发和清理由 ClusterTaskSchedule 触发，不创建 Job run。
+Messaging 在业务事务中写入 PostgreSQL Outbox，事务提交后再向 RabbitMQ 发布。它用于需要被其他业务 Consumer 处理的消息；发布失败会重试，Consumer 按自己的 RetryRule 重试或进入 DLQ。Outbox 派发和清理由无记录 `JobSchedule` 触发，不创建 Job Run。
 
 ## 后台 Job
 
-Job 模块把运行、节点、尝试次数、租约和结果保存在 PostgreSQL。Worker 失联后，其他实例可以重新领取过期节点，因此业务动作必须能够处理重复执行。需要持久化运行结果和失败恢复的文件清理使用 Job；短周期轮询和数据清理使用 ClusterTaskSchedule。
+Job 模块在 `PERSISTED` 模式下把运行、节点、尝试次数、租约和结果保存在 PostgreSQL。Worker 失联后，其他实例可以重新领取过期节点，因此业务动作必须能够处理重复执行。需要持久化运行结果和失败恢复的文件清理使用有记录 Job；短周期轮询和数据清理使用无记录 DirectJob。
 
 ## Quartz 计划
 
-Quartz 保存代码声明的触发时间和集群状态。JobSchedule 到达时间后向 JobExecutor 提交一次运行；ClusterTaskSchedule 到达时间后直接执行不需要业务运行历史的集群任务。计划对账成功后 Scheduler 才开始领取 trigger。
+Quartz 保存代码声明的触发时间和集群状态。`JobSchedule` 到达时间后按 Job 的记录策略提交 Run 或触发无记录工作。计划对账成功后 Scheduler 才开始领取 trigger。
 
 ## 浏览器通知
 

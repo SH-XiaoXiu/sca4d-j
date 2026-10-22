@@ -1,12 +1,14 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import type { Component } from 'vue';
 
 import type { VbenFormSchema } from '@vben/common-ui';
 
-import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import type { AuthenticationProofSubmission } from '#/features/authentication/proof';
+
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { AuthenticationLogin, VbenPinInput, z } from '@vben/common-ui';
+import { AuthenticationLogin, z } from '@vben/common-ui';
 import {
   SvgGithubIcon,
   SvgGoogleIcon,
@@ -14,222 +16,53 @@ import {
   SvgWeChatIcon,
 } from '@vben/icons';
 
-import { Alert, Button, Divider, Input, message } from 'ant-design-vue';
+import { AUTHENTICATION_METHOD_CODES as METHODS } from '@sca4d/admin';
+import { Button, Divider, message } from 'ant-design-vue';
 import { Globe2, KeyRound, Mail } from 'lucide-vue-next';
 
-import { AUTHENTICATION_METHOD_CODES } from '@sca4d/admin';
-
 import { BrowserPasskeyError } from '#/auth/passkey';
+import AuthenticationProofPanel from '#/features/authentication/AuthenticationProofPanel.vue';
+import { browserPasskeyErrorText } from '#/features/authentication/presentation';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
-
-defineOptions({ name: 'Login' });
-
 const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
-const totpCode = ref('');
-const pendingPassword = ref('');
-const pendingEmailCode = ref('');
-const pendingSmsCode = ref('');
-const activePendingMethod = ref('');
-const federatedLoadingCode = ref<null | string>(null);
-
-const codeLoginPath = computed(() => {
-  const redirect = route.query.redirect;
-  return typeof redirect === 'string' && redirect
-    ? `/auth/code-login?redirect=${encodeURIComponent(redirect)}`
-    : '/auth/code-login';
-});
-
-const pendingEmailResendSeconds = computed(() =>
-  secondsUntil(authStore.pendingEmailCodeChallenge?.resendAt),
+const passkeySubmitting = ref(false);
+const passwordSubmitting = ref(false);
+const federatedSubmitting = ref(new Set<string>());
+const notices = computed(() => ({
+  [METHODS.emailCode]: authStore.pendingEmailCodeChallenge,
+  [METHODS.smsCode]: authStore.pendingSmsCodeChallenge,
+}));
+const codeLoginPath = computed(() =>
+  typeof route.query.redirect === 'string'
+    ? `/auth/code-login?redirect=${encodeURIComponent(route.query.redirect)}`
+    : '/auth/code-login',
 );
-const pendingSmsResendSeconds = computed(() =>
-  secondsUntil(authStore.pendingSmsCodeChallenge?.resendAt),
-);
-
 const formSchema = computed((): VbenFormSchema[] => [
   {
     component: 'VbenInput',
+    fieldName: 'username',
+    label: $t('page.business.loginIdentifier'),
     componentProps: {
       autocomplete: 'username',
       placeholder: $t('page.business.loginIdentifierPlaceholder'),
     },
-    fieldName: 'username',
-    label: $t('page.business.loginIdentifier'),
     rules: z
       .string()
       .min(1, { message: $t('page.business.loginIdentifierPlaceholder') }),
   },
   {
     component: 'VbenInputPassword',
-    componentProps: {
-      autocomplete: 'current-password',
-      placeholder: $t('page.business.passwordPlaceholder'),
-    },
     fieldName: 'password',
     label: $t('page.business.password'),
+    componentProps: { autocomplete: 'current-password' },
     rules: z
       .string()
       .min(1, { message: $t('page.business.passwordPlaceholder') }),
   },
 ]);
-
-/** 校验并提交当前登录 attempt 的六位 TOTP 验证码。 */
-async function handleTotpSubmit(): Promise<void> {
-  if (!/^\d{6}$/u.test(totpCode.value)) return;
-  try {
-    await authStore.submitTotp(totpCode.value);
-    totpCode.value = '';
-  } catch {
-    message.error($t('page.business.authenticationFailed'));
-  }
-}
-
-/** 校验并提交当前登录 attempt 的密码。 */
-async function handlePasswordSubmit(): Promise<void> {
-  if (!pendingPassword.value) return;
-  try {
-    await authStore.submitPassword(pendingPassword.value);
-    pendingPassword.value = '';
-  } catch {
-    message.error($t('page.business.authenticationFailed'));
-  }
-}
-
-/** 请求当前登录 attempt 所属账号的 Email 验证码。 */
-async function handlePendingEmailSend(): Promise<void> {
-  const challenge = await authStore.requestPendingEmailCode();
-  pendingEmailCode.value = '';
-  message.success(
-    $t('page.business.emailCodeSent', {
-      recipient: challenge.maskedRecipient,
-    }),
-  );
-  await nextTick();
-}
-
-/** 校验并提交当前登录 attempt 的 Email 验证码。 */
-async function handlePendingEmailSubmit(): Promise<void> {
-  if (!/^\d{6}$/u.test(pendingEmailCode.value)) return;
-  try {
-    await authStore.submitEmailCode(pendingEmailCode.value);
-    pendingEmailCode.value = '';
-  } catch {
-    message.error($t('page.business.authenticationFailed'));
-  }
-}
-
-/** 请求当前登录 attempt 所属账号的 SMS 验证码。 */
-async function handlePendingSmsSend(): Promise<void> {
-  const challenge = await authStore.requestPendingSmsCode();
-  pendingSmsCode.value = '';
-  message.success(
-    $t('page.business.smsCodeSent', {
-      recipient: challenge.maskedRecipient,
-    }),
-  );
-  await nextTick();
-}
-
-/** 校验并提交当前登录 attempt 的 SMS 验证码。 */
-async function handlePendingSmsSubmit(): Promise<void> {
-  if (!/^\d{6}$/u.test(pendingSmsCode.value)) return;
-  try {
-    await authStore.submitSmsCode(pendingSmsCode.value);
-    pendingSmsCode.value = '';
-  } catch {
-    message.error($t('page.business.authenticationFailed'));
-  }
-}
-
-/** 根据当前选择的后续认证方法提交输入。 */
-async function handlePendingSubmit(): Promise<void> {
-  switch (activePendingMethod.value) {
-    case AUTHENTICATION_METHOD_CODES.emailCode: {
-      await handlePendingEmailSubmit();
-      break;
-    }
-    case AUTHENTICATION_METHOD_CODES.passkey: {
-      await handlePendingPasskey();
-      break;
-    }
-    case AUTHENTICATION_METHOD_CODES.password: {
-      await handlePasswordSubmit();
-      break;
-    }
-    case AUTHENTICATION_METHOD_CODES.smsCode: {
-      await handlePendingSmsSubmit();
-      break;
-    }
-    case AUTHENTICATION_METHOD_CODES.totp: {
-      await handleTotpSubmit();
-      break;
-    }
-  }
-}
-
-/** 使用 Passkey 开始 discoverable login，并显示浏览器 ceremony 失败原因。 */
-async function handlePasskeyLogin(): Promise<void> {
-  try {
-    await authStore.loginWithPasskey();
-  } catch (error) {
-    handlePasskeyError(error);
-  }
-}
-
-/** 使用 Passkey 提交当前登录 attempt 的后续认证因素。 */
-async function handlePendingPasskey(): Promise<void> {
-  try {
-    await authStore.submitPasskey();
-  } catch (error) {
-    handlePasskeyError(error);
-  }
-}
-
-/** 把浏览器 Passkey 错误转换为登录页文案；其他请求错误继续交给调用链。 */
-function handlePasskeyError(error: unknown): void {
-  if (!(error instanceof BrowserPasskeyError)) throw error;
-  if (error.kind === 'unsupported') {
-    message.error($t('page.business.passkeyUnsupported'));
-    return;
-  }
-  if (error.kind === 'cancelled') {
-    message.info($t('page.business.passkeyCancelled'));
-    return;
-  }
-  message.error($t('page.business.passkeyFailed'));
-}
-
-/** 打开现有 Email 验证码登录页，并保留登录后的目标地址。 */
-async function handleEmailCodeLogin(): Promise<void> {
-  await router.push(codeLoginPath.value);
-}
-
-/** 使用后端当前允许展示的 Provider 开始联邦登录。 */
-async function handleFederatedLogin(providerCode: string): Promise<void> {
-  federatedLoadingCode.value = providerCode;
-  try {
-    await authStore.loginWithFederated(providerCode);
-  } catch {
-    message.error($t('page.business.authenticationFailed'));
-  } finally {
-    federatedLoadingCode.value = null;
-  }
-}
-
-/** 返回 Vben 已提供的品牌图标，未知 Provider 使用通用网络图标。 */
-function federatedProviderIcon(iconReference: null | string): Component {
-  const icons: Readonly<Record<string, Component>> = {
-    github: SvgGithubIcon,
-    google: SvgGoogleIcon,
-    qq: SvgQQChatIcon,
-    wechat: SvgWeChatIcon,
-  };
-  return (iconReference && icons[iconReference]) || Globe2;
-}
-
 onMounted(async () => {
   const completion = route.query.federatedCompletion;
   if (typeof completion === 'string' && completion) {
@@ -245,215 +78,118 @@ onMounted(async () => {
   }
   await authStore.loadFederatedProviders();
 });
-
-/** 返回登录方法在当前语言下的名称。 */
-function pendingMethodLabel(method: string): string {
-  const labels: Record<string, string> = {
-    [AUTHENTICATION_METHOD_CODES.emailCode]: $t('page.business.emailCode'),
-    [AUTHENTICATION_METHOD_CODES.smsCode]: $t('page.business.smsCode'),
-    [AUTHENTICATION_METHOD_CODES.federated]: $t(
-      'page.security.methods.federated',
-    ),
-    [AUTHENTICATION_METHOD_CODES.passkey]: 'Passkey',
-    [AUTHENTICATION_METHOD_CODES.password]: $t('page.business.password'),
-    [AUTHENTICATION_METHOD_CODES.totp]: $t('page.business.totpLabel'),
-  };
-  return labels[method] ?? method;
+/** 密码起点只管理自身的提交状态。 */
+async function passwordLogin(
+  values: Parameters<typeof authStore.authLogin>[0],
+) {
+  if (passwordSubmitting.value) return;
+  passwordSubmitting.value = true;
+  try {
+    await authStore.authLogin(values);
+  } finally {
+    passwordSubmitting.value = false;
+  }
 }
-
-/** 显示 VbenPinInput 捕获的验证码发送失败。 */
-function handleEmailSendError(): void {
-  message.error($t('page.business.emailCodeSendFailed'));
+/** 浏览器 Passkey 请求与其他登录入口分别显示等待状态。 */
+async function passkeyLogin() {
+  if (passkeySubmitting.value) return;
+  passkeySubmitting.value = true;
+  try {
+    await authStore.loginWithPasskey();
+  } catch (error) {
+    const text =
+      browserPasskeyErrorText(error) ??
+      $t('page.business.authenticationFailed');
+    if (error instanceof BrowserPasskeyError && error.kind === 'cancelled')
+      message.info(text);
+    else message.error(text);
+  } finally {
+    passkeySubmitting.value = false;
+  }
 }
-
-/** 使用后端签发时间计算 VbenPinInput 的整秒倒计时。 */
-function secondsUntil(value: string | undefined): number {
-  if (!value) return 0;
-  return Math.max(1, Math.ceil((Date.parse(value) - Date.now()) / 1000));
+/** 一个 Provider 的跳转请求不会禁用其他入口。 */
+async function federatedLogin(code: string) {
+  if (federatedSubmitting.value.has(code)) return;
+  federatedSubmitting.value.add(code);
+  try {
+    await authStore.loginWithFederated(code);
+  } catch {
+    message.error($t('page.business.authenticationFailed'));
+  } finally {
+    federatedSubmitting.value.delete(code);
+  }
 }
-
-watch(
-  () => authStore.availablePendingLoginMethods,
-  (methods) => {
-    if (!methods.includes(activePendingMethod.value as never)) {
-      activePendingMethod.value = methods[0] ?? '';
+/** 按服务端返回的同一 attempt 提交后续因素。 */
+async function submitProof(proof: AuthenticationProofSubmission) {
+  switch (proof.methodCode) {
+    case METHODS.emailCode: {
+      await authStore.submitEmailCode(proof.code);
+      break;
     }
-  },
-  { immediate: true },
-);
+    case METHODS.password: {
+      await authStore.submitPassword(proof.password);
+      break;
+    }
+    case METHODS.smsCode: {
+      await authStore.submitSmsCode(proof.code);
+      break;
+    }
+    case METHODS.totp: {
+      await authStore.submitTotp(proof.code);
+      break;
+    }
+    default: {
+      await authStore.submitPasskey();
+    }
+  }
+}
+/** 验证码发送不执行因素提交。 */
+async function sendCode(method: string) {
+  await (method === METHODS.emailCode
+    ? authStore.requestPendingEmailCode()
+    : authStore.requestPendingSmsCode());
+}
+/** 使用已提供的品牌图标，未知品牌显示通用网络图标。 */
+function providerIcon(reference: null | string): Component {
+  const icons: Readonly<Record<string, Component>> = {
+    github: SvgGithubIcon,
+    google: SvgGoogleIcon,
+    qq: SvgQQChatIcon,
+    wechat: SvgWeChatIcon,
+  };
+  return reference ? (icons[reference] ?? Globe2) : Globe2;
+}
 </script>
-
 <template>
-  <div
-    v-if="authStore.requiresAdditionalAuthentication"
-    class="w-full"
-    @keydown.enter.prevent="handlePendingSubmit"
-  >
-    <h2 class="mb-2 text-2xl font-semibold">
+  <section v-if="authStore.requiresAdditionalAuthentication" class="w-full">
+    <h2 class="mb-2 text-xl font-semibold">
       {{ $t('page.business.additionalAuthenticationTitle') }}
     </h2>
-    <p class="text-muted-foreground mb-6 text-sm">
+    <p class="mb-6 text-sm text-muted-foreground">
       {{ $t('page.business.additionalAuthenticationDescription') }}
     </p>
-    <Alert
-      class="mb-4"
-      :message="$t('page.business.authenticationContinues')"
-      show-icon
-      type="info"
+    <AuthenticationProofPanel
+      :methods="authStore.availablePendingLoginMethods"
+      :operation-id="authStore.pendingLoginAttemptId"
+      :passkey-supported="authStore.passkeySupported"
+      :notices="notices"
+      :submit-proof="submitProof"
+      :send-code="sendCode"
     />
-    <a-tabs
-      v-model:active-key="activePendingMethod"
-      :animated="false"
-      :tab-bar-style="
-        authStore.availablePendingLoginMethods.length > 1
-          ? undefined
-          : { display: 'none' }
-      "
-    >
-      <a-tab-pane
-        v-for="method in authStore.availablePendingLoginMethods"
-        :key="method"
-        :tab="pendingMethodLabel(method)"
-      >
-        <template v-if="method === AUTHENTICATION_METHOD_CODES.password">
-          <Input.Password
-            v-model:value="pendingPassword"
-            :aria-label="$t('page.business.password')"
-            autocomplete="current-password"
-            size="large"
-          />
-          <Button
-            class="mt-5 w-full"
-            :disabled="!pendingPassword"
-            :loading="authStore.loginLoading"
-            size="large"
-            type="primary"
-            @click="handlePasswordSubmit"
-          >
-            {{ $t('page.business.continueLogin') }}
-          </Button>
-        </template>
-        <template v-else-if="method === AUTHENTICATION_METHOD_CODES.totp">
-          <Input
-            v-model:value="totpCode"
-            :aria-label="$t('page.business.totpLabel')"
-            autocomplete="one-time-code"
-            inputmode="numeric"
-            :maxlength="6"
-            placeholder="000000"
-            size="large"
-          />
-          <Button
-            class="mt-5 w-full"
-            :disabled="!/^\d{6}$/u.test(totpCode)"
-            :loading="authStore.loginLoading"
-            size="large"
-            type="primary"
-            @click="handleTotpSubmit"
-          >
-            {{ $t('page.business.continueLogin') }}
-          </Button>
-        </template>
-        <template v-else-if="method === AUTHENTICATION_METHOD_CODES.emailCode">
-          <Alert
-            v-if="authStore.pendingEmailCodeChallenge"
-            class="mb-4"
-            :message="
-              $t('page.business.emailCodeSent', {
-                recipient: authStore.pendingEmailCodeChallenge.maskedRecipient,
-              })
-            "
-            show-icon
-            type="success"
-          />
-          <VbenPinInput
-            v-model="pendingEmailCode"
-            :code-length="6"
-            :create-text="
-              (countdown: number) =>
-                countdown > 0
-                  ? $t('page.business.resendEmailCodeIn', { countdown })
-                  : $t('page.business.sendEmailCode')
-            "
-            :handle-send-code="handlePendingEmailSend"
-            :loading="authStore.emailCodeSending"
-            :max-time="pendingEmailResendSeconds"
-            @send-error="handleEmailSendError"
-          />
-          <Button
-            class="mt-5 w-full"
-            :disabled="!/^\d{6}$/u.test(pendingEmailCode)"
-            :loading="authStore.loginLoading"
-            size="large"
-            type="primary"
-            @click="handlePendingEmailSubmit"
-          >
-            {{ $t('page.business.continueLogin') }}
-          </Button>
-        </template>
-        <template v-else-if="method === AUTHENTICATION_METHOD_CODES.smsCode">
-          <Alert
-            v-if="authStore.pendingSmsCodeChallenge"
-            class="mb-4"
-            :message="
-              $t('page.business.smsCodeSent', {
-                recipient: authStore.pendingSmsCodeChallenge.maskedRecipient,
-              })
-            "
-            show-icon
-            type="success"
-          />
-          <VbenPinInput
-            v-model="pendingSmsCode"
-            :code-length="6"
-            :create-text="
-              (countdown: number) =>
-                countdown > 0
-                  ? $t('page.business.resendSmsCodeIn', { countdown })
-                  : $t('page.business.sendSmsCode')
-            "
-            :handle-send-code="handlePendingSmsSend"
-            :loading="authStore.smsCodeSending"
-            :max-time="pendingSmsResendSeconds"
-          />
-          <Button
-            class="mt-5 w-full"
-            :disabled="!/^\d{6}$/u.test(pendingSmsCode)"
-            :loading="authStore.loginLoading"
-            size="large"
-            type="primary"
-            @click="handlePendingSmsSubmit"
-          >
-            {{ $t('page.business.continueLogin') }}
-          </Button>
-        </template>
-        <Button
-          v-else-if="method === AUTHENTICATION_METHOD_CODES.passkey"
-          class="w-full"
-          :loading="authStore.loginLoading"
-          size="large"
-          type="primary"
-          @click="handlePendingPasskey"
-        >
-          <KeyRound :size="17" aria-hidden="true" />
-          {{ $t('page.business.passkeyLogin') }}
-        </Button>
-      </a-tab-pane>
-    </a-tabs>
-  </div>
+  </section>
   <AuthenticationLogin
     v-else
-    :code-login-path="codeLoginPath"
     :form-schema="formSchema"
-    :loading="authStore.loginLoading"
+    :loading="passwordSubmitting"
+    :code-login-path="codeLoginPath"
     :show-code-login="false"
     :show-forget-password="false"
     :show-qrcode-login="false"
     :show-register="false"
     :show-third-party-login="false"
-    :sub-title="$t('page.business.authDescription')"
     :title="$t('page.business.loginTitle')"
-    @submit="authStore.authLogin"
+    :sub-title="$t('page.business.authDescription')"
+    @submit="passwordLogin"
   >
     <template #third-party-login>
       <Divider>{{ $t('page.business.or') }}</Divider>
@@ -462,29 +198,27 @@ watch(
           v-for="provider in authStore.federatedProviders"
           :key="provider.code"
           class="w-full"
-          :disabled="federatedLoadingCode !== null"
-          :loading="federatedLoadingCode === provider.code"
           size="large"
-          @click="handleFederatedLogin(provider.code)"
+          :loading="federatedSubmitting.has(provider.code)"
+          @click="federatedLogin(provider.code)"
         >
           <component
-            :is="federatedProviderIcon(provider.iconReference)"
+            :is="providerIcon(provider.iconReference)"
+            :size="17"
             aria-hidden="true"
-            class="size-[17px]"
           />
           {{ provider.buttonText }}
         </Button>
-        <Button class="w-full" size="large" @click="handleEmailCodeLogin">
+        <Button class="w-full" size="large" @click="router.push(codeLoginPath)">
           <Mail :size="17" aria-hidden="true" />
           {{ $t('page.business.emailCodeLogin') }}
         </Button>
         <Button
           v-if="authStore.passkeySupported"
           class="w-full"
-          :disabled="federatedLoadingCode !== null"
-          :loading="authStore.loginLoading"
           size="large"
-          @click="handlePasskeyLogin"
+          :loading="passkeySubmitting"
+          @click="passkeyLogin"
         >
           <KeyRound :size="17" aria-hidden="true" />
           {{ $t('page.business.passkeyLogin') }}

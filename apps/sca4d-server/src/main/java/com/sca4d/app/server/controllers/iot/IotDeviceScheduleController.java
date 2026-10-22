@@ -49,9 +49,9 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class IotDeviceScheduleController {
 
-    private final @NotNull DeviceScheduleService schedules;
-
     private final @NotNull DeviceScheduleQueryService queries;
+
+    private final @NotNull DeviceScheduleService schedules;
 
     /** 创建只处理 App HTTP、权限和 View 转换的设备定时 Controller。 */
     public IotDeviceScheduleController(

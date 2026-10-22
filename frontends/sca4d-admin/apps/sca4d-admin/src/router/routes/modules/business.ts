@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
       {
         component: () => import('#/pages/AccountsPage.vue'),
         meta: {
-          authority: ['platform:accounts:read', 'platform:accounts:manage'],
+          authority: ['PLATFORM:ACCOUNTS:READ', 'PLATFORM:ACCOUNTS:MANAGE'],
           icon: 'lucide:users',
           order: 1,
           title: $t('page.business.accounts'),
@@ -27,7 +27,7 @@ const routes: RouteRecordRaw[] = [
       {
         component: () => import('#/pages/RolesPage.vue'),
         meta: {
-          authority: ['platform:roles:read', 'platform:roles:manage'],
+          authority: ['PLATFORM:ROLES:READ', 'PLATFORM:ROLES:MANAGE'],
           icon: 'lucide:shield-check',
           order: 2,
           title: $t('page.business.roles'),
@@ -57,7 +57,7 @@ const routes: RouteRecordRaw[] = [
           {
             component: () => import('#/pages/SystemSettingsPage.vue'),
             meta: {
-              authority: ['system:settings:read', 'system:settings:manage'],
+              authority: ['SYSTEM:SETTINGS:READ', 'SYSTEM:SETTINGS:MANAGE'],
               icon: 'lucide:sliders-horizontal',
               order: 1,
               title: $t('page.business.basicSettings'),
@@ -69,8 +69,8 @@ const routes: RouteRecordRaw[] = [
             component: () => import('#/pages/SystemDictionariesPage.vue'),
             meta: {
               authority: [
-                'system:dictionaries:read',
-                'system:dictionaries:manage',
+                'SYSTEM:DICTIONARIES:READ',
+                'SYSTEM:DICTIONARIES:MANAGE',
               ],
               icon: 'lucide:book-open-check',
               order: 2,
@@ -82,7 +82,7 @@ const routes: RouteRecordRaw[] = [
           {
             component: () => import('#/pages/FederatedProvidersPage.vue'),
             meta: {
-              authority: ['platform:accounts:read', 'platform:accounts:manage'],
+              authority: ['PLATFORM:ACCOUNTS:READ', 'PLATFORM:ACCOUNTS:MANAGE'],
               icon: 'lucide:globe-2',
               order: 3,
               title: $t('page.business.federatedProviders'),
@@ -104,7 +104,7 @@ const routes: RouteRecordRaw[] = [
           {
             component: () => import('#/pages/EmailNotificationsPage.vue'),
             meta: {
-              authority: ['system:email:read', 'system:email:manage'],
+              authority: ['SYSTEM:EMAIL:READ', 'SYSTEM:EMAIL:MANAGE'],
               icon: 'lucide:mail',
               order: 1,
               title: $t('page.business.emailNotifications'),
@@ -115,7 +115,7 @@ const routes: RouteRecordRaw[] = [
           {
             component: () => import('#/pages/SmsNotificationsPage.vue'),
             meta: {
-              authority: ['system:sms:read', 'system:sms:manage'],
+              authority: ['SYSTEM:SMS:READ', 'SYSTEM:SMS:MANAGE'],
               icon: 'lucide:message-square-text',
               order: 2,
               title: $t('page.business.smsNotifications'),
@@ -128,7 +128,7 @@ const routes: RouteRecordRaw[] = [
       {
         component: () => import('#/pages/OperationLogsPage.vue'),
         meta: {
-          authority: ['system:audit:read'],
+          authority: ['SYSTEM:AUDIT:READ'],
           icon: 'lucide:scroll-text',
           order: 6,
           title: $t('page.business.operationLogs'),
@@ -139,7 +139,7 @@ const routes: RouteRecordRaw[] = [
       {
         component: () => import('#/pages/IotProductsPage.vue'),
         meta: {
-          authority: ['iot:products:read', 'iot:products:manage'],
+          authority: ['IOT:PRODUCTS:READ', 'IOT:PRODUCTS:MANAGE'],
           icon: 'lucide:boxes',
           order: 7,
           title: $t('page.business.iotProducts'),

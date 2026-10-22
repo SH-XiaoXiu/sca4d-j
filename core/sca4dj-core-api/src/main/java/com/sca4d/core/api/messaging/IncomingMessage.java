@@ -22,7 +22,7 @@ public class IncomingMessage<M extends Message> {
 
     private final boolean redelivered;
 
-    private final int attempt;
+    private final long attempt;
 
     /** 创建一条包含 RabbitMQ 投递元数据的业务消息。 */
     public IncomingMessage(
@@ -31,7 +31,7 @@ public class IncomingMessage<M extends Message> {
             @NotNull Name sourceApplication,
             @NotNull Instant publishedAt,
             boolean redelivered,
-            int attempt) {
+            long attempt) {
         this.messageId = Objects.requireNonNull(messageId, "Id 不能为空");
         this.message = Objects.requireNonNull(message, "消息不能为空");
         this.sourceApplication = Objects.requireNonNull(sourceApplication, "消息来源应用不能为空");
@@ -69,7 +69,7 @@ public class IncomingMessage<M extends Message> {
     }
 
     /** @return 当前消息的处理尝试序号 */
-    public int attempt() {
+    public long attempt() {
         return attempt;
     }
 }

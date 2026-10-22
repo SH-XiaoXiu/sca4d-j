@@ -13,9 +13,12 @@ CREATE UNIQUE INDEX uk_notification_inbox_template_code
     ON notification_inbox_template (notification_code) WHERE deleted = 0;
 
 COMMENT ON TABLE notification_inbox_template IS '保存 Inbox 渠道使用的多语言 Tiptap JSON 模板';
+COMMENT ON COLUMN notification_inbox_template.id IS 'Inbox 模板全局标识';
 COMMENT ON COLUMN notification_inbox_template.notification_code IS 'NotificationType 声明的稳定通知编码';
 COMMENT ON COLUMN notification_inbox_template.content IS 'Locale 到 title/body ProseMirror 文档的 JSON object';
 COMMENT ON COLUMN notification_inbox_template.enabled IS '模板是否参与 Inbox 投递';
+COMMENT ON COLUMN notification_inbox_template.created_at IS 'Inbox 模板创建时间';
+COMMENT ON COLUMN notification_inbox_template.updated_at IS 'Inbox 模板最近更新时间，由数据库触发器维护';
 COMMENT ON COLUMN notification_inbox_template.version IS '模板并发修改使用的乐观版本';
 COMMENT ON COLUMN notification_inbox_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
 
@@ -45,8 +48,14 @@ CREATE INDEX idx_notification_inbox_message_unread
     ON notification_inbox_message (account_id, id DESC) WHERE read_at IS NULL;
 
 COMMENT ON TABLE notification_inbox_message IS '保存发送给 Account 且不会随模板变化的站内信快照';
+COMMENT ON COLUMN notification_inbox_message.id IS '站内信快照全局标识';
 COMMENT ON COLUMN notification_inbox_message.message_id IS '原始 NotificationMessage 标识，用于消费幂等';
 COMMENT ON COLUMN notification_inbox_message.account_id IS '站内信所属 Account 标识';
 COMMENT ON COLUMN notification_inbox_message.notification_code IS '产生站内信的 NotificationType 编码';
 COMMENT ON COLUMN notification_inbox_message.language_tag IS '渲染模板使用的 BCP 47 Locale';
+COMMENT ON COLUMN notification_inbox_message.title IS '渲染后的站内信标题快照';
+COMMENT ON COLUMN notification_inbox_message.text_content IS '渲染后的纯文本正文快照';
+COMMENT ON COLUMN notification_inbox_message.html_content IS '渲染后的 HTML 正文快照';
+COMMENT ON COLUMN notification_inbox_message.created_at IS '站内信快照创建时间';
 COMMENT ON COLUMN notification_inbox_message.read_at IS '首次标记已读时间；为空表示未读';
+COMMENT ON COLUMN notification_inbox_message.version IS '站内信已读状态并发修改使用的版本';

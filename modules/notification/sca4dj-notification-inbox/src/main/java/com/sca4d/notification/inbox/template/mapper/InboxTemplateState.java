@@ -11,15 +11,15 @@ import java.util.Objects;
  */
 public class InboxTemplateState {
 
-    private final long templateId;
+    private final @NotNull String contentJson;
 
     private final @NotNull TreeCode code;
 
-    private final @NotNull String contentJson;
+    private final @NotNull Version version;
 
     private final boolean enabled;
 
-    private final @NotNull Version version;
+    private final long templateId;
 
     /**
      * @param templateId 模板数据库标识

@@ -17,6 +17,12 @@ public class EncodedAuditEntry {
 
     private final @Nullable Long accountId;
 
+    private final @NotNull String auditId;
+
+    private final @Nullable String auditParentId;
+
+    private final @NotNull String auditTrailId;
+
     private final @Nullable String clientIp;
 
     private final @Nullable String httpMethod;
@@ -68,6 +74,9 @@ public class EncodedAuditEntry {
      */
     public EncodedAuditEntry(
             long id,
+            @NotNull String auditId,
+            @NotNull String auditTrailId,
+            @Nullable String auditParentId,
             @NotNull String requestId,
             long subjectId,
             @Nullable Long accountId,
@@ -86,6 +95,9 @@ public class EncodedAuditEntry {
             @NotNull Instant occurredAt,
             @Nullable String instanceId) {
         this.id = id;
+        this.auditId = auditId;
+        this.auditTrailId = auditTrailId;
+        this.auditParentId = auditParentId;
         this.requestId = requestId;
         this.subjectId = subjectId;
         this.accountId = accountId;
@@ -109,6 +121,9 @@ public class EncodedAuditEntry {
     public @NotNull EncodedAuditEntry withId(long id) {
         return new EncodedAuditEntry(
                 id,
+                auditId,
+                auditTrailId,
+                auditParentId,
                 requestId,
                 subjectId,
                 accountId,
@@ -131,6 +146,18 @@ public class EncodedAuditEntry {
     /** @return 主键 */
     public long id() {
         return id;
+    }
+
+    public @NotNull String auditId() {
+        return auditId;
+    }
+
+    public @NotNull String auditTrailId() {
+        return auditTrailId;
+    }
+
+    public @Nullable String auditParentId() {
+        return auditParentId;
     }
 
     /** @return 调用标识 */

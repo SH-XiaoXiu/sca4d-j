@@ -16,17 +16,17 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应及其嵌套对象。
 public class CurrentSessionView {
 
-    private final @NotNull String sessionId;
-
-    private final @NotNull Instant issuedAt;
+    private final @NotNull AccountView account;
 
     private final @NotNull Instant expiresAt;
 
-    private final @NotNull SubjectView subject;
-
-    private final @NotNull AccountView account;
+    private final @NotNull Instant issuedAt;
 
     private final @NotNull List<@NotNull String> permissions;
+
+    private final @NotNull String sessionId;
+
+    private final @NotNull SubjectView subject;
 
     private CurrentSessionView(
             @NotNull String sessionId,
@@ -119,9 +119,9 @@ public class CurrentSessionView {
 
     /** 当前 Session 的 Subject 字段。 */
     public static class SubjectView {
-        private final long subjectId;
-
         private final @NotNull String type;
+
+        private final long subjectId;
 
         private SubjectView(long subjectId, @NotNull String type) {
             this.subjectId = subjectId;
@@ -147,9 +147,9 @@ public class CurrentSessionView {
 
     /** 当前 Session 的 Account 字段。 */
     public static class AccountView {
-        private final long accountId;
-
         private final @NotNull String realmKey;
+
+        private final long accountId;
 
         private AccountView(long accountId, @NotNull String realmKey) {
             this.accountId = accountId;

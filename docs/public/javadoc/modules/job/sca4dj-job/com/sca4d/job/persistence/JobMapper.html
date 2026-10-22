@@ -116,9 +116,34 @@ loadScripts(document, 'script');</script>
 <div class="block">删除指定完整运行中的节点尝试。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deleteCompletedDeliveries(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">deleteCompletedDeliveries</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;completedBefore)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">删除已结束且超过短期协调保留时间的无记录份额。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deleteCompletedDispatches(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">deleteCompletedDispatches</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;createdBefore)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">删除不再有份额或 Run 的过期广播头。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deleteDependencies(java.util.List)" class="member-name-link">deleteDependencies</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;runIds)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">删除指定完整运行中的节点依赖关系。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deleteExpiredInstances(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">deleteExpiredInstances</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiredBefore)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">删除租约早已结束的实例登记。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deleteInstance(com.sca4d.core.api.name.Name,java.lang.String,java.util.UUID)" class="member-name-link">deleteInstance</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">删除本次进程启动代次的实例登记。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deleteNodes(java.util.List)" class="member-name-link">deleteNodes</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;runIds)</code></div>
@@ -132,39 +157,118 @@ loadScripts(document, 'script');</script>
 <div class="block">删除已锁定的指定成功根运行，返回实际根记录数量。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertDependencies(long,java.util.Map)" class="member-name-link">insertDependencies</a><wbr>(long&nbsp;runId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&gt;&nbsp;dependencies)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertDelivery(com.sca4d.core.api.name.Name,long,com.sca4d.core.api.job.JobKey,int,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,java.lang.String,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant)" class="member-name-link">insertDelivery</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ long&nbsp;dispatchId,
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ int&nbsp;definitionVersion,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;capability,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;overlapPolicy,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;targetGenerationId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">为无记录广播或固定目标创建短期投递份额。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertDependencies(long,java.util.Map)" class="member-name-link">insertDependencies</a><wbr>(long&nbsp;runId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&gt;&nbsp;dependencies)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">插入本次运行已经解析的节点依赖；外层键为节点标识，内层键为输入顺序、值为依赖节点标识。</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertDispatch(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,java.lang.String)" class="member-name-link">insertDispatch</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ @Nullable com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetsJson)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">为一次普通或定时广播创建完整的目标清单。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertNode(long,java.lang.String,java.lang.String,java.lang.String,com.sca4d.job.JobNodeStatus,boolean,int,long,java.time.Instant)" class="member-name-link">insertNode</a><wbr>(long&nbsp;runId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertNode(long,java.lang.String,java.lang.String,java.lang.String,com.sca4d.job.JobNodeStatus,boolean,com.sca4d.core.api.retry.RetryRule,java.time.Instant)" class="member-name-link">insertNode</a><wbr>(long&nbsp;runId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeKey,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;kind,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
  @NotNull <a href="../JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a>&nbsp;status,
  boolean&nbsp;parallelMerge,
- int&nbsp;maxAttempts,
- long&nbsp;retryDelayMillis,
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;retryRule,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">插入运行节点并返回数据库主键。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)" class="member-name-link">insertRun</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,int,java.lang.String,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant,java.lang.Long,java.lang.String,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)" class="member-name-link">insertRun</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
  @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
  int&nbsp;definitionVersion,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;kind,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;capability,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;overlapPolicy,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;targetGenerationId,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;targetExpiresAt,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;dispatchId,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
  @Nullable com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">插入根运行并返回数据库主键。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectDependencyOutputs(long)" class="member-name-link">selectDependencyOutputs</a><wbr>(long&nbsp;nodeId)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#rescheduleExpired(long,long,java.lang.String,java.time.Instant,java.time.Instant,java.time.Instant)" class="member-name-link">rescheduleExpired</a><wbr>(long&nbsp;nodeId,
+ long&nbsp;attempt,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">按旧租约原子放弃尝试并恢复 READY，返回结束的尝试数。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectActiveDelivery(com.sca4d.core.api.name.Name,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobKey,com.sca4d.core.api.job.JobWorkKey,java.lang.String)" class="member-name-link">selectActiveDelivery</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">查询当前实例上同一工作键的活动短期投递。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectActiveWork(com.sca4d.core.api.name.Name,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobKey,com.sca4d.core.api.job.JobWorkKey,java.lang.String)" class="member-name-link">selectActiveWork</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">查询同一系统身份、Job 和工作键下尚未结束的 Run。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectDependencyOutputs(long)" class="member-name-link">selectDependencyOutputs</a><wbr>(long&nbsp;nodeId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">查询节点直接依赖的输出列。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="JobDispatchRun.html" title="class in com.sca4d.job.persistence">JobDispatchRun</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectDispatchRuns(com.sca4d.core.api.name.Name,long)" class="member-name-link">selectDispatchRuns</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ long&nbsp;dispatchId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">读取某次广播下已经创建的全部持久化 Run。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectEligibleInstances(com.sca4d.core.api.name.Name,java.lang.String,java.time.Instant)" class="member-name-link">selectEligibleInstances</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilityCode,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">查找提交时在线且启用目标能力的实例。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="ExpiredJobAttempt.html" title="class in com.sca4d.job.persistence">ExpiredJobAttempt</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectExpiredAttempts(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">selectExpiredAttempts</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">锁定当前应用仍有尝试额度的过期租约，避免重复计算恢复时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectExpiredRunIdsForUpdate(com.sca4d.core.api.name.Name,java.time.Instant,int)" class="member-name-link">selectExpiredRunIdsForUpdate</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
@@ -185,10 +289,23 @@ loadScripts(document, 'script');</script>
 <div class="block">按 App 隔离名称和主键查询根运行列值。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectScheduledRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,java.util.List)" class="member-name-link">selectScheduledRun</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectRunIdForUpdate(com.sca4d.core.api.name.Name,long)" class="member-name-link">selectRunIdForUpdate</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ long&nbsp;runId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">在同一个根运行的并发分支推进前取得数据库行锁。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="JobDispatchRecord.html" title="class in com.sca4d.job.persistence">JobDispatchRecord</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectScheduledDispatch(com.sca4d.core.api.name.Name,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)" class="member-name-link">selectScheduledDispatch</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
  @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.job.JobRunStatus&gt;&nbsp;statuses)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">查询同一次定时触发已经固定的广播目标。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectScheduledRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,java.lang.String)" class="member-name-link">selectScheduledRun</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按计划、可选触发时间及状态读取首个匹配运行。</div>
 </div>
@@ -202,20 +319,57 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">返回指定计划的运行分页以及目标成功节点的输出。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateClaimableNode(com.sca4d.core.api.name.Name,java.lang.String,java.time.Instant,java.time.Instant,java.util.Map)" class="member-name-link">updateClaimableNode</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="JobDelivery.html" title="class in com.sca4d.job.persistence">JobDelivery</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateClaimableDelivery(com.sca4d.core.api.name.Name,java.lang.String,java.util.UUID,java.time.Instant,java.time.Instant,java.util.Map)" class="member-name-link">updateClaimableDelivery</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;definitions)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>com.sca4d.core.api.runtime.InstanceCapability&gt;&gt;&nbsp;definitions)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">按实例代次领取一份无记录工作。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateClaimableNode(com.sca4d.core.api.name.Name,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant,java.time.Instant,java.util.Map)" class="member-name-link">updateClaimableNode</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>com.sca4d.core.api.runtime.InstanceCapability&gt;&gt;&nbsp;definitions)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">原子领取一个可执行节点并登记本次尝试。</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateDeliveryLease(long,java.lang.String,java.util.UUID,java.time.Instant,java.time.Instant)" class="member-name-link">updateDeliveryLease</a><wbr>(long&nbsp;deliveryId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">续期仍由目标实例代次持有的无记录工作份额。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateDependentNodes(long,java.time.Instant)" class="member-name-link">updateDependentNodes</a><wbr>(long&nbsp;sourceNodeId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateDeliveryResult(long,java.lang.String,java.util.UUID,java.lang.String,java.lang.String,java.time.Instant)" class="member-name-link">updateDeliveryResult</a><wbr>(long&nbsp;deliveryId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;error,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;completedAt)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">保存无记录工作完成或失败；不重新投递。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateDependentNodes(long,java.time.Instant)" class="member-name-link">updateDependentNodes</a><wbr>(long&nbsp;sourceNodeId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">将依赖已经全部成功的等待节点改为可领取。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateExpiredDeliveries(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">updateExpiredDeliveries</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">标记固定目标已过期的未开始或失联无记录工作。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateExpiredNodes(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">updateExpiredNodes</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
@@ -224,25 +378,31 @@ loadScripts(document, 'script');</script>
 <div class="block">失败当前 App 隔离名称内租约过期且重试耗尽的节点及其根运行。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateNodeFailed(long,long,int,java.lang.String,java.lang.String,java.time.Instant)" class="member-name-link">updateNodeFailed</a><wbr>(long&nbsp;nodeId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateExpiredTargets(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">updateExpiredTargets</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">将固定目标等待期限已经过去的未开始运行标为失败。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateNodeFailed(long,long,long,java.lang.String,java.lang.String,java.time.Instant)" class="member-name-link">updateNodeFailed</a><wbr>(long&nbsp;nodeId,
  long&nbsp;runId,
- int&nbsp;attempt,
+ long&nbsp;attempt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;error,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;failedAt)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">原子登记最终失败、失败根运行并取消后继节点。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateNodeLease(long,java.lang.String,java.time.Instant)" class="member-name-link">updateNodeLease</a><wbr>(long&nbsp;nodeId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateNodeLease(long,java.lang.String,java.time.Instant)" class="member-name-link">updateNodeLease</a><wbr>(long&nbsp;nodeId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按节点状态和租约 owner 更新租约结束时间。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateNodeProgress(long,int,java.lang.String,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateNodeProgress</a><wbr>(long&nbsp;nodeId,
- int&nbsp;attempt,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateNodeProgress(long,long,java.lang.String,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateNodeProgress</a><wbr>(long&nbsp;nodeId,
+ long&nbsp;attempt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="../JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a>&gt;&nbsp;nodeStatus,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="../JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a>&gt;&nbsp;attemptStatus,
@@ -251,16 +411,25 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&gt;&nbsp;availableAt,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&gt;&nbsp;nodeCompletedAt,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&gt;&nbsp;completedAt)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按本次租约和尝试序号更新节点与尝试字段。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateRunResult(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateRunResult</a><wbr>(long&nbsp;runId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateRunResult(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateRunResult</a><wbr>(long&nbsp;runId,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;com.sca4d.core.api.job.JobRunStatus&gt;&nbsp;status,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;outputJson,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&gt;&nbsp;completedAt)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按当前未结束状态写入根运行结果字段。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#upsertInstance(com.sca4d.core.api.name.Name,java.lang.String,java.util.UUID,java.lang.String,java.time.Instant)" class="member-name-link">upsertInstance</a><wbr>(@NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilitiesJson,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">登记或续约当前执行实例和启用能力。</div>
 </div>
 </div>
 </div>
@@ -310,7 +479,7 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="insertRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)">
+<section class="detail" id="insertRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,int,java.lang.String,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant,java.lang.Long,java.lang.String,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)">
 <h3>insertRun</h3>
 <div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">insertRun</span><wbr><span class="parameters">(@Param("appName") @NotNull
  @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
@@ -320,6 +489,22 @@ loadScripts(document, 'script');</script>
  int&nbsp;definitionVersion,
  @Param("kind") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;kind,
+ @Param("capability") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;capability,
+ @Param("systemIdentity") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @Param("workKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @Param("overlapPolicy") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;overlapPolicy,
+ @Param("targetInstanceId") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId,
+ @Param("targetGenerationId") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;targetGenerationId,
+ @Param("targetExpiresAt") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;targetExpiresAt,
+ @Param("dispatchId") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;dispatchId,
  @Param("inputJson") @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
  @Param("scheduleKey") @Nullable
@@ -330,22 +515,260 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="selectScheduledRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,java.util.List)">
+<section class="detail" id="selectScheduledRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,java.lang.String)">
 <h3>selectScheduledRun</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">selectScheduledRun</span><wbr><span class="parameters">(@Param("appName") @NotNull
  @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
  @Param("scheduleKey") @NotNull
  @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
- @Param("scheduledAt") @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
- @Param("statuses") @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.job.JobRunStatus&gt;&nbsp;statuses)</span></div>
+ @Param("scheduledAt") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @Param("targetInstanceId") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId)</span></div>
 <div class="block">按计划、可选触发时间及状态读取首个匹配运行。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="insertNode(long,java.lang.String,java.lang.String,java.lang.String,com.sca4d.job.JobNodeStatus,boolean,int,long,java.time.Instant)">
+<section class="detail" id="selectActiveWork(com.sca4d.core.api.name.Name,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobKey,com.sca4d.core.api.job.JobWorkKey,java.lang.String)">
+<h3>selectActiveWork</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></span>&nbsp;<span class="element-name">selectActiveWork</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("systemIdentity") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @Param("jobKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ @Param("workKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @Param("targetInstanceId") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId)</span></div>
+<div class="block">查询同一系统身份、Job 和工作键下尚未结束的 Run。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="upsertInstance(com.sca4d.core.api.name.Name,java.lang.String,java.util.UUID,java.lang.String,java.time.Instant)">
+<h3>upsertInstance</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">upsertInstance</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("instanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @Param("generationId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @Param("capabilitiesJson") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilitiesJson,
+ @Param("expiresAt") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</span></div>
+<div class="block">登记或续约当前执行实例和启用能力。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectEligibleInstances(com.sca4d.core.api.name.Name,java.lang.String,java.time.Instant)">
+<h3>selectEligibleInstances</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a>&gt;</span>&nbsp;<span class="element-name">selectEligibleInstances</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("capabilityCode") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilityCode,
+ @Param("now") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
+<div class="block">查找提交时在线且启用目标能力的实例。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="deleteInstance(com.sca4d.core.api.name.Name,java.lang.String,java.util.UUID)">
+<h3>deleteInstance</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">deleteInstance</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("instanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @Param("generationId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId)</span></div>
+<div class="block">删除本次进程启动代次的实例登记。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="deleteExpiredInstances(com.sca4d.core.api.name.Name,java.time.Instant)">
+<h3>deleteExpiredInstances</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">deleteExpiredInstances</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("expiredBefore") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiredBefore)</span></div>
+<div class="block">删除租约早已结束的实例登记。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="insertDispatch(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,java.lang.String)">
+<h3>insertDispatch</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">insertDispatch</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("jobKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ @Param("scheduleKey") @Nullable
+ @Nullable com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @Param("scheduledAt") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @Param("targetsJson") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetsJson)</span></div>
+<div class="block">为一次普通或定时广播创建完整的目标清单。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectScheduledDispatch(com.sca4d.core.api.name.Name,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)">
+<h3>selectScheduledDispatch</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="JobDispatchRecord.html" title="class in com.sca4d.job.persistence">JobDispatchRecord</a></span>&nbsp;<span class="element-name">selectScheduledDispatch</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("scheduleKey") @NotNull
+ @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @Param("scheduledAt") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt)</span></div>
+<div class="block">查询同一次定时触发已经固定的广播目标。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectDispatchRuns(com.sca4d.core.api.name.Name,long)">
+<h3>selectDispatchRuns</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="JobDispatchRun.html" title="class in com.sca4d.job.persistence">JobDispatchRun</a>&gt;</span>&nbsp;<span class="element-name">selectDispatchRuns</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("dispatchId")
+ long&nbsp;dispatchId)</span></div>
+<div class="block">读取某次广播下已经创建的全部持久化 Run。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectActiveDelivery(com.sca4d.core.api.name.Name,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobKey,com.sca4d.core.api.job.JobWorkKey,java.lang.String)">
+<h3>selectActiveDelivery</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">selectActiveDelivery</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("systemIdentity") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @Param("jobKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ @Param("workKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @Param("targetInstanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId)</span></div>
+<div class="block">查询当前实例上同一工作键的活动短期投递。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="insertDelivery(com.sca4d.core.api.name.Name,long,com.sca4d.core.api.job.JobKey,int,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,java.lang.String,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant)">
+<h3>insertDelivery</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insertDelivery</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("dispatchId")
+ long&nbsp;dispatchId,
+ @Param("jobKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
+ @Param("definitionVersion")
+ int&nbsp;definitionVersion,
+ @Param("capability") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;capability,
+ @Param("systemIdentity") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;systemIdentity,
+ @Param("workKey") @NotNull
+ @NotNull com.sca4d.core.api.job.JobWorkKey&nbsp;workKey,
+ @Param("overlapPolicy") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;overlapPolicy,
+ @Param("inputJson") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
+ @Param("targetInstanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetInstanceId,
+ @Param("targetGenerationId") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;targetGenerationId,
+ @Param("expiresAt") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</span></div>
+<div class="block">为无记录广播或固定目标创建短期投递份额。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateClaimableDelivery(com.sca4d.core.api.name.Name,java.lang.String,java.util.UUID,java.time.Instant,java.time.Instant,java.util.Map)">
+<h3>updateClaimableDelivery</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="JobDelivery.html" title="class in com.sca4d.job.persistence">JobDelivery</a></span>&nbsp;<span class="element-name">updateClaimableDelivery</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("instanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @Param("generationId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @Param("now") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
+ @Param("leaseUntil") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
+ @Param("definitions") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>com.sca4d.core.api.runtime.InstanceCapability&gt;&gt;&nbsp;definitions)</span></div>
+<div class="block">按实例代次领取一份无记录工作。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateDeliveryLease(long,java.lang.String,java.util.UUID,java.time.Instant,java.time.Instant)">
+<h3>updateDeliveryLease</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateDeliveryLease</span><wbr><span class="parameters">(@Param("deliveryId")
+ long&nbsp;deliveryId,
+ @Param("instanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @Param("generationId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @Param("now") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
+ @Param("leaseUntil") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil)</span></div>
+<div class="block">续期仍由目标实例代次持有的无记录工作份额。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateDeliveryResult(long,java.lang.String,java.util.UUID,java.lang.String,java.lang.String,java.time.Instant)">
+<h3>updateDeliveryResult</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateDeliveryResult</span><wbr><span class="parameters">(@Param("deliveryId")
+ long&nbsp;deliveryId,
+ @Param("instanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @Param("generationId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
+ @Param("status") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status,
+ @Param("error") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;error,
+ @Param("completedAt") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;completedAt)</span></div>
+<div class="block">保存无记录工作完成或失败；不重新投递。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateExpiredDeliveries(com.sca4d.core.api.name.Name,java.time.Instant)">
+<h3>updateExpiredDeliveries</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateExpiredDeliveries</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("now") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
+<div class="block">标记固定目标已过期的未开始或失联无记录工作。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="deleteCompletedDeliveries(com.sca4d.core.api.name.Name,java.time.Instant)">
+<h3>deleteCompletedDeliveries</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">deleteCompletedDeliveries</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("completedBefore") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;completedBefore)</span></div>
+<div class="block">删除已结束且超过短期协调保留时间的无记录份额。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="deleteCompletedDispatches(com.sca4d.core.api.name.Name,java.time.Instant)">
+<h3>deleteCompletedDispatches</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">deleteCompletedDispatches</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("createdBefore") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;createdBefore)</span></div>
+<div class="block">删除不再有份额或 Run 的过期广播头。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="insertNode(long,java.lang.String,java.lang.String,java.lang.String,com.sca4d.job.JobNodeStatus,boolean,com.sca4d.core.api.retry.RetryRule,java.time.Instant)">
 <h3>insertNode</h3>
 <div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">insertNode</span><wbr><span class="parameters">(@Param("runId")
  long&nbsp;runId,
@@ -359,10 +782,8 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a>&nbsp;status,
  @Param("parallelMerge")
  boolean&nbsp;parallelMerge,
- @Param("maxAttempts")
- int&nbsp;maxAttempts,
- @Param("retryDelayMillis")
- long&nbsp;retryDelayMillis,
+ @Param("retryRule") @NotNull
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;retryRule,
  @Param("availableAt") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</span></div>
 <div class="block">插入运行节点并返回数据库主键。</div>
@@ -390,19 +811,34 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="updateClaimableNode(com.sca4d.core.api.name.Name,java.lang.String,java.time.Instant,java.time.Instant,java.util.Map)">
+<section class="detail" id="selectRunIdForUpdate(com.sca4d.core.api.name.Name,long)">
+<h3>selectRunIdForUpdate</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">selectRunIdForUpdate</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("runId")
+ long&nbsp;runId)</span></div>
+<div class="block">在同一个根运行的并发分支推进前取得数据库行锁。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateClaimableNode(com.sca4d.core.api.name.Name,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant,java.time.Instant,java.util.Map)">
 <h3>updateClaimableNode</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="return-type">@Nullable <a href="NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></span>&nbsp;<span class="element-name">updateClaimableNode</span><wbr><span class="parameters">(@Param("appName") @NotNull
  @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
  @Param("workerId") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
+ @Param("instanceId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
+ @Param("generationId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;generationId,
  @Param("now") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
  @Param("leaseUntil") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
  @Param("definitions") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;definitions)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>com.sca4d.core.api.runtime.InstanceCapability&gt;&gt;&nbsp;definitions)</span></div>
 <div class="block">原子领取一个可执行节点并登记本次尝试。</div>
 </section>
 </li>
@@ -436,12 +872,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="updateNodeProgress(long,int,java.lang.String,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)">
+<section class="detail" id="updateNodeProgress(long,long,java.lang.String,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)">
 <h3>updateNodeProgress</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateNodeProgress</span><wbr><span class="parameters">(@Param("nodeId")
  long&nbsp;nodeId,
  @Param("attempt")
- int&nbsp;attempt,
+ long&nbsp;attempt,
  @Param("workerId") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
  @Param("nodeStatus") @NotNull
@@ -486,14 +922,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="updateNodeFailed(long,long,int,java.lang.String,java.lang.String,java.time.Instant)">
+<section class="detail" id="updateNodeFailed(long,long,long,java.lang.String,java.lang.String,java.time.Instant)">
 <h3>updateNodeFailed</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateNodeFailed</span><wbr><span class="parameters">(@Param("nodeId")
  long&nbsp;nodeId,
  @Param("runId")
  long&nbsp;runId,
  @Param("attempt")
- int&nbsp;attempt,
+ long&nbsp;attempt,
  @Param("workerId") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
  @Param("error") @NotNull
@@ -504,6 +940,35 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="selectExpiredAttempts(com.sca4d.core.api.name.Name,java.time.Instant)">
+<h3>selectExpiredAttempts</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ExpiredJobAttempt.html" title="class in com.sca4d.job.persistence">ExpiredJobAttempt</a>&gt;</span>&nbsp;<span class="element-name">selectExpiredAttempts</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("now") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
+<div class="block">锁定当前应用仍有尝试额度的过期租约，避免重复计算恢复时间。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="rescheduleExpired(long,long,java.lang.String,java.time.Instant,java.time.Instant,java.time.Instant)">
+<h3>rescheduleExpired</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">rescheduleExpired</span><wbr><span class="parameters">(@Param("nodeId")
+ long&nbsp;nodeId,
+ @Param("attempt")
+ long&nbsp;attempt,
+ @Param("workerId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workerId,
+ @Param("leaseUntil") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
+ @Param("availableAt") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt,
+ @Param("now") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
+<div class="block">按旧租约原子放弃尝试并恢复 READY，返回结束的尝试数。</div>
+</section>
+</li>
+<li>
 <section class="detail" id="updateExpiredNodes(com.sca4d.core.api.name.Name,java.time.Instant)">
 <h3>updateExpiredNodes</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateExpiredNodes</span><wbr><span class="parameters">(@Param("appName") @NotNull
@@ -511,6 +976,16 @@ loadScripts(document, 'script');</script>
  @Param("now") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
 <div class="block">失败当前 App 隔离名称内租约过期且重试耗尽的节点及其根运行。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="updateExpiredTargets(com.sca4d.core.api.name.Name,java.time.Instant)">
+<h3>updateExpiredTargets</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateExpiredTargets</span><wbr><span class="parameters">(@Param("appName") @NotNull
+ @NotNull com.sca4d.core.api.name.Name&nbsp;appName,
+ @Param("now") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
+<div class="block">将固定目标等待期限已经过去的未开始运行标为失败。</div>
 </section>
 </li>
 <li>

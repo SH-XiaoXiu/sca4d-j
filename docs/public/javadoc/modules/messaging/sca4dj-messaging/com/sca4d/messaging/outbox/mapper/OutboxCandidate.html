@@ -103,11 +103,15 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,int,long)" class="member-name-link">OutboxCandidate</a><wbr>(long&nbsp;messageId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,long,long,com.sca4d.core.api.name.code.TreeCode,java.lang.Long,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">OutboxCandidate</a><wbr>(long&nbsp;outboxId,
+ long&nbsp;messageId,
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
  byte @NotNull []&nbsp;envelope,
- int&nbsp;attemptCount,
- long&nbsp;version)</code></div>
+ long&nbsp;attemptCount,
+ long&nbsp;version,
+ @Nullable com.sca4d.core.api.name.code.TreeCode&nbsp;targetHandlerCode,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;handlerAttempt,
+ @Nullable com.sca4d.core.api.retry.RetryRule&nbsp;handlerRetryRule)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建已经登记租约、尝试次数和版本的 Outbox 领取数据。</div>
 </div>
@@ -125,17 +129,29 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attemptCount()" class="member-name-link">attemptCount</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#envelope()" class="member-name-link">envelope</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handlerAttempt()" class="member-name-link">handlerAttempt</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable com.sca4d.core.api.retry.RetryRule</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handlerRetryRule()" class="member-name-link">handlerRetryRule</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messageCode()" class="member-name-link">messageCode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messageId()" class="member-name-link">messageId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outboxId()" class="member-name-link">outboxId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#targetHandlerCode()" class="member-name-link">targetHandlerCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#version()" class="member-name-link">version</a>()</code></div>
@@ -158,14 +174,21 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,com.sca4d.core.api.name.code.TreeCode,byte[],int,long)">
+<section class="detail" id="&lt;init&gt;(long,long,com.sca4d.core.api.name.code.TreeCode,byte[],long,long,com.sca4d.core.api.name.code.TreeCode,java.lang.Long,com.sca4d.core.api.retry.RetryRule)">
 <h3>OutboxCandidate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">OutboxCandidate</span><wbr><span class="parameters">(long&nbsp;messageId,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">OutboxCandidate</span><wbr><span class="parameters">(long&nbsp;outboxId,
+ long&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
  byte @NotNull []&nbsp;envelope,
- int&nbsp;attemptCount,
- long&nbsp;version)</span></div>
+ long&nbsp;attemptCount,
+ long&nbsp;version,
+ @Nullable
+ @Nullable com.sca4d.core.api.name.code.TreeCode&nbsp;targetHandlerCode,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;handlerAttempt,
+ @Nullable
+ @Nullable com.sca4d.core.api.retry.RetryRule&nbsp;handlerRetryRule)</span></div>
 <div class="block">创建已经登记租约、尝试次数和版本的 Outbox 领取数据。</div>
 </section>
 </li>
@@ -178,12 +201,55 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="outboxId()">
+<h3>outboxId</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">outboxId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>本次代理发布记录标识</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="targetHandlerCode()">
+<h3>targetHandlerCode</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">targetHandlerCode</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>定向投递目标；普通分发时为空</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="handlerAttempt()">
+<h3>handlerAttempt</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">handlerAttempt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>待开始的消费尝试序号；普通分发时为空</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="handlerRetryRule()">
+<h3>handlerRetryRule</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable com.sca4d.core.api.retry.RetryRule</span>&nbsp;<span class="element-name">handlerRetryRule</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>冻结的消费规则；普通分发时为空</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="messageId()">
 <h3>messageId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">messageId</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>消息主键</dd>
+<dd>原业务消息标识</dd>
 </dl>
 </section>
 </li>
@@ -211,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attemptCount()">
 <h3>attemptCount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">attemptCount</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">attemptCount</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>包含本次领取的累计尝试次数</dd>

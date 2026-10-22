@@ -3,27 +3,33 @@ package com.sca4d.scheduling.quartz;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.identity.SystemPrincipals;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
-import com.sca4d.core.api.job.JobExecution;
+import com.sca4d.core.api.job.JobDispatch;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.job.JobRetryPolicy;
 import com.sca4d.core.api.job.JobRunStatus;
-import com.sca4d.core.api.scheduling.ClusterTask;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
-import com.sca4d.core.api.scheduling.ClusterTaskScheduler;
+import com.sca4d.core.api.job.JobSubmission;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
+import com.sca4d.core.api.runtime.InstanceCapabilities;
+import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
+import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
+import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.mybatis.CoreMyBatisAutoConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +39,7 @@ import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
@@ -53,6 +60,7 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +68,7 @@ import java.util.function.Supplier;
 
 import javax.sql.DataSource;
 
-/** 使用真实 PostgreSQL 验证 Quartz 集群表、代码计划对账和 fire 提交。 */
+/** 使用真实 PostgreSQL 验证统一 JobSchedule 的两种运行记录策略。 */
 @Testcontainers(disabledWithoutDocker = true)
 class QuartzSchedulingIntegrationTest {
 
@@ -69,9 +77,13 @@ class QuartzSchedulingIntegrationTest {
 
     private static DataSource dataSource;
 
-    /** 在 Spring 创建 Scheduler 前准备官方 Quartz PostgreSQL 表。 */
     @BeforeAll
     static void createSchema() {
+        AppName.publish("quartz-test");
+        SystemPrincipals.publish(
+                Map.of(
+                        SystemPrincipals.MAIN,
+                        new SystemPrincipal(1, SystemPrincipals.MAIN)));
         dataSource = new DriverManagerDataSource(
                 POSTGRES.getJdbcUrl(),
                 POSTGRES.getUsername(),
@@ -80,13 +92,14 @@ class QuartzSchedulingIntegrationTest {
                 .execute(dataSource);
     }
 
-    /** 对账完成后 Scheduler 才启动，并把实际 fire 提交给 JobExecutor。 */
     @Test
-    void reconcilesStartsAndDispatchesScheduledFire() {
+    @SuppressWarnings("unchecked")
+    void schedulesPersistedAndUnrecordedJobsAndRemovesOldTaskGroup() {
         ApplicationContextRunner runner = new ApplicationContextRunner()
                 .withConfiguration(
                         AutoConfigurations.of(
                                 QuartzSchedulingAutoConfiguration.class,
+                                CoreJacksonAutoConfiguration.class,
                                 CoreMyBatisAutoConfiguration.class,
                                 MybatisAutoConfiguration.class,
                                 QuartzAutoConfiguration.class))
@@ -99,9 +112,8 @@ class QuartzSchedulingIntegrationTest {
         runner.run(context -> {
             assertThat(context).hasNotFailed();
             CountingJobExecutor executor = context.getBean(CountingJobExecutor.class);
-            assertThat(executor.fire.await(10, TimeUnit.SECONDS)).isTrue();
-            CountingClusterTask clusterTask = context.getBean(CountingClusterTask.class);
-            assertThat(clusterTask.execution.await(10, TimeUnit.SECONDS)).isTrue();
+            assertThat(executor.persisted.await(10, TimeUnit.SECONDS)).isTrue();
+            assertThat(executor.unrecorded.await(10, TimeUnit.SECONDS)).isTrue();
 
             Scheduler scheduler = context.getBean(Scheduler.class);
             assertThat(scheduler.isStarted()).isTrue();
@@ -113,167 +125,77 @@ class QuartzSchedulingIntegrationTest {
                                     + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ'",
                             Integer.class))
                     .isEqualTo(2);
-            assertThat(
-                    jdbc.queryForObject(
-                            "SELECT count(*) FROM quartz.qrtz_triggers "
-                                    + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ'",
-                            Integer.class))
-                    .isEqualTo(2);
-            assertThat(
-                    jdbc.queryForObject(
-                            "SELECT is_nonconcurrent FROM quartz.qrtz_job_details "
-                                    + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ' "
-                                    + "AND job_name = 'TEST/QUARTZ/CLUSTER_TASK' "
-                                    + "AND job_group = 'sca4dj-cluster-task'",
-                            Boolean.class))
-                    .isTrue();
 
-            // 持久化定义缺少当前版本键时，以当前代码定义重建 JobDetail。
             scheduler.standby();
-            JobDetail incompleteSchedule = scheduler.getJobDetail(
-                    new org.quartz.JobKey("TEST/QUARTZ/DISPATCH", "sca4dj-code"));
-            incompleteSchedule.getJobDataMap().remove(QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION);
-            scheduler.addJob(incompleteSchedule, true);
-            JobDetail incompleteClusterTask = scheduler.getJobDetail(
-                    new org.quartz.JobKey("TEST/QUARTZ/CLUSTER_TASK", "sca4dj-cluster-task"));
-            incompleteClusterTask.getJobDataMap().remove(QuartzClusterTaskJob.TASK_DEFINITION_VERSION);
-            scheduler.addJob(incompleteClusterTask, true);
-
-            JobScheduler jobScheduler = context.getBean(JobScheduler.class);
-            JobSchedule<Void, Void> schedule = context.getBean(JobSchedule.class);
             scheduler.addJob(
                     JobBuilder.newJob(QuartzDispatchJob.class)
-                            .withIdentity("storage.file.cleanup", "sca4dj-code")
+                            .withIdentity("old-scan", "sca4dj-cluster-task")
                             .storeDurably()
                             .build(),
                     true);
-            scheduler.addJob(
-                    JobBuilder.newJob(QuartzClusterTaskJob.class)
-                            .withIdentity("iot.downlink.retention", "sca4dj-cluster-task")
-                            .storeDurably()
-                            .build(),
-                    true);
-            jobScheduler.reconcile(List.of(schedule));
-            ClusterTaskScheduler clusterTaskScheduler = context.getBean(ClusterTaskScheduler.class);
-            ClusterTaskSchedule clusterTaskSchedule = context.getBean(ClusterTaskSchedule.class);
-            clusterTaskScheduler.reconcileClusterTasks(List.of(clusterTaskSchedule));
-            assertThat(scheduler.checkExists(new org.quartz.JobKey("storage.file.cleanup", "sca4dj-code")))
+            JobDetail incomplete = scheduler.getJobDetail(
+                    new org.quartz.JobKey("TEST/QUARTZ/DISPATCH", "sca4dj-code"));
+            incomplete.getJobDataMap().remove(QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION);
+            scheduler.addJob(incomplete, true);
+
+            JobScheduler schedules = context.getBean(JobScheduler.class);
+            List<JobSchedule<?, ?>> declared = List.of(
+                    (JobSchedule<Void, Void>) context.getBean("persistedSchedule", JobSchedule.class),
+                    (JobSchedule<Void, Void>) context.getBean("unrecordedSchedule", JobSchedule.class));
+            schedules.reconcile(declared);
+            assertThat(scheduler.checkExists(new org.quartz.JobKey("old-scan", "sca4dj-cluster-task")))
                     .isFalse();
-            assertThat(scheduler.checkExists(new org.quartz.JobKey("iot.downlink.retention", "sca4dj-cluster-task")))
-                    .isFalse();
-            assertThat(
-                    scheduler.getJobDetail(new org.quartz.JobKey("TEST/QUARTZ/DISPATCH", "sca4dj-code"))
-                            .getJobDataMap())
-                    .containsEntry(QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION, "1");
             assertThat(
                     scheduler.getJobDetail(
-                            new org.quartz.JobKey(
-                                    "TEST/QUARTZ/CLUSTER_TASK",
-                                    "sca4dj-cluster-task"))
+                            new org.quartz.JobKey("TEST/QUARTZ/DISPATCH", "sca4dj-code"))
                             .getJobDataMap())
-                    .containsEntry(QuartzClusterTaskJob.TASK_DEFINITION_VERSION, "1");
-            scheduler.start();
+                    .containsEntry(QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION, "1");
 
-            // 历史记录缺少当前调度契约时，运行时严格拒绝，不在公共机制中保留历史兼容分支。
-            scheduler.standby();
-            JobDetail legacyClusterTask = scheduler.getJobDetail(
-                    new org.quartz.JobKey("TEST/QUARTZ/CLUSTER_TASK", "sca4dj-cluster-task"));
-            String currentClusterContract = legacyClusterTask.getJobDataMap().getString("scheduleContract");
-            String currentClusterFingerprint = legacyClusterTask.getJobDataMap().getString("scheduleFingerprint");
-            legacyClusterTask.getJobDataMap().remove("scheduleContract");
-            legacyClusterTask.getJobDataMap().put("scheduleFingerprint", "legacy-implementation-fingerprint");
-            scheduler.addJob(legacyClusterTask, true);
-            assertThatThrownBy(() -> clusterTaskScheduler.reconcileClusterTasks(List.of(clusterTaskSchedule)))
+            JobSchedule<?, ?> changed = new JobSchedule<>(
+                    new ScheduleKey("TEST/QUARTZ/DISPATCH"),
+                    1,
+                    context.getBean("persistedJob", DirectJob.class),
+                    null,
+                    new IntervalSchedule(Duration.ofSeconds(2), Duration.ofMillis(100)),
+                    MisfirePolicy.FIRE_ONCE_NOW,
+                    OverlapPolicy.SKIP_IF_RUNNING);
+            assertThatThrownBy(
+                    () -> schedules.reconcile(
+                            List.of(
+                                    changed,
+                                    context.getBean(
+                                            "unrecordedSchedule",
+                                            JobSchedule.class))))
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessageContaining("同 definitionVersion 定义发生变化");
-            legacyClusterTask.getJobDataMap().put("scheduleContract", currentClusterContract);
-            legacyClusterTask.getJobDataMap().put("scheduleFingerprint", currentClusterFingerprint);
-            scheduler.addJob(legacyClusterTask, true);
-
-            // 任务实现类更换但调度契约不变时不需要递增 definitionVersion。
-            ClusterTaskSchedule movedTask = new ClusterTaskSchedule(
-                    clusterTaskSchedule.key(),
-                    clusterTaskSchedule.definitionVersion(),
-                    new RenamedCountingClusterTask(),
-                    clusterTaskSchedule.timing(),
-                    clusterTaskSchedule.misfirePolicy());
-            clusterTaskScheduler.reconcileClusterTasks(List.of(movedTask));
-            JobSchedule<Void, Void> movedSchedule = new JobSchedule<>(
-                    schedule.key(),
-                    schedule.definitionVersion(),
-                    new RenamedDirectJob(),
-                    schedule.input(),
-                    schedule.timing(),
-                    schedule.misfirePolicy(),
-                    schedule.overlapPolicy());
-            jobScheduler.reconcile(List.of(movedSchedule));
-            scheduler.start();
-
-            JobSchedule<?, ?> changedWithoutVersion = withInterval(
-                    schedule,
-                    new IntervalSchedule(Duration.ofSeconds(2), Duration.ofMillis(100)));
-            assertThatThrownBy(() -> jobScheduler.reconcile(List.of(changedWithoutVersion)))
-                    .isInstanceOf(IllegalStateException.class)
-                    .hasMessageContaining("同 definitionVersion 定义发生变化");
-
-            scheduler.standby();
-            jdbc.update(
-                    "UPDATE quartz.qrtz_triggers SET trigger_state = 'ERROR' "
-                            + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ' "
-                            + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'");
-            jobScheduler.reconcile(List.of(schedule));
-            assertThat(
-                    jdbc.queryForObject(
-                            "SELECT trigger_state FROM quartz.qrtz_triggers "
-                                    + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ' "
-                                    + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'",
-                            String.class))
-                    .isEqualTo("WAITING");
-            scheduler.start();
         });
     }
 
-    /** 没有 JobExecutor 时仍可只安装并执行基础设施集群任务。 */
+    /** 单独安装调度模块时也能执行无记录 Job，不要求持久化 JobExecutor。 */
     @Test
-    void runsClusterTaskWithoutJobExecutor() {
+    void runsUnrecordedScheduleWithoutJobModule() {
         ApplicationContextRunner runner = new ApplicationContextRunner()
                 .withConfiguration(
                         AutoConfigurations.of(
                                 QuartzSchedulingAutoConfiguration.class,
+                                CoreJacksonAutoConfiguration.class,
                                 CoreMyBatisAutoConfiguration.class,
                                 MybatisAutoConfiguration.class,
                                 QuartzAutoConfiguration.class))
                 .withUserConfiguration(TestConfiguration.class)
                 .withPropertyValues(
                         "spring.application.name=quartz-test",
-                        "test.job-schedule.enabled=false",
+                        "test.executor.enabled=false",
                         "sca4dj.scheduling.quartz.thread-count=2",
                         "sca4dj.scheduling.quartz.cluster-checkin-interval=PT1S");
 
         runner.run(context -> {
             assertThat(context).hasNotFailed();
             assertThat(context).doesNotHaveBean(JobExecutor.class);
-            CountingClusterTask clusterTask = context.getBean(CountingClusterTask.class);
-            assertThat(clusterTask.execution.await(10, TimeUnit.SECONDS)).isTrue();
-            assertThat(context.getBean(Scheduler.class).isStarted()).isTrue();
+            assertThat(context.getBean(CountingScan.class).execution.await(10, TimeUnit.SECONDS)).isTrue();
         });
     }
 
-    /** 保留 JobSchedule 输入输出泛型关系，只替换测试需要的固定间隔。 */
-    private static <I, O> @NotNull JobSchedule<I, O> withInterval(
-            @NotNull JobSchedule<I, O> schedule,
-            @NotNull IntervalSchedule interval) {
-        return new JobSchedule<>(
-                schedule.key(),
-                schedule.definitionVersion(),
-                schedule.job(),
-                schedule.input(),
-                interval,
-                schedule.misfirePolicy(),
-                schedule.overlapPolicy());
-    }
-
-    /** 提供真实 DataSource、统一 JSON、代码计划和可观测 JobExecutor。 */
     @Configuration(proxyBeanMethods = false)
     static class TestConfiguration {
 
@@ -297,7 +219,16 @@ class QuartzSchedulingIntegrationTest {
             return Clock.systemUTC();
         }
 
-        /** @return 立即执行任务的单进程测试锁 */
+        @Bean
+        InstanceProperties instanceProperties() {
+            return new InstanceProperties();
+        }
+
+        @Bean
+        InstanceCapabilities instanceCapabilities(List<InstanceCapability> definitions) {
+            return new InstanceCapabilities(definitions, null);
+        }
+
         @Bean
         DistributedLock distributedLock() {
             return new DistributedLock() {
@@ -310,25 +241,23 @@ class QuartzSchedulingIntegrationTest {
 
         @Bean
         @Sca4djJson
-        ObjectMapper sca4djJson() {
-            return new ObjectMapper().findAndRegisterModules();
+        Sca4djMapper sca4djJson() {
+            return new Sca4djMapper();
         }
 
         @Bean
-        @ConditionalOnProperty(name = "test.job-schedule.enabled", havingValue = "true", matchIfMissing = true)
+        @ConditionalOnProperty(name = "test.executor.enabled", havingValue = "true", matchIfMissing = true)
         CountingJobExecutor jobExecutor() {
             return new CountingJobExecutor();
         }
 
         @Bean
-        @ConditionalOnProperty(name = "test.job-schedule.enabled", havingValue = "true", matchIfMissing = true)
-        DirectJob<Void, Void> scheduledJob() {
+        @ConditionalOnProperty(name = "test.executor.enabled", havingValue = "true", matchIfMissing = true)
+        DirectJob<Void, Void> persistedJob() {
             return new DirectJob<>() {
-                private final JobKey key = new JobKey("TEST/QUARTZ/DISPATCH");
-
                 @Override
                 public @NotNull JobKey key() {
-                    return key;
+                    return new JobKey("TEST/QUARTZ/DISPATCH");
                 }
 
                 @Override
@@ -347,13 +276,13 @@ class QuartzSchedulingIntegrationTest {
                 }
 
                 @Override
-                public @NotNull JobRetryPolicy retryPolicy() {
-                    return JobRetryPolicy.once();
+                public @NotNull RetryRule retryRule() {
+                    return RetryRule.once();
                 }
 
                 @Override
                 protected @Nullable Void execute(
-                        @NotNull JobExecution execution,
+                        @NotNull com.sca4d.core.api.job.JobExecution execution,
                         @Nullable Void input) {
                     return null;
                 }
@@ -361,94 +290,60 @@ class QuartzSchedulingIntegrationTest {
         }
 
         @Bean
-        @ConditionalOnProperty(name = "test.job-schedule.enabled", havingValue = "true", matchIfMissing = true)
-        JobSchedule<Void, Void> schedule(DirectJob<Void, Void> scheduledJob) {
-            return new JobSchedule<>(
-                    new ScheduleKey("TEST/QUARTZ/DISPATCH"),
+        CountingScan countingScan() {
+            return new CountingScan();
+        }
+
+        @Bean
+        DirectJob<Void, Void> unrecordedJob(CountingScan scan) {
+            return DirectJob.unrecorded(
+                    new JobKey("TEST/QUARTZ/SCAN"),
                     1,
-                    scheduledJob,
+                    TreeCode.ofColon("SCHEDULING:WORKER"),
+                    scan::execute);
+        }
+
+        @Bean
+        @ConditionalOnProperty(name = "test.executor.enabled", havingValue = "true", matchIfMissing = true)
+        JobSchedule<Void, Void> persistedSchedule(
+                @Qualifier("persistedJob") DirectJob<Void, Void> job) {
+            return schedule("TEST/QUARTZ/DISPATCH", job);
+        }
+
+        @Bean
+        JobSchedule<Void, Void> unrecordedSchedule(
+                @Qualifier("unrecordedJob") DirectJob<Void, Void> job) {
+            return schedule("TEST/QUARTZ/SCAN", job);
+        }
+
+        private static JobSchedule<Void, Void> schedule(String key, DirectJob<Void, Void> job) {
+            return new JobSchedule<>(
+                    new ScheduleKey(key),
+                    1,
+                    job,
                     null,
                     new IntervalSchedule(Duration.ofSeconds(1), Duration.ofMillis(100)),
                     MisfirePolicy.FIRE_ONCE_NOW,
                     OverlapPolicy.SKIP_IF_RUNNING);
         }
-
-        @Bean
-        CountingClusterTask countingClusterTask() {
-            return new CountingClusterTask();
-        }
-
-        @Bean
-        ClusterTaskSchedule clusterTaskSchedule(CountingClusterTask task) {
-            return new ClusterTaskSchedule(
-                    new ScheduleKey("TEST/QUARTZ/CLUSTER_TASK"),
-                    1,
-                    task,
-                    new IntervalSchedule(Duration.ofMillis(100), Duration.ofMillis(50)),
-                    MisfirePolicy.FIRE_ONCE_NOW);
-        }
     }
 
-    /** 记录 Quartz 是否直接执行了集群任务。 */
-    static class CountingClusterTask implements ClusterTask {
+    static class CountingScan {
         private final CountDownLatch execution = new CountDownLatch(1);
 
-        @Override
-        public void execute() {
+        void execute() {
             execution.countDown();
         }
     }
 
-    /** 用于验证实现类更换不改变稳定调度契约。 */
-    static class RenamedCountingClusterTask implements ClusterTask {
-        @Override
-        public void execute() {
-        }
-    }
-
-    /** 用于验证 Job 实现类更换不改变稳定调度契约。 */
-    static class RenamedDirectJob extends DirectJob<Void, Void> {
-        private final JobKey key = new JobKey("TEST/QUARTZ/DISPATCH");
-
-        @Override
-        public @NotNull JobKey key() {
-            return key;
-        }
-
-        @Override
-        public int definitionVersion() {
-            return 1;
-        }
-
-        @Override
-        public @NotNull Class<Void> inputType() {
-            return Void.class;
-        }
-
-        @Override
-        public @NotNull Class<Void> outputType() {
-            return Void.class;
-        }
-
-        @Override
-        public @NotNull JobRetryPolicy retryPolicy() {
-            return JobRetryPolicy.once();
-        }
-
-        @Override
-        protected @Nullable Void execute(
-                @NotNull JobExecution execution,
-                @Nullable Void input) {
-            return null;
-        }
-    }
-
-    /** 记录 Quartz 是否使用原定 fire 时间提交了计划。 */
     static class CountingJobExecutor implements JobExecutor {
-        private final CountDownLatch fire = new CountDownLatch(1);
+
+        private final CountDownLatch persisted = new CountDownLatch(1);
+
+        private final CountDownLatch unrecorded = new CountDownLatch(1);
 
         @Override
-        public <I, O> @NotNull Id submit(@NotNull Job<I, O> job, @Nullable I input) {
+        public <I, O> @NotNull JobSubmission submit(@NotNull Job<I, O> job, @Nullable I input) {
             throw new UnsupportedOperationException();
         }
 
@@ -459,8 +354,43 @@ class QuartzSchedulingIntegrationTest {
                 @NotNull ScheduleKey scheduleKey,
                 @NotNull Instant scheduledAt,
                 @NotNull OverlapPolicy overlapPolicy) {
-            fire.countDown();
+            persisted.countDown();
             return Optional.of(Id.of(1));
+        }
+
+        @Override
+        public <I, O> @NotNull JobDispatch broadcast(@NotNull Job<I, O> job, @Nullable I input) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public <I, O> @NotNull JobDispatch broadcastScheduled(
+                @NotNull Job<I, O> job,
+                @Nullable I input,
+                @NotNull ScheduleKey scheduleKey,
+                @NotNull Instant scheduledAt,
+                @NotNull OverlapPolicy overlapPolicy) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public <I, O> boolean trigger(
+                @NotNull Job<I, O> job,
+                @Nullable I input,
+                @NotNull OverlapPolicy overlapPolicy) {
+            unrecorded.countDown();
+            return true;
+        }
+
+        @Override
+        public <I, O> boolean triggerScheduled(
+                @NotNull Job<I, O> job,
+                @Nullable I input,
+                @NotNull ScheduleKey scheduleKey,
+                @NotNull Instant scheduledAt,
+                @NotNull OverlapPolicy overlapPolicy) {
+            unrecorded.countDown();
+            return true;
         }
 
         @Override
@@ -477,9 +407,7 @@ class QuartzSchedulingIntegrationTest {
         }
 
         @Override
-        public <O> @NotNull Optional<O> result(
-                @NotNull Id runId,
-                @NotNull Job<?, O> job) {
+        public <O> @NotNull Optional<O> result(@NotNull Id runId, @NotNull Job<?, O> job) {
             throw new UnsupportedOperationException();
         }
 

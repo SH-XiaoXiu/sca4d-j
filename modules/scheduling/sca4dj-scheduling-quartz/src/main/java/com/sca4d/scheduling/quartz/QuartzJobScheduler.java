@@ -1,21 +1,18 @@
 package com.sca4d.scheduling.quartz;
 
 import static com.sca4d.core.api.name.NameFormat.SLASH;
-import static com.sca4d.scheduling.quartz.QuartzClusterTaskJob.TASK_DEFINITION_VERSION;
-import static com.sca4d.scheduling.quartz.QuartzClusterTaskJob.TASK_KEY;
 import static com.sca4d.scheduling.quartz.QuartzDispatchJob.EXECUTOR_CONTEXT_KEY;
 import static com.sca4d.scheduling.quartz.QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION;
 import static com.sca4d.scheduling.quartz.QuartzDispatchJob.SCHEDULE_KEY;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
+import com.sca4d.core.api.job.JobRunRecording;
+import com.sca4d.core.api.job.JobTarget;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
-import com.sca4d.core.api.scheduling.ClusterTaskScheduler;
 import com.sca4d.core.api.scheduling.CronSchedule;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
@@ -23,6 +20,7 @@ import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.api.scheduling.ScheduleTiming;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.jetbrains.annotations.NotNull;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -57,8 +55,8 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/** 对账代码声明的持久化 Job 计划和基础设施集群任务，并在对账成功后启动 Quartz。 */
-public final class QuartzJobScheduler implements JobScheduler, ClusterTaskScheduler, SmartLifecycle {
+/** 对账代码声明的 Job 计划，并在对账成功后启动 Quartz。 */
+public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
 
     private static final String CLUSTER_TASK_GROUP = "sca4dj-cluster-task";
 
@@ -74,13 +72,9 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
-    private final @NotNull ObjectMapper objectMapper;
-
-    private final @NotNull ObjectProvider<ClusterTaskSchedule> initialClusterTasks;
+    private final @NotNull Sca4djMapper objectMapper;
 
     private final @NotNull ObjectProvider<JobSchedule<?, ?>> initialSchedules;
-
-    private final @NotNull QuartzClusterTaskRegistry clusterTaskRegistry;
 
     private final @NotNull QuartzScheduleRegistry registry;
 
@@ -101,40 +95,30 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
      *
      * @param scheduler Spring Boot 创建的 JDBC Quartz Scheduler
      * @param registry 对账成功后供 fire 恢复定义的目录
-     * @param clusterTaskRegistry 对账成功后供 fire 恢复集群任务的目录
      * @param distributedLock Quartz 计划对账使用的 Redis 分布式锁
      * @param transactionManager 主 PostgreSQL 事务管理器
      * @param objectMapper 脚手架统一 JSON 映射器
      * @param clock 固定间隔首次 fire 使用的时钟
      * @param initialSchedules 延迟读取 Spring 登记的全部代码计划
-     * @param initialClusterTasks 延迟读取 Spring 登记的全部集群任务计划
      * @param schedulerName Quartz 集群共享名称
      */
     QuartzJobScheduler(
             @NotNull Scheduler scheduler,
             @NotNull QuartzScheduleRegistry registry,
-            @NotNull QuartzClusterTaskRegistry clusterTaskRegistry,
             @NotNull DistributedLock distributedLock,
             @NotNull PlatformTransactionManager transactionManager,
-            @NotNull ObjectMapper objectMapper,
+            @NotNull Sca4djMapper objectMapper,
             @NotNull Clock clock,
             @NotNull ObjectProvider<JobSchedule<?, ?>> initialSchedules,
-            @NotNull ObjectProvider<ClusterTaskSchedule> initialClusterTasks,
             @NotNull Key schedulerName) {
         this.scheduler = Objects.requireNonNull(scheduler, "Quartz Scheduler 不能为空");
         this.registry = Objects.requireNonNull(registry, "QuartzScheduleRegistry 不能为空");
-        this.clusterTaskRegistry = Objects.requireNonNull(
-                clusterTaskRegistry,
-                "QuartzClusterTaskRegistry 不能为空");
         this.distributedLock = Objects.requireNonNull(distributedLock, "Quartz 对账分布式锁不能为空");
         this.transactions = new TransactionTemplate(
                 Objects.requireNonNull(transactionManager, "Quartz 事务管理器不能为空"));
         this.objectMapper = Objects.requireNonNull(objectMapper, "Quartz ObjectMapper 不能为空");
         this.clock = Objects.requireNonNull(clock, "Quartz 时钟不能为空");
         this.initialSchedules = Objects.requireNonNull(initialSchedules, "Quartz 初始计划 Provider 不能为空");
-        this.initialClusterTasks = Objects.requireNonNull(
-                initialClusterTasks,
-                "Quartz 初始集群任务 Provider 不能为空");
         this.schedulerName = Objects.requireNonNull(schedulerName, "Quartz schedulerName 不能为空");
     }
 
@@ -170,55 +154,28 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     }
 
     @Override
-    public void reconcileClusterTasks(@NotNull Collection<@NotNull ClusterTaskSchedule> schedules) {
-        // 在写入 Quartz 前完整校验计划 key，并计算用于阻止同定义版本静默变化的摘要。
-        Map<ScheduleKey, ClusterTaskSchedule> definitions = clusterTaskDefinitions(schedules);
-        Map<ScheduleKey, String> contracts = new HashMap<>();
-        Map<ScheduleKey, String> fingerprints = new HashMap<>();
-        definitions.forEach((key, schedule) -> {
-            String contract = clusterTaskContract(schedule);
-            contracts.put(key, contract);
-            fingerprints.put(key, DigestUtil.sha256Hex(contract));
-        });
-        Integer deletedCount = distributedLock.execute(
-                RECONCILE_LOCK,
-                LOCK_WAIT,
-                () -> transactions.execute(status -> {
-                    try {
-                        return reconcileClusterTasksQuartz(definitions, contracts, fingerprints);
-                    } catch (SchedulerException exception) {
-                        throw new IllegalStateException("Quartz 集群任务计划对账失败", exception);
-                    }
-                }));
-        // 只有数据库对账全部成功后才替换 fire 可见的定义。
-        clusterTaskRegistry.replace(definitions);
-        log.debug(
-                "Quartz 集群任务计划对账完成 | schedulerName={} definitionCount={} deletedCount={}",
-                schedulerName,
-                definitions.size(),
-                deletedCount);
-    }
-
-    @Override
     public void start() {
         if (!running.compareAndSet(false, true)) {
             return;
         }
         try {
-            // 只有持久化 Job 计划需要 JobExecutor；纯集群任务可以独立使用 Quartz。
             List<JobSchedule<?, ?>> jobSchedules = initialSchedules.orderedStream().toList();
-            if (!jobSchedules.isEmpty()
-                    && !scheduler.getContext().containsKey(EXECUTOR_CONTEXT_KEY)) {
-                throw new IllegalStateException("Quartz 存在 JobSchedule，但应用没有提供 JobExecutor");
+            if (!scheduler.getContext().containsKey(EXECUTOR_CONTEXT_KEY)
+                    && jobSchedules.stream().anyMatch(schedule -> !quartzCanRunDirectly(schedule))) {
+                throw new IllegalStateException("持久化或定向 JobSchedule 需要 JobExecutor");
             }
             reconcile(jobSchedules);
-            reconcileClusterTasks(initialClusterTasks.orderedStream().toList());
             scheduler.start();
             log.info("Quartz 集群调度器已启动 | schedulerName={}", schedulerName);
         } catch (SchedulerException | RuntimeException exception) {
             running.set(false);
             throw new IllegalStateException("Quartz 对账或启动失败", exception);
         }
+    }
+
+    private static <I, O> boolean quartzCanRunDirectly(@NotNull JobSchedule<I, O> schedule) {
+        return schedule.job().runRecording() == JobRunRecording.NONE
+                && schedule.job().target(schedule.input()).kind() == JobTarget.Kind.ANY;
     }
 
     @Override
@@ -309,72 +266,8 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 }
             }
         }
-        return deletedCount;
-    }
-
-    /** 更新当前集群任务计划并删除代码中已经移除的集群任务 JobDetail。 */
-    private int reconcileClusterTasksQuartz(
-            @NotNull Map<ScheduleKey, ClusterTaskSchedule> definitions,
-            @NotNull Map<ScheduleKey, String> contracts,
-            @NotNull Map<ScheduleKey, String> fingerprints) throws SchedulerException {
-        for (Map.Entry<ScheduleKey, ClusterTaskSchedule> entry : definitions.entrySet()) {
-            ScheduleKey key = entry.getKey();
-            ClusterTaskSchedule schedule = entry.getValue();
-            String fingerprint = fingerprints.get(key);
-            JobKey jobKey = quartzClusterTaskJobKey(key);
-            TriggerKey triggerKey = quartzClusterTaskTriggerKey(key);
-            JobDetail existing = scheduler.getJobDetail(jobKey);
-            Trigger.TriggerState triggerState = scheduler.getTriggerState(triggerKey);
-            if (existing != null) {
-                JobDataMap existingData = existing.getJobDataMap();
-                String storedDefinitionVersion = existingData.getString(
-                        TASK_DEFINITION_VERSION);
-                if (storedDefinitionVersion != null) {
-                    int existingDefinitionVersion = Integer.parseInt(storedDefinitionVersion);
-                    String existingFingerprint = existingData.getString(FINGERPRINT);
-                    String existingContract = existingData.getString(CONTRACT);
-                    if (schedule.definitionVersion() < existingDefinitionVersion) {
-                        throw new IllegalStateException(
-                                "Quartz 集群任务 definitionVersion 不能倒退: " + key + ", stored="
-                                        + existingDefinitionVersion + ", current=" + schedule.definitionVersion());
-                    }
-                    if (existingDefinitionVersion == schedule.definitionVersion()) {
-                        if (!contracts.get(key).equals(existingContract)
-                                || !fingerprint.equals(existingFingerprint)) {
-                            throw new IllegalStateException(
-                                    "Quartz 集群任务同 definitionVersion 定义发生变化: " + key
-                                            + ", definitionVersion=" + schedule.definitionVersion());
-                        }
-                    }
-                    if (contracts.get(key).equals(existingContract)
-                            && fingerprint.equals(existingFingerprint)
-                            && scheduler.checkExists(triggerKey)
-                            && triggerState != Trigger.TriggerState.ERROR) {
-                        continue;
-                    }
-                }
-            }
-
-            JobDetail detail = clusterTaskJobDetail(schedule, contracts.get(key), fingerprint);
-            scheduler.addJob(detail, true);
-            Trigger trigger = trigger(
-                    schedule.key(),
-                    schedule.timing(),
-                    schedule.misfirePolicy(),
-                    jobKey,
-                    CLUSTER_TASK_GROUP);
-            if (scheduler.checkExists(triggerKey)) {
-                scheduler.rescheduleJob(triggerKey, trigger);
-            } else {
-                scheduler.scheduleJob(trigger);
-            }
-        }
-
-        int deletedCount = 0;
-        Set<JobKey> stored = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(CLUSTER_TASK_GROUP));
-        for (JobKey key : stored) {
-            if (!definitions.containsKey(new ScheduleKey(key.getName()))
-                    && scheduler.deleteJob(key)) {
+        for (JobKey oldTask : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(CLUSTER_TASK_GROUP))) {
+            if (scheduler.deleteJob(oldTask)) {
                 deletedCount++;
             }
         }
@@ -401,71 +294,40 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 .build();
     }
 
-    /** 创建只保存集群任务定位信息的 durable JobDetail。 */
-    private static @NotNull JobDetail clusterTaskJobDetail(
-            @NotNull ClusterTaskSchedule schedule,
-            @NotNull String contract,
-            @NotNull String fingerprint) {
-        JobDataMap data = new JobDataMap();
-        data.put(TASK_KEY, schedule.key().format(SLASH));
-        data.put(
-                TASK_DEFINITION_VERSION,
-                Integer.toString(schedule.definitionVersion()));
-        data.put(FINGERPRINT, fingerprint);
-        data.put(CONTRACT, contract);
-        return JobBuilder.newJob(QuartzClusterTaskJob.class)
-                .withIdentity(quartzClusterTaskJobKey(schedule.key()))
-                .usingJobData(data)
-                .storeDurably()
-                .requestRecovery(false)
-                .build();
-    }
-
     /** 按 Cron 或固定间隔声明 trigger 和 misfire 行为。 */
     private @NotNull Trigger trigger(
             @NotNull JobSchedule<?, ?> schedule,
             @NotNull JobKey jobKey) {
-        return trigger(
-                schedule.key(),
-                schedule.timing(),
-                schedule.misfirePolicy(),
-                jobKey,
-                GROUP);
-    }
-
-    /** 按 Cron 或固定间隔创建指定 Quartz group 中的 trigger。 */
-    private @NotNull Trigger trigger(
-            @NotNull ScheduleKey key,
-            @NotNull ScheduleTiming timing,
-            @NotNull MisfirePolicy misfirePolicy,
-            @NotNull JobKey jobKey,
-            @NotNull String group) {
+        ScheduleKey key = schedule.key();
+        ScheduleTiming timing = schedule.timing();
+        MisfirePolicy misfirePolicy = schedule.misfirePolicy();
         TriggerBuilder<Trigger> builder = TriggerBuilder.newTrigger()
-                .withIdentity(new TriggerKey(key.format(SLASH), group))
+                .withIdentity(new TriggerKey(key.format(SLASH), GROUP))
                 .forJob(jobKey);
-        if (timing instanceof CronSchedule cron) {
-            CronScheduleBuilder cronBuilder = CronScheduleBuilder.cronSchedule(cron.expression())
-                    .inTimeZone(TimeZone.getTimeZone(cron.zone()));
-            cronBuilder = misfirePolicy == MisfirePolicy.SKIP
-                    ? cronBuilder.withMisfireHandlingInstructionDoNothing()
-                    : cronBuilder.withMisfireHandlingInstructionFireAndProceed();
-            return builder.withSchedule(cronBuilder).build();
-        }
-        if (timing instanceof IntervalSchedule interval) {
-            long intervalMillis = interval.interval().toMillis();
-            if (intervalMillis < 1) {
-                throw new IllegalArgumentException("Quartz 固定间隔不能小于 1 毫秒: " + key);
+        return switch (timing) {
+            case CronSchedule cron -> {
+                CronScheduleBuilder cronBuilder = CronScheduleBuilder.cronSchedule(cron.expression())
+                        .inTimeZone(TimeZone.getTimeZone(cron.zone()));
+                cronBuilder = misfirePolicy == MisfirePolicy.SKIP
+                        ? cronBuilder.withMisfireHandlingInstructionDoNothing()
+                        : cronBuilder.withMisfireHandlingInstructionFireAndProceed();
+                yield builder.withSchedule(cronBuilder).build();
             }
-            SimpleScheduleBuilder simple = SimpleScheduleBuilder.simpleSchedule()
-                    .withIntervalInMilliseconds(intervalMillis)
-                    .repeatForever();
-            simple = misfirePolicy == MisfirePolicy.SKIP
-                    ? simple.withMisfireHandlingInstructionNextWithRemainingCount()
-                    : simple.withMisfireHandlingInstructionNowWithExistingCount();
-            Instant firstFire = clock.instant().plus(interval.initialDelay());
-            return builder.startAt(Date.from(firstFire)).withSchedule(simple).build();
-        }
-        throw new IllegalArgumentException("不支持的 ScheduleTiming: " + timing.getClass().getName());
+            case IntervalSchedule interval -> {
+                long intervalMillis = interval.interval().toMillis();
+                if (intervalMillis < 1) {
+                    throw new IllegalArgumentException("Quartz 固定间隔不能小于 1 毫秒: " + key);
+                }
+                SimpleScheduleBuilder simple = SimpleScheduleBuilder.simpleSchedule()
+                        .withIntervalInMilliseconds(intervalMillis)
+                        .repeatForever();
+                simple = misfirePolicy == MisfirePolicy.SKIP
+                        ? simple.withMisfireHandlingInstructionNextWithRemainingCount()
+                        : simple.withMisfireHandlingInstructionNowWithExistingCount();
+                Instant firstFire = clock.instant().plus(interval.initialDelay());
+                yield builder.startAt(Date.from(firstFire)).withSchedule(simple).build();
+            }
+        };
     }
 
     /** 校验完整计划集合中的 key 唯一且定义版本为正数。 */
@@ -482,31 +344,12 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         return Map.copyOf(definitions);
     }
 
-    /** 校验完整集群任务计划集合中的 key 唯一。 */
-    private static @NotNull Map<ScheduleKey, ClusterTaskSchedule> clusterTaskDefinitions(
-            @NotNull Collection<@NotNull ClusterTaskSchedule> schedules) {
-        Map<ScheduleKey, ClusterTaskSchedule> definitions = new LinkedHashMap<>();
-        for (ClusterTaskSchedule schedule : Objects.requireNonNull(schedules, "Quartz 集群任务集合不能为空")) {
-            ClusterTaskSchedule checked = Objects.requireNonNull(schedule, "Quartz 集群任务不能为空");
-            ClusterTaskSchedule previous = definitions.putIfAbsent(checked.key(), checked);
-            if (previous != null) {
-                throw new IllegalStateException("Quartz 集群任务 key 重复: " + checked.key());
-            }
-        }
-        return Map.copyOf(definitions);
-    }
-
     /** 计算同定义版本不可静默变化的稳定摘要。 */
     private @NotNull String scheduleContract(@NotNull JobSchedule<?, ?> schedule) {
-        String timing;
-        if (schedule.timing() instanceof CronSchedule cron) {
-            timing = "cron|" + cron.expression() + "|" + cron.zone().getId();
-        } else if (schedule.timing() instanceof IntervalSchedule interval) {
-            timing = "interval|" + interval.interval() + "|" + interval.initialDelay();
-        } else {
-            throw new IllegalArgumentException(
-                    "不支持的 ScheduleTiming: " + schedule.timing().getClass().getName());
-        }
+        String timing = switch (schedule.timing()) {
+            case CronSchedule cron -> "cron|" + cron.expression() + "|" + cron.zone().getId();
+            case IntervalSchedule interval -> "interval|" + interval.interval() + "|" + interval.initialDelay();
+        };
         String input;
         try {
             input = objectMapper.writeValueAsString(schedule.input());
@@ -519,24 +362,6 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 + "|" + input;
     }
 
-    /** 计算集群任务不包含实现类名称的稳定调度契约。 */
-    private static @NotNull String clusterTaskContract(@NotNull ClusterTaskSchedule schedule) {
-        String timing = timingFingerprint(schedule.timing());
-        return schedule.key().format(SLASH) + "|" + schedule.definitionVersion()
-                + "|" + timing + "|" + schedule.misfirePolicy();
-    }
-
-    /** 返回计划时间定义的稳定摘要片段。 */
-    private static @NotNull String timingFingerprint(@NotNull ScheduleTiming timing) {
-        if (timing instanceof CronSchedule cron) {
-            return "cron|" + cron.expression() + "|" + cron.zone().getId();
-        }
-        if (timing instanceof IntervalSchedule interval) {
-            return "interval|" + interval.interval() + "|" + interval.initialDelay();
-        }
-        throw new IllegalArgumentException("不支持的 ScheduleTiming: " + timing.getClass().getName());
-    }
-
     /** 返回代码计划对应的 Quartz JobKey。 */
     private static @NotNull JobKey quartzJobKey(@NotNull ScheduleKey key) {
         return new JobKey(key.format(SLASH), GROUP);
@@ -547,13 +372,4 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         return new TriggerKey(key.format(SLASH), GROUP);
     }
 
-    /** 返回集群任务对应的 Quartz JobKey。 */
-    private static @NotNull JobKey quartzClusterTaskJobKey(@NotNull ScheduleKey key) {
-        return new JobKey(key.format(SLASH), CLUSTER_TASK_GROUP);
-    }
-
-    /** 返回集群任务对应的 Quartz TriggerKey。 */
-    private static @NotNull TriggerKey quartzClusterTaskTriggerKey(@NotNull ScheduleKey key) {
-        return new TriggerKey(key.format(SLASH), CLUSTER_TASK_GROUP);
-    }
 }

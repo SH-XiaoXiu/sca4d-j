@@ -20,6 +20,18 @@ public interface TimescaleMapper {
             @Param("to") @NotNull Instant to,
             @Param("limit") int limit);
 
+    /** 按设备集合读取每个设备最近的事件。 */
+    @NotNull
+    List<TimescaleThingEvent> selectRecentEvents(
+            @Param("deviceIds") @NotNull List<@NotNull Long> deviceIds,
+            @Param("limit") int limit);
+
+    /** 按消息集合读取每条下行消息最近的回执。 */
+    @NotNull
+    List<TimescaleThingEvent> selectRecentAcknowledgements(
+            @Param("messageIds") @NotNull List<@NotNull Long> messageIds,
+            @Param("limit") int limit);
+
     /** 统计按 Device、事件编码或定时规则筛选的事件。 */
     long countEvents(
             @Param("deviceId") @Nullable Long deviceId,

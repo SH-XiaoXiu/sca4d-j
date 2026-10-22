@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sca4d.audit.recording.mapper.AuditMapper">
-    <sql id="columns">id, request_id, subject_id, account_id, principal_id, operation,
+    <sql id="columns">id, audit_id, trail_id AS audit_trail_id, parent_id AS audit_parent_id, request_id, subject_id, account_id, principal_id, operation,
         target_type, target_id, result, payload_type, payload_version,
         payload_json::text AS payload_json, http_method, http_path, client_ip, user_agent, occurred_at, instance_id
     </sql>
 
     <sql id="conditions">
         <where>
-            <if test="query.requestId() != null">request_id = #{query.requestId}</if>
+            <if test="query.resourceMatches() != null">
+                <choose>
+                    <when test="query.resourceMatches().isEmpty()">AND FALSE</when>
+                    <otherwise>
+                        AND (
+                        <foreach collection="query.resourceMatches()" item="resource" separator=" OR ">
+                            (target_type = #{resource.type} AND target_id = #{resource.id})
+                            OR EXISTS (SELECT 1 FROM audit_record_resource matched WHERE matched.audit_id = audit_record.id
+                                AND matched.resource_type = #{resource.type} AND matched.resource_id = #{resource.id})
+                        </foreach>
+                        )
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="query.relatedType() != null">
+                AND EXISTS (SELECT 1 FROM audit_record_resource r WHERE r.audit_id = audit_record.id
+                    AND r.resource_type = #{query.relatedType} AND r.resource_id = #{query.relatedId})
+            </if>
+            <if test="query.requestId() != null">AND request_id = #{query.requestId}</if>
             <if test="query.accountId() != null">AND account_id = #{query.accountId}</if>
             <if test="query.principalId() != null">AND principal_id = #{query.principalId}</if>
             <if test="query.operation() != null">AND operation = #{query.operation}</if>
@@ -16,6 +34,8 @@
             <if test="query.targetType() != null">
                 AND target_type = #{query.targetType} AND target_id = #{query.targetId}
             </if>
+            <if test="query.trailId() != null">AND trail_id = #{query.trailId}</if>
+            <if test="query.parentId() != null">AND parent_id = #{query.parentId}</if>
             <if test="query.occurredFrom() != null">AND occurred_at &gt;= #{query.occurredFrom}</if>
             <if test="query.occurredTo() != null">AND occurred_at &lt; #{query.occurredTo}</if>
         </where>
@@ -23,11 +43,11 @@
 
     <sql id="insertRow">
         INSERT INTO audit_record
-        (id, request_id, subject_id, account_id, principal_id, operation,
+        (id, audit_id, trail_id, parent_id, request_id, subject_id, account_id, principal_id, operation,
         target_type, target_id, result, payload_type, payload_version, payload_json,
         http_method, http_path, client_ip, user_agent, occurred_at, instance_id)
         VALUES
-        (#{row.id}, #{row.requestId}, #{row.subjectId}, #{row.accountId}, #{row.principalId},
+        (#{row.id}, #{row.auditId}, #{row.auditTrailId}, #{row.auditParentId}, #{row.requestId}, #{row.subjectId}, #{row.accountId}, #{row.principalId},
         #{row.operation}, #{row.targetType}, #{row.targetId}, #{row.result},
         #{row.payloadType}, #{row.payloadVersion}, CAST(#{row.payloadJson} AS JSONB),
         #{row.httpMethod}, #{row.httpPath}, #{row.clientIp}, #{row.userAgent}, #{row.occurredAt}, #{row.instanceId})
@@ -56,5 +76,20 @@
         <include refid="conditions"/>
         ORDER BY occurred_at DESC, id DESC
         LIMIT #{query.page.size} OFFSET #{query.page.offset}
+    </select>
+    <insert id="insertResources">
+        INSERT INTO audit_record_resource (audit_id, resource_type, resource_id, occurred_at)
+        SELECT record.id,refs.type,refs.id,record.occurred_at FROM audit_record record
+        CROSS JOIN (VALUES <foreach collection="resources" item="r" separator=",">(#{r.type}::varchar,#{r.id}::varchar)</foreach>) AS refs(type,id)
+        WHERE record.id = #{id}
+        ON CONFLICT (audit_id, resource_type, resource_id) DO NOTHING
+    </insert>
+    <select id="relatesTo" resultType="boolean">
+        SELECT EXISTS (SELECT 1 FROM audit_record_resource
+            WHERE audit_id = #{id} AND resource_type = #{type} AND resource_id = #{resourceId})
+    </select>
+    <select id="scan" resultType="com.sca4d.audit.recording.mapper.EncodedAuditEntry">
+        SELECT <include refid="columns"/> FROM audit_record
+        WHERE id &gt; #{afterId} AND id &lt;= #{throughId} ORDER BY id LIMIT #{size}
     </select>
 </mapper>

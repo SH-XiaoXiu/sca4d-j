@@ -12,9 +12,9 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotDesiredStateView {
 
-    private final long desiredSequence;
-
     private final @NotNull @Unmodifiable List<IotDownlinkMessageView> messages;
+
+    private final long desiredSequence;
 
     /** 从公共 desired 修改结果创建 HTTP 视图。 */
     private IotDesiredStateView(@NotNull DesiredStateResult result) {

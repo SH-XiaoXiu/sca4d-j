@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">RabbitHandlerContainers</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">RabbitHandlerContainers</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.springframework.context.SmartLifecycle</span></div>
 <div class="block">为每个 MessageHandler 启动手动确认的竞争消费容器。</div>
@@ -118,11 +118,14 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec,com.sca4d.messaging.config.MessagingProperties,com.sca4d.messaging.rabbit.RabbitPublisher,java.util.List,java.util.List)" class="member-name-link">RabbitHandlerContainers</a><wbr>(@NotNull org.springframework.amqp.rabbit.connection.ConnectionFactory&nbsp;connectionFactory,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec,com.sca4d.messaging.outbox.MessageOutboxRepository,com.sca4d.core.api.id.IdGenerator,org.springframework.transaction.PlatformTransactionManager,java.time.Clock,com.sca4d.core.api.codec.Codec,java.util.List,java.util.List)" class="member-name-link">RabbitHandlerContainers</a><wbr>(@NotNull org.springframework.amqp.rabbit.connection.ConnectionFactory&nbsp;connectionFactory,
  @NotNull <a href="RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a>&nbsp;topology,
  @NotNull <a href="RabbitMessageEnvelopeCodec.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageEnvelopeCodec</a>&nbsp;codec,
- @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties,
- @NotNull <a href="RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a>&nbsp;publisher,
+ @NotNull <a href="../outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a>&nbsp;outbox,
+ @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
+ @NotNull org.springframework.transaction.PlatformTransactionManager&nbsp;transactionManager,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull com.sca4d.core.api.codec.Codec&lt;com.sca4d.core.api.retry.RetryRule,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;rules,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.EventHandler&lt;?&gt;&gt;&nbsp;eventHandlers,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.MessageHandler&lt;?&gt;&gt;&nbsp;messageHandlers)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -144,17 +147,14 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPhase()" class="member-name-link">getPhase</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAutoStartup()" class="member-name-link">isAutoStartup</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRunning()" class="member-name-link">isRunning</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRunning()" class="member-name-link">isRunning</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -163,7 +163,7 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.springframework.context.SmartLifecycle">Methods inherited from interface&nbsp;org.springframework.context.SmartLifecycle</h3>
-<code>stop</code></div>
+<code>isAutoStartup, stop</code></div>
 </section>
 </li>
 </ul>
@@ -176,7 +176,7 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec,com.sca4d.messaging.config.MessagingProperties,com.sca4d.messaging.rabbit.RabbitPublisher,java.util.List,java.util.List)">
+<section class="detail" id="&lt;init&gt;(org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec,com.sca4d.messaging.outbox.MessageOutboxRepository,com.sca4d.core.api.id.IdGenerator,org.springframework.transaction.PlatformTransactionManager,java.time.Clock,com.sca4d.core.api.codec.Codec,java.util.List,java.util.List)">
 <h3>RabbitHandlerContainers</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RabbitHandlerContainers</span><wbr><span class="parameters">(@NotNull
  @NotNull org.springframework.amqp.rabbit.connection.ConnectionFactory&nbsp;connectionFactory,
@@ -185,9 +185,15 @@ implements org.springframework.context.SmartLifecycle</span></div>
  @NotNull
  @NotNull <a href="RabbitMessageEnvelopeCodec.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageEnvelopeCodec</a>&nbsp;codec,
  @NotNull
- @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties,
+ @NotNull <a href="../outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a>&nbsp;outbox,
  @NotNull
- @NotNull <a href="RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a>&nbsp;publisher,
+ @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
+ @NotNull
+ @NotNull org.springframework.transaction.PlatformTransactionManager&nbsp;transactionManager,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull
+ @NotNull com.sca4d.core.api.codec.Codec&lt;com.sca4d.core.api.retry.RetryRule,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;rules,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.EventHandler&lt;?&gt;&gt;&nbsp;eventHandlers,
  @NotNull
@@ -197,8 +203,11 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <dd><code>connectionFactory</code> - RabbitMQ 连接工厂</dd>
 <dd><code>topology</code> - 消息拓扑</dd>
 <dd><code>codec</code> - 消息信封 Codec</dd>
-<dd><code>properties</code> - Messaging 配置</dd>
-<dd><code>publisher</code> - 重试消息发布器</dd>
+<dd><code>outbox</code> - 定向重试交接入口</dd>
+<dd><code>ids</code> - 投递记录标识生成器</dd>
+<dd><code>transactionManager</code> - 独立交接事务管理器</dd>
+<dd><code>clock</code> - 下次投递时间使用的时钟</dd>
+<dd><code>rules</code> - 由脚手架 JSON 装配提供的重试规则 Codec</dd>
 <dd><code>eventHandlers</code> - 已安装的 EventHandler</dd>
 <dd><code>messageHandlers</code> - 已安装的 MessageHandler</dd>
 </dl>
@@ -239,16 +248,6 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>isRunning</code>&nbsp;in interface&nbsp;<code>org.springframework.context.Lifecycle</code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isAutoStartup()">
-<h3>isAutoStartup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isAutoStartup</span>()</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code>isAutoStartup</code>&nbsp;in interface&nbsp;<code>org.springframework.context.SmartLifecycle</code></dd>
 </dl>
 </section>
 </li>

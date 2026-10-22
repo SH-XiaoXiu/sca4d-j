@@ -1,5 +1,8 @@
 CREATE TABLE audit_record (
     id BIGINT PRIMARY KEY,
+    audit_id VARCHAR(128) NOT NULL UNIQUE,
+    trail_id VARCHAR(128) NOT NULL,
+    parent_id VARCHAR(128),
     request_id VARCHAR(128) NOT NULL,
     subject_id BIGINT NOT NULL,
     account_id BIGINT,
@@ -20,6 +23,8 @@ CREATE TABLE audit_record (
 );
 
 CREATE INDEX idx_audit_record_request ON audit_record (request_id);
+CREATE INDEX idx_audit_record_trail ON audit_record (trail_id, occurred_at DESC, id DESC);
+CREATE INDEX idx_audit_record_parent ON audit_record (parent_id, occurred_at DESC, id DESC);
 CREATE INDEX idx_audit_record_account_time ON audit_record (account_id, occurred_at DESC, id DESC)
     WHERE account_id IS NOT NULL;
 CREATE INDEX idx_audit_record_principal_time ON audit_record (principal_id, occurred_at DESC, id DESC);
@@ -47,3 +52,15 @@ COMMENT ON COLUMN audit_record.client_ip IS '可选直连客户端地址，不�
 COMMENT ON COLUMN audit_record.user_agent IS '可选且完成控制字符清理和长度限制的 User-Agent';
 COMMENT ON COLUMN audit_record.occurred_at IS '被审计操作产生最终结果的时间';
 COMMENT ON COLUMN audit_record.instance_id IS '实际执行实例标识，不是 IAM 身份；历史记录允许为空';
+
+-- 只关联审计行，不关联业务资源外键，保留资源删除和移动前的历史。
+CREATE TABLE audit_record_resource (
+    audit_id BIGINT NOT NULL REFERENCES audit_record(id) ON DELETE CASCADE,
+    resource_type VARCHAR(128) NOT NULL,
+    resource_id VARCHAR(128) NOT NULL,
+    occurred_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    PRIMARY KEY (audit_id, resource_type, resource_id)
+);
+CREATE INDEX idx_audit_record_resource_scope_time
+    ON audit_record_resource(resource_type, resource_id, occurred_at DESC, audit_id DESC);
+COMMENT ON TABLE audit_record_resource IS '操作发生时关联的资源标识快照；不随当前业务归属变化';

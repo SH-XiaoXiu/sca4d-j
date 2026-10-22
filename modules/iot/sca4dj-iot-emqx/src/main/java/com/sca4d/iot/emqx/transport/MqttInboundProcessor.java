@@ -1,6 +1,14 @@
 package com.sca4d.iot.emqx.transport;
 
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryDecision;
+import com.sca4d.core.api.retry.RetryExecutor;
+import com.sca4d.core.api.retry.RetryInterruptedException;
+import com.sca4d.core.api.retry.RetryListener;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,9 +44,11 @@ final class MqttInboundProcessor implements AutoCloseable {
 
     private final @NotNull List<ThreadPoolExecutor> workers;
 
-    private final @NotNull Duration retryDelay;
+    private final @NotNull RetryPolicy<Throwable> retryPolicy;
 
     private final @NotNull Duration shutdownTimeout;
+
+    private final @NotNull RetryExecutor retries;
 
     private final int maximumAttempts;
 
@@ -72,6 +82,7 @@ final class MqttInboundProcessor implements AutoCloseable {
      * @param maximumAttempts 未明确拒绝的消息最大处理次数
      * @param retryDelay 相邻处理尝试的等待时间
      * @param shutdownTimeout 停止时等待队列排空的最长时间
+     * @param retries 同步重试执行器
      */
     public MqttInboundProcessor(
             @NotNull Consumer<MqttMessage> router,
@@ -82,7 +93,8 @@ final class MqttInboundProcessor implements AutoCloseable {
             int queueCapacity,
             int maximumAttempts,
             @NotNull Duration retryDelay,
-            @NotNull Duration shutdownTimeout) {
+            @NotNull Duration shutdownTimeout,
+            @NotNull RetryExecutor retries) {
         this.router = Objects.requireNonNull(router, "MQTT 上行路由入口不能为空");
         this.receptionObservers = List.copyOf(
                 Objects.requireNonNull(receptionObservers, "MQTT 接收观察器不能为空"));
@@ -93,7 +105,12 @@ final class MqttInboundProcessor implements AutoCloseable {
             throw new IllegalArgumentException("MQTT 上行 worker、队列容量和最大处理次数必须为正数");
         }
         this.maximumAttempts = maximumAttempts;
-        this.retryDelay = positive(retryDelay, "MQTT 上行重试间隔");
+        this.retryPolicy = RetryPolicy.forFailures(
+                RetryRule.atMost(
+                        maximumAttempts,
+                        Backoff.fixed(positive(retryDelay, "MQTT 上行重试间隔"))),
+                failure -> failure instanceof RuntimeException && !(failure instanceof MqttMessageRejectedException));
+        this.retries = Objects.requireNonNull(retries, "MQTT 上行需要配置 RetryExecutor");
         this.shutdownTimeout = positive(shutdownTimeout, "MQTT 上行停止等待时间");
         List<ThreadPoolExecutor> executors = new ArrayList<>(workerCount);
         for (int index = 0; index < workerCount; index++) {
@@ -183,39 +200,54 @@ final class MqttInboundProcessor implements AutoCloseable {
         String deliveryId = UUID.randomUUID().toString();
         try {
             notifyReceived(message);
-            for (int attempt = 1; attempt <= maximumAttempts; attempt++) {
-                try {
+            AtomicInteger attempts = new AtomicInteger();
+            try {
+                retries.execute(retryPolicy, () -> {
+                    attempts.incrementAndGet();
                     router.accept(message);
-                    processed.increment();
-                    acknowledge(publish, message);
-                    return;
-                } catch (MqttMessageRejectedException failure) {
-                    rejected.increment();
-                    notifyRejected(deliveryId, message, failure);
-                    LOG.warn(
-                            "MQTT 上行报文已拒绝 | topic={} payloadBytes={} reason={}",
-                            message.topic(),
-                            message.payloadSize(),
-                            failure.reason());
-                    acknowledge(publish, message);
-                    return;
-                } catch (RuntimeException failure) {
-                    if (attempt == maximumAttempts) {
-                        storeFailure(publish, new MqttInboundFailure(deliveryId, message, attempt, failure));
-                        return;
+                    return null;
+                }, new RetryListener() {
+                    @Override
+                    public void failed(@NotNull RetryContext<Throwable> context, @NotNull RetryDecision decision) {
+                        if (decision.retrying()) {
+                            notifyRetrying(
+                                    deliveryId,
+                                    message,
+                                    Math.toIntExact(context.attempt()),
+                                    (RuntimeException) context.failure());
+                            LOG.warn(
+                                    "MQTT 上行处理失败，等待再次处理 | topic={} payloadBytes={} attempt={} maximumAttempts={} failureType={}",
+                                    message.topic(),
+                                    message.payloadSize(),
+                                    context.attempt(),
+                                    maximumAttempts,
+                                    context.failure().getClass().getSimpleName());
+                        }
                     }
-                    notifyRetrying(deliveryId, message, attempt, failure);
-                    LOG.warn(
-                            "MQTT 上行处理失败，等待再次处理 | topic={} payloadBytes={} attempt={} maximumAttempts={} failureType={}",
-                            message.topic(),
-                            message.payloadSize(),
-                            attempt,
-                            maximumAttempts,
-                            failure.getClass().getSimpleName());
-                    if (!waitForRetry()) {
-                        return;
+
+                    @Override
+                    public void waiting(@NotNull RetryContext<Throwable> context, @NotNull Duration delay) {
+                        retrying.incrementAndGet();
                     }
-                }
+
+                    @Override
+                    public void waited(@NotNull RetryContext<Throwable> context) {
+                        retrying.decrementAndGet();
+                    }
+                });
+                processed.increment();
+                acknowledge(publish, message);
+            } catch (MqttMessageRejectedException failure) {
+                rejected.increment();
+                notifyRejected(deliveryId, message, failure);
+                LOG.warn("MQTT 上行报文已拒绝 | topic={} reason={}", message.topic(), failure.reason());
+                acknowledge(publish, message);
+            } catch (RetryInterruptedException failure) {
+                LOG.debug("MQTT 上行等待已中断，消息保持未确认 | topic={}", message.topic());
+            } catch (RuntimeException failure) {
+                if (Thread.currentThread().isInterrupted())
+                    return;
+                storeFailure(publish, new MqttInboundFailure(deliveryId, message, attempts.get(), failure));
             }
         } finally {
             pending.decrementAndGet();
@@ -267,20 +299,6 @@ final class MqttInboundProcessor implements AutoCloseable {
                     "MQTT 上行业务处理已结束但确认失败 | topic={} failureType={}",
                     message.topic(),
                     failure.getClass().getSimpleName());
-        }
-    }
-
-    /** 等待下一次处理；应用停止时结束当前消息并保留 Broker 未确认状态。 */
-    private boolean waitForRetry() {
-        retrying.incrementAndGet();
-        try {
-            Thread.sleep(retryDelay);
-            return true;
-        } catch (InterruptedException exception) {
-            Thread.currentThread().interrupt();
-            return false;
-        } finally {
-            retrying.decrementAndGet();
         }
     }
 

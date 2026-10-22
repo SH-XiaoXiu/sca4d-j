@@ -31,9 +31,9 @@ public class AliyunSmsProviderClient implements SmsProviderClient {
 
     private static final Region CHINA_MAINLAND = new Region("CN");
 
-    private final AliyunSmsProperties properties;
-
     private final ObjectMapper objectMapper;
+
+    private final AliyunSmsProperties properties;
 
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
 

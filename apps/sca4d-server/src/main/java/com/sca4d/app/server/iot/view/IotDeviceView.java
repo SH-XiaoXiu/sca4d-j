@@ -22,27 +22,27 @@ import java.util.OptionalLong;
 @SuppressWarnings("unused")
 public class IotDeviceView {
 
-    private final long id;
-
     private final @NotNull ProductSource productSource;
 
     private final @NotNull String productCode;
+
+    private final long id;
 
     private final @Nullable Long productId;
 
     private final @NotNull String code;
 
-    private final @Nullable String serialNumber;
-
     private final @NotNull String displayName;
 
+    private final @NotNull String protocolCode;
+
     private final @Nullable String remark;
+
+    private final @Nullable String serialNumber;
 
     private final int thingModelVersion;
 
     private final long bindingGeneration;
-
-    private final @NotNull String protocolCode;
 
     private final @Nullable String connectionProtocol;
 
@@ -50,13 +50,13 @@ public class IotDeviceView {
 
     private final @Nullable String connectionIdentity;
 
-    private final @NotNull @Unmodifiable List<String> accessMethods;
-
-    private final @NotNull IotProfileStatus status;
-
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
+
+    private final @NotNull IotProfileStatus status;
+
+    private final @NotNull @Unmodifiable List<String> accessMethods;
 
     /** 从公共 Device、连接身份和应用 Profile 创建 HTTP 视图。 */
     private IotDeviceView(

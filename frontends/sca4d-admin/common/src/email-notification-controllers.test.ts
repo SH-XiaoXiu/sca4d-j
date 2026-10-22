@@ -86,12 +86,18 @@ describe('Email notification controllers', () => {
     expect(deletion?.headers?.['If-Match']).toBe('"sender-7"');
   });
 
-  it('loads templates with locales and submits preview and test-message bodies', async () => {
+  it('保留完整多语言源码并按指定语言请求服务端预览', async () => {
     const requests: HttpRequest[] = [];
     const current = template({
-      content: {
-        'fr-FR': localeContent('Code ', 'Code '),
-        'zh-CN': localeContent('验证码 ', '验证码 '),
+      locales: {
+        'fr-FR': localeSource(
+          'Code {{code}}',
+          '<strong>Code {{code}}</strong>',
+        ),
+        'zh-CN': localeSource(
+          '验证码 {{code}}',
+          '<strong>验证码 {{code}}</strong>',
+        ),
       },
       version: '2',
     });
@@ -113,7 +119,7 @@ describe('Email notification controllers', () => {
     await controller.load();
     await controller.require('11');
     await controller.preview({
-      content: current.content,
+      source: current.locales['zh-CN']!,
       languageTag: 'zh-CN',
       variables: { code: '123456', expiresInMinutes: '5' },
     });
@@ -125,16 +131,15 @@ describe('Email notification controllers', () => {
       'en-US',
     ]);
     expect(
-      Object.isFrozen(controller.state.templates[0]?.content['zh-CN']),
+      Object.isFrozen(controller.state.templates[0]?.locales['zh-CN']),
     ).toBe(true);
-    expect(
-      controller.state.templates[0]?.content['fr-FR']?.title.content?.[0]
-        ?.content?.[0]?.text,
-    ).toBe('Code ');
+    expect(controller.state.templates[0]?.locales['fr-FR']?.html).toBe(
+      '<strong>Code {{code}}</strong>',
+    );
     expect(controller.state.preview?.subject).toBe('验证码');
     expect(requests[3]?.body).toEqual({
       source: {
-        html: '验证码 {{code}}',
+        html: '<strong>验证码 {{code}}</strong>',
         subject: '验证码 {{code}}',
         text: '验证码 {{code}}',
       },
@@ -218,8 +223,11 @@ function sender(overrides: Partial<EmailSender> = {}): EmailSender {
 /** 创建 Email 模板测试数据。 */
 function template(overrides: Partial<EmailTemplate> = {}): EmailTemplate {
   return {
-    content: {
-      'zh-CN': localeContent('验证码 ', '验证码 '),
+    locales: {
+      'zh-CN': localeSource(
+        '验证码 {{code}}',
+        '<strong>验证码 {{code}}</strong>',
+      ),
     },
     enabled: false,
     notificationCode: 'authentication.email-code',
@@ -230,26 +238,7 @@ function template(overrides: Partial<EmailTemplate> = {}): EmailTemplate {
   };
 }
 
-/** 创建包含一个变量节点的标题和正文。 */
-function localeContent(title: string, body: string) {
-  return {
-    body: document(body),
-    title: document(title),
-  };
-}
-
-/** 创建最小 ProseMirror 文档。 */
-function document(text: string) {
-  return {
-    content: [
-      {
-        content: [
-          { text, type: 'text' },
-          { attrs: { name: 'code' }, type: 'notificationVariable' },
-        ],
-        type: 'paragraph',
-      },
-    ],
-    type: 'doc',
-  };
+/** 创建不会丢失 HTML 的三种 Email 源码。 */
+function localeSource(subject: string, html: string) {
+  return { subject, text: subject, html };
 }

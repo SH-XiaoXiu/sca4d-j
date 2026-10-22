@@ -62,6 +62,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/security/ConfiguredSecretKeyring.html#activeCipher()" class="member-name-link">activeCipher()</a> - Method in class com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/ConfiguredSecretKeyring.html" title="class in com.sca4d.core.spring.security">ConfiguredSecretKeyring</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionWebConfiguration.html#addArgumentResolvers(java.util.List)" class="member-name-link">addArgumentResolvers(List&lt;HandlerMethodArgumentResolver&gt;)</a> - Method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionWebConfiguration.html" title="class in com.sca4d.core.spring.version">VersionWebConfiguration</a></dt>
+<dd>
+<div class="block">Controller 可直接接收类型化客户端版本和兼容结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionWebConfiguration.html#addInterceptors(org.springframework.web.servlet.config.annotation.InterceptorRegistry)" class="member-name-link">addInterceptors(InterceptorRegistry)</a> - Method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionWebConfiguration.html" title="class in com.sca4d.core.spring.version">VersionWebConfiguration</a></dt>
+<dd>
+<div class="block">注册版本判断，进入 Controller 前完成协议校验。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/persistence/mybatis/AdditionalMyBatisSessionFactoryBuilder.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">AdditionalMyBatisSessionFactoryBuilder</a> - Class in <a href="com/sca4d/core/spring/persistence/mybatis/package-summary.html">com.sca4d.core.spring.persistence.mybatis</a></dt>
 <dd>
 <div class="block">使用公共 MyBatis 配置为一个明确的数据源创建资源隔离的附加 `SqlSessionFactory`，不负责运行时数据源路由。</div>
@@ -124,6 +132,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">指定号码至少需要满足的一组规则。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#API_CONTRACT_HEADER" class="member-name-link">API_CONTRACT_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：api-contract。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/ApiCapability.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.version">ApiCapability</a> - Annotation Interface in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
+<dd>
+<div class="block">声明接口所属能力及固定路由契约；contract 为零时按请求协商。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponse.html" class="type-name-link" title="class in com.sca4d.core.spring.web">ApiResponse&lt;T&gt;</a> - Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
 <dd>
 <div class="block">HTTP 接口返回的固定字段响应。</div>
@@ -148,6 +164,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">应用完成启动并进入 readiness 后立即发起第一次注册。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/version/ApplicationVersionAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.version">ApplicationVersionAutoConfiguration</a> - Class in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
+<dd>
+<div class="block">从应用配置创建版本和兼容规则；不依赖构建工具、产物格式或固定文件位置。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/ApplicationVersionAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">ApplicationVersionAutoConfiguration()</a> - Constructor for class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/ApplicationVersionAutoConfiguration.html" title="class in com.sca4d.core.spring.version">ApplicationVersionAutoConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/view/BaseView.html#apply(com.sca4d.core.spring.web.view.ViewJson)" class="member-name-link">apply(ViewJson)</a> - Method in class com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/BaseView.html" title="class in com.sca4d.core.spring.web.view">BaseView</a></dt>
 <dd>
 <div class="block">按登记顺序执行全部 action，最后调用 render。</div>
@@ -249,6 +271,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#before()" class="member-name-link">before()</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallInterceptor.html#before(com.sca4d.core.api.call.CallExecution)" class="member-name-link">before(CallExecution)</a> - Method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a></dt>
+<dd>
+<div class="block">在业务、幂等重放和事务执行前拒绝不兼容请求。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponseAdvice.html#beforeBodyWrite(java.lang.Object,org.springframework.core.MethodParameter,org.springframework.http.MediaType,java.lang.Class,org.springframework.http.server.ServerHttpRequest,org.springframework.http.server.ServerHttpResponse)" class="member-name-link">beforeBodyWrite(Object, MethodParameter, MediaType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;, ServerHttpRequest, ServerHttpResponse)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponseAdvice.html" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a></dt>
 <dt><a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html#beforeBodyWrite(java.lang.Object,org.springframework.core.MethodParameter,org.springframework.http.MediaType,java.lang.Class,org.springframework.http.server.ServerHttpRequest,org.springframework.http.server.ServerHttpResponse)" class="member-name-link">beforeBodyWrite(Object, MethodParameter, MediaType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;, ServerHttpRequest, ServerHttpResponse)</a> - Method in class com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateResponseAdvice</a></dt>
 <dt><a href="com/sca4d/core/spring/call/CallPreCommitTransactionListener.html#beforeCommit(org.springframework.transaction.TransactionExecution)" class="member-name-link">beforeCommit(TransactionExecution)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallPreCommitTransactionListener.html" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionListener</a></dt>
@@ -382,6 +408,26 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">清理当前线程保存的版本前置条件。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_API_CONTRACT_HEADER" class="member-name-link">CLIENT_API_CONTRACT_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-api-contract。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_BUILD_HEADER" class="member-name-link">CLIENT_BUILD_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-build。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_NAME_HEADER" class="member-name-link">CLIENT_NAME_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-name。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_RELEASE_ID_HEADER" class="member-name-link">CLIENT_RELEASE_ID_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-release-id。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_RELEASE_VERSION_HEADER" class="member-name-link">CLIENT_RELEASE_VERSION_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-release-version。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_STATE_REFRESH_HEADER" class="member-name-link">CLIENT_STATE_REFRESH_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
 <dd>
 <div class="block">客户端收到后重新读取指定本地状态的响应 Header。</div>
@@ -418,7 +464,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">当前 HTTP 调用完成后需要客户端重新读取的状态目标。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html#clientVersion(com.sca4d.core.api.version.VersionCompatibilityException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">clientVersion(VersionCompatibilityException, HttpServletRequest)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html" title="class in com.sca4d.core.spring.web">GlobalExceptionHandler</a></dt>
+<dd>
+<div class="block">将 Call 中的版本拒绝转换为统一错误，保留本地化、callId 与 SSE 行为。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/ClientVersionResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.version">ClientVersionResolver</a> - Class in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
+<dd>
+<div class="block">严格解析一次 HTTP 客户端版本声明，结果不作为可信身份。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/ClientVersionResolver.html#%3Cinit%3E()" class="member-name-link">ClientVersionResolver()</a> - Constructor for class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/ClientVersionResolver.html" title="class in com.sca4d.core.spring.version">ClientVersionResolver</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/retry/RetryRuleCodec.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/RetryRuleCodec.html" title="class in com.sca4d.core.spring.retry">RetryRuleCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/DatabaseSettingStore.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/DatabaseSettingStore.html" title="class in com.sca4d.core.spring.setting">DatabaseSettingStore</a></dt>
 <dd>&nbsp;</dd>
@@ -430,9 +488,9 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/JarSettingReader.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/JarSettingReader.html" title="class in com.sca4d.core.spring.setting">JarSettingReader</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallInterceptor.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/HttpErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpErrorCode.html" title="enum class in com.sca4d.core.spring.web">HttpErrorCode</a></dt>
 <dd>&nbsp;</dd>
@@ -443,6 +501,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
 <dd>
 <div class="block">业务主体选择节点编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a></dt>
+<dd>
+<div class="block">版本检查的稳定生命周期编码。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.Colon.html#%3Cinit%3E()" class="member-name-link">Colon()</a> - Constructor for class com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.Colon.html" title="class in com.sca4d.core.spring.persistence.mybatis">TreeCodeTypeHandler.Colon</a></dt>
 <dd>
@@ -498,6 +560,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">基于 Redis 提供跨应用实例的分布式锁和共享限流。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/retry/package-summary.html">com.sca4d.core.spring.retry</a> - package com.sca4d.core.spring.retry</dt>
+<dd>
+<div class="block">将共同重试契约接入 Spring 并编码可恢复规则。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/security/package-summary.html">com.sca4d.core.spring.security</a> - package com.sca4d.core.spring.security</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a> - package com.sca4d.core.spring.setting</dt>
@@ -511,6 +577,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/validation/package-summary.html">com.sca4d.core.spring.validation</a> - package com.sca4d.core.spring.validation</dt>
 <dd>
 <div class="block">提供跨模块复用的 Bean Validation 注解及 Spring 条件接入。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a> - package com.sca4d.core.spring.version</dt>
+<dd>
+<div class="block">将构建版本和兼容选择接入 Spring，不登记具体应用的 HTTP 路由。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a> - package com.sca4d.core.spring.web</dt>
 <dd>
@@ -531,6 +601,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/view/package-summary.html">com.sca4d.core.spring.web.view</a> - package com.sca4d.core.spring.web.view</dt>
 <dd>
 <div class="block">提供 BaseView 最终 JSON 定制、本地化内置定制和 HTTP Jackson 序列化接入。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#COMPATIBILITY_STATUS_HEADER" class="member-name-link">COMPATIBILITY_STATUS_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：compatibility-status。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/config/ConditionalOnCapability.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.config">ConditionalOnCapability</a> - Annotation Interface in <a href="com/sca4d/core/spring/config/package-summary.html">com.sca4d.core.spring.config</a></dt>
 <dd>
@@ -562,6 +636,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">限制地理号码可以属于的洲别。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/version/ApiCapability.html#contract()" class="member-name-link">contract()</a> - Element in annotation interface com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/ApiCapability.html" title="annotation interface in com.sca4d.core.spring.version">ApiCapability</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/json/Sca4djMapper.html#copy()" class="member-name-link">copy()</a> - Method in class com.sca4d.core.spring.json.<a href="com/sca4d/core/spring/json/Sca4djMapper.html" title="class in com.sca4d.core.spring.json">Sca4djMapper</a></dt>
 <dd>
 <div class="block">复制内部配置和已安装模块，供需要独立读写配置的框架实现使用。</div>
@@ -741,14 +817,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/YamlCodec.html#decode(byte%5B%5D)" class="member-name-link">decode(byte[])</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/YamlCodec.html" title="class in com.sca4d.core.spring.setting">YamlCodec</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#decode(com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decode(EncryptedSecret)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#decode(com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decode(EncryptedSecret)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html#decode(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,java.lang.String,int,com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decode(SecretCipher, SettingOwner, String, String, int, EncryptedSecret)</a> - Static method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a></dt>
-<dd>
-<div class="block">先用当前编码尝试，认证失败后用旧点式编码读取历史密文。</div>
-</dd>
+<dt><a href="com/sca4d/core/spring/retry/RetryRuleCodec.html#decode(java.lang.String)" class="member-name-link">decode(String)</a> - Method in class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/RetryRuleCodec.html" title="class in com.sca4d.core.spring.retry">RetryRuleCodec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html#decrypt(java.lang.String,com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decrypt(String, EncryptedSecret)</a> - Method in class com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html" title="class in com.sca4d.core.spring.security">AesGcmSecretCipher</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/list/ListDefinition.Builder.html#defaultSort(com.sca4d.core.api.query.SortOrder...)" class="member-name-link">defaultSort(SortOrder...)</a> - Method in class com.sca4d.core.spring.web.list.<a href="com/sca4d/core/spring/web/list/ListDefinition.Builder.html" title="class in com.sca4d.core.spring.web.list">ListDefinition.Builder</a></dt>
@@ -862,14 +934,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html#enabled()" class="member-name-link">enabled()</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html" title="class in com.sca4d.core.spring.dictionary">DynamicDictionary</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#encode(byte%5B%5D)" class="member-name-link">encode(byte[])</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#encode(byte%5B%5D)" class="member-name-link">encode(byte[])</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html#encode(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,byte%5B%5D)" class="member-name-link">encode(SecretCipher, SettingOwner, String, byte[])</a> - Static method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a></dt>
-<dd>
-<div class="block">使用当前设置编码生成新密文，密钥标识和密钥材料保持由 SecretKeyring 决定。</div>
-</dd>
+<dt><a href="com/sca4d/core/spring/retry/RetryRuleCodec.html#encode(com.sca4d.core.api.retry.RetryRule)" class="member-name-link">encode(RetryRule)</a> - Method in class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/RetryRuleCodec.html" title="class in com.sca4d.core.spring.retry">RetryRuleCodec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/YamlCodec.html#encode(T)" class="member-name-link">encode(T)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/YamlCodec.html" title="class in com.sca4d.core.spring.setting">YamlCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html#encrypt(java.lang.String,byte%5B%5D)" class="member-name-link">encrypt(String, byte[])</a> - Method in class com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html" title="class in com.sca4d.core.spring.security">AesGcmSecretCipher</a></dt>
@@ -934,6 +1002,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">等待取得锁后执行任务，任务执行期间由 Redisson watchdog 续租。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/retry/SpringRetryExecutor.html#execute(com.sca4d.core.api.retry.RetryPolicy,com.sca4d.core.api.retry.RetryOperation,com.sca4d.core.api.retry.RetryListener)" class="member-name-link">execute(RetryPolicy&lt;Throwable&gt;, RetryOperation&lt;T, E&gt;, RetryListener)</a> - Method in class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/SpringRetryExecutor.html" title="class in com.sca4d.core.spring.retry">SpringRetryExecutor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/redis/RedisDistributedLock.html#executeAsync(com.sca4d.core.api.concurrent.LockKey,java.time.Duration,java.util.function.Supplier)" class="member-name-link">executeAsync(LockKey, Duration, Supplier&lt;? extends CompletionStage&lt;T&gt;&gt;)</a> - Method in class com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisDistributedLock.html" title="class in com.sca4d.core.spring.redis">RedisDistributedLock</a></dt>
 <dd>
 <div class="block">使用独立逻辑 owner ID 持锁到 CompletionStage 终止，watchdog 负责期间续租。</div>
@@ -1630,6 +1700,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">判断当前实现方法是否进入该绑定。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallBinding.html#matches(java.lang.reflect.Method,java.lang.Class)" class="member-name-link">matches(Method, Class&lt;?&gt;)</a> - Method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallBinding.html" title="class in com.sca4d.core.spring.version">VersionCallBinding</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/config/InstanceCapabilityCondition.html#matches(org.springframework.context.annotation.ConditionContext,org.springframework.core.type.AnnotatedTypeMetadata)" class="member-name-link">matches(ConditionContext, AnnotatedTypeMetadata)</a> - Method in class com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/InstanceCapabilityCondition.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityCondition</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/validation/BizId.html#max()" class="member-name-link">max()</a> - Element in annotation interface com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/BizId.html" title="annotation interface in com.sca4d.core.spring.validation">BizId</a></dt>
@@ -1715,10 +1787,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html#methodValidation(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">methodValidation(HttpServletRequest)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html" title="class in com.sca4d.core.spring.web">GlobalExceptionHandler</a></dt>
 <dd>
 <div class="block">处理 Spring 方法校验失败。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html#migrate(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,int,com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.security.EncryptedSecret,int,com.sca4d.core.api.security.SecretCipher)" class="member-name-link">migrate(SettingOwner, String, int, SecretCipher, EncryptedSecret, int, SecretCipher)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></dt>
-<dd>
-<div class="block">把一条密文转换为目标版本，调用方负责保存返回结果。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/validation/BizId.html#min()" class="member-name-link">min()</a> - Element in annotation interface com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/BizId.html" title="annotation interface in com.sca4d.core.spring.validation">BizId</a></dt>
 <dd>
@@ -1842,8 +1910,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DictionaryRegistry.html#options(java.lang.String)" class="member-name-link">options(String)</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryRegistry.html" title="class in com.sca4d.core.spring.dictionary">DictionaryRegistry</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#owner()" class="member-name-link">owner()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
-<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallInterceptor.html#order(com.sca4d.core.api.call.CallLifecycleConfiguration)" class="member-name-link">order(CallLifecycleConfiguration)</a> - Static method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a></dt>
+<dd>
+<div class="block">在权限之后、幂等重放之前检查，保留 Audit 的最外层观察。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/setting/StoredSetting.html#owner()" class="member-name-link">owner()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -2053,10 +2123,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/JarSettingReader.html#read(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">read(TreeCode, SettingOwner)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/JarSettingReader.html" title="class in com.sca4d.core.spring.setting">JarSettingReader</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html#rebind(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,java.lang.String,int,com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">rebind(SecretCipher, SettingOwner, String, String, int, EncryptedSecret)</a> - Static method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a></dt>
-<dd>
-<div class="block">使用同一把密钥把旧用途密文转换为新用途密文，keyId 不发生变化。</div>
-</dd>
 <dt><a href="com/sca4d/core/spring/redis/RedisBatches.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">RedisBatches</a> - Class in <a href="com/sca4d/core/spring/redis/package-summary.html">com.sca4d.core.spring.redis</a></dt>
 <dd>
 <div class="block">按 pipeline 命令数量限制分批执行已经确定的 Redis 操作。</div>
@@ -2210,6 +2276,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用当前接口的声明校验并转换请求参数。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/version/ClientVersionResolver.html#resolve(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">resolve(HttpServletRequest)</a> - Method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/ClientVersionResolver.html" title="class in com.sca4d.core.spring.version">ClientVersionResolver</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/validation/PhoneNumberConditionRegistry.html#resolve(java.lang.Class)" class="member-name-link">resolve(Class&lt;? extends PhoneNumberCondition&gt;)</a> - Method in class com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/PhoneNumberConditionRegistry.html" title="class in com.sca4d.core.spring.validation">PhoneNumberConditionRegistry</a></dt>
 <dd>
 <div class="block">按注解引用的类型查找唯一条件 Bean。</div>
@@ -2274,6 +2342,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">恢复幂等重放保存的 HTTP 状态和响应头。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/config/CoreJacksonAutoConfiguration.html#retryRuleCodec(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">retryRuleCodec(ObjectMapper)</a> - Method in class com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreJacksonAutoConfiguration.html" title="class in com.sca4d.core.spring.config">CoreJacksonAutoConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/retry/RetryRuleCodec.html" class="type-name-link" title="class in com.sca4d.core.spring.retry">RetryRuleCodec</a> - Class in <a href="com/sca4d/core/spring/retry/package-summary.html">com.sca4d.core.spring.retry</a></dt>
+<dd>
+<div class="block">编解码版本化重试规则快照，不保存 Java 类名、异常或可执行判断函数。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/retry/RetryRuleCodec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">RetryRuleCodec(ObjectMapper)</a> - Constructor for class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/RetryRuleCodec.html" title="class in com.sca4d.core.spring.retry">RetryRuleCodec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/redis/RedisHashTag.html#root()" class="member-name-link">root()</a> - Method in class com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a></dt>
 <dd>
 <div class="block">需要共享 Cluster hash tag 的编码根。</div>
@@ -2396,6 +2472,22 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/view/BaseViewSerializer.html#serialize(com.sca4d.core.spring.web.view.BaseView,com.fasterxml.jackson.core.JsonGenerator,com.fasterxml.jackson.databind.SerializerProvider)" class="member-name-link">serialize(BaseView, JsonGenerator, SerializerProvider)</a> - Method in class com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/BaseViewSerializer.html" title="class in com.sca4d.core.spring.web.view">BaseViewSerializer</a></dt>
 <dd>
 <div class="block">缓冲默认 Bean JSON，依次执行全部定制，成功后只写出一次最终对象。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_API_CONTRACT_HEADER" class="member-name-link">SERVER_API_CONTRACT_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-api-contract。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_BUILD_HEADER" class="member-name-link">SERVER_BUILD_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-build。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_RELEASE_ID_HEADER" class="member-name-link">SERVER_RELEASE_ID_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-release-id。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_RELEASE_VERSION_HEADER" class="member-name-link">SERVER_RELEASE_VERSION_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-release-version。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/call/CallHolder.html#set(com.sca4d.core.api.call.Call)" class="member-name-link">set(Call)</a> - Static method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHolder.html" title="class in com.sca4d.core.spring.call">CallHolder</a></dt>
 <dd>
@@ -2549,25 +2641,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingsBootstrapProperties.html#%3Cinit%3E()" class="member-name-link">SettingsBootstrapProperties()</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingsBootstrapProperties.html" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
-<dd>
-<div class="block">读取设置编码迁移前的密文用途，写入始终使用当前设置编码；不迁移密钥材料。</div>
-</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
 <dd>
-<div class="block">为一个设置所属和稳定编码建立 V1/V2 密文 Codec 目录，并把 V2 作为当前写入版本。</div>
+<div class="block">为一个设置所属和稳定编码选择当前写入及已登记的读取 Codec。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html#%3Cinit%3E(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">SettingSecretCodecCatalog(SecretCipher, SettingOwner, String)</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></dt>
 <dd>
-<div class="block">创建使用同一密钥读取或写入一个 Setting 的 V1/V2 Codec 目录。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
-<dd>
-<div class="block">使用旧的 Setting key 上下文读取版本一敏感设置密文，供历史数据和显式迁移使用。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#%3Cinit%3E(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">SettingSecretCodecV1(SecretCipher, SettingOwner, String)</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
-<dd>
-<div class="block">创建绑定 owner、Setting key 和密钥的 V1 Secret Codec。</div>
+<div class="block">创建绑定密钥、owner 和设置编码的版本目录；未登记的读取版本直接报错。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
 <dd>
@@ -2577,12 +2657,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建绑定 owner、Setting key 和密钥的 V2 Secret Codec。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
-<dd>
-<div class="block">手工把一个 Setting 密文从指定版本转换到另一个版本，不读取或修改数据库。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html#%3Cinit%3E()" class="member-name-link">SettingSecretEncryptionMigrator()</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/id/SnowflakeIdGenerator.html" class="type-name-link" title="class in com.sca4d.core.spring.id">SnowflakeIdGenerator</a> - Class in <a href="com/sca4d/core/spring/id/package-summary.html">com.sca4d.core.spring.id</a></dt>
 <dd>
 <div class="block">使用 Hutool 雪花算法生成全局正整数标识（Snowflake ID Generator）。</div>
@@ -2614,6 +2688,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/call/SpringCallValueResolverLookup.html#%3Cinit%3E(org.springframework.context.ApplicationContext)" class="member-name-link">SpringCallValueResolverLookup(ApplicationContext)</a> - Constructor for class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpringCallValueResolverLookup.html" title="class in com.sca4d.core.spring.call">SpringCallValueResolverLookup</a></dt>
 <dd>
 <div class="block">创建按类型读取 Spring Bean 的解析器目录。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/retry/SpringRetryExecutor.html" class="type-name-link" title="class in com.sca4d.core.spring.retry">SpringRetryExecutor</a> - Class in <a href="com/sca4d/core/spring/retry/package-summary.html">com.sca4d.core.spring.retry</a></dt>
+<dd>
+<div class="block">使用 Spring Retry 执行同步重试，共同策略是次数和退避判断的唯一来源。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/retry/SpringRetryExecutor.html#%3Cinit%3E()" class="member-name-link">SpringRetryExecutor()</a> - Constructor for class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/SpringRetryExecutor.html" title="class in com.sca4d.core.spring.retry">SpringRetryExecutor</a></dt>
+<dd>
+<div class="block">使用可中断的线程等待。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/persistence/batch/SqlBatches.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.batch">SqlBatches</a> - Class in <a href="com/sca4d/core/spring/persistence/batch/package-summary.html">com.sca4d.core.spring.persistence.batch</a></dt>
 <dd>
@@ -2654,6 +2736,8 @@ loadScripts(document, 'script');</script>
 <div class="block">成功响应使用的固定响应码。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponseAdvice.html#supports(org.springframework.core.MethodParameter,java.lang.Class)" class="member-name-link">supports(MethodParameter, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponseAdvice.html" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a></dt>
 <dt><a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html#supports(org.springframework.core.MethodParameter,java.lang.Class)" class="member-name-link">supports(MethodParameter, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;)</a> - Method in class com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateResponseAdvice</a></dt>
@@ -2800,6 +2884,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DatabaseDictionaryOption.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DatabaseDictionaryOption.html" title="class in com.sca4d.core.spring.dictionary">DatabaseDictionaryOption</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/ApiCapability.html#value()" class="member-name-link">value()</a> - Element in annotation interface com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/ApiCapability.html" title="annotation interface in com.sca4d.core.spring.version">ApiCapability</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/clientstate/ClientStateTarget.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateTarget.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateTarget</a></dt>
 <dd>
 <div class="block">写入响应头的目标编码。</div>
@@ -2832,7 +2918,7 @@ the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/StoredSetting.html#valueText()" class="member-name-link">valueText()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dt><a href="com/sca4d/core/spring/retry/RetryRuleCodec.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/RetryRuleCodec.html" title="class in com.sca4d.core.spring.retry">RetryRuleCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
 <dd>&nbsp;</dd>
@@ -2840,15 +2926,39 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html" title="class in com.sca4d.core.spring.dictionary">DynamicDictionary</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dt><a href="com/sca4d/core/spring/retry/RetryRuleCodec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.retry.<a href="com/sca4d/core/spring/retry/RetryRuleCodec.html" title="class in com.sca4d.core.spring.retry">RetryRuleCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/StoredSetting.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallBinding.html" class="type-name-link" title="class in com.sca4d.core.spring.version">VersionCallBinding</a> - Class in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
+<dd>
+<div class="block">只将受版本规则保护的 HTTP 方法接入 Call，不处理异常响应。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallBinding.html#%3Cinit%3E()" class="member-name-link">VersionCallBinding()</a> - Constructor for class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallBinding.html" title="class in com.sca4d.core.spring.version">VersionCallBinding</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a> - Class in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
+<dd>
+<div class="block">在 Call 中报告兼容拒绝，使审计、拒绝分类和完成处理保持统一。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionCallInterceptor.html#%3Cinit%3E()" class="member-name-link">VersionCallInterceptor()</a> - Constructor for class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionDiscovery.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.version">VersionDiscovery</a> - Annotation Interface in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
+<dd>
+<div class="block">允许版本不兼容的客户端仍查询升级和兼容信息。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html#versionPreconditionFailed(com.sca4d.core.api.concurrent.VersionPreconditionFailedException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">versionPreconditionFailed(VersionPreconditionFailedException, HttpServletRequest)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html" title="class in com.sca4d.core.spring.web">GlobalExceptionHandler</a></dt>
 <dd>
 <div class="block">处理调用方提交的版本前置条件失败。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionWebConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.version">VersionWebConfiguration</a> - Class in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
+<dd>
+<div class="block">应用显式导入的 MVC 适配；应用提供矩阵并选择默认能力和旧客户端策略。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/version/VersionWebConfiguration.html#%3Cinit%3E(com.sca4d.core.api.version.ApplicationVersion,com.sca4d.core.api.version.CompatibilityResolver,java.lang.String,boolean)" class="member-name-link">VersionWebConfiguration(ApplicationVersion, CompatibilityResolver, String, boolean)</a> - Constructor for class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionWebConfiguration.html" title="class in com.sca4d.core.spring.version">VersionWebConfiguration</a></dt>
+<dd>
+<div class="block">创建请求适配，业务规则仅来自应用提供的矩阵。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/view/ViewJson.html" class="type-name-link" title="class in com.sca4d.core.spring.web.view">ViewJson</a> - Class in <a href="com/sca4d/core/spring/web/view/package-summary.html">com.sca4d.core.spring.web.view</a></dt>
 <dd>

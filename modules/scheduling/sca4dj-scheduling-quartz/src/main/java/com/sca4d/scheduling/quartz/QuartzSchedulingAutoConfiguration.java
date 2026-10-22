@@ -8,12 +8,13 @@ import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.runtime.InstanceCapabilities;
 import com.sca4d.core.api.runtime.InstanceCapability;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.spring.config.AppIsolationAutoConfiguration;
 import com.sca4d.core.spring.config.ConditionalOnCapability;
+import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import org.jetbrains.annotations.NotNull;
@@ -63,22 +64,11 @@ public class QuartzSchedulingAutoConfiguration {
     }
 
     /**
-     * 创建只保存当前集群任务定义的进程内目录。
-     *
-     * @return 保存对账成功定义并供 Quartz fire 恢复任务的进程内目录
-     */
-    @Bean
-    QuartzClusterTaskRegistry quartzClusterTaskRegistry() {
-        return new QuartzClusterTaskRegistry();
-    }
-
-    /**
      * 配置 Quartz 使用主 PostgreSQL、{@code quartz.qrtz_} 表和集群 JobStore。
      *
      * @param dataSource 主 PostgreSQL DataSource
      * @param jobExecutor Quartz fire 提交持久化 Job run 的可选入口
      * @param registry 对账成功后保存可执行计划的目录
-     * @param clusterTaskRegistry 对账成功后保存可执行集群任务的目录
      * @param properties Quartz 工作线程和集群签到配置
      * @return 在 Spring Boot 创建 SchedulerFactoryBean 时应用前述设置的定制器
      * @throws IllegalArgumentException Quartz 配置无效或派生 scheduler 名称超过数据库限制时抛出
@@ -88,7 +78,10 @@ public class QuartzSchedulingAutoConfiguration {
             @NotNull DataSource dataSource,
             @NotNull ObjectProvider<JobExecutor> jobExecutor,
             @NotNull QuartzScheduleRegistry registry,
-            @NotNull QuartzClusterTaskRegistry clusterTaskRegistry,
+            @NotNull InstanceCapabilities capabilities,
+            @NotNull InstanceProperties instanceProperties,
+            @NotNull DistributedLock distributedLock,
+            @NotNull Clock clock,
             @NotNull QuartzSchedulingProperties properties) {
         properties.validate();
         Key schedulerName = schedulerName();
@@ -112,7 +105,10 @@ public class QuartzSchedulingAutoConfiguration {
             factory.setWaitForJobsToCompleteOnShutdown(true);
             Map<String, Object> schedulerContext = new HashMap<>();
             schedulerContext.put(QuartzDispatchJob.REGISTRY_CONTEXT_KEY, registry);
-            schedulerContext.put(QuartzClusterTaskJob.REGISTRY_CONTEXT_KEY, clusterTaskRegistry);
+            schedulerContext.put(QuartzDispatchJob.CAPABILITIES_CONTEXT_KEY, capabilities);
+            schedulerContext.put(QuartzDispatchJob.INSTANCE_CONTEXT_KEY, instanceProperties);
+            schedulerContext.put(QuartzDispatchJob.LOCK_CONTEXT_KEY, distributedLock);
+            schedulerContext.put(QuartzDispatchJob.CLOCK_CONTEXT_KEY, clock);
             JobExecutor executor = jobExecutor.getIfAvailable();
             if (executor != null) {
                 schedulerContext.put(EXECUTOR_CONTEXT_KEY, executor);
@@ -126,14 +122,12 @@ public class QuartzSchedulingAutoConfiguration {
      *
      * @param scheduler Spring Boot 创建但尚未自动启动的 Quartz Scheduler
      * @param registry 对账成功后供 fire 查询的计划目录
-     * @param clusterTaskRegistry 对账成功后供 fire 查询的集群任务目录
      * @param distributedLock Quartz 计划对账使用的 Redis 分布式锁
      * @param transactionManager 主 PostgreSQL 事务管理器
      * @param objectMapper 脚手架统一 JSON 映射器
      * @param clock 固定间隔计划计算首次触发时间的时钟
      * @param schedules 当前应用声明的全部 JobSchedule Bean
-     * @param clusterTasks 当前应用声明的全部 ClusterTaskSchedule Bean
-     * @return 先对账持久化 Job 计划和集群任务、再启动 Quartz 的调度器
+     * @return 对账全部 Job 计划后启动 Quartz 的调度器
      */
     @Bean
     @ConditionalOnMissingBean(JobScheduler.class)
@@ -141,23 +135,19 @@ public class QuartzSchedulingAutoConfiguration {
     QuartzJobScheduler quartzJobScheduler(
             @NotNull Scheduler scheduler,
             @NotNull QuartzScheduleRegistry registry,
-            @NotNull QuartzClusterTaskRegistry clusterTaskRegistry,
             @NotNull DistributedLock distributedLock,
             @NotNull PlatformTransactionManager transactionManager,
             @NotNull @Sca4djJson Sca4djMapper objectMapper,
             @NotNull Clock clock,
-            @NotNull ObjectProvider<JobSchedule<?, ?>> schedules,
-            @NotNull ObjectProvider<ClusterTaskSchedule> clusterTasks) {
+            @NotNull ObjectProvider<JobSchedule<?, ?>> schedules) {
         return new QuartzJobScheduler(
                 scheduler,
                 registry,
-                clusterTaskRegistry,
                 distributedLock,
                 transactionManager,
                 objectMapper,
                 clock,
                 schedules,
-                clusterTasks,
                 schedulerName());
     }
 

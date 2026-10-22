@@ -3,7 +3,7 @@ package com.sca4d.storage.file.lifecycle;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.job.JobRetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +15,7 @@ import java.util.Objects;
  * <p>FileCleanupService 已按文件保存删除租约、成功和下次重试时间，因此该 Job 不再增加外层重试；
  * 本次扫描未完成的记录由下一次代码计划继续处理。
  */
-public final class FileCleanupJob extends DirectJob<Void, Void> {
+public class FileCleanupJob extends DirectJob<Void, Void> {
 
     private static final JobKey KEY = new JobKey("STORAGE/FILE/CLEANUP");
 
@@ -52,8 +52,8 @@ public final class FileCleanupJob extends DirectJob<Void, Void> {
     }
 
     @Override
-    public @NotNull JobRetryPolicy retryPolicy() {
-        return JobRetryPolicy.once();
+    public @NotNull RetryRule retryRule() {
+        return RetryRule.once();
     }
 
     @Override

@@ -11,13 +11,13 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class EmailCodeChallengeView {
 
-    private final @NotNull String challengeId;
-
-    private final @NotNull String maskedRecipient;
-
     private final @NotNull Instant expiresAt;
 
     private final @NotNull Instant resendAt;
+
+    private final @NotNull String challengeId;
+
+    private final @NotNull String maskedRecipient;
 
     private EmailCodeChallengeView(@NotNull EmailCodeChallenge challenge) {
         this.challengeId = challenge.challengeId().value();

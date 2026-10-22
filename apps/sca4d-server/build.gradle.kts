@@ -69,6 +69,7 @@ dependencies {
     runtimeOnly(project(":modules:storage:sca4dj-storage-file"))
     runtimeOnly(project(":modules:storage:sca4dj-storage-local"))
     runtimeOnly(project(":modules:storage:sca4dj-storage-minio"))
+    runtimeOnly(libs.spring.retry)
     runtimeOnly(libs.zxing.javase)
     implementation(libs.flyway.core)
     runtimeOnly(libs.flyway.postgresql)
@@ -126,10 +127,6 @@ tasks.withType<Test>().configureEach {
             .file(
                 "apps/sca4d-server-mfa-plugin/build/libs/sca4d-server-mfa-plugin-1.0.0-plugin.jar",
             ).asFile.absolutePath,
-    )
-    systemProperty(
-        "javax.xml.parsers.SAXParserFactory",
-        "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
     )
 }
 

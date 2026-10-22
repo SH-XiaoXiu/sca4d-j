@@ -9,9 +9,9 @@ import java.util.Objects;
 
 /** 保存成功消费 SMS Challenge 后确认的 Account、引用和版本。 */
 public class ConsumedSmsCodeChallenge {
-    private final @NotNull SmsCodeChallengeId challengeId;
-
     private final @NotNull Account account;
+
+    private final @NotNull SmsCodeChallengeId challengeId;
 
     private final @NotNull Version version;
 

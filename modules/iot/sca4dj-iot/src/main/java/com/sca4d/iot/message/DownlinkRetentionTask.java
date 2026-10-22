@@ -1,7 +1,6 @@
 package com.sca4d.iot.message;
 
 import com.sca4d.core.api.annotation.SystemExecution;
-import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.iot.api.IotCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 分批删除超过保留期的最终状态下行消息，使 PostgreSQL 只保留可靠投递所需状态和近期查询数据。 */
-public class DownlinkRetentionTask implements ClusterTask {
+public class DownlinkRetentionTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(DownlinkRetentionTask.class);
 
@@ -55,7 +54,6 @@ public class DownlinkRetentionTask implements ClusterTask {
     }
 
     /** 删除一批早于保留截止时间且已经进入最终状态的下行消息。 */
-    @Override
     @Transactional
     @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public void execute() {

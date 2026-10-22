@@ -111,7 +111,7 @@ public class DeviceAcknowledgementCheckHandler implements MessageHandler<DeviceA
             if (!downlinks.rescheduleAfterAcknowledgement(message.messageId(), failure.code())) {
                 return;
             }
-            messages.publishDispatch(message.messageId(), message.attemptCount() + 1, retryAt);
+            messages.publishDispatch(message.messageId(), Math.incrementExact(message.attemptCount()), retryAt);
             LOG.debug(
                     "Device 下行 ACK 超时后等待重试 | messageId={} attempt={} retryAt={}",
                     message.messageId(),

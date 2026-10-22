@@ -17,6 +17,17 @@ import java.util.Set;
 /** 读写 `iot_downlink_message` 中的业务下行状态和最新 ACK。 */
 public interface DeviceDownlinkMapper {
 
+    /** 按设备集合读取每个设备最近的下行消息，不统计完整历史数量。 */
+    @NotNull
+    List<EncodedDownlinkMessage> selectRecentDeviceDownlinks(
+            @Param("deviceIds") @NotNull List<@NotNull Long> deviceIds,
+            @Param("limit") int limit);
+
+    /** 批量读取仍保存在主库中的最新回执投影。 */
+    @NotNull
+    List<EncodedDeviceAcknowledgement> selectAcknowledgementsByMessageIds(
+            @Param("messageIds") @NotNull List<@NotNull Long> messageIds);
+
     /** 统计 Device 的全部下行消息。 */
     long countDeviceDownlinks(@Param("deviceId") long deviceId);
 

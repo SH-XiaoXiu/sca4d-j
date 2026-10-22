@@ -1,5 +1,5 @@
 -- 此文件由 initFlyway 根据 App 运行模块生成。
--- 生成后由 App 维护，后续数据库变化请新增 V2、V3 等迁移。
+-- 生成后由 App 维护，之后的数据库变化请新增 V2、V3 等迁移。
 
 -- 组件：project :core:sca4dj-core-spring
 -- 结构：dictionary-settings.sql
@@ -16,22 +16,33 @@ $$;
 COMMENT ON FUNCTION sca4dj_set_updated_at() IS '在包含 updated_at 的可变记录更新时写入数据库当前时间';
 
 CREATE TABLE sys_setting (
-    setting_key VARCHAR(160) PRIMARY KEY,
+    owner_type VARCHAR(128) NOT NULL,
+    owner_id VARCHAR(160) NOT NULL,
+    setting_key VARCHAR(160) NOT NULL,
+    schema_version INTEGER NOT NULL,
+    has_value BOOLEAN NOT NULL DEFAULT TRUE,
     value_text TEXT,
     value_key_id VARCHAR(128),
     value_ciphertext BYTEA,
+    encryption_context_version SMALLINT,
     synchronized_from_environment BOOLEAN NOT NULL DEFAULT FALSE,
-    version BIGINT NOT NULL DEFAULT 0,
+    version BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (owner_type, owner_id, setting_key)
 );
 
-COMMENT ON TABLE sys_setting IS '保存客户可通过管理端修改或由指定初始化节点写入的类型化设置';
-COMMENT ON COLUMN sys_setting.setting_key IS 'Java Setting 声明的全局稳定键';
+COMMENT ON TABLE sys_setting IS '按 owner 保存 Java Setting 声明的系统设置、个人偏好和后端逻辑设置';
+COMMENT ON COLUMN sys_setting.owner_type IS '设置归属者使用的稳定类型；SYSTEM 表示 Subject.SYSTEM';
+COMMENT ON COLUMN sys_setting.owner_id IS 'owner_type 内唯一的设置归属者标识';
+COMMENT ON COLUMN sys_setting.setting_key IS 'Java Setting Bean 声明的全局稳定键';
+COMMENT ON COLUMN sys_setting.schema_version IS '当前值使用的结构版本，必须与 Java Setting 定义一致';
+COMMENT ON COLUMN sys_setting.has_value IS '是否保存 owner 显式覆盖值；false 表示保留版本的默认值 tombstone';
 COMMENT ON COLUMN sys_setting.value_text IS '非敏感设置的编码文本';
 COMMENT ON COLUMN sys_setting.value_key_id IS '敏感设置使用的 SecretKeyring 密钥标识';
 COMMENT ON COLUMN sys_setting.value_ciphertext IS '敏感设置的密文';
-COMMENT ON COLUMN sys_setting.synchronized_from_environment IS '是否由指定初始化节点在每次启动时同步并禁止界面修改';
+COMMENT ON COLUMN sys_setting.encryption_context_version IS '密文绑定 owner 和设置键时使用的加密用途版本';
+COMMENT ON COLUMN sys_setting.synchronized_from_environment IS 'SystemSetting 是否由指定初始化节点在每次启动时同步并禁止界面修改';
 COMMENT ON COLUMN sys_setting.version IS '设置值更新使用的乐观并发版本';
 COMMENT ON COLUMN sys_setting.created_at IS '设置创建时间';
 COMMENT ON COLUMN sys_setting.updated_at IS '设置最近更新时间，由数据库触发器维护';
@@ -50,6 +61,7 @@ CREATE TABLE sys_dictionary_option (
     dictionary_key VARCHAR(160) NOT NULL,
     option_value VARCHAR(160) NOT NULL,
     label VARCHAR(160) NOT NULL,
+    i18n JSONB NOT NULL DEFAULT '{}'::jsonb,
     enabled BOOLEAN NOT NULL DEFAULT TRUE,
     sort_order INTEGER NOT NULL DEFAULT 0,
     version BIGINT NOT NULL DEFAULT 0,
@@ -75,7 +87,8 @@ COMMENT ON COLUMN sys_dictionary.updated_at IS '动态字典最近更新时间�
 COMMENT ON TABLE sys_dictionary_option IS '保存动态字典选项和可扩展代码字典的数据库选项';
 COMMENT ON COLUMN sys_dictionary_option.dictionary_key IS '动态字典键或允许扩展的 Java Dictionary 键；不使用外键是因为代码字典不写入 sys_dictionary';
 COMMENT ON COLUMN sys_dictionary_option.option_value IS '字典内唯一且供代码和接口使用的选项值';
-COMMENT ON COLUMN sys_dictionary_option.label IS '选项的默认展示名称';
+COMMENT ON COLUMN sys_dictionary_option.label IS '选项缺少目标 Locale 翻译时使用的默认展示名称';
+COMMENT ON COLUMN sys_dictionary_option.i18n IS '按 BCP 47 Locale 和 label 字段保存的多语言展示名称';
 COMMENT ON COLUMN sys_dictionary_option.enabled IS '选项是否允许用于新的业务数据';
 COMMENT ON COLUMN sys_dictionary_option.sort_order IS '同一字典内的升序排列值';
 COMMENT ON COLUMN sys_dictionary_option.version IS '选项更新使用的乐观并发版本';
@@ -113,7 +126,8 @@ CREATE TABLE audit_record (
     http_path VARCHAR(2048),
     client_ip VARCHAR(128),
     user_agent VARCHAR(512),
-    occurred_at TIMESTAMP WITH TIME ZONE NOT NULL
+    occurred_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    instance_id VARCHAR(128)
 );
 
 CREATE INDEX idx_audit_record_request ON audit_record (request_id);
@@ -143,6 +157,7 @@ COMMENT ON COLUMN audit_record.http_path IS '可选且不含查询参数的 HTTP
 COMMENT ON COLUMN audit_record.client_ip IS '可选直连客户端地址，不读取转发 Header';
 COMMENT ON COLUMN audit_record.user_agent IS '可选且完成控制字符清理和长度限制的 User-Agent';
 COMMENT ON COLUMN audit_record.occurred_at IS '被审计操作产生最终结果的时间';
+COMMENT ON COLUMN audit_record.instance_id IS '实际执行实例标识，不是 IAM 身份；历史记录允许为空';
 
 -- 组件：project :modules:auth:sca4dj-auth-federation
 -- 结构：auth-federation.sql
@@ -530,9 +545,24 @@ CREATE TABLE iam_principal (
     status VARCHAR(32) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    roles_revision BIGINT NOT NULL DEFAULT 0,
+    roles_version BIGINT NOT NULL DEFAULT 0,
     deleted SMALLINT NOT NULL DEFAULT 0
 );
+
+CREATE UNIQUE INDEX uk_iam_single_system ON iam_subject(subject_type) WHERE subject_type = 'SYSTEM';
+
+CREATE TABLE iam_system_identity (
+    code VARCHAR(128) PRIMARY KEY,
+    principal_id BIGINT NOT NULL UNIQUE,
+    subject_id BIGINT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (code ~ '^[A-Z0-9_]+(:[A-Z0-9_]+)*$')
+);
+
+COMMENT ON TABLE iam_system_identity IS '整个业务系统的稳定领域身份；各实例共享编码和 Principal ID';
+COMMENT ON COLUMN iam_system_identity.code IS '代码常量声明的系统身份编码';
+COMMENT ON COLUMN iam_system_identity.principal_id IS '配置指定且禁止自动改写的全局 Principal ID';
+COMMENT ON COLUMN iam_system_identity.subject_id IS '整个业务系统唯一的 SYSTEM Subject';
 
 CREATE TABLE iam_account_principal (
     account_id BIGINT NOT NULL,
@@ -608,7 +638,7 @@ CREATE INDEX idx_platform_acl_entry_list ON platform_acl_entry (principal_id, re
 
 COMMENT ON TABLE iam_subject IS '记录完成认证或建立受控调用的具体接入者';
 COMMENT ON COLUMN iam_subject.id IS '接入者全局标识';
-COMMENT ON COLUMN iam_subject.subject_type IS '接入者类型；持久化值为 HUMAN、DEVICE 或 APPLICATION，SYSTEM 不入库';
+COMMENT ON COLUMN iam_subject.subject_type IS '接入者类型；SYSTEM 表示整个业务系统，其 ID 由应用配置确定';
 COMMENT ON COLUMN iam_subject.status IS '接入者当前状态';
 COMMENT ON COLUMN iam_subject.created_at IS '接入者创建时间';
 COMMENT ON COLUMN iam_subject.updated_at IS '接入者最近更新时间';
@@ -629,7 +659,7 @@ COMMENT ON COLUMN iam_principal.principal_type IS '与 PrincipalCodec type 一�
 COMMENT ON COLUMN iam_principal.status IS '业务主体当前状态';
 COMMENT ON COLUMN iam_principal.created_at IS '业务主体创建时间';
 COMMENT ON COLUMN iam_principal.updated_at IS '业务主体最近更新时间';
-COMMENT ON COLUMN iam_principal.roles_revision IS 'Principal 角色集合的 HTTP Revision';
+COMMENT ON COLUMN iam_principal.roles_version IS 'Principal 角色集合版本';
 COMMENT ON COLUMN iam_principal.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
 
 COMMENT ON TABLE iam_account_principal IS '记录账号可以选择的业务主体';
@@ -657,7 +687,7 @@ COMMENT ON COLUMN platform_role.status IS '角色当前状态；DISABLED 角色�
 COMMENT ON COLUMN platform_role.built_in IS '是否为 IAM 创建并保护的内置角色';
 COMMENT ON COLUMN platform_role.created_at IS '角色创建时间';
 COMMENT ON COLUMN platform_role.updated_at IS '角色最近更新时间';
-COMMENT ON COLUMN platform_role.version IS '角色名称、状态、权限和删除共享的 HTTP Revision';
+COMMENT ON COLUMN platform_role.version IS '角色名称、状态、权限和删除共享的版本';
 
 COMMENT ON TABLE platform_role_permission IS '记录 Platform 角色保存的具体 ACTION 编码或内部全量选择符';
 COMMENT ON COLUMN platform_role_permission.role_id IS 'Platform 角色标识';
@@ -702,7 +732,7 @@ CREATE TRIGGER set_platform_role_updated_at
 CREATE TABLE iot_product (
     id BIGINT PRIMARY KEY,
     code VARCHAR(128) NOT NULL UNIQUE,
-    display_name VARCHAR(128) NOT NULL,
+    i18n JSONB NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -726,6 +756,7 @@ CREATE TABLE iot_thing_model (
     version INTEGER NOT NULL,
     model_json JSONB NOT NULL,
     content_hash CHAR(64) NOT NULL,
+    i18n JSONB NOT NULL,
     published_at TIMESTAMP WITH TIME ZONE NOT NULL,
     PRIMARY KEY (product_id, version)
 );
@@ -740,12 +771,12 @@ CREATE TABLE iot_device (
     display_name VARCHAR(128) NOT NULL,
     remark VARCHAR(4096),
     thing_model_version INTEGER NOT NULL,
-    binding_revision BIGINT NOT NULL DEFAULT 1,
+    binding_generation BIGINT NOT NULL DEFAULT 1,
     protocol_code VARCHAR(128) NOT NULL,
     connection_protocol VARCHAR(128),
     connection_identifier_type VARCHAR(128),
     connection_identifier_value VARCHAR(512),
-    desired_revision BIGINT NOT NULL DEFAULT 0,
+    desired_sequence BIGINT NOT NULL DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_iot_device_product_code_code UNIQUE (product_code, code),
@@ -765,7 +796,7 @@ CREATE INDEX idx_iot_device_product ON iot_device (product_id, id);
 
 CREATE TABLE iot_reported_group (
     device_id BIGINT NOT NULL,
-    binding_revision BIGINT NOT NULL,
+    binding_generation BIGINT NOT NULL,
     group_code VARCHAR(128) NOT NULL,
     order_scope VARCHAR(128) NOT NULL,
     order_value VARCHAR(256) NOT NULL,
@@ -773,31 +804,31 @@ CREATE TABLE iot_reported_group (
     state_json JSONB NOT NULL,
     observed_at TIMESTAMP WITH TIME ZONE NOT NULL,
     received_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    revision BIGINT NOT NULL DEFAULT 1,
+    version BIGINT NOT NULL DEFAULT 1,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (device_id, binding_revision, group_code)
+    PRIMARY KEY (device_id, binding_generation, group_code)
 );
 
 CREATE TABLE iot_desired_property (
     device_id BIGINT NOT NULL,
-    binding_revision BIGINT NOT NULL,
+    binding_generation BIGINT NOT NULL,
     property_code VARCHAR(128) NOT NULL,
-    desired_revision BIGINT NOT NULL,
+    desired_sequence BIGINT NOT NULL,
     value_json JSONB NOT NULL,
     converged_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (device_id, binding_revision, property_code)
+    PRIMARY KEY (device_id, binding_generation, property_code)
 );
 
 CREATE TABLE iot_downlink_message (
     message_id BIGINT PRIMARY KEY,
     device_id BIGINT NOT NULL,
-    binding_revision BIGINT NOT NULL,
+    binding_generation BIGINT NOT NULL,
     kind VARCHAR(16) NOT NULL,
     target_code VARCHAR(128) NOT NULL,
-    desired_revision BIGINT,
+    desired_sequence BIGINT,
     schedule_id BIGINT,
     scheduled_at TIMESTAMP WITH TIME ZONE,
     data_json JSONB NOT NULL,
@@ -815,7 +846,7 @@ CREATE TABLE iot_downlink_message (
     last_ack_source_acknowledgement_id VARCHAR(256),
     last_acknowledged_at TIMESTAMP WITH TIME ZONE,
     last_ack_received_at TIMESTAMP WITH TIME ZONE,
-    last_error VARCHAR(1000),
+    last_failure_code VARCHAR(128),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     completed_at TIMESTAMP WITH TIME ZONE,
@@ -844,7 +875,7 @@ CREATE TABLE iot_device_schedule (
     last_triggered_at TIMESTAMP WITH TIME ZONE,
     last_execution_status VARCHAR(16),
     last_message_id BIGINT,
-    last_failure VARCHAR(1000),
+    last_failure_code VARCHAR(128),
     version BIGINT NOT NULL DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -857,13 +888,13 @@ CREATE INDEX idx_iot_device_schedule_due
 COMMENT ON TABLE iot_product IS '定义一类数据库 Product 允许采用的认证接入方式和设备协议';
 COMMENT ON COLUMN iot_product.id IS '数据库 Product 全局标识';
 COMMENT ON COLUMN iot_product.code IS '数据库 Product 的全局稳定编码';
-COMMENT ON COLUMN iot_product.display_name IS 'Product 默认展示名称';
+COMMENT ON COLUMN iot_product.i18n IS '按 BCP 47 Locale 保存的 Product 完整多语言展示字段';
 COMMENT ON COLUMN iot_product.created_at IS 'Product 创建时间';
 COMMENT ON COLUMN iot_product.updated_at IS 'Product 最近更新时间，由数据库触发器维护';
 
 COMMENT ON TABLE iot_product_access_method IS '记录数据库 Product 允许 Device 采用的认证接入方式';
 COMMENT ON COLUMN iot_product_access_method.product_id IS '接入方式所属数据库 Product 标识';
-COMMENT ON COLUMN iot_product_access_method.method_code IS 'Product 允许的接入方式编码，例如 anonymous、session 或 account:shared-secret';
+COMMENT ON COLUMN iot_product_access_method.method_code IS 'Product 允许的接入方式编码，例如 ANONYMOUS、SESSION 或 ACCOUNT:AUTHENTICATION/SHARED_SECRET';
 COMMENT ON COLUMN iot_product_access_method.created_at IS 'Product 接入方式关系创建时间';
 
 COMMENT ON TABLE iot_product_protocol IS '记录数据库 Product 允许 Device 绑定的协议实现';
@@ -876,6 +907,7 @@ COMMENT ON COLUMN iot_thing_model.product_id IS '物模型所属数据库 Produc
 COMMENT ON COLUMN iot_thing_model.version IS 'Product 内从 1 开始连续递增的物模型版本';
 COMMENT ON COLUMN iot_thing_model.model_json IS '完整物模型定义的 JSON 对象';
 COMMENT ON COLUMN iot_thing_model.content_hash IS '规范化物模型 JSON 的 SHA-256 小写十六进制摘要';
+COMMENT ON COLUMN iot_thing_model.i18n IS '按 BCP 47 Locale 和稳定展示路径保存的完整动态翻译';
 COMMENT ON COLUMN iot_thing_model.published_at IS '该物模型版本完成发布的时间';
 
 COMMENT ON TABLE iot_device IS '保存 DEVICE Subject 对应的公共 IoT Profile 和可选直接连接绑定';
@@ -888,23 +920,23 @@ COMMENT ON COLUMN iot_device.serial_number IS '同一 Product 内可选且唯一
 COMMENT ON COLUMN iot_device.display_name IS 'Device 默认展示名称';
 COMMENT ON COLUMN iot_device.remark IS 'Device 可选备注';
 COMMENT ON COLUMN iot_device.thing_model_version IS 'Device 当前绑定的已发布物模型版本';
-COMMENT ON COLUMN iot_device.binding_revision IS '物模型或协议每次重新绑定后递增的版本';
+COMMENT ON COLUMN iot_device.binding_generation IS '物模型或协议每次重新绑定后递增的版本';
 COMMENT ON COLUMN iot_device.protocol_code IS 'Device 当前绑定的 DeviceProtocol 编码';
 COMMENT ON COLUMN iot_device.connection_protocol IS 'Device 可选直接连接使用的协议编码';
 COMMENT ON COLUMN iot_device.connection_identifier_type IS 'Device 可选直接连接使用的公开身份类型';
 COMMENT ON COLUMN iot_device.connection_identifier_value IS '连接协议和身份类型范围内唯一的公开 Device 身份值';
-COMMENT ON COLUMN iot_device.desired_revision IS '当前绑定内最近分配的 desired 递增版本';
+COMMENT ON COLUMN iot_device.desired_sequence IS '当前绑定内最近分配的 desired 递增版本';
 COMMENT ON COLUMN iot_device.created_at IS 'Device 创建时间';
 COMMENT ON COLUMN iot_device.updated_at IS 'Device 最近更新时间，由数据库触发器维护';
 
 COMMENT ON TABLE iot_device_access_method IS '记录 Device 当前启用的认证接入方式';
 COMMENT ON COLUMN iot_device_access_method.device_id IS '接入方式所属 Device 标识';
-COMMENT ON COLUMN iot_device_access_method.method_code IS 'Device 当前启用的接入方式编码，例如 anonymous、session 或 account:shared-secret';
+COMMENT ON COLUMN iot_device_access_method.method_code IS 'Device 当前启用的接入方式编码，例如 ANONYMOUS、SESSION 或 ACCOUNT:AUTHENTICATION/SHARED_SECRET';
 COMMENT ON COLUMN iot_device_access_method.created_at IS 'Device 接入方式关系创建时间';
 
 COMMENT ON TABLE iot_reported_group IS '保存每个 reported 字段组最后接受的顺序和值';
 COMMENT ON COLUMN iot_reported_group.device_id IS 'reported 状态所属 Device 标识';
-COMMENT ON COLUMN iot_reported_group.binding_revision IS '状态所属 Device 绑定版本';
+COMMENT ON COLUMN iot_reported_group.binding_generation IS '状态所属 Device 绑定版本';
 COMMENT ON COLUMN iot_reported_group.group_code IS '物模型中定义的 reported 字段组编码';
 COMMENT ON COLUMN iot_reported_group.order_scope IS '解释 order_value 所需的排序范围编码';
 COMMENT ON COLUMN iot_reported_group.order_value IS '协议提供且在 order_scope 内可比较的顺序值';
@@ -912,15 +944,15 @@ COMMENT ON COLUMN iot_reported_group.content_hash IS '规范化 state_json 的 S
 COMMENT ON COLUMN iot_reported_group.state_json IS '该字段组最近一次接受的完整 reported 值';
 COMMENT ON COLUMN iot_reported_group.observed_at IS 'Device 观察到该组状态的时间';
 COMMENT ON COLUMN iot_reported_group.received_at IS '平台收到该组状态的时间';
-COMMENT ON COLUMN iot_reported_group.revision IS '每次接受新状态后递增的版本';
+COMMENT ON COLUMN iot_reported_group.version IS '每次接受新状态后递增的乐观锁版本';
 COMMENT ON COLUMN iot_reported_group.created_at IS '该绑定内字段组首个状态创建时间';
 COMMENT ON COLUMN iot_reported_group.updated_at IS '字段组最近接受状态的时间，由数据库触发器维护';
 
 COMMENT ON TABLE iot_desired_property IS '保存平台持续期望的当前属性值和收敛结果';
 COMMENT ON COLUMN iot_desired_property.device_id IS 'desired 属性所属 Device 标识';
-COMMENT ON COLUMN iot_desired_property.binding_revision IS 'desired 属性所属 Device 绑定版本';
+COMMENT ON COLUMN iot_desired_property.binding_generation IS 'desired 属性所属 Device 绑定版本';
 COMMENT ON COLUMN iot_desired_property.property_code IS '物模型中可写属性的稳定编码';
-COMMENT ON COLUMN iot_desired_property.desired_revision IS 'Device 内生成该期望值时分配的递增版本';
+COMMENT ON COLUMN iot_desired_property.desired_sequence IS 'Device 内生成该期望值时分配的递增版本';
 COMMENT ON COLUMN iot_desired_property.value_json IS '平台当前持续期望的属性值';
 COMMENT ON COLUMN iot_desired_property.converged_at IS 'reported 值确认已达到当前期望值的时间';
 COMMENT ON COLUMN iot_desired_property.created_at IS '该绑定内属性首次建立期望值的时间';
@@ -929,10 +961,10 @@ COMMENT ON COLUMN iot_desired_property.updated_at IS '期望值或收敛结果�
 COMMENT ON TABLE iot_downlink_message IS '保存 desired 和 command 共用的可靠下行状态机';
 COMMENT ON COLUMN iot_downlink_message.message_id IS '下行消息全局标识';
 COMMENT ON COLUMN iot_downlink_message.device_id IS '接收下行的 Device 标识';
-COMMENT ON COLUMN iot_downlink_message.binding_revision IS '创建消息时的 Device 绑定版本';
+COMMENT ON COLUMN iot_downlink_message.binding_generation IS '创建消息时的 Device 绑定版本';
 COMMENT ON COLUMN iot_downlink_message.kind IS '消息种类，DESIRED 表示期望属性，COMMAND 表示一次性命令';
 COMMENT ON COLUMN iot_downlink_message.target_code IS '目标属性或命令的物模型编码';
-COMMENT ON COLUMN iot_downlink_message.desired_revision IS 'DESIRED 消息对应的期望版本，COMMAND 时为空';
+COMMENT ON COLUMN iot_downlink_message.desired_sequence IS 'DESIRED 消息对应的期望版本，COMMAND 时为空';
 COMMENT ON COLUMN iot_downlink_message.schedule_id IS '生成该 command 的设备定时规则标识，即时下行为空';
 COMMENT ON COLUMN iot_downlink_message.scheduled_at IS '设备定时规则本次原定触发时间，即时下行为空';
 COMMENT ON COLUMN iot_downlink_message.data_json IS '协议编码前的属性值或命令输入';
@@ -950,7 +982,7 @@ COMMENT ON COLUMN iot_downlink_message.last_ack_source IS '最新 ACK 的接入�
 COMMENT ON COLUMN iot_downlink_message.last_ack_source_acknowledgement_id IS '来源提供的最新 ACK 稳定事实标识';
 COMMENT ON COLUMN iot_downlink_message.last_acknowledged_at IS '最新 ACK 表示的 Device 处理时间';
 COMMENT ON COLUMN iot_downlink_message.last_ack_received_at IS '平台收到最新 ACK 的时间';
-COMMENT ON COLUMN iot_downlink_message.last_error IS '最近一次发送失败的受限摘要';
+COMMENT ON COLUMN iot_downlink_message.last_failure_code IS '最近一次发送失败或停止重试的稳定 code';
 COMMENT ON COLUMN iot_downlink_message.created_at IS '下行消息创建时间';
 COMMENT ON COLUMN iot_downlink_message.updated_at IS '下行状态最近更新时间，由数据库触发器维护';
 COMMENT ON COLUMN iot_downlink_message.completed_at IS '下行进入最终状态的时间';
@@ -972,7 +1004,7 @@ COMMENT ON COLUMN iot_device_schedule.last_planned_at IS '最近一次执行结�
 COMMENT ON COLUMN iot_device_schedule.last_triggered_at IS '最近一次执行结果的实际处理时间';
 COMMENT ON COLUMN iot_device_schedule.last_execution_status IS '最近一次执行生成下行、过期或失败的结果';
 COMMENT ON COLUMN iot_device_schedule.last_message_id IS '最近一次成功生成的下行消息标识';
-COMMENT ON COLUMN iot_device_schedule.last_failure IS '最近一次业务失败的受限原因摘要';
+COMMENT ON COLUMN iot_device_schedule.last_failure_code IS '最近一次业务失败的稳定 code';
 COMMENT ON COLUMN iot_device_schedule.version IS '计划并发修改使用的乐观版本';
 COMMENT ON COLUMN iot_device_schedule.created_at IS '计划创建时间';
 COMMENT ON COLUMN iot_device_schedule.updated_at IS '计划最近更新时间，由数据库触发器维护';
@@ -1011,9 +1043,9 @@ CREATE SCHEMA IF NOT EXISTS job;
 
 CREATE TABLE job.job_run (
     id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
-    runtime_namespace VARCHAR(128) NOT NULL,
+    app_name VARCHAR(128) NOT NULL,
     job_key VARCHAR(128) NOT NULL,
-    job_revision INTEGER NOT NULL,
+    job_definition_version INTEGER NOT NULL,
     job_kind VARCHAR(16) NOT NULL,
     input_json JSONB,
     output_json JSONB,
@@ -1024,8 +1056,87 @@ CREATE TABLE job.job_run (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     started_at TIMESTAMP WITH TIME ZONE,
     completed_at TIMESTAMP WITH TIME ZONE,
-    UNIQUE (runtime_namespace, schedule_key, scheduled_fire_time)
+    UNIQUE (app_name, schedule_key, scheduled_fire_time)
 );
+
+ALTER TABLE job.job_run
+    ADD COLUMN capability_code VARCHAR(128) NOT NULL DEFAULT 'JOB:WORKER',
+    ADD COLUMN system_identity VARCHAR(128) NOT NULL DEFAULT 'MAIN',
+    ADD COLUMN work_key VARCHAR(256) NOT NULL DEFAULT 'DEFAULT',
+    ADD COLUMN overlap_policy VARCHAR(24) NOT NULL DEFAULT 'ALLOW',
+    ADD COLUMN target_instance_id VARCHAR(128),
+    ADD COLUMN target_generation_id UUID,
+    ADD COLUMN target_expires_at TIMESTAMP WITH TIME ZONE,
+    ADD COLUMN dispatch_id BIGINT;
+
+ALTER TABLE job.job_run
+    DROP CONSTRAINT IF EXISTS job_run_runtime_namespace_schedule_key_scheduled_fire_time_key,
+    DROP CONSTRAINT IF EXISTS job_run_app_name_schedule_key_scheduled_fire_time_key;
+
+DROP INDEX IF EXISTS job.job_run_runtime_namespace_schedule_key_scheduled_fire_time_key;
+DROP INDEX IF EXISTS job.job_run_app_name_schedule_key_scheduled_fire_time_key;
+
+CREATE UNIQUE INDEX uk_job_run_scheduled_target
+    ON job.job_run (
+        app_name, schedule_key, scheduled_fire_time,
+        COALESCE(target_instance_id, ''))
+    WHERE schedule_key IS NOT NULL;
+
+ALTER TABLE job.job_run
+    ADD CONSTRAINT ck_job_run_target_generation CHECK (
+        target_generation_id IS NULL OR target_instance_id IS NOT NULL);
+
+CREATE INDEX idx_job_run_active_work
+    ON job.job_run (app_name, system_identity, job_key, work_key, status, id);
+
+CREATE TABLE job.job_instance (
+    app_name VARCHAR(128) NOT NULL,
+    instance_id VARCHAR(128) NOT NULL,
+    generation_id UUID NOT NULL,
+    capabilities_json JSONB NOT NULL,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    PRIMARY KEY (app_name, instance_id)
+);
+
+CREATE TABLE job.job_dispatch (
+    id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    app_name VARCHAR(128) NOT NULL,
+    job_key VARCHAR(128) NOT NULL,
+    schedule_key VARCHAR(128),
+    scheduled_fire_time TIMESTAMP WITH TIME ZONE,
+    targets_json JSONB NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (app_name, schedule_key, scheduled_fire_time)
+);
+
+CREATE TABLE job.job_delivery (
+    id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    app_name VARCHAR(128) NOT NULL,
+    dispatch_id BIGINT NOT NULL REFERENCES job.job_dispatch(id),
+    job_key VARCHAR(128) NOT NULL,
+    job_definition_version INTEGER NOT NULL,
+    capability_code VARCHAR(128) NOT NULL,
+    system_identity VARCHAR(128) NOT NULL,
+    work_key VARCHAR(256) NOT NULL,
+    overlap_policy VARCHAR(24) NOT NULL,
+    input_json JSONB,
+    target_instance_id VARCHAR(128) NOT NULL,
+    target_generation_id UUID,
+    status VARCHAR(16) NOT NULL DEFAULT 'READY',
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    started_at TIMESTAMP WITH TIME ZONE,
+    lease_until TIMESTAMP WITH TIME ZONE,
+    completed_at TIMESTAMP WITH TIME ZONE,
+    error_summary VARCHAR(1000),
+    UNIQUE (dispatch_id, target_instance_id)
+);
+
+CREATE INDEX idx_job_delivery_claim
+    ON job.job_delivery (app_name, target_instance_id, target_generation_id, status, id);
+
+CREATE INDEX idx_job_instance_live
+    ON job.job_instance (app_name, expires_at);
 
 CREATE TABLE job.job_run_node (
     id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
@@ -1049,10 +1160,10 @@ CREATE TABLE job.job_run_node (
 );
 
 CREATE INDEX idx_job_run_namespace_status
-    ON job.job_run (runtime_namespace, status, id);
+    ON job.job_run (app_name, status, id);
 
 CREATE INDEX idx_job_run_succeeded_cleanup
-    ON job.job_run (runtime_namespace, status, completed_at, id);
+    ON job.job_run (app_name, status, completed_at, id);
 
 CREATE INDEX idx_job_run_node_claim
     ON job.job_run_node (status, available_at, lease_until, id);
@@ -1084,9 +1195,9 @@ CREATE TABLE job.job_run_attempt (
 COMMENT ON SCHEMA job IS '保存可恢复 Job run、Pipeline 节点、依赖和尝试事实';
 COMMENT ON TABLE job.job_run IS '按运行时命名空间保存一次 DirectJob 或 PipelineJob 的根运行';
 COMMENT ON COLUMN job.job_run.id IS 'Job run 数据库标识';
-COMMENT ON COLUMN job.job_run.runtime_namespace IS '隔离 Job 定义、领取和清理的运行时命名空间';
+COMMENT ON COLUMN job.job_run.app_name IS '隔离 Job 定义、领取和清理的运行时命名空间';
 COMMENT ON COLUMN job.job_run.job_key IS '本次运行采用的稳定 Job 编码';
-COMMENT ON COLUMN job.job_run.job_revision IS '本次运行采用的 Job 定义版本';
+COMMENT ON COLUMN job.job_run.job_definition_version IS '本次运行采用的 Job 定义版本';
 COMMENT ON COLUMN job.job_run.job_kind IS '根 Job 是 DIRECT 还是 PIPELINE';
 COMMENT ON COLUMN job.job_run.input_json IS '启动根 Job 时保存的可选输入';
 COMMENT ON COLUMN job.job_run.output_json IS '根 Job 成功后保存的可选输出';
@@ -1137,7 +1248,7 @@ COMMENT ON COLUMN job.job_run_attempt.completed_at IS '本次尝试进入最终�
 -- 结构：messaging.sql
 CREATE TABLE messaging_outbox (
     message_id BIGINT PRIMARY KEY,
-    event_code VARCHAR(128) NOT NULL,
+    message_code VARCHAR(128) NOT NULL,
     envelope BYTEA NOT NULL,
     status VARCHAR(16) NOT NULL,
     available_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -1165,7 +1276,7 @@ CREATE INDEX idx_messaging_outbox_sent
 
 COMMENT ON TABLE messaging_outbox IS '保存业务事务中登记且尚未由 RabbitMQ 确认发布的消息信封';
 COMMENT ON COLUMN messaging_outbox.message_id IS '消息信封全局标识';
-COMMENT ON COLUMN messaging_outbox.event_code IS '消费者选择消息类型使用的稳定事件编码';
+COMMENT ON COLUMN messaging_outbox.message_code IS '消费者选择消息类型使用的稳定消息编码';
 COMMENT ON COLUMN messaging_outbox.envelope IS '已经校验并序列化的 RabbitMQ 业务消息信封';
 COMMENT ON COLUMN messaging_outbox.status IS 'PENDING、SENDING、FAILED 或 SENT，不包含发布端 DEAD 状态';
 COMMENT ON COLUMN messaging_outbox.available_at IS '发布 Worker 下一次允许领取的时间';
@@ -1184,6 +1295,29 @@ CREATE TRIGGER set_messaging_outbox_updated_at
 
 -- 组件：project :modules:notification:sca4dj-notification-email
 -- 结构：notification-email.sql
+CREATE TABLE notification_email_template (
+    id BIGINT PRIMARY KEY,
+    notification_code VARCHAR(128) NOT NULL,
+    locales JSONB NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL DEFAULT 0,
+    deleted SMALLINT NOT NULL DEFAULT 0
+);
+
+CREATE UNIQUE INDEX uk_notification_email_template_code
+    ON notification_email_template (notification_code) WHERE deleted = 0;
+
+COMMENT ON TABLE notification_email_template IS '保存 Email 渠道使用的多语言主题、纯文本和 HTML 源码模板';
+COMMENT ON COLUMN notification_email_template.locales IS 'Locale 到 subject、text、html 源码的 JSON object';
+COMMENT ON COLUMN notification_email_template.version IS '模板并发修改使用的乐观版本';
+COMMENT ON COLUMN notification_email_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
+
+CREATE TRIGGER set_notification_email_template_updated_at
+    BEFORE UPDATE ON notification_email_template
+    FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
+
 CREATE TABLE notification_email_sender (
     id BIGINT PRIMARY KEY,
     name VARCHAR(128) NOT NULL,
@@ -1208,20 +1342,6 @@ CREATE UNIQUE INDEX uk_notification_email_sender_name
 CREATE UNIQUE INDEX uk_notification_email_sender_enabled
     ON notification_email_sender (enabled) WHERE enabled = TRUE AND deleted = 0;
 
-CREATE TABLE notification_email_template (
-    id BIGINT PRIMARY KEY,
-    notification_code VARCHAR(128) NOT NULL,
-    i18n JSONB NOT NULL,
-    enabled BOOLEAN NOT NULL DEFAULT FALSE,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    version BIGINT NOT NULL DEFAULT 0,
-    deleted SMALLINT NOT NULL DEFAULT 0
-);
-
-CREATE UNIQUE INDEX uk_notification_email_template_code
-    ON notification_email_template (notification_code) WHERE deleted = 0;
-
 COMMENT ON TABLE notification_email_sender IS '保存 Email 通知使用的 SMTP 配置和加密密码';
 COMMENT ON COLUMN notification_email_sender.id IS 'Email Sender 全局标识';
 COMMENT ON COLUMN notification_email_sender.name IS '管理端识别 Sender 使用的唯一名称';
@@ -1239,22 +1359,136 @@ COMMENT ON COLUMN notification_email_sender.created_at IS 'Sender 创建时间';
 COMMENT ON COLUMN notification_email_sender.updated_at IS 'Sender 最近更新时间，由数据库触发器维护';
 COMMENT ON COLUMN notification_email_sender.version IS 'Sender 并发修改使用的乐观版本';
 COMMENT ON COLUMN notification_email_sender.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
-COMMENT ON TABLE notification_email_template IS '按通知编码保存完整多语言 Email 模板';
-COMMENT ON COLUMN notification_email_template.id IS 'Email 模板全局标识';
-COMMENT ON COLUMN notification_email_template.notification_code IS 'Notification 声明的稳定通知编码';
-COMMENT ON COLUMN notification_email_template.i18n IS '每个 Locale 保存必填 subject、text 和可选 html';
-COMMENT ON COLUMN notification_email_template.enabled IS '模板是否允许参与 Email 投递';
-COMMENT ON COLUMN notification_email_template.created_at IS '模板创建时间';
-COMMENT ON COLUMN notification_email_template.updated_at IS '模板最近更新时间，由数据库触发器维护';
-COMMENT ON COLUMN notification_email_template.version IS '模板并发修改使用的乐观版本';
-COMMENT ON COLUMN notification_email_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
 
 CREATE TRIGGER set_notification_email_sender_updated_at
     BEFORE UPDATE ON notification_email_sender
     FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
 
-CREATE TRIGGER set_notification_email_template_updated_at
-    BEFORE UPDATE ON notification_email_template
+-- 组件：project :modules:notification:sca4dj-notification-inbox
+-- 结构：notification-inbox.sql
+CREATE TABLE notification_inbox_template (
+    id BIGINT PRIMARY KEY,
+    notification_code VARCHAR(128) NOT NULL,
+    content JSONB NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL DEFAULT 0,
+    deleted SMALLINT NOT NULL DEFAULT 0
+);
+
+CREATE UNIQUE INDEX uk_notification_inbox_template_code
+    ON notification_inbox_template (notification_code) WHERE deleted = 0;
+
+COMMENT ON TABLE notification_inbox_template IS '保存 Inbox 渠道使用的多语言 Tiptap JSON 模板';
+COMMENT ON COLUMN notification_inbox_template.notification_code IS 'NotificationType 声明的稳定通知编码';
+COMMENT ON COLUMN notification_inbox_template.content IS 'Locale 到 title/body ProseMirror 文档的 JSON object';
+COMMENT ON COLUMN notification_inbox_template.enabled IS '模板是否参与 Inbox 投递';
+COMMENT ON COLUMN notification_inbox_template.version IS '模板并发修改使用的乐观版本';
+COMMENT ON COLUMN notification_inbox_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
+
+CREATE TRIGGER set_notification_inbox_template_updated_at
+    BEFORE UPDATE ON notification_inbox_template
+    FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
+
+CREATE TABLE notification_inbox_message (
+    id BIGINT PRIMARY KEY,
+    message_id BIGINT NOT NULL,
+    account_id BIGINT NOT NULL,
+    notification_code VARCHAR(128) NOT NULL,
+    language_tag VARCHAR(64) NOT NULL,
+    title VARCHAR(998) NOT NULL,
+    text_content TEXT NOT NULL,
+    html_content TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    read_at TIMESTAMP WITH TIME ZONE,
+    version BIGINT NOT NULL DEFAULT 0
+);
+
+CREATE UNIQUE INDEX uk_notification_inbox_message_delivery
+    ON notification_inbox_message (message_id, account_id);
+CREATE INDEX idx_notification_inbox_message_account_page
+    ON notification_inbox_message (account_id, id DESC);
+CREATE INDEX idx_notification_inbox_message_unread
+    ON notification_inbox_message (account_id, id DESC) WHERE read_at IS NULL;
+
+COMMENT ON TABLE notification_inbox_message IS '保存发送给 Account 且不会随模板变化的站内信快照';
+COMMENT ON COLUMN notification_inbox_message.message_id IS '原始 NotificationMessage 标识，用于消费幂等';
+COMMENT ON COLUMN notification_inbox_message.account_id IS '站内信所属 Account 标识';
+COMMENT ON COLUMN notification_inbox_message.notification_code IS '产生站内信的 NotificationType 编码';
+COMMENT ON COLUMN notification_inbox_message.language_tag IS '渲染模板使用的 BCP 47 Locale';
+COMMENT ON COLUMN notification_inbox_message.read_at IS '首次标记已读时间；为空表示未读';
+
+-- 组件：project :modules:notification:sca4dj-notification-sms
+-- 结构：notification-sms.sql
+CREATE TABLE notification_sms_provider (
+    id BIGINT PRIMARY KEY,
+    code VARCHAR(128) NOT NULL,
+    provider_type VARCHAR(64) NOT NULL,
+    credential_ref VARCHAR(128) NOT NULL,
+    priority INTEGER NOT NULL DEFAULT 100,
+    enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL DEFAULT 0,
+    deleted SMALLINT NOT NULL DEFAULT 0
+);
+
+CREATE UNIQUE INDEX uk_notification_sms_provider_code
+    ON notification_sms_provider (code) WHERE deleted = 0;
+
+CREATE TABLE notification_sms_binding (
+    id BIGINT PRIMARY KEY,
+    provider_id BIGINT NOT NULL,
+    notification_code VARCHAR(128) NOT NULL,
+    route VARCHAR(64) NOT NULL,
+    language_tag VARCHAR(64) NOT NULL,
+    sign_name VARCHAR(128) NOT NULL,
+    provider_template_code VARCHAR(128) NOT NULL,
+    parameter_mapping JSONB NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL DEFAULT 0,
+    deleted SMALLINT NOT NULL DEFAULT 0,
+    CONSTRAINT ck_notification_sms_binding_parameter_mapping_object
+        CHECK (jsonb_typeof(parameter_mapping) = 'object')
+);
+
+CREATE UNIQUE INDEX uk_notification_sms_binding_route
+    ON notification_sms_binding (provider_id, notification_code, route, language_tag)
+    WHERE deleted = 0;
+
+CREATE TABLE notification_sms_delivery (
+    id BIGINT PRIMARY KEY,
+    message_id BIGINT NOT NULL,
+    provider_id BIGINT NOT NULL,
+    route VARCHAR(64) NOT NULL,
+    recipient_hash VARCHAR(64) NOT NULL,
+    recipient_masked VARCHAR(32) NOT NULL,
+    status VARCHAR(16) NOT NULL,
+    request_id VARCHAR(128),
+    biz_id VARCHAR(128),
+    failure_code VARCHAR(128),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    completed_at TIMESTAMP WITH TIME ZONE
+);
+
+CREATE UNIQUE INDEX uk_notification_sms_delivery_attempt
+    ON notification_sms_delivery (message_id, provider_id);
+
+COMMENT ON TABLE notification_sms_provider IS '保存可由 App 策略选择的 SMS Provider 实例，不保存密钥';
+COMMENT ON COLUMN notification_sms_provider.credential_ref IS '部署配置中 Provider 凭据集合的稳定引用';
+COMMENT ON COLUMN notification_sms_binding.route IS '具体应用声明的 SMS 路由编码，公共模块不预设地区分组';
+COMMENT ON TABLE notification_sms_binding IS '把统一通知变量绑定到 Provider 已审核模板，不保存业务模板正文';
+COMMENT ON COLUMN notification_sms_binding.parameter_mapping IS 'Provider 参数名到统一通知变量名的 JSON object';
+COMMENT ON TABLE notification_sms_delivery IS '记录一个原始通知消息在各 SMS Provider 的 API 提交结果';
+
+CREATE TRIGGER set_notification_sms_provider_updated_at
+    BEFORE UPDATE ON notification_sms_provider
+    FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
+CREATE TRIGGER set_notification_sms_binding_updated_at
+    BEFORE UPDATE ON notification_sms_binding
     FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
 
 -- 组件：project :modules:openapi:sca4dj-openapi
@@ -1577,7 +1811,7 @@ COMMENT ON COLUMN quartz.qrtz_locks.lock_name IS 'Quartz JobStore 竞争的逻�
 -- 结构：storage-file.sql
 CREATE TABLE storage_file (
     id BIGINT PRIMARY KEY,
-    uploader_account_id BIGINT NOT NULL,
+    uploader_principal_id BIGINT NOT NULL,
     scene VARCHAR(64) NOT NULL,
     target_resource_type VARCHAR(128) NOT NULL,
     target_resource_id VARCHAR(128) NOT NULL,
@@ -1611,13 +1845,13 @@ CREATE INDEX idx_storage_file_upload_cleanup
 
 COMMENT ON TABLE storage_file IS '记录文件上传意图、业务用途和实际存储位置';
 COMMENT ON COLUMN storage_file.id IS '文件记录全局标识';
-COMMENT ON COLUMN storage_file.uploader_account_id IS '创建上传意图的 Account 标识快照';
+COMMENT ON COLUMN storage_file.uploader_principal_id IS '创建文件的 Principal 标识快照；SYSTEM 使用应用配置的全局 Subject ID';
 COMMENT ON COLUMN storage_file.scene IS '文件在目标业务资源中的固定使用场景';
 COMMENT ON COLUMN storage_file.target_resource_type IS '文件准备绑定或已经绑定的目标 Resource 类型';
 COMMENT ON COLUMN storage_file.target_resource_id IS '文件准备绑定或已经绑定的目标 Resource 标识';
 COMMENT ON COLUMN storage_file.backend_id IS '创建文件时选择的稳定存储实现标识';
 COMMENT ON COLUMN storage_file.container_name IS '存储实现内保存对象的容器或 Bucket 名称';
-COMMENT ON COLUMN storage_file.upload_object_key IS '上传签名可以写入的临时对象键';
+COMMENT ON COLUMN storage_file.upload_object_key IS '客户端或服务端上传内容时使用的临时对象键';
 COMMENT ON COLUMN storage_file.object_key IS '创建上传记录时预分配、完成后用于读取的正式对象键';
 COMMENT ON COLUMN storage_file.filename IS '调用方提交并完成安全清理的原始文件名';
 COMMENT ON COLUMN storage_file.declared_content_type IS '创建上传意图时声明的媒体类型';
@@ -1665,41 +1899,6 @@ COMMENT ON COLUMN platform_user_profile.deleted IS '逻辑删除标记；0 表�
 CREATE INDEX idx_platform_user_profile_avatar_file
     ON platform_user_profile (avatar_file_id)
     WHERE avatar_file_id IS NOT NULL;
-
-CREATE TABLE app_account_authentication_settings (
-    account_id BIGINT PRIMARY KEY,
-    login_factor_count SMALLINT NOT NULL,
-    sensitive_action_factor_count SMALLINT NOT NULL,
-    reusable_authentication_maximum_age_seconds BIGINT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE app_account_authentication_method (
-    account_id BIGINT NOT NULL,
-    method_code VARCHAR(64) NOT NULL,
-    login_start_enabled BOOLEAN NOT NULL,
-    login_additional_enabled BOOLEAN NOT NULL,
-    sensitive_action_enabled BOOLEAN NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (account_id, method_code)
-);
-
-COMMENT ON TABLE app_account_authentication_settings IS '示例 App 为账号设置的登录和敏感动作认证因素要求';
-COMMENT ON COLUMN app_account_authentication_settings.account_id IS '认证设置所属 Account 标识';
-COMMENT ON COLUMN app_account_authentication_settings.login_factor_count IS '登录要求的不同认证因素类别数';
-COMMENT ON COLUMN app_account_authentication_settings.sensitive_action_factor_count IS '敏感动作要求的不同认证因素类别数';
-COMMENT ON COLUMN app_account_authentication_settings.reusable_authentication_maximum_age_seconds IS '敏感动作允许复用 Session 中认证结果的最大年龄秒数';
-COMMENT ON COLUMN app_account_authentication_settings.created_at IS 'Account 认证设置创建时间';
-COMMENT ON COLUMN app_account_authentication_settings.updated_at IS 'Account 认证设置最近更新时间，由数据库触发器维护';
-
-COMMENT ON TABLE app_account_authentication_method IS '示例 App 为账号设置的认证方法用途开关';
-COMMENT ON COLUMN app_account_authentication_method.account_id IS '认证方法用途设置所属 Account 标识';
-COMMENT ON COLUMN app_account_authentication_method.method_code IS '认证模块声明的方法编码';
-COMMENT ON COLUMN app_account_authentication_method.login_start_enabled IS '是否允许该方法识别账号并开始登录';
-COMMENT ON COLUMN app_account_authentication_method.login_additional_enabled IS '是否允许该方法补充登录因素';
-COMMENT ON COLUMN app_account_authentication_method.sensitive_action_enabled IS '是否允许该方法认证敏感动作';
-COMMENT ON COLUMN app_account_authentication_method.created_at IS 'Account 认证方法用途关系创建时间';
 
 CREATE TABLE app_iot_product_profile (
     product_id BIGINT PRIMARY KEY,
@@ -1753,10 +1952,6 @@ COMMENT ON COLUMN app_iot_device_creation_request.updated_at IS '请求状态最
 
 CREATE TRIGGER set_platform_user_profile_updated_at
     BEFORE UPDATE ON platform_user_profile
-    FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
-
-CREATE TRIGGER set_app_account_authentication_settings_updated_at
-    BEFORE UPDATE ON app_account_authentication_settings
     FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
 
 CREATE TRIGGER set_app_iot_product_profile_updated_at

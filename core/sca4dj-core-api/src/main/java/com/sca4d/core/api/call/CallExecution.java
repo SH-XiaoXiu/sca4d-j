@@ -1,6 +1,7 @@
 package com.sca4d.core.api.call;
 
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.resource.Resource;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -12,14 +13,41 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 /** 保存一次被声明式调用规则包围的方法执行、结果和预提交条件。 */
 public class CallExecution {
+
+    private final String auditId = UUID.randomUUID().toString();
+
+    private final @Nullable String auditParentId;
+
+    private final String auditTrailId;
+
+    private final Set<Resource.Ref> auditResources = new LinkedHashSet<>();
+
+    /**
+     * 在业务授权后登记本次操作涉及的资源快照；移动操作应登记变更前后的归属。
+     * 每次执行独立保存，嵌套调用须明确选择归属执行；不会修改 Call 的输入。
+     */
+    public synchronized void relateAuditResources(@NotNull Collection<? extends Resource> resources) {
+        for (Resource resource : resources) {
+            auditResources.add(new Resource.Ref(resource.type(), resource.id()));
+        }
+    }
+
+    /** 返回本次执行已经登记的不可变资源引用，供审计记录器冻结。 */
+    public synchronized @NotNull @Unmodifiable List<Resource.Ref> auditResources() {
+        return List.copyOf(auditResources);
+    }
 
     private final Call call;
 
@@ -122,12 +150,25 @@ public class CallExecution {
             Method method,
             Object[] arguments,
             Type resultType) {
+        this(call, declaringType, method, arguments, resultType, null);
+    }
+
+    /** 创建带有当前线程外层业务调用关系的执行描述。 */
+    public CallExecution(
+            Call call,
+            Class<?> declaringType,
+            Method method,
+            Object[] arguments,
+            Type resultType,
+            @Nullable CallExecution parent) {
         this.call = Objects.requireNonNull(call, "调用不能为空");
         this.declaringType = Objects.requireNonNull(declaringType, "业务类型不能为空");
         this.method = Objects.requireNonNull(method, "业务方法不能为空");
         this.operation = null;
         this.arguments = Arrays.copyOf(Objects.requireNonNull(arguments, "业务方法实参不能为空"), arguments.length);
         this.resultType = Objects.requireNonNull(resultType, "业务返回类型不能为空");
+        this.auditTrailId = parent == null ? auditId : parent.auditTrailId;
+        this.auditParentId = parent == null ? null : parent.auditId;
     }
 
     /** 创建纯函数执行，操作编码是函数的稳定身份。 */
@@ -150,6 +191,8 @@ public class CallExecution {
         this.operation = Objects.requireNonNull(operation, "函数操作编码不能为空");
         this.arguments = Arrays.copyOf(Objects.requireNonNull(arguments, "函数实参不能为空"), arguments.length);
         this.resultType = Objects.requireNonNull(resultType, "函数返回类型不能为空");
+        this.auditTrailId = auditId;
+        this.auditParentId = null;
     }
 
     /** 登记业务方法成功和事务提交前必须满足的条件。 */
@@ -282,6 +325,21 @@ public class CallExecution {
     @Contract(pure = true)
     public Type resultType() {
         return resultType;
+    }
+
+    /** @return 当前审计记录逻辑标识 */
+    public @NotNull String auditId() {
+        return auditId;
+    }
+
+    /** @return 当前审计链标识 */
+    public @NotNull String auditTrailId() {
+        return auditTrailId;
+    }
+
+    /** @return 父审计记录逻辑标识 */
+    public @NotNull Optional<String> auditParentId() {
+        return Optional.ofNullable(auditParentId);
     }
 
     /** 返回具体类型和完整参数类型组成的稳定签名，供限流范围及幂等指纹使用。 */

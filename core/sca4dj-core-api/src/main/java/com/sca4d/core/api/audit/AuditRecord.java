@@ -1,10 +1,16 @@
 package com.sca4d.core.api.audit;
 
 import com.sca4d.core.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 /** 保存一次操作的行为主体、目标资源、结果和发生时间。 */
 public class AuditRecord {
@@ -21,7 +27,15 @@ public class AuditRecord {
 
     private final Instant occurredAt;
 
+    private final List<Resource.Ref> relatedResources;
+
     private final Resource target;
+
+    private final String auditId;
+
+    private final String auditParentId;
+
+    private final String auditTrailId;
 
     private final String requestId;
 
@@ -46,6 +60,72 @@ public class AuditRecord {
             AuditPayload payload,
             HttpCall httpCall,
             Instant occurredAt) {
+        this(
+                requestId,
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                null,
+                actor,
+                operation,
+                target,
+                result,
+                payload,
+                httpCall,
+                occurredAt,
+                List.of());
+    }
+
+    /** 创建没有链路元数据的固定审计记录；仅供已有非调用生命周期写入点使用。 */
+    public AuditRecord(
+            @NotNull String requestId,
+            @NotNull AuditActor actor,
+            @NotNull AuditOperation operation,
+            @Nullable Resource target,
+            @NotNull AuditResult result,
+            @Nullable AuditPayload payload,
+            @Nullable HttpCall httpCall,
+            @NotNull Instant occurredAt,
+            @NotNull Collection<? extends Resource> relatedResources) {
+        this(
+                requestId,
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                null,
+                actor,
+                operation,
+                target,
+                result,
+                payload,
+                httpCall,
+                occurredAt,
+                relatedResources);
+    }
+
+    /** 创建审计记录并复制操作当时关联的资源标识；后续资源移动不改变快照。 */
+    public AuditRecord(
+            @NotNull String requestId,
+            @NotNull String auditId,
+            @NotNull String auditTrailId,
+            @Nullable String auditParentId,
+            @NotNull AuditActor actor,
+            @NotNull AuditOperation operation,
+            @Nullable Resource target,
+            @NotNull AuditResult result,
+            @Nullable AuditPayload payload,
+            @Nullable HttpCall httpCall,
+            @NotNull Instant occurredAt,
+            @NotNull Collection<? extends Resource> relatedResources) {
+        this.auditId = Objects.requireNonNull(auditId, "审计记录标识不能为空");
+        this.auditTrailId = Objects.requireNonNull(auditTrailId, "审计链标识不能为空");
+        this.auditParentId = auditParentId;
+        this.relatedResources = Objects.requireNonNull(relatedResources, "关联资源不能为空")
+                .stream()
+                .map(resource -> {
+                    Resource checked = Objects.requireNonNull(resource, "关联资源不能为 null");
+                    return new Resource.Ref(checked.type(), checked.id());
+                })
+                .distinct()
+                .toList();
         this.requestId = Objects.requireNonNull(requestId, "调用链标识不能为空");
         this.actor = Objects.requireNonNull(actor, "审计行为主体不能为空");
         this.operation = Objects.requireNonNull(operation, "审计操作不能为空");
@@ -54,6 +134,26 @@ public class AuditRecord {
         this.payload = payload;
         this.httpCall = httpCall;
         this.occurredAt = Objects.requireNonNull(occurredAt, "审计时间不能为空");
+    }
+
+    /** @return 当前审计记录逻辑标识 */
+    public @NotNull String auditId() {
+        return auditId;
+    }
+
+    /** @return 当前审计链标识 */
+    public @NotNull String auditTrailId() {
+        return auditTrailId;
+    }
+
+    /** @return 父审计记录逻辑标识 */
+    public @Nullable String auditParentId() {
+        return auditParentId;
+    }
+
+    /** 返回操作当时的关联资源，不包含可变业务对象。 */
+    public @NotNull @Unmodifiable List<Resource.Ref> relatedResources() {
+        return relatedResources;
     }
 
     /**

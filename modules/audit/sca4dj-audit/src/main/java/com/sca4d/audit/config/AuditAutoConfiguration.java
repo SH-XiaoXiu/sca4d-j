@@ -2,10 +2,13 @@ package com.sca4d.audit.config;
 
 import com.sca4d.audit.payload.AuditPayloadJson;
 import com.sca4d.audit.payload.AuditPayloadRegistry;
+import com.sca4d.audit.query.AuditAssociationService;
 import com.sca4d.audit.query.AuditQueryService;
 import com.sca4d.audit.recording.AfterCommitAuditRecorder;
+import com.sca4d.audit.recording.AuditMessage;
 import com.sca4d.audit.recording.AuditMessageCodec;
 import com.sca4d.audit.recording.AuditMessageHandler;
+import com.sca4d.audit.recording.AuditMessageV2Codec;
 import com.sca4d.audit.recording.AuditRepository;
 import com.sca4d.audit.recording.DatabaseAuditRecorder;
 import com.sca4d.audit.recording.QueuedAuditRecorder;
@@ -16,9 +19,11 @@ import com.sca4d.core.api.audit.AuditCallInterceptor;
 import com.sca4d.core.api.audit.AuditPayloadCodec;
 import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.audit.AuditResolverLookup;
+import com.sca4d.core.api.audit.AuditResourceCollector;
 import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.config.CoreSpringAutoConfiguration;
 import com.sca4d.core.spring.config.InstanceProperties;
@@ -124,14 +129,23 @@ public class AuditAutoConfiguration {
     /** 即使默认同步记录，也为局部队列声明安装编码器。 */
     @Bean
     @ConditionalOnBean(MessageBus.class)
-    AuditMessageCodec auditMessageCodec(@Sca4djJson Sca4djMapper json) {
+    AuditMessageCodec auditMessageCodecV1(@Sca4djJson Sca4djMapper json) {
         return new AuditMessageCodec(json);
+    }
+
+    /** 当前审计消息写入版本；旧 v1 Codec 仅用于读取历史载荷。 */
+    @Bean
+    @ConditionalOnBean(MessageBus.class)
+    AuditMessageV2Codec auditMessageCodecV2(@Sca4djJson Sca4djMapper json) {
+        return new AuditMessageV2Codec(json);
     }
 
     /** 消费者只负责冻结记录落库，不依赖发起者 Call。 */
     @Bean
     @ConditionalOnBean(MessageBus.class)
-    AuditMessageHandler auditMessageHandler(AuditRepository repository, AuditMessageCodec codec) {
+    AuditMessageHandler auditMessageHandler(
+            AuditRepository repository,
+            @Qualifier("auditMessageCodecV2") MessageCodec<AuditMessage> codec) {
         return new AuditMessageHandler(repository, codec);
     }
 
@@ -159,6 +173,7 @@ public class AuditAutoConfiguration {
             AuditProperties properties,
             AuditResolverLookup resolvers,
             SPICallValueResolver expressionResolver,
+            List<AuditResourceCollector> resourceCollectors,
             Clock clock) {
         AuditRecorder directDefault = database.getIfAvailable();
         AuditRecorder queuedDefault = queued.getIfAvailable();
@@ -186,7 +201,13 @@ public class AuditAutoConfiguration {
                 properties.getMode(),
                 resolvers,
                 expressionResolver,
-                clock);
+                clock,
+                resourceCollectors);
+    }
+
+    @Bean
+    AuditAssociationService auditAssociationService(AuditRepository repository) {
+        return new AuditAssociationService(repository);
     }
 
     @Bean

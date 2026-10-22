@@ -12,21 +12,21 @@ import java.util.Objects;
 /** 返回当前 Account 一项站内信渲染快照。 */
 @SuppressWarnings("unused")
 public class InboxMessageView {
-    private final long id;
-
-    private final String notificationType;
-
-    private final String languageTag;
-
-    private final String title;
-
-    private final String text;
-
-    private final String html;
-
     private final Instant createdAt;
 
     private final Instant readAt;
+
+    private final String html;
+
+    private final String languageTag;
+
+    private final String notificationType;
+
+    private final String text;
+
+    private final String title;
+
+    private final long id;
 
     private final long version;
 

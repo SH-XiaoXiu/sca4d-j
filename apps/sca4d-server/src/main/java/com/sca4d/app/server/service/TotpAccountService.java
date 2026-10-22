@@ -19,15 +19,15 @@ import java.util.Objects;
 @Service
 public class TotpAccountService {
 
+    private final PlatformAuthenticationPolicyService policies;
+
     private final TotpEnrollmentService enrollments;
 
     private final TotpCredentialRepository credentials;
 
-    private final PlatformAuthenticationPolicyService policies;
+    private final ProductSettings settings;
 
     private final TotpQrCodeGenerator qrCodes;
-
-    private final ProductSettings settings;
 
     /**
      * 创建当前 Account TOTP 应用服务。

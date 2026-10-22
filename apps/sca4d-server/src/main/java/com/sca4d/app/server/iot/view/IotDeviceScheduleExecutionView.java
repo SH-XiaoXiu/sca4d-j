@@ -18,19 +18,19 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotDeviceScheduleExecutionView {
 
-    private final long executionId;
+    private final @NotNull DeviceScheduleExecutionStatus status;
 
-    private final long scheduleId;
+    private final @Nullable Failure failure;
 
     private final @NotNull Instant plannedAt;
 
     private final @NotNull Instant triggeredAt;
 
-    private final @NotNull DeviceScheduleExecutionStatus status;
-
     private final @Nullable Long messageId;
 
-    private final @Nullable Failure failure;
+    private final long executionId;
+
+    private final long scheduleId;
 
     /** 从模块 Device 定时执行结果创建 HTTP 视图。 */
     private IotDeviceScheduleExecutionView(@NotNull DeviceScheduleExecution execution) {
@@ -89,14 +89,14 @@ public class IotDeviceScheduleExecutionView {
     /** 返回调度执行的稳定失败 code 和本地化消息。 */
     public static class Failure extends BaseView {
 
+        private final @NotNull MessageText localizedMessage;
+
         private final @NotNull String code;
 
         @Localize(source = "messageText")
         private final @NotNull String message;
 
-        private final @NotNull MessageText localizedMessage;
-
-        /** 从已知错误码或历史值创建安全失败响应。 */
+        /** 创建已校验错误码的失败响应。 */
         private Failure(@NotNull String code, @NotNull String messageKey) {
             this.code = code;
             this.message = messageKey;
@@ -119,7 +119,7 @@ public class IotDeviceScheduleExecutionView {
             return localizedMessage;
         }
 
-        /** 把已保存 code 解析为模块错误、内置失败或安全历史失败。 */
+        /** 解析模块、内置或合法扩展失败 code；拒绝输出未校验的自由文本。 */
         private static @NotNull Failure from(@NotNull String code) {
             for (IotErrorCode errorCode : IotErrorCode.values()) {
                 if (errorCode.code().equals(code)) {
@@ -131,9 +131,8 @@ public class IotDeviceScheduleExecutionView {
                     return new Failure(failureCode.code(), failureCode.messageKey());
                 }
             }
-            return new Failure(
-                    IotFailureCode.LEGACY_FAILURE.code(),
-                    IotFailureCode.LEGACY_FAILURE.messageKey());
+            IotFailureCode extension = IotFailureCode.of(code, "failure.iot.unknown");
+            return new Failure(extension.code(), extension.messageKey());
         }
     }
 }

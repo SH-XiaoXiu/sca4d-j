@@ -13,9 +13,9 @@ public final class AuthenticationMethodSettings {
 
     private final TreeCode methodCode;
 
-    private final boolean loginStartEnabled;
-
     private final boolean loginAdditionalEnabled;
+
+    private final boolean loginStartEnabled;
 
     private final boolean sensitiveActionEnabled;
 

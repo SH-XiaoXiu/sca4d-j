@@ -12,6 +12,8 @@ public class RunRecord {
 
     private final @NotNull JobRunStatus status;
 
+    private final @Nullable String inputJson;
+
     private final @Nullable String outputJson;
 
     private final int jobDefinitionVersion;
@@ -25,17 +27,20 @@ public class RunRecord {
      * @param jobKey 提交时保存的 Job key
      * @param jobDefinitionVersion 提交时保存的 Job 定义版本
      * @param outputJson 成功输出 JSON；未成功或 Void 输出时为空
+     * @param inputJson 提交时保存的输入 JSON；Void 输入为空
      * @param status 当前根运行状态
      */
     public RunRecord(
             long id,
             @NotNull JobKey jobKey,
             int jobDefinitionVersion,
+            @Nullable String inputJson,
             @Nullable String outputJson,
             @NotNull JobRunStatus status) {
         this.id = id;
         this.jobKey = jobKey;
         this.jobDefinitionVersion = jobDefinitionVersion;
+        this.inputJson = inputJson;
         this.outputJson = outputJson;
         this.status = status;
     }
@@ -74,6 +79,11 @@ public class RunRecord {
      */
     public @Nullable String outputJson() {
         return outputJson;
+    }
+
+    /** @return 提交时保存的输入 JSON */
+    public @Nullable String inputJson() {
+        return inputJson;
     }
 
     /**

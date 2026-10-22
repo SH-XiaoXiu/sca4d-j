@@ -96,7 +96,7 @@ describe('admin controllers', () => {
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
         account: { accountId: '2', realmKey: 'platform' },
-        permissions: ['platform:accounts:manage'],
+        permissions: ['PLATFORM:ACCOUNTS:MANAGE'],
       }),
     ];
     const app = createAdminApplication({
@@ -121,6 +121,10 @@ describe('admin controllers', () => {
     });
 
     await app.session.login('admin', 'secret');
+    expect(requests[0]?.body).toEqual({
+      identifier: 'admin',
+      password: 'secret',
+    });
     expect(app.session.state.phase).toBe('totp');
     await app.session.submitTotp('123456');
 
@@ -260,8 +264,6 @@ describe('admin controllers', () => {
       ok(permissionCatalog),
       ok({ roleId, permissionCodes: ['account:read'] }, { etag: '"4"' }),
       ok([role]),
-      ok({ roleId, permissionCodes: ['account:read'] }, { etag: '"4"' }),
-      ok(permissionCatalog),
       ok(role, { etag: '"4"' }),
       ok(null),
       ok([]),
@@ -303,11 +305,11 @@ describe('admin controllers', () => {
     });
     expect(requests[5]?.headers['If-Match']).toBe('"2"');
     expect(requests[9]?.headers['If-Match']).toBe('"3"');
-    expect(requests[14]).toMatchObject({
+    expect(requests[12]).toMatchObject({
       method: 'DELETE',
       path: `/platform/roles/${roleId}`,
     });
-    expect(requests[14]?.headers['If-Match']).toBe('"4"');
+    expect(requests[12]?.headers['If-Match']).toBe('"4"');
     expect(app.roles.state.roleEtag).toBeNull();
     expect(app.roles.state.localeCatalog).toEqual(localeCatalog);
   });
@@ -327,7 +329,7 @@ describe('admin controllers', () => {
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
         account: { accountId: '2', realmKey: 'platform' },
-        permissions: ['platform:accounts:manage'],
+        permissions: ['PLATFORM:ACCOUNTS:MANAGE'],
       },
       {
         sessionId: 'session',
@@ -395,7 +397,7 @@ describe('admin controllers', () => {
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
         account: { accountId: '2', realmKey: 'platform' },
-        permissions: ['platform:accounts:read'],
+        permissions: ['PLATFORM:ACCOUNTS:READ'],
       }),
       {
         status: 401,
@@ -424,7 +426,7 @@ describe('admin controllers', () => {
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
         account: { accountId: '2', realmKey: 'platform' },
-        permissions: ['platform:accounts:read'],
+        permissions: ['PLATFORM:ACCOUNTS:READ'],
       }),
       {
         status: 401,

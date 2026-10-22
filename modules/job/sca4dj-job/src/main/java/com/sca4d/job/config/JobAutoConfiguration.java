@@ -2,18 +2,22 @@ package com.sca4d.job.config;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.identity.SystemPrincipals;
+import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobHistory;
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.runtime.InstanceCapabilities;
 import com.sca4d.core.api.runtime.InstanceCapability;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
+import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
+import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.AppIsolationAutoConfiguration;
-import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.config.CoreSpringAutoConfiguration;
+import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -28,6 +32,8 @@ import com.sca4d.job.runtime.JobRunService;
 import com.sca4d.job.runtime.JobWorker;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -63,8 +69,8 @@ public class JobAutoConfiguration {
      * @throws IllegalStateException Job key 重复、定义版本无效或 PipelineJob 计划无效时抛出
      */
     @Bean
-    JobCatalog jobCatalog(@NotNull List<@NotNull Job<?, ?>> jobs) {
-        return new JobCatalog(jobs);
+    JobCatalog jobCatalog(@NotNull ObjectProvider<Job<?, ?>> jobs) {
+        return new JobCatalog(() -> jobs.orderedStream().toList());
     }
 
     /**
@@ -86,8 +92,9 @@ public class JobAutoConfiguration {
             @NotNull JobRepository repository,
             @NotNull PlatformTransactionManager transactionManager,
             @NotNull Clock clock,
-            @NotNull DistributedLock distributedLock) {
-        return new JobRunService(repository, transactionManager, clock, distributedLock);
+            @NotNull DistributedLock distributedLock,
+            @NotNull @Sca4djJson Sca4djMapper objectMapper) {
+        return new JobRunService(repository, transactionManager, clock, distributedLock, objectMapper);
     }
 
     /** 创建按配置窗口清理成功 Job run 的历史服务。 */
@@ -116,17 +123,29 @@ public class JobAutoConfiguration {
 
     /** 创建按配置间隔执行且不生成 Job run 的成功历史清理计划。 */
     @Bean
-    ClusterTaskSchedule jobHistoryCleanupSchedule(
-            @NotNull JobHistoryCleanupTask task,
+    JobSchedule<Void, Void> jobHistoryCleanupSchedule(
+            @Qualifier("jobHistoryCleanupJob") @NotNull DirectJob<Void, Void> job,
             @NotNull JobProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("JOB/HISTORY/CLEANUP"),
                 1,
-                task,
+                job,
+                null,
                 new IntervalSchedule(
                         properties.getHistoryCleanupInterval(),
                         properties.getHistoryCleanupInterval()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    /** 登记不保存 Run 的 Job 历史清理工作。 */
+    @Bean
+    DirectJob<Void, Void> jobHistoryCleanupJob(@NotNull JobHistoryCleanupTask task) {
+        return DirectJob.unrecorded(
+                new JobKey("JOB/HISTORY/CLEANUP"),
+                1,
+                TreeCode.ofColon("JOB:WORKER"),
+                task::execute);
     }
 
     /**
@@ -142,8 +161,21 @@ public class JobAutoConfiguration {
     JobExecutor jobExecutor(
             @NotNull JobCatalog catalog,
             @NotNull JobRunService runs,
-            @NotNull @Sca4djJson Sca4djMapper objectMapper) {
-        return new DefaultJobExecutor(catalog, runs, objectMapper);
+            @NotNull @Sca4djJson Sca4djMapper objectMapper,
+            @NotNull InstanceCapabilities instanceCapabilities,
+            @NotNull InstanceProperties instanceProperties,
+            @NotNull DistributedLock distributedLock,
+            @NotNull Clock clock,
+            @NotNull JobProperties properties) {
+        return new DefaultJobExecutor(
+                catalog,
+                runs,
+                objectMapper,
+                instanceCapabilities,
+                instanceProperties,
+                distributedLock,
+                clock,
+                properties);
     }
 
     /**
@@ -158,14 +190,22 @@ public class JobAutoConfiguration {
      * @throws IllegalArgumentException worker、轮询或租约配置无效时抛出
      */
     @Bean
-    @ConditionalOnCapability("JOB:WORKER")
     JobWorker jobWorker(
             @NotNull JobCatalog catalog,
             @NotNull JobRunService runs,
             @NotNull @Sca4djJson Sca4djMapper objectMapper,
             @NotNull JobProperties properties,
-            @NotNull Clock clock) {
+            @NotNull Clock clock,
+            @NotNull InstanceProperties instanceProperties,
+            @NotNull InstanceCapabilities instanceCapabilities) {
         properties.validate();
-        return new JobWorker(catalog, runs, objectMapper, properties, clock);
+        return new JobWorker(
+                catalog,
+                runs,
+                objectMapper,
+                properties,
+                clock,
+                instanceProperties,
+                instanceCapabilities);
     }
 }

@@ -23,8 +23,17 @@ public class HandlingDecision {
 
     private final @Nullable String detail;
 
+    private final long completedAttempts;
+
     /** 创建消息处理决定。 */
     private HandlingDecision(@NotNull Status status, @Nullable String detail) {
+        this(status, detail, 1);
+    }
+
+    private HandlingDecision(@NotNull Status status, @Nullable String detail, long completedAttempts) {
+        if (completedAttempts < 1)
+            throw new IllegalArgumentException("已执行次数必须为正数");
+        this.completedAttempts = completedAttempts;
         this.status = Objects.requireNonNull(status, "消息处理决定不能为空");
         this.detail = detail == null || detail.isBlank() ? null : detail.strip();
     }
@@ -35,13 +44,33 @@ public class HandlingDecision {
         return new HandlingDecision(ACKNOWLEDGE, null);
     }
 
-    /** @param detail 再次处理原因 @return 要求基础设施再次处理当前消息 */
+    /**
+     * @param detail 再次处理原因
+     * @return 要求基础设施再次处理当前消息
+     */
     @CheckReturnValue
     public static @NotNull HandlingDecision retry(@NotNull String detail) {
         return new HandlingDecision(RETRY, detail);
     }
 
-    /** @param detail 拒绝原因 @return 拒绝当前消息 */
+    /**
+     * @param detail 重试原因
+     * @param completedAttempts 领域消息中已经执行的次数下界
+     * @return 延续已有进度的重试决定
+     */
+    public static @NotNull HandlingDecision retry(@NotNull String detail, long completedAttempts) {
+        return new HandlingDecision(RETRY, detail, completedAttempts);
+    }
+
+    /** @return 已知执行次数的下界，不能降低 Broker 中已有次数 */
+    public long completedAttempts() {
+        return completedAttempts;
+    }
+
+    /**
+     * @param detail 拒绝原因
+     * @return 拒绝当前消息
+     */
     @CheckReturnValue
     public static @NotNull HandlingDecision reject(@NotNull String detail) {
         return new HandlingDecision(REJECT, detail);

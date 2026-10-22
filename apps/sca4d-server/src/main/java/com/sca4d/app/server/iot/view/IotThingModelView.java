@@ -33,13 +33,13 @@ public class IotThingModelView extends BaseView {
     @Localize(source = "displayNameText")
     private final @NotNull String displayName;
 
-    private final @NotNull LocalizableText localizedDisplayName;
-
-    private final @NotNull List<Property> properties;
+    private final @NotNull List<Command> commands;
 
     private final @NotNull List<Event> events;
 
-    private final @NotNull List<Command> commands;
+    private final @NotNull List<Property> properties;
+
+    private final @NotNull LocalizableText localizedDisplayName;
 
     /** 从展示结果构造一个已本地化的完整 ThingModel HTTP 投影。 */
     private IotThingModelView(@NotNull ThingModelPresentation presentation) {
@@ -130,22 +130,22 @@ public class IotThingModelView extends BaseView {
     /** 返回一个 ThingModel 属性及当前请求 Locale 的展示名称。 */
     public static class Property extends BaseView {
 
+        private final @NotNull LocalizableText localizedDisplayName;
+
+        private final @NotNull String access;
+
+        private final @Nullable String acknowledgementPolicy;
+
         private final @NotNull String code;
 
         @Localize(source = "displayNameText")
         private final @NotNull String displayName;
 
-        private final @NotNull LocalizableText localizedDisplayName;
+        private final @Nullable String retryPolicy;
 
         private final @NotNull ValueType valueType;
 
-        private final @NotNull String access;
-
         private final boolean telemetry;
-
-        private final @Nullable String acknowledgementPolicy;
-
-        private final @Nullable String retryPolicy;
 
         /** 从一个属性定义构造本地化 HTTP 投影。 */
         private Property(
@@ -209,16 +209,16 @@ public class IotThingModelView extends BaseView {
     /** 返回一个 ThingModel 事件及本地化输出字段。 */
     public static class Event extends BaseView {
 
-        private final @NotNull String code;
-
-        @Localize(source = "displayNameText")
-        private final @NotNull String displayName;
+        private final @NotNull List<Field> outputs;
 
         private final @NotNull LocalizableText localizedDisplayName;
 
+        private final @NotNull String code;
+
         private final @NotNull String delivery;
 
-        private final @NotNull List<Field> outputs;
+        @Localize(source = "displayNameText")
+        private final @NotNull String displayName;
 
         /** 从一个事件定义构造本地化 HTTP 投影。 */
         private Event(
@@ -262,16 +262,16 @@ public class IotThingModelView extends BaseView {
     /** 返回一个 ThingModel 命令及本地化输入字段。 */
     public static class Command extends BaseView {
 
+        private final @NotNull List<Field> inputs;
+
+        private final @NotNull LocalizableText localizedDisplayName;
+
+        private final @NotNull String acknowledgementPolicy;
+
         private final @NotNull String code;
 
         @Localize(source = "displayNameText")
         private final @NotNull String displayName;
-
-        private final @NotNull LocalizableText localizedDisplayName;
-
-        private final @NotNull List<Field> inputs;
-
-        private final @NotNull String acknowledgementPolicy;
 
         private final @NotNull String retryPolicy;
 
@@ -323,12 +323,12 @@ public class IotThingModelView extends BaseView {
     /** 返回事件输出、命令输入或 object 成员的本地化字段定义。 */
     public static class Field extends BaseView {
 
+        private final @NotNull LocalizableText localizedDisplayName;
+
         private final @NotNull String code;
 
         @Localize(source = "displayNameText")
         private final @NotNull String displayName;
-
-        private final @NotNull LocalizableText localizedDisplayName;
 
         private final @NotNull ValueType valueType;
 
@@ -369,12 +369,12 @@ public class IotThingModelView extends BaseView {
     /** 返回 enum code 及当前请求 Locale 的展示名称。 */
     public static class EnumValue extends BaseView {
 
+        private final @NotNull LocalizableText localizedDisplayName;
+
         private final @NotNull String code;
 
         @Localize(source = "displayNameText")
         private final @NotNull String displayName;
-
-        private final @NotNull LocalizableText localizedDisplayName;
 
         /** 从一个 enum code 构造本地化 HTTP 投影。 */
         private EnumValue(
@@ -406,27 +406,27 @@ public class IotThingModelView extends BaseView {
     /** 返回 ThingModel 递归值类型及全部技术约束和本地化成员。 */
     public static class ValueType {
 
-        private final @NotNull String kind;
-
-        private final @Nullable String minimum;
-
-        private final @Nullable String maximum;
-
-        private final @Nullable Integer scale;
-
-        private final @Nullable String unit;
+        private final @Nullable Integer maximumItems;
 
         private final @Nullable Integer maximumLength;
 
-        private final @Nullable String pattern;
-
-        private final @Nullable Integer maximumItems;
+        private final @Nullable Integer scale;
 
         private final @NotNull List<EnumValue> enumValues;
 
+        private final @NotNull List<Field> optionalFields;
+
         private final @NotNull List<Field> requiredFields;
 
-        private final @NotNull List<Field> optionalFields;
+        private final @NotNull String kind;
+
+        private final @Nullable String maximum;
+
+        private final @Nullable String minimum;
+
+        private final @Nullable String pattern;
+
+        private final @Nullable String unit;
 
         private final @Nullable ValueType elementType;
 

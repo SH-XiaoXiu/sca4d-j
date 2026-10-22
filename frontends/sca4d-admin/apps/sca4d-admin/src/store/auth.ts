@@ -17,7 +17,6 @@ import { preferences } from '@vben/preferences';
 import { useAccessStore, useTabbarStore, useUserStore } from '@vben/stores';
 
 import { AUTHENTICATION_METHOD_CODES } from '@sca4d/admin';
-
 import { defineStore } from 'pinia';
 
 import {
@@ -54,7 +53,7 @@ import {
   selectAuthenticationToken,
 } from '#/auth/session';
 import { $t } from '#/locales';
-import { businessApplication } from '#/platform/business-application';
+import { clearBusinessSessionResources } from '#/platform/business-application';
 import {
   activatePreferenceSync,
   deactivatePreferenceSync,
@@ -118,7 +117,7 @@ export const useAuthStore = defineStore('auth', () => {
   const initialEmailCodeChallenge = ref<InitialEmailCodeChallenge | null>(null);
   const initialSmsCodeChallenge = ref<InitialSmsCodeChallenge | null>(null);
   const pendingEmailCodeChallenge = ref<EmailCodeChallenge | null>(null);
-  const pendingSmsCodeChallenge = ref<SmsCodeChallenge | null>(null);
+  const pendingSmsCodeChallenge = ref<null | SmsCodeChallenge>(null);
   const currentSession = ref<CurrentSession | null>(null);
   const federatedProviders = ref<readonly FederatedProvider[]>([]);
   const pendingLoginAttemptId = ref<null | string>(null);
@@ -171,7 +170,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   /** 清除计时器、Token、用户和动态访问状态。 */
   function clearLocalSession(): void {
-    businessApplication.files.clear();
+    clearBusinessSessionResources();
     deactivatePreferenceSync();
     closeSessionEvents();
     if (refreshTimer) clearTimeout(refreshTimer);
@@ -244,7 +243,7 @@ export const useAuthStore = defineStore('auth', () => {
   /** 保存新 Token，并让 Vben 普通请求立即使用新的 access Token。 */
   function acceptTokens(tokens: SessionToken): void {
     if (sessionTokenStore.tokens?.sessionId !== tokens.sessionId)
-      businessApplication.files.clear();
+      clearBusinessSessionResources();
     sessionTokenStore.setTokens(tokens);
     accessStore.setAccessToken(tokens.accessToken);
     scheduleTokenRefresh(tokens);
@@ -364,6 +363,8 @@ export const useAuthStore = defineStore('auth', () => {
         // 头像是可选展示内容，签发失败时继续使用 Vben 默认头像。
       }
     }
+    if (sessionTokenStore.tokens?.sessionId !== expectedSessionId)
+      throw new Error('读取头像期间登录状态已变化');
     const userInfo = { ...baseUserInfo, avatar };
     accessStore.setAccessCodes([...session.permissions]);
     userStore.setUserInfo(userInfo);
@@ -798,6 +799,7 @@ export const useAuthStore = defineStore('auth', () => {
     logout,
     passkeySupported,
     pendingEmailCodeChallenge,
+    pendingLoginAttemptId,
     pendingSmsCodeChallenge,
     requestEmailLoginCode,
     requestPendingEmailCode,

@@ -9,14 +9,17 @@ import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.resource.ResourceReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.Clock;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,8 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
 
     private final Clock clock;
 
+    private final List<AuditResourceCollector> resourceCollectors;
+
     private final Audit.Mode defaultMode;
 
     private final SPICallValueResolver expressionResolver;
@@ -54,6 +59,18 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
             @NotNull AuditResolverLookup resolverLookup,
             @NotNull SPICallValueResolver expressionResolver,
             @NotNull Clock clock) {
+        this(recorders, defaultMode, resolverLookup, expressionResolver, clock, List.of());
+    }
+
+    /** 安装可选的业务关联收集器；收集结果与显式登记的执行快照合并。 */
+    public AuditCallInterceptor(
+            @NotNull List<? extends AuditRecorder> recorders,
+            @NotNull Audit.Mode defaultMode,
+            @NotNull AuditResolverLookup resolverLookup,
+            @NotNull SPICallValueResolver expressionResolver,
+            @NotNull Clock clock,
+            @NotNull List<AuditResourceCollector> resourceCollectors) {
+        this.resourceCollectors = List.copyOf(resourceCollectors);
         this.defaultMode = Objects.requireNonNull(defaultMode);
         if (defaultMode == Audit.Mode.DEFAULT) {
             throw new IllegalArgumentException("应用审计配置不能使用 DEFAULT");
@@ -165,7 +182,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
             CallExecution execution,
             AuditResult result) {
         AuditInvocation invocation = new AuditInvocation(execution, result);
-        Resource target = resolveTarget(audit, invocation);
+        Resource.Ref target = resolveTarget(audit, invocation);
         AuditPayload payload;
         if (!audit.payload().isBlank()) {
             if (audit.payloadFactory() != NoAuditPayloadFactory.class) {
@@ -185,15 +202,24 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
                 execution.call().subject().orElseThrow().subjectId(),
                 execution.call().account().map(Account::accountId).orElse(null),
                 execution.call().principal().orElseThrow().principalId());
+        Instant occurredAt = clock.instant();
+        List<Resource> resources = new ArrayList<>(execution.auditResources());
+        for (AuditResourceCollector collector : resourceCollectors) {
+            resources.addAll(collector.collect(invocation, target, occurredAt));
+        }
         return new AuditRecord(
                 execution.call().callId(),
+                execution.auditId(),
+                execution.auditTrailId(),
+                execution.auditParentId().orElse(null),
                 actor,
                 AuditOperation.declared(audit.operation()),
                 target,
                 result,
                 payload,
                 execution.call().input(HttpCall.KEY).orElse(null),
-                clock.instant());
+                occurredAt,
+                resources);
     }
 
     /**
@@ -217,7 +243,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
      * @param invocation 完整审计调用
      * @return 可选目标资源
      */
-    private @Nullable Resource resolveTarget(Audit audit, AuditInvocation invocation) {
+    private @Nullable Resource.Ref resolveTarget(Audit audit, AuditInvocation invocation) {
         AuditTargetResolver resolver = audit.targetResolver() == NoAuditTargetResolver.class
                 ? null
                 : resolverLookup.targetResolver(audit.targetResolver());
@@ -241,19 +267,54 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
         }
         if (expression) {
             Object value = expressionResolver.resolve(audit.target(), invocation.execution());
-            return value == null ? null : ResourceReference.fromValue(value, audit.resourceType());
+            return reference(value, audit.resourceType(), "");
         }
         if (resolver != null) {
             Resource value = resolver.resolve(invocation);
-            return value == null ? null : ResourceReference.fromValue(value, audit.resourceType());
+            return value == null ? null : reference(value, audit.resourceType(), "");
         }
         if (markedTarget == null) {
             return null;
         }
-        return ResourceReference.fromValue(
+        return reference(
                 invocation.arguments()[markedIndex],
                 markedTarget.resourceType(),
                 markedTarget.idPrefix());
+    }
+
+    private static @Nullable Resource.Ref reference(
+            @Nullable Object value,
+            @NotNull String resourceType,
+            @NotNull String idPrefix) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof Resource resource) {
+            if (!resourceType.isBlank() && !TreeCode.of(resourceType).equals(resource.type())) {
+                throw new IllegalStateException("资源值与声明的 resourceType 不一致");
+            }
+            return Resource.Ref.of(resource);
+        }
+        if (resourceType.isBlank()) {
+            throw new IllegalStateException("审计目标必须声明 resourceType");
+        }
+        String id;
+        if (value instanceof Number number) {
+            try {
+                BigInteger integer = new BigDecimal(number.toString()).toBigIntegerExact();
+                if (integer.signum() <= 0) {
+                    throw new IllegalStateException("审计资源标识必须是正整数");
+                }
+                id = integer.toString();
+            } catch (ArithmeticException | NumberFormatException exception) {
+                throw new IllegalStateException("审计资源标识必须是正整数", exception);
+            }
+        } else if (value instanceof String text && !text.isBlank()) {
+            id = text.trim();
+        } else {
+            throw new IllegalStateException("审计目标必须是 Resource、正整数或非空文本标识");
+        }
+        return new Resource.Ref(resourceType, Objects.requireNonNull(idPrefix, "审计标识前缀不能为空") + id);
     }
 
 }

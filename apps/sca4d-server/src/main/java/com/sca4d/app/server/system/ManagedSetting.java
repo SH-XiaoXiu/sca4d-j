@@ -12,15 +12,15 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class ManagedSetting {
 
+    private final JsonNode value;
+
     private final SystemSetting<?> setting;
 
-    private final JsonNode value;
+    private final Version version;
 
     private final boolean stored;
 
     private final boolean synchronizedFromEnvironment;
-
-    private final Version version;
 
     /** 创建设置管理结果。 */
     public ManagedSetting(

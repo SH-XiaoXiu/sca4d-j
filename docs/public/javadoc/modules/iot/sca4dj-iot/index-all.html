@@ -369,7 +369,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/message/policy/DefaultCommandRetryPolicy.html" class="type-name-link" title="class in com.sca4d.iot.message.policy">DefaultCommandRetryPolicy</a> - Class in <a href="com/sca4d/iot/message/policy/package-summary.html">com.sca4d.iot.message.policy</a></dt>
 <dd>
-<div class="block">使用固定退避并在第五次发送仍失败后停止的默认命令重试策略。</div>
+<div class="block">使用预设退避序列并在第五次发送仍失败后停止的默认命令重试策略。</div>
 </dd>
 <dt><a href="com/sca4d/iot/message/policy/DefaultCommandRetryPolicy.html#%3Cinit%3E()" class="member-name-link">DefaultCommandRetryPolicy()</a> - Constructor for class com.sca4d.iot.message.policy.<a href="com/sca4d/iot/message/policy/DefaultCommandRetryPolicy.html" title="class in com.sca4d.iot.message.policy">DefaultCommandRetryPolicy</a></dt>
 <dd>&nbsp;</dd>
@@ -395,7 +395,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/message/policy/DefaultStateSyncRetryPolicy.html" class="type-name-link" title="class in com.sca4d.iot.message.policy">DefaultStateSyncRetryPolicy</a> - Class in <a href="com/sca4d/iot/message/policy/package-summary.html">com.sca4d.iot.message.policy</a></dt>
 <dd>
-<div class="block">按固定退避持续发送当前 desired sequence，直到新 desired sequence 取代或 reported 收敛。</div>
+<div class="block">按预设退避序列持续发送当前 desired sequence，直到新 desired sequence 取代或 reported 收敛。</div>
 </dd>
 <dt><a href="com/sca4d/iot/message/policy/DefaultStateSyncRetryPolicy.html#%3Cinit%3E()" class="member-name-link">DefaultStateSyncRetryPolicy()</a> - Constructor for class com.sca4d.iot.message.policy.<a href="com/sca4d/iot/message/policy/DefaultStateSyncRetryPolicy.html" title="class in com.sca4d.iot.message.policy">DefaultStateSyncRetryPolicy</a></dt>
 <dd>&nbsp;</dd>
@@ -611,7 +611,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">消费可靠断连消息，并在协议实现暂时不可用时登记延迟重试。</div>
 </dd>
-<dt><a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html#%3Cinit%3E(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.core.api.connection.ConnectionRegistry,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceDisconnectHandler(DeviceConnectionTerminatorRouter, DeviceConnectionReceiver, MessageBus, Clock, ConnectionRegistry, MessageCodec&lt;DeviceDisconnectMessage&gt;)</a> - Constructor for class com.sca4d.iot.connection.<a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html" title="class in com.sca4d.iot.connection">DeviceDisconnectHandler</a></dt>
+<dt><a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html#%3Cinit%3E(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.connection.ConnectionRegistry,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceDisconnectHandler(DeviceConnectionTerminatorRouter, DeviceConnectionReceiver, ConnectionRegistry, MessageCodec&lt;DeviceDisconnectMessage&gt;)</a> - Constructor for class com.sca4d.iot.connection.<a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html" title="class in com.sca4d.iot.connection">DeviceDisconnectHandler</a></dt>
 <dd>
 <div class="block">创建使用通用 Messaging 重试、不保存 IoT 断连任务表的 Consumer。</div>
 </dd>
@@ -1562,6 +1562,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/message/DevicePolicyCatalog.html#retry(java.lang.String)" class="member-name-link">retry(String)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/persistence/EncodedDownlinkMessage.html#retryPolicy()" class="member-name-link">retryPolicy()</a> - Method in class com.sca4d.iot.persistence.<a href="com/sca4d/iot/persistence/EncodedDownlinkMessage.html" title="class in com.sca4d.iot.persistence">EncodedDownlinkMessage</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html#retryRule()" class="member-name-link">retryRule()</a> - Method in class com.sca4d.iot.connection.<a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html" title="class in com.sca4d.iot.connection">DeviceDisconnectHandler</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/query/DefaultDeviceRuntimeQueryService.html#runtime(long)" class="member-name-link">runtime(long)</a> - Method in class com.sca4d.iot.query.<a href="com/sca4d/iot/query/DefaultDeviceRuntimeQueryService.html" title="class in com.sca4d.iot.query">DefaultDeviceRuntimeQueryService</a></dt>
 <dd>&nbsp;</dd>

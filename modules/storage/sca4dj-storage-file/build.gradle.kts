@@ -31,6 +31,7 @@ dependencies {
     add("integrationTestImplementation", libs.spring.jdbc)
     add("integrationTestImplementation", libs.testcontainers.postgresql)
     add("integrationTestImplementation", libs.testcontainers.junit.jupiter)
+    add("integrationTestRuntimeOnly", libs.jakarta.servlet)
     add("integrationTestRuntimeOnly", libs.postgresql)
     add("integrationTestRuntimeOnly", libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.platform.launcher)

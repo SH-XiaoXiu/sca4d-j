@@ -9,6 +9,7 @@ import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.retry.RetryRuleCodec;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
@@ -49,7 +50,7 @@ class CoreMyBatisAutoConfigurationTest {
         Configuration configuration = new Configuration();
 
         new CoreMyBatisAutoConfiguration()
-                .coreTypeHandlerCustomizer(new Sca4djMapper())
+                .coreTypeHandlerCustomizer(new Sca4djMapper(), new RetryRuleCodec(new Sca4djMapper()))
                 .customize(configuration);
 
         assertThat(configuration.isMapUnderscoreToCamelCase()).isTrue();

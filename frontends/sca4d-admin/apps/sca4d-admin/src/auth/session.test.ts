@@ -65,7 +65,7 @@ describe('session Token 契约', () => {
       account: { accountId: '9007199254740993', realmKey: 'platform' },
       expiresAt: '2026-07-30T02:00:00.000Z',
       issuedAt: '2026-07-30T01:00:00.000Z',
-      permissions: ['platform:accounts:read'],
+      permissions: ['PLATFORM:ACCOUNTS:READ'],
       sessionId: 'session-1',
       subject: { subjectId: '9007199254740995', type: 'ACCOUNT' },
     };
@@ -98,10 +98,10 @@ describe('session Token 契约', () => {
   });
 
   it('按账号、角色和个人资料顺序选择首个业务页面', () => {
-    expect(currentSessionHomePath(['platform:accounts:read'])).toBe(
+    expect(currentSessionHomePath(['PLATFORM:ACCOUNTS:READ'])).toBe(
       '/sca4d-server/accounts',
     );
-    expect(currentSessionHomePath(['platform:roles:manage'])).toBe(
+    expect(currentSessionHomePath(['PLATFORM:ROLES:MANAGE'])).toBe(
       '/sca4d-server/roles',
     );
     expect(currentSessionHomePath([])).toBe('/profile');

@@ -2,6 +2,7 @@ package com.sca4d.messaging.outbox;
 
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,13 +15,21 @@ class OutboxClaim {
 
     private final @NotNull Id messageId;
 
+    private final @NotNull Id outboxId;
+
+    private final @Nullable Long handlerAttempt;
+
+    private final @Nullable RetryRule handlerRetryRule;
+
     private final @NotNull String leaseId;
 
     private final @NotNull TreeCode messageCode;
 
+    private final @Nullable TreeCode targetHandlerCode;
+
     private final byte @NotNull [] envelope;
 
-    private final int attemptCount;
+    private final long attemptCount;
 
     private final long version;
 
@@ -34,12 +43,20 @@ class OutboxClaim {
 
     /** 创建已被当前派发批次改为 {@link OutboxStatus#SENDING} 的领取结果。 */
     OutboxClaim(
+            @NotNull Id outboxId,
             @NotNull Id messageId,
             @NotNull TreeCode messageCode,
             byte @NotNull [] envelope,
-            int attemptCount,
+            long attemptCount,
             @NotNull String leaseId,
-            long version) {
+            long version,
+            @Nullable TreeCode targetHandlerCode,
+            @Nullable Long handlerAttempt,
+            @Nullable RetryRule handlerRetryRule) {
+        this.outboxId = Objects.requireNonNull(outboxId, "Outbox 标识不能为空");
+        this.targetHandlerCode = targetHandlerCode;
+        this.handlerAttempt = handlerAttempt;
+        this.handlerRetryRule = handlerRetryRule;
         this.messageId = Objects.requireNonNull(messageId, "Id 不能为空");
         this.messageCode = Objects.requireNonNull(messageCode, "消息编码不能为空");
         this.envelope = Arrays.copyOf(Objects.requireNonNull(envelope, "消息信封不能为空"), envelope.length);
@@ -48,7 +65,27 @@ class OutboxClaim {
         this.version = version;
     }
 
-    /** @return 消息标识 */
+    @NotNull
+    Id outboxId() {
+        return outboxId;
+    }
+
+    @Nullable
+    TreeCode targetHandlerCode() {
+        return targetHandlerCode;
+    }
+
+    @Nullable
+    Long handlerAttempt() {
+        return handlerAttempt;
+    }
+
+    @Nullable
+    RetryRule handlerRetryRule() {
+        return handlerRetryRule;
+    }
+
+    /** @return 原业务消息标识 */
     @NotNull
     Id messageId() {
         return messageId;
@@ -66,7 +103,7 @@ class OutboxClaim {
     }
 
     /** @return 包含本次领取的累计发布次数 */
-    int attemptCount() {
+    long attemptCount() {
         return attemptCount;
     }
 
@@ -83,7 +120,17 @@ class OutboxClaim {
 
     /** 在 RabbitMQ 确认后记录本次租约的成功结果。 */
     OutboxClaim sent(@NotNull Instant at) {
-        OutboxClaim result = new OutboxClaim(messageId, messageCode, envelope, attemptCount, leaseId, version);
+        OutboxClaim result = new OutboxClaim(
+                outboxId,
+                messageId,
+                messageCode,
+                envelope,
+                attemptCount,
+                leaseId,
+                version,
+                targetHandlerCode,
+                handlerAttempt,
+                handlerRetryRule);
         result.status = OutboxStatus.SENT;
         result.sentAt = Objects.requireNonNull(at, "Outbox 确认时间不能为空");
         return result;
@@ -91,7 +138,17 @@ class OutboxClaim {
 
     /** 记录本次租约失败及业务层确定的下一次尝试时间。 */
     OutboxClaim failed(@NotNull Instant nextAttemptAt, @NotNull String error) {
-        OutboxClaim result = new OutboxClaim(messageId, messageCode, envelope, attemptCount, leaseId, version);
+        OutboxClaim result = new OutboxClaim(
+                outboxId,
+                messageId,
+                messageCode,
+                envelope,
+                attemptCount,
+                leaseId,
+                version,
+                targetHandlerCode,
+                handlerAttempt,
+                handlerRetryRule);
         result.status = OutboxStatus.FAILED;
         result.availableAt = Objects.requireNonNull(nextAttemptAt, "Outbox 重试时间不能为空");
         result.lastError = Objects.requireNonNull(error, "Outbox 失败摘要不能为空");

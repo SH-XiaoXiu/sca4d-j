@@ -12,6 +12,10 @@ import com.sca4d.auth.passkey.config.PasskeySettings;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -106,7 +110,8 @@ public class PasskeyCeremonyStore {
     private StoredCeremony store(TreeCode prefix, ObjectNode payload) {
         Duration ttl = settings.CEREMONY_TTL.get();
         Instant expiresAt = clock.instant().plus(ttl);
-        for (int attempt = 0; attempt < 3; attempt++) {
+        RetryPolicy<Boolean> retry = RetryPolicy.always(RetryRule.atMost(3, Backoff.fixed(Duration.ZERO)));
+        for (long attempt = 1;; attempt++) {
             PasskeyCeremonyId id = new PasskeyCeremonyId(UUID.randomUUID().toString());
             try {
                 Boolean created = redis.opsForValue()
@@ -117,6 +122,8 @@ public class PasskeyCeremonyStore {
                 if (TRUE.equals(created)) {
                     return new StoredCeremony(id, expiresAt);
                 }
+                if (!retry.evaluate(RetryContext.failed(attempt, false)).retrying())
+                    break;
             } catch (JsonProcessingException exception) {
                 throw new IllegalStateException("Passkey ceremony 编码失败", exception);
             }

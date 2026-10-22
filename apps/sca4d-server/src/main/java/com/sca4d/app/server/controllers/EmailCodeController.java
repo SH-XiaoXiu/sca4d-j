@@ -42,13 +42,13 @@ import java.util.Objects;
 @Tag(name = "Authentication")
 public class EmailCodeController {
 
-    private final @NotNull EmailCodeChallengeService challenges;
+    private final @NotNull ActionAuthenticationService actions;
 
-    private final @NotNull AuthenticationAttempts authentication;
+    private final @NotNull EmailCodeChallengeService challenges;
 
     private final @NotNull PlatformLoginService login;
 
-    private final @NotNull ActionAuthenticationService actions;
+    private final @NotNull AuthenticationAttempts authentication;
 
     /**
      * @param challenges Email Code Challenge 签发服务
@@ -81,7 +81,7 @@ public class EmailCodeController {
     /** 使用已消费的 Email Code Challenge 开始登录。 */
     @PostMapping("/login/email-code/proofs")
     @AnonymousAccess
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用 Email Code 开始登录")
     public @NotNull ApiResponse<LoginResultView> login(
             @RequestBody @Valid @NotNull EmailCodeProofRequest request) {
@@ -104,7 +104,7 @@ public class EmailCodeController {
     /** 向已经确定 Account 的登录尝试提交 Email Code。 */
     @PostMapping("/login/attempts/{attemptId}/email-code/proofs")
     @AnonymousAccess
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "向登录尝试提交 Email Code")
     public @NotNull ApiResponse<LoginResultView> loginAttempt(
             @PathVariable @Size(max = 128) @NotNull String attemptId,
@@ -126,7 +126,7 @@ public class EmailCodeController {
 
     /** 向当前 Session 所属动作认证提交 Email Code。 */
     @PostMapping("/verifications/{verificationId}/email-code/proofs")
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "向动作认证提交 Email Code")
     public @NotNull ApiResponse<VerificationView> verification(
             @PathVariable @Size(max = 128) @NotNull String verificationId,

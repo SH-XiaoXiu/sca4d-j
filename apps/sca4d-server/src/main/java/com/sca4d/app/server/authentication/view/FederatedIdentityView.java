@@ -5,23 +5,23 @@ import org.jetbrains.annotations.NotNull;
 
 /** 返回当前账号已绑定的外部身份和最近资料快照。 */
 public class FederatedIdentityView {
-    private final long id;
-
-    private final long providerId;
-
-    private final long accountId;
-
-    private final String issuer;
-
-    private final String subject;
+    private final String avatarUrl;
 
     private final String displayName;
 
     private final String email;
 
+    private final String issuer;
+
+    private final String subject;
+
     private final boolean emailVerified;
 
-    private final String avatarUrl;
+    private final long accountId;
+
+    private final long id;
+
+    private final long providerId;
 
     private final long version;
 

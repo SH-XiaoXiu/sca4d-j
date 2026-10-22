@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
-import { Profile } from '@vben/common-ui';
 import { useUserStore } from '@vben/stores';
 
 import { message } from 'ant-design-vue';
+import { LockKeyhole, UserRound } from 'lucide-vue-next';
 
+import { SjPage, SjProfileSettingsLayout, SjTabs } from '#/components/sj';
 import ActionVerificationDialog from '#/features/authentication/ActionVerificationDialog.vue';
 import AuthenticationMethodsTab from '#/features/authentication/AuthenticationMethodsTab.vue';
 import AuthenticationSettingsTab from '#/features/authentication/AuthenticationSettingsTab.vue';
 import PasswordChangeTab from '#/features/authentication/PasswordChangeTab.vue';
 import { securityActionSuccessText } from '#/features/authentication/presentation';
+import { useSjPresentation } from '#/features/sj-presentation';
 import { $t } from '#/locales';
 import { useSecurityStore } from '#/store/security';
 
+const { t } = useSjPresentation();
+
+const navigation = computed(() => [
+  { label: t('profile'), icon: UserRound, to: '/profile' },
+  { label: t('authenticationSettings'), icon: LockKeyhole, to: '/security' },
+]);
 const store = useSecurityStore();
 const userStore = useUserStore();
 const activeTab = ref('methods');
@@ -52,22 +60,25 @@ watch(
 </script>
 
 <template>
-  <div class="size-full">
-    <Profile
-      v-model:model-value="activeTab"
-      :tabs="tabs"
-      :title="$t('page.security.title')"
-      :user-info="userStore.userInfo"
+  <SjPage :title="$t('page.security.title')" auto-content-height mode="detail">
+    <SjProfileSettingsLayout
+      :navigation="navigation"
+      :navigation-label="$t('page.security.title')"
     >
-      <template #content>
-        <AuthenticationMethodsTab
-          v-if="activeTab === 'methods'"
-          :display-name="displayName"
-        />
-        <AuthenticationSettingsTab v-else-if="activeTab === 'settings'" />
-        <PasswordChangeTab v-else />
+      <template #identity>
+        <strong>{{ displayName }}</strong>
       </template>
-    </Profile>
+      <SjTabs v-model:active-key="activeTab">
+        <a-tab-pane v-for="tab in tabs" :key="tab.value" :tab="tab.label">
+          <AuthenticationMethodsTab
+            v-if="tab.value === 'methods'"
+            :display-name="displayName"
+          />
+          <AuthenticationSettingsTab v-else-if="tab.value === 'settings'" />
+          <PasswordChangeTab v-else />
+        </a-tab-pane>
+      </SjTabs>
+    </SjProfileSettingsLayout>
     <ActionVerificationDialog />
-  </div>
+  </SjPage>
 </template>

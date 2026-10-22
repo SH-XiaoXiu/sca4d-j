@@ -36,11 +36,11 @@ public class SmsConfigurationService {
 
     private final SmsRepository repository;
 
+    private final IdGenerator ids;
+
     private final NotificationTypeCatalog notificationTypes;
 
     private final Set<String> transportTypes;
-
-    private final IdGenerator ids;
 
     /**
      * 创建 SMS 配置管理服务。
@@ -384,9 +384,9 @@ public class SmsConfigurationService {
     private static class CheckedProvider {
         private final String code;
 
-        private final String type;
-
         private final String credentialRef;
+
+        private final String type;
 
         private CheckedProvider(String code, String type, String credentialRef) {
             this.code = code;
@@ -396,17 +396,17 @@ public class SmsConfigurationService {
     }
 
     private static class CheckedBinding {
-        private final TreeCode code;
+        private final Locale locale;
+
+        private final Map<String, String> parameterMapping;
 
         private final SmsRoute route;
 
-        private final Locale locale;
+        private final String providerTemplateCode;
 
         private final String signName;
 
-        private final String providerTemplateCode;
-
-        private final Map<String, String> parameterMapping;
+        private final TreeCode code;
 
         private CheckedBinding(
                 TreeCode code,

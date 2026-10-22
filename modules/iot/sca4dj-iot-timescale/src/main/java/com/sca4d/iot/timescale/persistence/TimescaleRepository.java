@@ -17,10 +17,13 @@ import com.sca4d.iot.api.schedule.DeviceScheduleExecutionStatus;
 import com.sca4d.iot.api.telemetry.TelemetryBatch;
 import com.sca4d.iot.api.telemetry.TelemetrySample;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,6 +41,73 @@ public class TimescaleRepository {
     private final @NotNull SqlBatches sqlBatches;
 
     private final int maxQueryResults;
+
+    /**
+     * 批量读取最近记录；每个标识对应有序且不可修改的列表，无记录时为空列表。
+     *
+     * @param deviceIds 正数标识集合，重复标识合并，空集合不查询数据库
+     * @param limitPerDevice 每个标识的记录上限，范围为 1 到 100
+     * @return 按标识分组的不可修改结果
+     */
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceEvent>> findRecentEvents(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice) {
+        int checkedLimit = new PageRequest(1, limitPerDevice).verifyMaxSize(100).size();
+        List<Long> ids = List.copyOf(new LinkedHashSet<>(deviceIds));
+        Map<Long, List<DeviceEvent>> result = new LinkedHashMap<>();
+        for (Long id : ids) {
+            if (id <= 0)
+                throw new IllegalArgumentException("历史查询标识必须为正数");
+            result.put(id, new ArrayList<>());
+        }
+        // 限制每批最多 500 个标识，并继续遵守配置的 SQL 参数上限。
+        for (int offset = 0; offset < ids.size(); offset += 500) {
+            List<Long> chunk = ids.subList(offset, Math.min(offset + 500, ids.size()));
+            for (TimescaleThingEvent row : sqlBatches.query(
+                    chunk,
+                    1,
+                    1,
+                    batch -> mapper.selectRecentEvents(batch, checkedLimit))) {
+                result.get(row.deviceId()).add(toEvent(row));
+            }
+        }
+        result.replaceAll((id, values) -> List.copyOf(values));
+        return Map.copyOf(result);
+    }
+
+    /**
+     * 批量读取最近记录；每个标识对应有序且不可修改的列表，无记录时为空列表。
+     *
+     * @param messageIds 正数标识集合，重复标识合并，空集合不查询数据库
+     * @param limitPerMessage 每个标识的记录上限，范围为 1 到 100
+     * @return 按标识分组的不可修改结果
+     */
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceAcknowledgement>> findRecentAcknowledgements(
+            @NotNull Collection<@NotNull Long> messageIds,
+            int limitPerMessage) {
+        int checkedLimit = new PageRequest(1, limitPerMessage).verifyMaxSize(100).size();
+        List<Long> ids = List.copyOf(new LinkedHashSet<>(messageIds));
+        Map<Long, List<DeviceAcknowledgement>> result = new LinkedHashMap<>();
+        for (Long id : ids) {
+            if (id <= 0)
+                throw new IllegalArgumentException("历史查询标识必须为正数");
+            result.put(id, new ArrayList<>());
+        }
+        // 限制每批最多 500 个标识，并继续遵守配置的 SQL 参数上限。
+        for (int offset = 0; offset < ids.size(); offset += 500) {
+            List<Long> chunk = ids.subList(offset, Math.min(offset + 500, ids.size()));
+            for (TimescaleThingEvent row : sqlBatches.query(
+                    chunk,
+                    1,
+                    1,
+                    batch -> mapper.selectRecentAcknowledgements(batch, checkedLimit))) {
+                DeviceAcknowledgement acknowledgement = toAcknowledgement(row);
+                result.get(acknowledgement.messageId()).add(acknowledgement);
+            }
+        }
+        result.replaceAll((id, values) -> List.copyOf(values));
+        return Map.copyOf(result);
+    }
 
     /**
      * 创建只读写 `iot_telemetry_sample` 和 `iot_event` 的 Repository。

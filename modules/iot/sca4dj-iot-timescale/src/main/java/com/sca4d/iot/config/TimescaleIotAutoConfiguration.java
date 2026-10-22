@@ -1,9 +1,13 @@
 package com.sca4d.iot.config;
 
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
+import com.sca4d.core.api.job.DirectJob;
+import com.sca4d.core.api.job.JobKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
+import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
+import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.json.Sca4djJson;
@@ -19,10 +23,10 @@ import com.sca4d.iot.telemetry.TimescaleTelemetryConsumer;
 import com.sca4d.iot.timescale.persistence.TimescaleMapper;
 import com.sca4d.iot.timescale.persistence.TimescaleRepository;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.flywaydb.core.Flyway;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,30 +50,18 @@ public class TimescaleIotAutoConfiguration {
 
     private static final String MAPPER_LOCATIONS = "classpath*:META-INF/sca4dj/mybatis/iot-history/*.xml";
 
-    /** @return 只迁移 IoT 模块版本化高频表资源的独立 Flyway */
-    @Bean(initMethod = "migrate", defaultCandidate = false)
+    /** @return 只加载 IoT 历史 Mapper XML 的独立 SqlSessionFactory */
+    @Bean(defaultCandidate = false)
     @IotTimescale
-    Flyway iotTimescaleFlyway(@NotNull DataSource dataSource) {
+    SqlSessionFactory iotTimescaleSqlSessionFactory(
+            @NotNull DataSource dataSource,
+            @NotNull AdditionalMyBatisSessionFactoryBuilder builder) throws Exception {
         if (!(dataSource instanceof DynamicRoutingDataSource routing)) {
             throw new IllegalStateException("IoT 历史存储必须使用动态数据源");
         }
         if (!routing.getDataSources().containsKey(IotTimescale.DATASOURCE)) {
             throw new IllegalStateException("启用 IoT 历史存储必须配置 spring.datasource.dynamic.datasource.iot-history");
         }
-        return Flyway.configure()
-                .dataSource(routing.getDataSource(IotTimescale.DATASOURCE))
-                .locations("classpath:META-INF/sca4dj/timescale/migration")
-                .load();
-    }
-
-    /** @return 只加载 IoT 历史 Mapper XML 的独立 SqlSessionFactory */
-    @Bean(defaultCandidate = false)
-    @IotTimescale
-    SqlSessionFactory iotTimescaleSqlSessionFactory(
-            @NotNull DataSource dataSource,
-            @IotTimescale @NotNull Flyway migration,
-            @NotNull AdditionalMyBatisSessionFactoryBuilder builder) throws Exception {
-        Objects.requireNonNull(migration, "IoT Timescale Flyway 不能为空");
         Resource[] mapperLocations = new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATIONS);
         if (mapperLocations.length == 0) {
             throw new IllegalStateException("IoT Timescale Mapper XML 不存在: " + MAPPER_LOCATIONS);
@@ -144,14 +136,25 @@ public class TimescaleIotAutoConfiguration {
 
     /** @return 按应用配置间隔清理 TimescaleDB 完整历史 chunk 的集群计划 */
     @Bean
-    ClusterTaskSchedule timescaleRetentionSchedule(
-            @NotNull TimescaleRetentionTask task,
+    JobSchedule<Void, Void> timescaleRetentionSchedule(
+            @Qualifier("timescaleRetentionJob") @NotNull DirectJob<Void, Void> job,
             @NotNull IotTimescaleProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("IOT/TIMESCALE/RETENTION"),
                 1,
-                task,
+                job,
+                null,
                 new IntervalSchedule(properties.getCleanupInterval(), properties.getCleanupInterval()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    @Bean
+    DirectJob<Void, Void> timescaleRetentionJob(@NotNull TimescaleRetentionTask task) {
+        return DirectJob.unrecorded(
+                new JobKey("IOT/TIMESCALE/RETENTION"),
+                1,
+                TreeCode.ofColon(IotCapabilities.WORKER),
+                task::execute);
     }
 }

@@ -41,13 +41,13 @@ import java.util.Objects;
 @RequestMapping
 @Tag(name = "Authentication")
 public class SmsCodeController {
-    private final SmsCodeChallengeService challenges;
-
-    private final AuthenticationAttempts authentication;
+    private final ActionAuthenticationService actions;
 
     private final PlatformLoginService login;
 
-    private final ActionAuthenticationService actions;
+    private final SmsCodeChallengeService challenges;
+
+    private final AuthenticationAttempts authentication;
 
     /** 创建 SMS Code HTTP 入口。 */
     public SmsCodeController(
@@ -73,7 +73,7 @@ public class SmsCodeController {
     /** 使用 SMS 验证码开始匿名登录。 */
     @PostMapping("/login/sms-code/proofs")
     @AnonymousAccess
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用 SMS Code 开始登录")
     public @NotNull ApiResponse<LoginResultView> login(@RequestBody @Valid @NotNull SmsCodeProofRequest request) {
         LoginResultView result = LoginResultView.from(login.start(submission(request)));
@@ -93,7 +93,7 @@ public class SmsCodeController {
     /** 向指定登录尝试提交 SMS 验证码。 */
     @PostMapping("/login/attempts/{attemptId}/sms-code/proofs")
     @AnonymousAccess
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<LoginResultView> loginAttempt(
             @PathVariable @Size(max = 128) @NotNull String attemptId,
             @RequestBody @Valid @NotNull SmsCodeProofRequest request) {
@@ -110,7 +110,7 @@ public class SmsCodeController {
 
     /** 向当前会话的敏感动作认证尝试提交 SMS 验证码。 */
     @PostMapping("/verifications/{verificationId}/sms-code/proofs")
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<VerificationView> verification(
             @PathVariable @Size(max = 128) @NotNull String verificationId,
             @CurrentSession @NotNull Session session,

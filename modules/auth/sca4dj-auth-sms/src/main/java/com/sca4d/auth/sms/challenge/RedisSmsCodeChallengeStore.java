@@ -24,9 +24,9 @@ import java.util.Objects;
 public class RedisSmsCodeChallengeStore {
     private static final DefaultRedisScript<Long> VERIFY = verifyScript();
 
-    private final RedisTemplate<Key, String> redis;
-
     private final Clock clock;
+
+    private final RedisTemplate<Key, String> redis;
 
     private final Key challengePrefix;
 

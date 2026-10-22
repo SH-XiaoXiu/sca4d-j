@@ -8,8 +8,8 @@ import { AdminError } from './errors';
 
 /** 当前账号认证设置的读取和写入状态。 */
 export interface AuthenticationSettingsState {
-  readonly etag: null | string;
   readonly error: AdminError | null;
+  readonly etag: null | string;
   readonly phase: ResourcePhase;
   readonly settings: AuthenticationSettings | null;
 }
@@ -22,6 +22,7 @@ export class AuthenticationSettingsController extends ObservableController<Authe
 
   /** 读取当前账号认证设置。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const result = await this.api.get<AuthenticationSettings>(
@@ -30,6 +31,7 @@ export class AuthenticationSettingsController extends ObservableController<Authe
       if (!result.etag) {
         throw new Error('Authentication settings response has no ETag');
       }
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         error: null,
         etag: result.etag,
@@ -37,6 +39,7 @@ export class AuthenticationSettingsController extends ObservableController<Authe
         settings: freezeSettings(result.data),
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error);
       throw error;
     }

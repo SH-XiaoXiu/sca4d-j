@@ -88,14 +88,9 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">com.sca4d.job.runtime.JobHistoryCleanupTask</div>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.scheduling.ClusterTask</code></dd>
-</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">JobHistoryCleanupTask</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">由集群定时器触发一次成功 Job run 历史清理。</div>
 </section>
 <section class="summary">
@@ -128,7 +123,9 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#execute()" class="member-name-link">execute</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按 Job 历史保留策略清理已成功的运行。</div>
+</div>
 </div>
 </div>
 </div>
@@ -170,10 +167,7 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 <section class="detail" id="execute()">
 <h3>execute</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">execute</span>()</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code>execute</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.scheduling.ClusterTask</code></dd>
-</dl>
+<div class="block">按 Job 历史保留策略清理已成功的运行。</div>
 </section>
 </li>
 </ul>

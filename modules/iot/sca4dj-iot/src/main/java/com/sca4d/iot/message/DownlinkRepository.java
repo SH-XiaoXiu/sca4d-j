@@ -25,6 +25,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -52,6 +53,69 @@ public class DownlinkRepository {
     private final @NotNull SqlBatches sqlBatches;
 
     private final @NotNull ThingDataJsonCodec json;
+
+    /**
+     * 批量读取最近记录；每个标识对应有序且不可修改的列表，无记录时为空列表。
+     *
+     * @param deviceIds 正数标识集合，重复标识合并，空集合不查询数据库
+     * @param limitPerDevice 每个标识的记录上限，范围为 1 到 100
+     * @return 按标识分组的不可修改结果
+     */
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceDownlink>> findRecentDownlinks(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice) {
+        int checkedLimit = new PageRequest(1, limitPerDevice).verifyMaxSize(100).size();
+        List<Long> ids = List.copyOf(new LinkedHashSet<>(deviceIds));
+        Map<Long, List<DeviceDownlink>> result = new LinkedHashMap<>();
+        for (Long id : ids) {
+            if (id <= 0)
+                throw new IllegalArgumentException("历史查询标识必须为正数");
+            result.put(id, new ArrayList<>());
+        }
+        // 限制每批最多 500 个标识，并继续遵守配置的 SQL 参数上限。
+        for (int offset = 0; offset < ids.size(); offset += 500) {
+            List<Long> chunk = ids.subList(offset, Math.min(offset + 500, ids.size()));
+            for (EncodedDownlinkMessage row : sqlBatches.query(
+                    chunk,
+                    1,
+                    1,
+                    batch -> messages.selectRecentDeviceDownlinks(batch, checkedLimit))) {
+                result.get(row.deviceId()).add(toMessage(row));
+            }
+        }
+        result.replaceAll((id, values) -> List.copyOf(values));
+        return Map.copyOf(result);
+    }
+
+    /**
+     * 批量读取最近记录；每个标识对应有序且不可修改的列表，无记录时为空列表。
+     *
+     * @param messageIds 正数标识集合，重复标识合并，空集合不查询数据库
+     * @return 按标识分组的不可修改结果
+     */
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceAcknowledgement>> findLatestAcknowledgements(
+            @NotNull Collection<@NotNull Long> messageIds) {
+        List<Long> ids = List.copyOf(new LinkedHashSet<>(messageIds));
+        Map<Long, List<DeviceAcknowledgement>> result = new LinkedHashMap<>();
+        for (Long id : ids) {
+            if (id <= 0)
+                throw new IllegalArgumentException("历史查询标识必须为正数");
+            result.put(id, new ArrayList<>());
+        }
+        // 限制每批最多 500 个标识，并继续遵守配置的 SQL 参数上限。
+        for (int offset = 0; offset < ids.size(); offset += 500) {
+            List<Long> chunk = ids.subList(offset, Math.min(offset + 500, ids.size()));
+            for (EncodedDeviceAcknowledgement row : sqlBatches.query(
+                    chunk,
+                    1,
+                    0,
+                    batch -> messages.selectAcknowledgementsByMessageIds(batch))) {
+                result.get(row.messageId()).add(toAcknowledgement(row));
+            }
+        }
+        result.replaceAll((id, values) -> List.copyOf(values));
+        return Map.copyOf(result);
+    }
 
     /**
      * @param messages 下行消息 SQL Mapper

@@ -4,12 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.audit.config.AuditAutoConfiguration;
 import com.sca4d.audit.query.AuditEntry;
 import com.sca4d.audit.query.AuditQuery;
 import com.sca4d.audit.query.AuditQueryService;
-import com.sca4d.audit.recording.AuditMessageCodec;
+import com.sca4d.audit.recording.AfterCommitAuditRecorder;
 import com.sca4d.audit.recording.AuditMessageHandler;
+import com.sca4d.audit.recording.AuditMessageV2Codec;
 import com.sca4d.audit.recording.AuditRepository;
 import com.sca4d.audit.recording.QueuedAuditRecorder;
 import com.sca4d.core.api.audit.AuditActor;
@@ -19,32 +21,43 @@ import com.sca4d.core.api.audit.AuditRecord;
 import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.audit.HttpCall;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
-import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.api.resource.Resource;
+import com.sca4d.core.spring.call.SpelCallValueResolver;
 import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
+import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
+import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
+import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -60,6 +73,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
@@ -83,6 +97,7 @@ class AuditPersistenceIntegrationTest {
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
 
     @Autowired
+    @Qualifier("databaseAuditRecorder")
     private AuditRecorder recorder;
 
     @Autowired
@@ -107,12 +122,158 @@ class AuditPersistenceIntegrationTest {
 
     @BeforeEach
     void resetState() {
+        jdbc.execute("DROP TABLE IF EXISTS audit_record_resource");
         jdbc.execute("DROP TABLE IF EXISTS audit_record");
         ResourceDatabasePopulator schema = new ResourceDatabasePopulator(
                 new ClassPathResource("META-INF/sca4dj/schema/audit.sql"));
         schema.execute(Objects.requireNonNull(jdbc.getDataSource()));
         jdbc.execute("DROP TABLE IF EXISTS audit_handoff_test");
         jdbc.execute("CREATE TABLE audit_handoff_test (id BIGINT PRIMARY KEY)");
+    }
+
+    @Test
+    void afterCommitPersistsFrozenAssociationsOnlyWhenCommitted() {
+        var deferred = new AfterCommitAuditRecorder(repository, Runnable::run);
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> {
+            deferred.record(record(31, "TEST/UPDATE", "101", AuditResult.SUCCESS, Instant.EPOCH));
+            status.setRollbackOnly();
+        });
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_record", Integer.class)).isZero();
+        new TransactionTemplate(transactionManager).executeWithoutResult(
+                status -> deferred.record(record(31, "TEST/UPDATE", "101", AuditResult.SUCCESS, Instant.EPOCH)));
+        var page = queries.page(
+                new AuditQuery(
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        new PageRequest(1, 10),
+                        "TEST/PROJECT",
+                        "7"));
+        assertThat(page.getTotal()).isEqualTo(1);
+    }
+
+    @Test
+    void resourceAssociationsDeduplicateAndRollBackWithTheRecord() {
+        var project = new Resource.Ref("TEST/PROJECT", "7");
+        var group = new Resource.Ref("TEST/GROUP", "8");
+        var row = new AuditRecord(
+                "scope-call",
+                new AuditActor(1, 2L, 3),
+                new AuditOperation("TEST/MOVE"),
+                group,
+                AuditResult.SUCCESS,
+                null,
+                null,
+                Instant.EPOCH,
+                List.of(project, group, project));
+        recorder.record(row);
+        var query = new AuditQuery(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                new PageRequest(1, 10),
+                "TEST/PROJECT",
+                "7").matchingResources(List.of(project, group));
+        var page = queries.page(query);
+        assertThat(page.getTotal()).isEqualTo(1);
+        long id = page.getItems().getFirst().id();
+        assertThat(queries.relatesTo(id, project)).isTrue();
+        assertThat(queries.relatesTo(id, new Resource.Ref("TEST/PROJECT", "9"))).isFalse();
+        assertThat(queries.page(query.matchingResources(List.of())).getTotal()).isZero();
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_record_resource", Integer.class)).isEqualTo(2);
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> {
+            recorder.record(
+                    new AuditRecord(
+                            row.requestId(),
+                            row.actor(),
+                            row.operation(),
+                            row.target().orElse(null),
+                            row.result(),
+                            row.payload().orElse(null),
+                            row.httpCall().orElse(null),
+                            row.occurredAt(),
+                            row.relatedResources()));
+            status.setRollbackOnly();
+        });
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_record", Integer.class)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_record_resource", Integer.class)).isEqualTo(2);
+    }
+
+    @Test
+    void recordsAndQueriesParentChildAuditTrail() {
+        var actor = new AuditActor(1, 2L, 3);
+        var root = new AuditRecord(
+                "trail-request",
+                "audit-root",
+                "trail-1",
+                null,
+                actor,
+                new AuditOperation("PROJECT/TEST/CREATE"),
+                new Resource.Ref("TEST/PROJECT", "7"),
+                AuditResult.SUCCESS,
+                null,
+                null,
+                Instant.EPOCH,
+                List.of(new Resource.Ref("TEST/PROJECT", "7")));
+        var child = new AuditRecord(
+                "trail-request",
+                "audit-child",
+                "trail-1",
+                "audit-root",
+                actor,
+                new AuditOperation("TEST/TARGET/COMPLETE"),
+                new Resource.Ref("TEST/LUMINAIRE", "9"),
+                AuditResult.SUCCESS,
+                null,
+                null,
+                Instant.EPOCH.plusSeconds(1),
+                List.of(new Resource.Ref("TEST/PROJECT", "7")));
+
+        recorder.record(root);
+        recorder.record(child);
+
+        assertThat(
+                queries.page(
+                        new AuditQuery(
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                new PageRequest(1, 10)).trail("trail-1"))
+                        .getTotal())
+                .isEqualTo(2);
+        assertThat(
+                queries.page(
+                        new AuditQuery(
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                new PageRequest(1, 10)).parent("audit-root"))
+                        .getTotal())
+                .isEqualTo(1);
     }
 
     @Test
@@ -195,7 +356,7 @@ class AuditPersistenceIntegrationTest {
 
     @Test
     @DisplayName("队列交接拥有独立事务，原事务回滚仍保留已接收记录")
-    void handsOffInAnIndependentTransaction() {
+    void handsOffInAnIndependentTransaction() throws Exception {
         AtomicReference<com.sca4d.audit.recording.AuditMessage> captured = new AtomicReference<>();
         MessageBus bus = (message, policy) -> {
             captured.set((com.sca4d.audit.recording.AuditMessage) message);
@@ -208,7 +369,7 @@ class AuditPersistenceIntegrationTest {
             status.setRollbackOnly();
         });
         assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_handoff_test", Integer.class)).isEqualTo(1);
-        AuditMessageHandler handler = new AuditMessageHandler(repository, new AuditMessageCodec(new ObjectMapper()));
+        AuditMessageHandler handler = new AuditMessageHandler(repository, new AuditMessageV2Codec(new ObjectMapper()));
         IncomingMessage<com.sca4d.audit.recording.AuditMessage> incoming = new IncomingMessage<>(
                 Id.of(42),
                 captured.get(),
@@ -219,6 +380,21 @@ class AuditPersistenceIntegrationTest {
         new TransactionTemplate(transactionManager).executeWithoutResult(status -> handler.handle(incoming));
         new TransactionTemplate(transactionManager).executeWithoutResult(status -> handler.handle(incoming));
         assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_record WHERE id = 42", Integer.class)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_record_resource WHERE audit_id = 42", Integer.class))
+                .isEqualTo(1);
+        var codec = new AuditMessageV2Codec(new ObjectMapper());
+        var altered = (ObjectNode) new ObjectMapper().readTree(codec.encode(captured.get()));
+        altered.putArray("relatedResources").addObject().put("type", "TEST/PROJECT").put("id", "999");
+        var replay = new IncomingMessage<>(
+                Id.of(42),
+                codec.decode(new ObjectMapper().writeValueAsBytes(altered)),
+                new Name("audit-test"),
+                Instant.EPOCH,
+                true,
+                2);
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> handler.handle(replay));
+        assertThat(queries.relatesTo(42, new Resource.Ref("TEST/PROJECT", "999"))).isFalse();
+
     }
 
     @Test
@@ -253,11 +429,12 @@ class AuditPersistenceIntegrationTest {
                 "request-" + fileId,
                 new AuditActor(11L, 21L, principalId),
                 new AuditOperation(operation),
-                new ResourceReference("STORAGE/FILE", fileId),
+                new Resource.Ref("STORAGE/FILE", fileId),
                 result,
                 new RawPayload(Map.of("reason", "test")),
                 new HttpCall("POST", "/files/" + fileId + "?token=secret", "127.0.0.1", "test\r\n client"),
-                occurredAt);
+                occurredAt,
+                List.of(new Resource.Ref("TEST/PROJECT", "7")));
     }
 
     /** 保存不需要 App Codec 的测试 Raw JSON。 */
@@ -278,8 +455,35 @@ class AuditPersistenceIntegrationTest {
     /** 为 Audit 自动配置提供测试 DataSource、ObjectMapper 和标识生成器。 */
     @SpringBootConfiguration
     @ImportAutoConfiguration({DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
-            JdbcTemplateAutoConfiguration.class, MybatisAutoConfiguration.class, AuditAutoConfiguration.class})
+            JdbcTemplateAutoConfiguration.class, MybatisAutoConfiguration.class,
+            AuditAutoConfiguration.class})
+    @EnableAspectJAutoProxy
     static class TestApplication {
+        /** 与应用一致地检查 Repository 方法的影响行数声明，避免 @AffectedRows 违规只在应用里暴露。 */
+        @Bean
+        AffectedRowsAspect affectedRowsAspect() {
+            return new AffectedRowsAspect();
+        }
+
+        @Bean
+        AffectedRowsInterceptor affectedRowsInterceptor() {
+            return new AffectedRowsInterceptor();
+        }
+
+        @Bean
+        SPICallValueResolver expressionResolver(ApplicationContext context) {
+            return new SpelCallValueResolver(context);
+        }
+
+        @Bean
+        ConfigurationCustomizer resourceTypes() {
+            return configuration -> configuration.getTypeHandlerRegistry()
+                    .register(
+                            TreeCode.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(TreeCode::of, code -> code.format(NameFormat.SLASH)));
+        }
+
         @Bean
         Clock clock() {
             return Clock.systemUTC();

@@ -52,16 +52,16 @@ public class SystemSettingsView {
 
     /** 管理端中的一个设置分组。 */
     public static class Group extends BaseView {
-        private final String key;
+        private final List<Item> settings;
 
-        private final String labelKey;
+        private final String key;
 
         @Localize(source = "labelText")
         private final String label;
 
-        private final int sortOrder;
+        private final String labelKey;
 
-        private final List<Item> settings;
+        private final int sortOrder;
 
         private Group(
                 @NotNull String key,

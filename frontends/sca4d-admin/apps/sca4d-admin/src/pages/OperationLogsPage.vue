@@ -17,8 +17,6 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
 import { computed, ref, watch } from 'vue';
 
-import { Page } from '@vben/common-ui';
-
 import {
   operationLogActionText,
   operationLogTargetReference,
@@ -27,13 +25,21 @@ import {
 import { message } from 'ant-design-vue';
 import { CircleCheck, Eye, ShieldX, TriangleAlert } from 'lucide-vue-next';
 
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import {
+  SjPage,
+  SjResourceEditor,
+  SjResourceReference,
+  SjResourceState,
+  useSjVxeGrid,
+} from '#/components/sj';
+import { useSjAccess } from '#/features/sj-access';
+import { useSjControllerState } from '#/features/sj-controller-state';
+import { useSjPresentation } from '#/features/sj-presentation';
+import { businessApplication } from '#/platform/business-application';
 
-import ResourceState from '../components/ResourceState.vue';
-import ResourceReference from '../components/ResourceReference.vue';
-import { useI18n } from '../i18n';
 import { resourceReferenceRoute } from '../platform/resource-reference-routes';
-import { useAdminStore } from '../store/business';
+
+const { t, dateTime } = useSjPresentation();
 
 interface OperationLogSearchValues {
   accountId?: string;
@@ -46,8 +52,12 @@ interface OperationLogSearchValues {
   targetType?: string;
 }
 
-const store = useAdminStore();
-const { t, dateTime } = useI18n();
+const accounts = useSjControllerState(businessApplication.accounts);
+const roles = useSjControllerState(businessApplication.roles);
+const operationLogs = useSjControllerState(businessApplication.operationLogs);
+const emailSenders = useSjControllerState(businessApplication.emailSenders);
+const emailTemplates = useSjControllerState(businessApplication.emailTemplates);
+const session = useSjAccess();
 const detailOpen = ref(false);
 const detailId = ref<Int64String | null>(null);
 const fileAccessUrls = ref(new Map<Int64String, string>());
@@ -72,22 +82,22 @@ const displayText = computed<OperationLogDisplayText>(() => ({
 }));
 const targetNames = computed<Readonly<Record<string, string>>>(() => {
   const values = new Map<string, string>();
-  store.accounts.page.items.forEach((account) => {
+  accounts.value.page.items.forEach((account) => {
     const key = resourceReferenceKey('IAM/ACCOUNT', account.id);
     if (key) values.set(key, account.displayName);
   });
-  store.roles.roles.forEach((role: PlatformRole) => {
+  roles.value.roles.forEach((role: PlatformRole) => {
     const key = resourceReferenceKey('IAM/ROLE', role.id);
     if (key) values.set(key, role.name);
   });
-  store.emailSenders.senders.forEach((sender: EmailSender) => {
+  emailSenders.value.senders.forEach((sender: EmailSender) => {
     const key = resourceReferenceKey(
       'NOTIFICATION/EMAIL/SENDERS',
       sender.senderId,
     );
     if (key) values.set(key, sender.name);
   });
-  store.emailTemplates.templates.forEach((template: EmailTemplate) => {
+  emailTemplates.value.templates.forEach((template: EmailTemplate) => {
     const key = resourceReferenceKey(
       'NOTIFICATION/EMAIL/TEMPLATES',
       template.templateId,
@@ -196,12 +206,12 @@ const targetTypeLabels = computed<Readonly<Record<string, string>>>(() => ({
 }));
 
 watch(
-  () => store.operationLogs.page.items,
+  () => operationLogs.value.page.items,
   (items) => void loadFileAccessUrls(items),
   { immediate: true },
 );
 
-const [Grid] = useVbenVxeGrid({
+const [Grid] = useSjVxeGrid(() => ({
   formOptions: {
     schema: [
       {
@@ -341,9 +351,9 @@ const [Grid] = useVbenVxeGrid({
             page.currentPage,
             page.pageSize,
           );
-          if (!filters) return store.operationLogs.page;
-          await store.loadOperationLogs(filters);
-          return store.operationLogs.page;
+          if (!filters) return operationLogs.value.page;
+          await businessApplication.operationLogs.load(filters);
+          return operationLogs.value.page;
         },
       },
     },
@@ -356,14 +366,14 @@ const [Grid] = useVbenVxeGrid({
       zoom: true,
     },
   } as VxeTableGridOptions<OperationLog>,
-});
+}));
 
 /** 打开抽屉并读取选中日志的完整详情。 */
 async function openDetail(id: Int64String): Promise<void> {
   detailId.value = id;
   detailOpen.value = true;
   try {
-    await store.loadOperationLog(id);
+    await businessApplication.operationLogs.require(id);
   } catch {
     // 详情抽屉使用独立状态展示错误。
   }
@@ -378,7 +388,7 @@ async function retryDetail(): Promise<void> {
 function detailVisibilityChanged(open: boolean): void {
   if (open) return;
   detailId.value = null;
-  store.clearOperationLog();
+  businessApplication.operationLogs.clearSelection();
 }
 
 /** 校验 Vben 搜索表单并转换成后端仍然使用的操作日志查询参数。 */
@@ -452,7 +462,7 @@ function targetReference(log: OperationLog): ResourceReferenceData {
 /** 返回日志 Account 在已加载账号页中可以匹配到的名称。 */
 function accountReference(log: OperationLog): ResourceReferenceData {
   const account = log.accountId
-    ? store.accounts.page.items.find((item) => item.id === log.accountId)
+    ? accounts.value.page.items.find((item) => item.id === log.accountId)
     : undefined;
   return {
     id: log.accountId,
@@ -495,9 +505,9 @@ function accountRoute(log: OperationLog) {
 /** 返回当前 Session 对资源管理页的读取权限。 */
 function resourceRouteAccess() {
   return {
-    accounts: store.session.capabilities.accountsRead,
-    email: store.session.capabilities.emailRead,
-    roles: store.session.capabilities.rolesRead,
+    accounts: session.value.capabilities.accountsRead,
+    email: session.value.capabilities.emailRead,
+    roles: session.value.capabilities.rolesRead,
   };
 }
 
@@ -528,7 +538,7 @@ async function loadFileAccessUrls(
     return;
   }
   try {
-    const resolved = await store.resolveAvatarUrls(fileIds);
+    const resolved = await businessApplication.files.resolveAccessUrls(fileIds);
     if (request === fileAccessRequest) {
       fileAccessUrls.value = new Map(resolved);
     }
@@ -570,13 +580,13 @@ function isPositiveInteger(value: string): boolean {
 </script>
 
 <template>
-  <Page auto-content-height>
+  <SjPage auto-content-height>
     <Grid class="h-full" :table-title="t('operationLogs')">
       <template #table-title>
         <div class="flex min-w-0 flex-col items-start gap-0.5">
           <span>{{ t('operationLogs') }}</span>
           <span class="text-muted-foreground text-xs font-normal">
-            {{ t('totalItems', { count: store.operationLogs.page.total }) }}
+            {{ t('totalItems', { count: operationLogs.page.total }) }}
           </span>
         </div>
       </template>
@@ -586,7 +596,7 @@ function isPositiveInteger(value: string): boolean {
         </time>
       </template>
       <template #actor="{ row }">
-        <ResourceReference
+        <SjResourceReference
           :empty-text="displayText.empty"
           :id="actorReference(row).id"
           :name="actorReference(row).name"
@@ -595,9 +605,9 @@ function isPositiveInteger(value: string): boolean {
       <template #operation="{ row }">
         <div class="flex min-w-0 flex-col gap-0.5 text-left">
           <strong class="truncate">{{ actionText(row) }}</strong>
-          <code class="text-muted-foreground truncate text-xs">{{
-            row.operation
-          }}</code>
+          <code class="text-muted-foreground truncate text-xs">
+            {{ row.operation }}
+          </code>
         </div>
       </template>
       <template #result="{ row }">
@@ -613,7 +623,7 @@ function isPositiveInteger(value: string): boolean {
         </a-tag>
       </template>
       <template #target="{ row }">
-        <ResourceReference
+        <SjResourceReference
           :empty-text="displayText.empty"
           :external-url="targetExternalUrl(row)"
           :id="targetReference(row).id"
@@ -640,114 +650,110 @@ function isPositiveInteger(value: string): boolean {
       </template>
     </Grid>
 
-    <a-drawer
+    <SjResourceEditor
       v-model:open="detailOpen"
-      width="min(620px, 100vw)"
       :title="
-        store.operationLogs.selected
-          ? actionText(store.operationLogs.selected)
+        operationLogs.selected
+          ? actionText(operationLogs.selected)
           : t('operationLogDetails')
       "
-      @after-open-change="detailVisibilityChanged"
+      @closed="detailVisibilityChanged(false)"
+      :create="false"
+      size="lg"
+      read-only
     >
-      <ResourceState
-        :phase="store.operationLogs.detailPhase"
-        :error="store.operationLogs.detailError"
+      <SjResourceState
+        :phase="operationLogs.detailPhase"
+        :error="operationLogs.detailError"
         @retry="retryDetail"
       >
-        <template v-if="store.operationLogs.selected">
+        <template v-if="operationLogs.selected">
           <a-descriptions bordered size="small" :column="1">
             <a-descriptions-item :label="t('occurredAt')">
-              {{ dateTime(store.operationLogs.selected.occurredAt) }}
+              {{ dateTime(operationLogs.selected.occurredAt) }}
             </a-descriptions-item>
             <a-descriptions-item :label="t('operator')">
-              <ResourceReference
+              <SjResourceReference
                 :empty-text="displayText.empty"
-                :id="actorReference(store.operationLogs.selected).id"
-                :name="actorReference(store.operationLogs.selected).name"
+                :id="actorReference(operationLogs.selected).id"
+                :name="actorReference(operationLogs.selected).name"
               />
             </a-descriptions-item>
             <a-descriptions-item :label="t('subjectId')">
-              <ResourceReference
+              <SjResourceReference
                 :empty-text="displayText.empty"
-                :id="subjectReference(store.operationLogs.selected).id"
-                :type-label="
-                  subjectReference(store.operationLogs.selected).typeLabel
-                "
+                :id="subjectReference(operationLogs.selected).id"
+                :type-label="subjectReference(operationLogs.selected).typeLabel"
               />
             </a-descriptions-item>
             <a-descriptions-item :label="t('accountId')">
-              <ResourceReference
+              <SjResourceReference
                 :empty-text="displayText.empty"
-                :id="accountReference(store.operationLogs.selected).id"
-                :name="accountReference(store.operationLogs.selected).name"
+                :id="accountReference(operationLogs.selected).id"
+                :name="accountReference(operationLogs.selected).name"
                 :to="
-                  accountReference(store.operationLogs.selected).id
-                    ? (accountRoute(store.operationLogs.selected) ?? undefined)
+                  accountReference(operationLogs.selected).id
+                    ? (accountRoute(operationLogs.selected) ?? undefined)
                     : undefined
                 "
-                :type-label="
-                  accountReference(store.operationLogs.selected).typeLabel
-                "
+                :type-label="accountReference(operationLogs.selected).typeLabel"
               />
             </a-descriptions-item>
             <a-descriptions-item :label="t('principalId')">
-              <ResourceReference
+              <SjResourceReference
                 :empty-text="displayText.empty"
-                :id="principalReference(store.operationLogs.selected).id"
-                :name="principalReference(store.operationLogs.selected).name"
+                :id="principalReference(operationLogs.selected).id"
+                :name="principalReference(operationLogs.selected).name"
                 :type-label="
-                  principalReference(store.operationLogs.selected).typeLabel
+                  principalReference(operationLogs.selected).typeLabel
                 "
               />
             </a-descriptions-item>
             <a-descriptions-item :label="t('operation')">
-              {{ actionText(store.operationLogs.selected) }}
+              {{ actionText(operationLogs.selected) }}
             </a-descriptions-item>
             <a-descriptions-item :label="t('operationCode')">
-              <code class="log-code">{{
-                store.operationLogs.selected.operation
-              }}</code>
+              <code class="log-code">
+                {{ operationLogs.selected.operation }}
+              </code>
             </a-descriptions-item>
             <a-descriptions-item :label="t('result')">
-              <a-tag :color="resultColor(store.operationLogs.selected.result)">
-                {{ resultText(store.operationLogs.selected.result) }}
+              <a-tag :color="resultColor(operationLogs.selected.result)">
+                {{ resultText(operationLogs.selected.result) }}
               </a-tag>
             </a-descriptions-item>
             <a-descriptions-item :label="t('targetResource')">
-              <ResourceReference
+              <SjResourceReference
                 :empty-text="displayText.empty"
-                :external-url="targetExternalUrl(store.operationLogs.selected)"
-                :id="targetReference(store.operationLogs.selected).id"
-                :name="targetReference(store.operationLogs.selected).name"
-                :to="targetRoute(store.operationLogs.selected) ?? undefined"
-                :type-label="
-                  targetReference(store.operationLogs.selected).typeLabel
-                "
+                :external-url="targetExternalUrl(operationLogs.selected)"
+                :id="targetReference(operationLogs.selected).id"
+                :name="targetReference(operationLogs.selected).name"
+                :to="targetRoute(operationLogs.selected) ?? undefined"
+                :type-label="targetReference(operationLogs.selected).typeLabel"
               />
             </a-descriptions-item>
             <a-descriptions-item :label="t('targetType')">
-              <code class="log-code">{{
-                store.operationLogs.selected.targetType || '-'
-              }}</code>
+              <code class="log-code">
+                {{ operationLogs.selected.targetType || '-' }}
+              </code>
             </a-descriptions-item>
             <a-descriptions-item :label="t('requestId')">
               <a-typography-text copyable>
-                {{ store.operationLogs.selected.requestId }}
+                {{ operationLogs.selected.requestId }}
               </a-typography-text>
             </a-descriptions-item>
             <a-descriptions-item :label="t('httpRequest')">
               <code class="log-code">
-                {{ store.operationLogs.selected.httpMethod || '-' }}
-                {{ store.operationLogs.selected.httpPath || '' }}
+                {{ operationLogs.selected.httpMethod || '-' }}
+                {{ operationLogs.selected.httpPath || '' }}
               </code>
             </a-descriptions-item>
             <a-descriptions-item :label="t('clientIp')">
-              {{ store.operationLogs.selected.clientIp || '-' }}
+              {{ operationLogs.selected.clientIp || '-' }}
             </a-descriptions-item>
             <a-descriptions-item :label="t('userAgent')">
               <span class="break-all">
-                {{ store.operationLogs.selected.userAgent || '-' }}
+                {{ operationLogs.selected.userAgent || '-' }}
               </span>
             </a-descriptions-item>
           </a-descriptions>
@@ -757,13 +763,13 @@ function isPositiveInteger(value: string): boolean {
               {{ t('auditPayload') }}
             </h2>
             <pre class="audit-payload border-border border">{{
-              payloadText(store.operationLogs.selected)
+              payloadText(operationLogs.selected)
             }}</pre>
           </section>
         </template>
-      </ResourceState>
-    </a-drawer>
-  </Page>
+      </SjResourceState>
+    </SjResourceEditor>
+  </SjPage>
 </template>
 
 <style scoped>

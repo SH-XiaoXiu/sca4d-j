@@ -5,18 +5,17 @@ import type {
   EmailSender,
   EmailTemplate,
   EmailTemplateInput,
-  EmailTemplateSource,
   EmailTemplatePage,
   Int64String,
   LocaleCatalog,
-  NotificationRichTextNode,
-  NotificationTemplateContent,
   PreviewEmailTemplateInput,
   RenderedEmail,
   ReplaceEmailSenderInput,
 } from './types';
 
 import { ObservableController } from './controller';
+import { SavedResourceRefreshError } from './errors';
+import { SupersededReadError } from './errors';
 import { AdminError } from './errors';
 import { freezeLocaleCatalog } from './localized-fields';
 
@@ -37,7 +36,7 @@ export interface EmailTemplatesState {
   readonly localeCatalog: LocaleCatalog | null;
   readonly page: number;
   readonly phase: ResourcePhase;
-  readonly preview: RenderedEmail | null;
+  readonly preview: null | RenderedEmail;
   readonly size: number;
   readonly templates: readonly EmailTemplate[];
   readonly total: number;
@@ -57,6 +56,8 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
 
   /** 清除抽屉使用的 SMTP 配置详情和 ETag。 */
   clearDetail(): void {
+    this.cancelRead('detail');
+    this.cancelRead('preview');
     this.publish({ ...this.state, detail: null, detailEtag: null });
   }
 
@@ -67,7 +68,11 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
         '/system/email/senders',
         input,
       );
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       return freezeSender(result.data);
     } catch (error) {
       this.mutationFailed(error);
@@ -83,7 +88,11 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
         'If-Match': current.etag,
       });
       if (this.state.detail?.senderId === senderId) this.clearDetail();
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.mutationFailed(error);
       throw error;
@@ -92,37 +101,22 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
 
   /** 读取全部 SMTP 配置；空列表仍允许页面创建第一项配置。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const result = await this.api.get<readonly EmailSender[]>(
         '/system/email/senders',
       );
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         error: null,
         phase: 'ready',
-        senders: Object.freeze(result.data.map(freezeSender)),
+        senders: Object.freeze(result.data.map((item) => freezeSender(item))),
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.loadFailed(error);
-      throw error;
-    }
-  }
-
-  /** 读取 SMTP 配置详情和后续修改使用的强 ETag。 */
-  async require(senderId: Int64String): Promise<EmailSender> {
-    try {
-      const result = await this.readVersioned(senderId);
-      const detail = freezeSender(result.data);
-      this.publish({
-        ...this.state,
-        detail,
-        detailEtag: result.etag,
-        error: null,
-      });
-      return detail;
-    } catch (error) {
-      this.mutationFailed(error);
       throw error;
     }
   }
@@ -146,9 +140,35 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
         detailEtag: result.etag,
         error: null,
       });
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       return updated;
     } catch (error) {
+      this.mutationFailed(error);
+      throw error;
+    }
+  }
+
+  /** 读取 SMTP 配置详情和后续修改使用的强 ETag。 */
+  async require(senderId: Int64String): Promise<EmailSender> {
+    const read = this.beginRead('detail');
+    try {
+      const result = await this.readVersioned(senderId);
+      const detail = freezeSender(result.data);
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      this.publish({
+        ...this.state,
+        detail,
+        detailEtag: result.etag,
+        error: null,
+      });
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      return detail;
+    } catch (error) {
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
       this.mutationFailed(error);
       throw error;
     }
@@ -163,7 +183,11 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
         { enabled },
         { 'If-Match': current.etag },
       );
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.mutationFailed(error);
       throw error;
@@ -179,13 +203,6 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
       this.mutationFailed(error);
       throw error;
     }
-  }
-
-  /** 读取详情并拒绝缺失 ETag 的响应。 */
-  private async readVersioned(senderId: Int64String) {
-    const result = await this.api.get<EmailSender>(senderPath(senderId));
-    if (!result.etag) throw new Error('Email sender response has no ETag');
-    return { data: result.data, etag: result.etag };
   }
 
   /** 把列表读取失败转换为 ResourceState 使用的阶段。 */
@@ -206,6 +223,13 @@ export class EmailSendersController extends ObservableController<EmailSendersSta
         ? failurePhase(value)
         : this.state.phase;
     this.publish({ ...this.state, error: value, phase });
+  }
+
+  /** 读取详情并拒绝缺失 ETag 的响应。 */
+  private async readVersioned(senderId: Int64String) {
+    const result = await this.api.get<EmailSender>(senderPath(senderId));
+    if (!result.etag) throw new Error('Email sender response has no ETag');
+    return { data: result.data, etag: result.etag };
   }
 }
 
@@ -228,6 +252,8 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
 
   /** 清除抽屉使用的模板详情、ETag 和预览。 */
   clearDetail(): void {
+    this.cancelRead('detail');
+    this.cancelRead('preview');
     this.publish({
       ...this.state,
       detail: null,
@@ -246,9 +272,13 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.post<EmailTemplate>(
         '/system/email/templates',
-        normalizeTemplateInput(input),
+        input,
       );
-      await this.load(1, this.state.size);
+      try {
+        await this.load(1, this.state.size);
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       return freezeTemplate(result.data);
     } catch (error) {
       this.mutationFailed(error);
@@ -264,7 +294,11 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
         'If-Match': current.etag,
       });
       if (this.state.detail?.templateId === templateId) this.clearDetail();
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.mutationFailed(error);
       throw error;
@@ -273,6 +307,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
 
   /** 同时读取指定模板页和应用 Locale；空列表仍允许创建模板。 */
   async load(page = this.state.page, size = this.state.size): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const [templates, locales] = await Promise.all([
@@ -290,6 +325,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
         await this.load(page - 1, size);
         return;
       }
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         error: null,
@@ -297,10 +333,13 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
         page: templates.data.page,
         phase: 'ready',
         size: templates.data.size,
-        templates: Object.freeze(templates.data.items.map(freezeTemplate)),
+        templates: Object.freeze(
+          templates.data.items.map((item) => freezeTemplate(item)),
+        ),
         total: templates.data.total,
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.loadFailed(error);
       throw error;
     }
@@ -308,34 +347,19 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
 
   /** 使用未保存草稿生成经过服务端安全处理的预览。 */
   async preview(input: PreviewEmailTemplateInput): Promise<RenderedEmail> {
+    const read = this.beginRead('preview');
     try {
       const result = await this.api.post<RenderedEmail>(
         '/system/email/templates/previews',
-        normalizePreviewInput(input),
+        input,
       );
       const preview = Object.freeze({ ...result.data });
+      if (!this.isCurrentRead('preview', read)) throw new SupersededReadError();
       this.publish({ ...this.state, error: null, preview });
+      if (!this.isCurrentRead('preview', read)) throw new SupersededReadError();
       return preview;
     } catch (error) {
-      this.mutationFailed(error);
-      throw error;
-    }
-  }
-
-  /** 读取模板详情、变量集合和后续修改使用的强 ETag。 */
-  async require(templateId: Int64String): Promise<EmailTemplate> {
-    try {
-      const result = await this.readVersioned(templateId);
-      const detail = freezeTemplate(result.data);
-      this.publish({
-        ...this.state,
-        detail,
-        detailEtag: result.etag,
-        error: null,
-        preview: null,
-      });
-      return detail;
-    } catch (error) {
+      if (!this.isCurrentRead('preview', read)) throw new SupersededReadError();
       this.mutationFailed(error);
       throw error;
     }
@@ -349,7 +373,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.put<EmailTemplate>(
         templatePath(detail.templateId),
-        normalizeTemplateInput(input),
+        input,
         { 'If-Match': etag },
       );
       if (!result.etag) throw new Error('Email template response has no ETag');
@@ -360,9 +384,36 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
         detailEtag: result.etag,
         error: null,
       });
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       return updated;
     } catch (error) {
+      this.mutationFailed(error);
+      throw error;
+    }
+  }
+
+  /** 读取模板详情、变量集合和后续修改使用的强 ETag。 */
+  async require(templateId: Int64String): Promise<EmailTemplate> {
+    const read = this.beginRead('detail');
+    try {
+      const result = await this.readVersioned(templateId);
+      const detail = freezeTemplate(result.data);
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      this.publish({
+        ...this.state,
+        detail,
+        detailEtag: result.etag,
+        error: null,
+        preview: null,
+      });
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      return detail;
+    } catch (error) {
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
       this.mutationFailed(error);
       throw error;
     }
@@ -377,18 +428,15 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
         { enabled },
         { 'If-Match': current.etag },
       );
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.mutationFailed(error);
       throw error;
     }
-  }
-
-  /** 读取详情并拒绝缺失 ETag 的响应。 */
-  private async readVersioned(templateId: Int64String) {
-    const result = await this.api.get<EmailTemplate>(templatePath(templateId));
-    if (!result.etag) throw new Error('Email template response has no ETag');
-    return { data: result.data, etag: result.etag };
   }
 
   /** 把列表读取失败转换为 ResourceState 使用的阶段。 */
@@ -410,6 +458,13 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
         : this.state.phase;
     this.publish({ ...this.state, error: value, phase });
   }
+
+  /** 读取详情并拒绝缺失 ETag 的响应。 */
+  private async readVersioned(templateId: Int64String) {
+    const result = await this.api.get<EmailTemplate>(templatePath(templateId));
+    if (!result.etag) throw new Error('Email template response has no ETag');
+    return { data: result.data, etag: result.etag };
+  }
 }
 
 /** 冻结 SMTP 配置，避免页面改写 Controller 状态。 */
@@ -417,124 +472,20 @@ function freezeSender(sender: EmailSender): EmailSender {
   return Object.freeze({ ...sender });
 }
 
-/** 冻结模板、多语言富文本和变量集合。 */
+/** 冻结完整源码及变量集合，编辑器必须复制草稿，不能修改读取快照。 */
 function freezeTemplate(template: EmailTemplate): EmailTemplate {
-  const content = template.content ?? contentFromLocales(template.locales ?? {});
-  const locales = template.locales ?? sourcesFromContent(content);
   return Object.freeze({
     ...template,
-    content: freezeTemplateContent(content),
-    locales: Object.freeze({ ...locales }),
+    locales: Object.freeze(
+      Object.fromEntries(
+        Object.entries(template.locales).map(([locale, source]) => [
+          locale,
+          Object.freeze({ ...source }),
+        ]),
+      ),
+    ),
     variables: Object.freeze([...template.variables]),
   });
-}
-
-function normalizeTemplateInput(input: EmailTemplateInput) {
-  if (input.locales) return input;
-  if (!input.content) throw new Error('Email template content is missing');
-  return { notificationCode: input.notificationCode, locales: sourcesFromContent(input.content) };
-}
-
-function normalizePreviewInput(input: PreviewEmailTemplateInput) {
-  if (input.source) {
-    return { source: input.source, languageTag: input.languageTag, variables: input.variables };
-  }
-  if (!input.content) throw new Error('Email preview content is missing');
-  const source = sourcesFromContent(input.content)[input.languageTag];
-  if (!source) throw new Error(`Email preview locale is missing: ${input.languageTag}`);
-  return { source, languageTag: input.languageTag, variables: input.variables };
-}
-
-function sourcesFromContent(
-  content: NotificationTemplateContent,
-): Readonly<Record<string, EmailTemplateSource>> {
-  return Object.fromEntries(
-    Object.entries(content).map(([locale, value]) => [
-      locale,
-      {
-        html: htmlFromNode(value.body),
-        subject: textFromNode(value.title),
-        text: textFromNode(value.body),
-      },
-    ]),
-  );
-}
-
-function contentFromLocales(
-  locales: Readonly<Record<string, EmailTemplateSource>>,
-): NotificationTemplateContent {
-  return Object.fromEntries(
-    Object.entries(locales).map(([locale, source]) => [
-      locale,
-      { body: documentFromText(source.text), title: documentFromText(source.subject) },
-    ]),
-  );
-}
-
-function documentFromText(text: string): NotificationRichTextNode {
-  return {
-    content: [{ content: [{ text, type: 'text' }], type: 'paragraph' }],
-    type: 'doc',
-  };
-}
-
-function textFromNode(node: NotificationRichTextNode): string {
-  if (node.type === 'text') return node.text ?? '';
-  if (node.type === 'notificationVariable') return `{{${String(node.attrs?.name ?? '')}}}`;
-  if (node.type === 'hardBreak') return '\n';
-  return (node.content ?? []).map(textFromNode).join('');
-}
-
-function htmlFromNode(node: NotificationRichTextNode): string {
-  return textFromNode(node)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('\n', '<br>');
-}
-
-/** 递归冻结统一通知模板，避免页面改写 Controller 状态。 */
-function freezeTemplateContent(
-  content: EmailTemplate['content'],
-): EmailTemplate['content'] {
-  return Object.freeze(
-    Object.fromEntries(
-      Object.entries(content).map(([locale, value]) => [
-        locale,
-        Object.freeze({
-          body: freezeRichTextNode(value.body),
-          title: freezeRichTextNode(value.title),
-        }),
-      ]),
-    ),
-  );
-}
-
-/** 递归冻结一个 ProseMirror JSON 节点及其属性、marks 和子节点。 */
-function freezeRichTextNode<T extends EmailTemplate['content'][string]['body']>(
-  node: T,
-): T {
-  return Object.freeze({
-    ...node,
-    ...(node.attrs ? { attrs: Object.freeze({ ...node.attrs }) } : {}),
-    ...(node.content
-      ? { content: Object.freeze(node.content.map(freezeRichTextNode)) }
-      : {}),
-    ...(node.marks
-      ? {
-          marks: Object.freeze(
-            node.marks.map((mark) =>
-              Object.freeze({
-                ...mark,
-                ...(mark.attrs
-                  ? { attrs: Object.freeze({ ...mark.attrs }) }
-                  : {}),
-              }),
-            ),
-          ),
-        }
-      : {}),
-  }) as T;
 }
 
 /** 编码 SMTP 配置资源路径。 */

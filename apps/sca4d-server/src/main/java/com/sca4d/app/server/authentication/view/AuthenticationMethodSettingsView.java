@@ -13,9 +13,9 @@ public class AuthenticationMethodSettingsView {
 
     private final String methodCode;
 
-    private final boolean loginStartEnabled;
-
     private final boolean loginAdditionalEnabled;
+
+    private final boolean loginStartEnabled;
 
     private final boolean sensitiveActionEnabled;
 

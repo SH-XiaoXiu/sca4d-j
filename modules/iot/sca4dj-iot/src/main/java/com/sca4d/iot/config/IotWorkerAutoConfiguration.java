@@ -2,12 +2,16 @@ package com.sca4d.iot.config;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.connection.ConnectionRegistry;
+import com.sca4d.core.api.job.DirectJob;
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
-import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
+import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
+import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.json.Sca4djJson;
@@ -17,6 +21,8 @@ import com.sca4d.iot.api.connection.DeviceConnectionTerminator;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
 import com.sca4d.iot.api.message.DeviceAcknowledgementCheck;
+import com.sca4d.iot.api.message.DeviceDispatchAdmission;
+import com.sca4d.iot.api.message.DeviceDispatchDecision;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceTransport;
 import com.sca4d.iot.change.DeviceChangeNotifier;
@@ -36,6 +42,7 @@ import com.sca4d.iot.protocol.DeviceProtocolCatalog;
 import com.sca4d.iot.schedule.DefaultDeviceScheduleService;
 import com.sca4d.iot.schedule.DeviceScheduleTask;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -44,10 +51,20 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Clock;
+import java.util.List;
 
 /** 在具体应用选择 Transport 或 Connection 终止入口后创建 IoT 可靠任务 Worker。 */
 @AutoConfiguration(after = IotAutoConfiguration.class, afterName = "com.sca4d.iot.emqx.config.EmqxAutoConfiguration")
 public class IotWorkerAutoConfiguration {
+
+    /** 声明 IoT 后台任务使用的实例能力和系统身份。 */
+    @Bean
+    InstanceCapability iotWorkerCapability() {
+        return new InstanceCapability(
+                TreeCode.ofColon(IotCapabilities.WORKER),
+                IotCapabilities.SYSTEM_IDENTITY,
+                List.of());
+    }
 
     /** @return 不依赖 ACK Consumer 实例的消息编码器 */
     @Bean
@@ -127,7 +144,8 @@ public class IotWorkerAutoConfiguration {
             DeviceChangeNotifier changes,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager,
-            MessageCodec<DeviceDispatchMessage> codec) {
+            MessageCodec<DeviceDispatchMessage> codec,
+            ObjectProvider<DeviceDispatchAdmission> admission) {
         return new DeviceDispatchHandler(
                 downlinks,
                 router,
@@ -136,7 +154,8 @@ public class IotWorkerAutoConfiguration {
                 changes,
                 distributedLock,
                 new TransactionTemplate(transactionManager),
-                codec);
+                codec,
+                admission.getIfAvailable(() -> (message, attempt, now) -> DeviceDispatchDecision.allow()));
     }
 
     /** @return 消费延迟消息并处理分阶段 ACK 超时的业务 Consumer */
@@ -179,15 +198,11 @@ public class IotWorkerAutoConfiguration {
     DeviceDisconnectHandler deviceDisconnectHandler(
             DeviceConnectionTerminatorRouter terminators,
             DeviceConnectionRepository connections,
-            Clock clock,
-            MessageBus messages,
             ObjectProvider<ConnectionRegistry> commonConnections,
             MessageCodec<DeviceDisconnectMessage> codec) {
         return new DeviceDisconnectHandler(
                 terminators,
                 connections,
-                messages,
-                clock,
                 commonConnections.getIfAvailable(),
                 codec);
     }
@@ -209,17 +224,28 @@ public class IotWorkerAutoConfiguration {
 
     /** @return 按应用配置间隔触发终态下行消息清理的集群计划 */
     @Bean
-    ClusterTaskSchedule downlinkRetentionSchedule(
-            DownlinkRetentionTask task,
+    JobSchedule<Void, Void> downlinkRetentionSchedule(
+            @Qualifier("downlinkRetentionJob") DirectJob<Void, Void> job,
             IotProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("IOT/DOWNLINK/RETENTION"),
                 1,
-                task,
+                job,
+                null,
                 new IntervalSchedule(
                         properties.getDownlinkCleanupInterval(),
                         properties.getDownlinkCleanupInterval()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    @Bean
+    DirectJob<Void, Void> downlinkRetentionJob(DownlinkRetentionTask task) {
+        return DirectJob.unrecorded(
+                new JobKey("IOT/DOWNLINK/RETENTION"),
+                1,
+                TreeCode.ofColon(IotCapabilities.WORKER),
+                task::execute);
     }
 
     /** @return 按毫秒到期索引批量生成可靠设备下行的集群任务 */
@@ -236,14 +262,25 @@ public class IotWorkerAutoConfiguration {
 
     /** @return 按应用配置精度扫描到期设备规则的集群计划 */
     @Bean
-    ClusterTaskSchedule deviceScheduleScanSchedule(
-            DeviceScheduleTask task,
+    JobSchedule<Void, Void> deviceScheduleScanSchedule(
+            @Qualifier("deviceScheduleScanJob") DirectJob<Void, Void> job,
             IotProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("IOT/DEVICE_SCHEDULE/SCAN"),
                 1,
-                task,
+                job,
+                null,
                 new IntervalSchedule(properties.getScheduleTick(), properties.getScheduleTick()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    @Bean
+    DirectJob<Void, Void> deviceScheduleScanJob(DeviceScheduleTask task) {
+        return DirectJob.unrecorded(
+                new JobKey("IOT/DEVICE_SCHEDULE/SCAN"),
+                1,
+                TreeCode.ofColon(IotCapabilities.WORKER),
+                task::execute);
     }
 }

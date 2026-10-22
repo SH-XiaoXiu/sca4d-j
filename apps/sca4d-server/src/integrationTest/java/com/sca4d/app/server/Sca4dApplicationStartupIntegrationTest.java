@@ -2,6 +2,8 @@ package com.sca4d.app.server;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.sca4d.app.server.authentication.AccountAuthenticationSettingConfiguration;
 import com.sca4d.app.server.authentication.AccountAuthenticationSettings;
 import com.sca4d.app.server.authentication.AuthenticationMethodSettings;
@@ -23,7 +25,6 @@ import com.sca4d.core.spring.dictionary.DictionaryMapper;
 import com.sca4d.core.spring.setting.SettingMapper;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.config.IotTimescale;
-import com.sca4d.iot.emqx.config.EmqxProperties;
 import com.sca4d.iot.persistence.EncodedDownlinkMessage;
 import com.sca4d.iot.persistence.EncodedThingModel;
 import com.sca4d.iot.persistence.mapper.DeviceDownlinkMapper;
@@ -45,7 +46,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.RabbitMQContainer;
@@ -67,8 +67,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import javax.sql.DataSource;
 
 /** 验证完整 Sca4d Server 能同时装配默认数据库、IoT 历史数据库和启用 AOP 的 EMQX 回调。 */
 @SpringBootTest(classes = Sca4dApplication.class)
@@ -138,11 +136,7 @@ class Sca4dApplicationStartupIntegrationTest {
     }
 
     @Autowired
-    private DataSource defaultDataSource;
-
-    @Autowired
-    @IotTimescale
-    private DataSource historyDataSource;
+    private DynamicRoutingDataSource dataSource;
 
     @Autowired
     private Flyway defaultFlyway;
@@ -164,13 +158,6 @@ class Sca4dApplicationStartupIntegrationTest {
     @Autowired
     @IotTimescale
     private SqlSessionTemplate historySqlSessionTemplate;
-
-    @Autowired
-    private PlatformTransactionManager defaultTransactionManager;
-
-    @Autowired
-    @IotTimescale
-    private PlatformTransactionManager historyTransactionManager;
 
     @Autowired
     private SettingMapper settingMapper;
@@ -200,31 +187,34 @@ class Sca4dApplicationStartupIntegrationTest {
     @Autowired
     private JdbcTemplate jdbc;
 
-    @Autowired
-    private EmqxProperties emqxProperties;
-
     @Test
     @DisplayName("默认数据库与 IoT 历史数据库分别完成装配和迁移")
     void startsWithIsolatedDatabaseInfrastructure() {
-        assertThat(emqxProperties.getClientId())
-                .startsWith("sca4d-server:sca4dj:iot:emqx:client:");
-        assertThat(defaultDataSource).isNotSameAs(historyDataSource);
+        assertThat(dataSource.getDataSource("main"))
+                .isNotSameAs(dataSource.getDataSource(IotTimescale.DATASOURCE));
         assertThat(defaultFlyway).isNotSameAs(historyFlyway);
         assertThat(defaultSqlSessionFactory).isNotSameAs(historySqlSessionFactory);
         assertThat(defaultSqlSessionTemplate).isNotSameAs(historySqlSessionTemplate);
-        assertThat(defaultTransactionManager).isNotSameAs(historyTransactionManager);
 
-        assertThat(defaultFlyway.info().current()).isNotNull();
-        assertThat(historyFlyway.info().current()).isNotNull();
+        assertThat(defaultFlyway.info().applied()).hasSize(2);
+        assertThat(defaultFlyway.info().current().getVersion().getVersion()).isEqualTo("2");
+        assertThat(historyFlyway.info().applied()).hasSize(1);
+        assertThat(historyFlyway.info().current().getVersion().getVersion()).isEqualTo("1");
         assertThat(settingMapper.select(TreeCode.of("SYSTEM"), "1", List.of("startup.integration.missing"))).isEmpty();
-        assertThat(
-                timescaleMapper.selectTelemetry(
-                        1L,
-                        "temperature",
-                        Instant.parse("2026-08-08T00:00:00Z"),
-                        Instant.parse("2026-08-08T00:01:00Z"),
-                        1))
-                .isEmpty();
+        // 直接调用 Mapper 时显式选择历史库，生产代码由 @DS 在服务边界选择。
+        DynamicDataSourceContextHolder.push(IotTimescale.DATASOURCE);
+        try {
+            assertThat(
+                    timescaleMapper.selectTelemetry(
+                            1L,
+                            "temperature",
+                            Instant.parse("2026-08-08T00:00:00Z"),
+                            Instant.parse("2026-08-08T00:01:00Z"),
+                            1))
+                    .isEmpty();
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+        }
     }
 
     @Test
@@ -390,29 +380,34 @@ class Sca4dApplicationStartupIntegrationTest {
         long messageId = 9_300_002L;
         Instant occurredAt = Instant.parse("2026-08-08T00:00:30Z");
 
-        assertThat(
-                timescaleMapper.insertTelemetrySamples(
-                        List.of(
-                                new TimescaleTelemetrySample(
-                                        messageId,
-                                        0,
-                                        deviceId,
-                                        1,
-                                        "temperature",
-                                        "23.5",
-                                        occurredAt,
-                                        occurredAt))))
-                .isOne();
-        List<EncodedTelemetrySample> samples = timescaleMapper.selectTelemetry(
-                deviceId,
-                "temperature",
-                occurredAt.minusSeconds(1),
-                occurredAt.plusSeconds(1),
-                10);
-        assertThat(samples).singleElement().satisfies(sample -> {
-            assertThat(sample.propertyCode()).isEqualTo("temperature");
-            assertThat(sample.valueJson()).isEqualTo("23.5");
-        });
+        DynamicDataSourceContextHolder.push(IotTimescale.DATASOURCE);
+        try {
+            assertThat(
+                    timescaleMapper.insertTelemetrySamples(
+                            List.of(
+                                    new TimescaleTelemetrySample(
+                                            messageId,
+                                            0,
+                                            deviceId,
+                                            1,
+                                            "temperature",
+                                            "23.5",
+                                            occurredAt,
+                                            occurredAt))))
+                    .isOne();
+            List<EncodedTelemetrySample> samples = timescaleMapper.selectTelemetry(
+                    deviceId,
+                    "temperature",
+                    occurredAt.minusSeconds(1),
+                    occurredAt.plusSeconds(1),
+                    10);
+            assertThat(samples).singleElement().satisfies(sample -> {
+                assertThat(sample.propertyCode()).isEqualTo("temperature");
+                assertThat(sample.valueJson()).isEqualTo("23.5");
+            });
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+        }
     }
 
     @Test

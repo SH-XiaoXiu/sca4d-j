@@ -10,7 +10,7 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.setting.value.SettingValues;
 import com.sca4d.core.api.storage.FileAccessUrl;
 import com.sca4d.core.api.storage.FileContent;
@@ -917,7 +917,7 @@ public class DefaultFileService implements FileService {
                 record.uploaderPrincipalId(),
                 new FileUse(
                         record.scene(),
-                        new ResourceReference(record.targetResourceType(), record.targetResourceId())),
+                        new Resource.Ref(record.targetResourceType(), record.targetResourceId())),
                 record.filename(),
                 contentType,
                 sizeBytes,

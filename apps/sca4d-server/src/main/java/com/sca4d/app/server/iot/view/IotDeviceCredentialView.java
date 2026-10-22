@@ -16,9 +16,9 @@ public class IotDeviceCredentialView {
 
     private final @Nullable Long accountId;
 
-    private final @Nullable String sharedSecret;
-
     private final @Nullable String hmacKey;
+
+    private final @Nullable String sharedSecret;
 
     /** 创建包含当前 Device 和一次性凭据的 HTTP 视图。 */
     private IotDeviceCredentialView(

@@ -10,23 +10,23 @@ import java.util.Objects;
 
 /** 保存 Redis 中的 SMS 验证码摘要、Account、状态、次数和时间边界。 */
 public class SmsCodeChallengeState {
+    private final @NotNull Instant expiresAt;
+
+    private final @NotNull Instant resendAt;
+
     private final @NotNull SmsCodeChallengeId challengeId;
 
-    private final long accountId;
+    private final @NotNull SmsCodeChallengeStatus status;
 
     private final @NotNull String codeHash;
 
     private final @NotNull String maskedRecipient;
 
-    private final @NotNull Instant expiresAt;
-
-    private final @NotNull Instant resendAt;
+    private final @NotNull Version version;
 
     private final int attemptCount;
 
-    private final @NotNull SmsCodeChallengeStatus status;
-
-    private final @NotNull Version version;
+    private final long accountId;
 
     /**
      * @param challengeId Challenge 标识

@@ -17,8 +17,6 @@ import java.util.Objects;
 @SuppressFBWarnings(value = "SS_SHOULD_BE_STATIC", justification = "@Localize requires instance fields for BaseViewSerializer metadata")
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class FederatedProviderView extends BaseView {
-    private final long id;
-
     private final String code;
 
     private final String protocol;
@@ -28,6 +26,8 @@ public class FederatedProviderView extends BaseView {
     private final boolean loginPageVisible;
 
     private final int displayOrder;
+
+    private final long id;
 
     @Localize(key = "name")
     private final @NotNull String name = "";

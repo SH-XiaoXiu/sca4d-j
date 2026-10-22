@@ -13,17 +13,17 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotDeviceEventView {
 
-    private final long eventId;
-
-    private final long deviceId;
-
-    private final @NotNull String eventCode;
-
-    private final @NotNull @Unmodifiable Map<String, Object> outputs;
-
     private final @NotNull Instant occurredAt;
 
     private final @NotNull Instant receivedAt;
+
+    private final @NotNull @Unmodifiable Map<String, Object> outputs;
+
+    private final @NotNull String eventCode;
+
+    private final long deviceId;
+
+    private final long eventId;
 
     /** 从模块事件查询结果创建 HTTP 视图。 */
     private IotDeviceEventView(@NotNull DeviceEvent event) {

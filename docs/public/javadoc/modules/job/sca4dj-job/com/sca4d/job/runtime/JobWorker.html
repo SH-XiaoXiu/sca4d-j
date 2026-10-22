@@ -93,10 +93,10 @@ loadScripts(document, 'script');</script>
 <dd><code>org.springframework.context.Lifecycle</code>, <code>org.springframework.context.Phased</code>, <code>org.springframework.context.SmartLifecycle</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">JobWorker</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">JobWorker</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.springframework.context.SmartLifecycle</span></div>
-<div class="block">轮询可执行节点，在有界线程池中执行并为每个运行中的节点续租。</div>
+<div class="block">轮询可执行节点和短期投递，在有界线程池中执行并为运行中的工作续租。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -117,11 +117,13 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.job.config.JobProperties,java.time.Clock)" class="member-name-link">JobWorker</a><wbr>(@NotNull <a href="JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a>&nbsp;catalog,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.sca4d.core.spring.json.Sca4djMapper,com.sca4d.job.config.JobProperties,java.time.Clock,com.sca4d.core.spring.config.InstanceProperties,com.sca4d.core.api.runtime.InstanceCapabilities)" class="member-name-link">JobWorker</a><wbr>(@NotNull <a href="JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a>&nbsp;catalog,
  @NotNull <a href="JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a>&nbsp;runs,
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
+ @NotNull com.sca4d.core.spring.json.Sca4djMapper&nbsp;objectMapper,
  @NotNull <a href="../config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a>&nbsp;properties,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull com.sca4d.core.spring.config.InstanceProperties&nbsp;instanceProperties,
+ @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;instanceCapabilities)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建在当前 App 隔离名称内领取和执行节点的 worker。</div>
 </div>
@@ -139,15 +141,18 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRunning()" class="member-name-link">isRunning</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPhase()" class="member-name-link">getPhase</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRunning()" class="member-name-link">isRunning</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -156,7 +161,7 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.springframework.context.SmartLifecycle">Methods inherited from interface&nbsp;org.springframework.context.SmartLifecycle</h3>
-<code>getPhase, isAutoStartup, stop</code></div>
+<code>isAutoStartup, stop</code></div>
 </section>
 </li>
 </ul>
@@ -169,18 +174,22 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.job.config.JobProperties,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.sca4d.core.spring.json.Sca4djMapper,com.sca4d.job.config.JobProperties,java.time.Clock,com.sca4d.core.spring.config.InstanceProperties,com.sca4d.core.api.runtime.InstanceCapabilities)">
 <h3>JobWorker</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JobWorker</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a>&nbsp;catalog,
  @NotNull
  @NotNull <a href="JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a>&nbsp;runs,
  @NotNull
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
+ @NotNull com.sca4d.core.spring.json.Sca4djMapper&nbsp;objectMapper,
  @NotNull
  @NotNull <a href="../config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a>&nbsp;properties,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull
+ @NotNull com.sca4d.core.spring.config.InstanceProperties&nbsp;instanceProperties,
+ @NotNull
+ @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;instanceCapabilities)</span></div>
 <div class="block">创建在当前 App 隔离名称内领取和执行节点的 worker。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -189,6 +198,8 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <dd><code>objectMapper</code> - 脚手架统一 JSON 映射器</dd>
 <dd><code>properties</code> - worker、轮询和租约配置</dd>
 <dd><code>clock</code> - 执行事实使用的时钟</dd>
+<dd><code>instanceProperties</code> - 当前进程的实例标识配置</dd>
+<dd><code>instanceCapabilities</code> - 当前实例启用的能力</dd>
 </dl>
 </section>
 </li>
@@ -227,6 +238,18 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>isRunning</code>&nbsp;in interface&nbsp;<code>org.springframework.context.Lifecycle</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getPhase()">
+<h3>getPhase</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getPhase</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>getPhase</code>&nbsp;in interface&nbsp;<code>org.springframework.context.Phased</code></dd>
+<dt>Specified by:</dt>
+<dd><code>getPhase</code>&nbsp;in interface&nbsp;<code>org.springframework.context.SmartLifecycle</code></dd>
 </dl>
 </section>
 </li>

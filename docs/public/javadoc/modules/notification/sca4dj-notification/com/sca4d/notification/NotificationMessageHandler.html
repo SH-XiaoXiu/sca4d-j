@@ -135,8 +135,8 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;<a href="NotificationM
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.messaging.HandlingDecision</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handle(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handle</a><wbr>(@NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;<a href="NotificationMessage.html" title="class in com.sca4d.notification">NotificationMessage</a>&gt;&nbsp;incoming)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.messaging.HandlingPolicy</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handlingPolicy()" class="member-name-link">handlingPolicy</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.retry.RetryRule</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryRule()" class="member-name-link">retryRule</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -203,13 +203,13 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;<a href="NotificationM
 </section>
 </li>
 <li>
-<section class="detail" id="handlingPolicy()">
-<h3>handlingPolicy</h3>
+<section class="detail" id="retryRule()">
+<h3>retryRule</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.messaging.HandlingPolicy</span>&nbsp;<span class="element-name">handlingPolicy</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.retry.RetryRule</span>&nbsp;<span class="element-name">retryRule</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>handlingPolicy</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.MessageHandler&lt;<a href="NotificationMessage.html" title="class in com.sca4d.notification">NotificationMessage</a>&gt;</code></dd>
+<dd><code>retryRule</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.MessageHandler&lt;<a href="NotificationMessage.html" title="class in com.sca4d.notification">NotificationMessage</a>&gt;</code></dd>
 </dl>
 </section>
 </li>

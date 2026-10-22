@@ -14,19 +14,19 @@ import java.util.Objects;
 /** 按 Sca4d Server 的固定 HTTP 字段顺序生成 Device MAC canonical request。 */
 public class HmacCanonicalRequest {
 
-    private final long deviceId;
-
-    private final @NotNull String method;
-
-    private final @NotNull String path;
+    private final @NotNull Instant timestamp;
 
     private final @NotNull String canonicalQuery;
 
-    private final byte @NotNull [] body;
-
-    private final @NotNull Instant timestamp;
+    private final @NotNull String method;
 
     private final @NotNull String nonce;
+
+    private final @NotNull String path;
+
+    private final byte @NotNull [] body;
+
+    private final long deviceId;
 
     /** 创建待签名 HTTP 请求；query 必须已经按名称和值排序并使用 RFC 3986 百分号编码。 */
     public HmacCanonicalRequest(

@@ -2,6 +2,7 @@ package com.sca4d.core.api.messaging;
 
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 
 /** 声明一种 Message 的稳定 RabbitMQ 消费入口和技术失败处理策略。 */
@@ -17,8 +18,8 @@ public interface MessageHandler<M extends Message> {
 
     /** @return 当前 Handler 技术失败时的再次处理策略 */
     @NotNull
-    default HandlingPolicy handlingPolicy() {
-        return HandlingPolicy.noRetry();
+    default RetryRule retryRule() {
+        return RetryRule.once();
     }
 
     /** @return RabbitMQ 对当前消息应执行的处理决定 */

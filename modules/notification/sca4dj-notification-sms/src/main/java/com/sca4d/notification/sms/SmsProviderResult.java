@@ -9,11 +9,11 @@ import java.util.Objects;
 public class SmsProviderResult {
     private final @NotNull SmsDeliveryStatus status;
 
-    private final @Nullable String requestId;
-
     private final @Nullable String bizId;
 
     private final @Nullable String failureCode;
+
+    private final @Nullable String requestId;
 
     public SmsProviderResult(
             @NotNull SmsDeliveryStatus status,

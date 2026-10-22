@@ -1,5 +1,6 @@
 package com.sca4d.iot.connection;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -11,25 +12,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.id.Id;
-import com.sca4d.core.api.messaging.DispatchPolicy;
-import com.sca4d.core.api.messaging.DispatchReceipt;
+import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
-import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneOffset;
 
 /** 验证可靠断连同时终止协议连接和全部通用连接投影。 */
 class DeviceDisconnectHandlerTest {
@@ -44,15 +42,11 @@ class DeviceDisconnectHandlerTest {
 
     private final DeviceConnectionReceiver connections = mock(DeviceConnectionReceiver.class);
 
-    private final MessageBus messages = mock(MessageBus.class);
-
     private final ConnectionRegistry commonConnections = mock(ConnectionRegistry.class);
 
     private final DeviceDisconnectHandler consumer = new DeviceDisconnectHandler(
             terminators,
             connections,
-            messages,
-            Clock.fixed(NOW, ZoneOffset.UTC),
             commonConnections,
             new JacksonMessageCodec<>(
                     DeviceDisconnectMessage.CODE,
@@ -71,7 +65,6 @@ class DeviceDisconnectHandlerTest {
         order.verify(terminators).disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
         order.verify(connections).disconnected(MQTT, CONNECTION_ID);
         order.verify(commonConnections).remove(new ConnectionId(CONNECTION_ID.value()));
-        verify(messages, never()).dispatch(any(), any());
     }
 
     @Test
@@ -84,56 +77,36 @@ class DeviceDisconnectHandlerTest {
         verify(terminators).disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
         verify(connections).disconnected(MQTT, CONNECTION_ID);
         verify(commonConnections).remove(new ConnectionId(CONNECTION_ID.value()));
-        verify(messages, never()).dispatch(any(), any());
     }
 
     @Test
-    @DisplayName("协议终止失败时不提前删除投影并登记延迟重试")
+    @DisplayName("协议终止失败时保留投影，并由 Messaging 决定下一次投递")
     void retriesWithoutRemovingProjectionWhenTerminationFails() {
-        Mockito.doThrow(new IllegalStateException("broker unavailable"))
+        Mockito.doThrow(new IllegalStateException("offline"))
                 .when(terminators)
                 .disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
-        when(
-                messages.dispatch(
-                        any(),
-                        ArgumentMatchers.argThat(
-                                policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
-                                        && NOW.plusSeconds(1).equals(policy.notBefore()))))
-                .thenReturn(new DispatchReceipt(Id.of(90L), DispatchReceipt.Status.OUTBOX_ENLISTED));
-
-        consumer.handle(delivery());
-
-        verify(connections, never()).disconnected(MQTT, CONNECTION_ID);
+        var decision = consumer.handle(delivery());
+        assertThat(decision.status()).isEqualTo(HandlingDecision.Status.RETRY);
+        verify(connections, never()).disconnected(any(), any());
         verify(commonConnections, never()).remove(any());
-        verify(messages).dispatch(
-                any(),
-                ArgumentMatchers.argThat(
-                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
-                                && NOW.plusSeconds(1).equals(policy.notBefore())));
     }
 
     @Test
-    @DisplayName("投影删除失败时重新执行协议终止和投影删除")
-    void retriesTerminationAndProjectionRemovalWhenProjectionRemovalFails() {
-        when(connections.disconnected(MQTT, CONNECTION_ID))
-                .thenThrow(new IllegalStateException("redis unavailable"));
-        when(
-                messages.dispatch(
-                        any(),
-                        ArgumentMatchers.argThat(
-                                policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
-                                        && NOW.plusSeconds(1).equals(policy.notBefore()))))
-                .thenReturn(new DispatchReceipt(Id.of(91L), DispatchReceipt.Status.OUTBOX_ENLISTED));
-
-        consumer.handle(delivery());
-
-        verify(terminators).disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
-        verify(commonConnections, never()).remove(any());
-        verify(messages).dispatch(
-                any(),
-                ArgumentMatchers.argThat(
-                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
-                                && NOW.plusSeconds(1).equals(policy.notBefore())));
+    @DisplayName("旧消息的尝试次数继续计入断连额度")
+    void preservesLegacyAttemptCount() {
+        Mockito.doThrow(new IllegalStateException("offline"))
+                .when(terminators)
+                .disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
+        var original = delivery();
+        var legacy = new DeviceDisconnectMessage(71L, CONNECTION_ID, MQTT, "identity-unavailable", 20);
+        var decision = consumer.handle(
+                new IncomingMessage<>(original.messageId(), legacy, original.sourceApplication(), NOW, false, 1));
+        assertThat(decision.completedAttempts()).isEqualTo(20);
+        assertThat(
+                RetryPolicy.always(consumer.retryRule())
+                        .evaluate(RetryContext.failed(decision.completedAttempts(), "offline"))
+                        .retrying())
+                .isFalse();
     }
 
     /** 创建第一次断连尝试使用的可靠消息投递。 */

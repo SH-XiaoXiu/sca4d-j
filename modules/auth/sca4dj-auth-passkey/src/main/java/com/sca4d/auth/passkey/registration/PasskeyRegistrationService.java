@@ -15,6 +15,10 @@ import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.utils.TextUtils;
 import com.yubico.webauthn.FinishRegistrationOptions;
 import com.yubico.webauthn.RegistrationResult;
@@ -40,6 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -221,7 +226,9 @@ public class PasskeyRegistrationService {
 
             // Service 根据单次 CAS 的结果决定重试、数量上限和并发失败，不让 Repository 决定业务错误。
             boolean reserved = false;
-            for (int attempt = 0; attempt <= maximumCredentials; attempt++) {
+            RetryPolicy<CredentialSlotReservation> retry = RetryPolicy.always(
+                    RetryRule.atMost((long) maximumCredentials + 1, Backoff.fixed(Duration.ZERO)));
+            for (long attempt = 1;; attempt++) {
                 CredentialSlotReservation reservation = credentials.reserveCredentialSlot(
                         checkedAccount.accountId(),
                         maximumCredentials);
@@ -235,6 +242,8 @@ public class PasskeyRegistrationService {
                 if (reservation == ACCOUNT_MISSING) {
                     throw new IllegalStateException("Passkey 账号锚点不存在");
                 }
+                if (!retry.evaluate(RetryContext.failed(attempt, reservation)).retrying())
+                    break;
             }
             if (!reserved) {
                 throw new OptimisticLockException("Passkey Credential 名额");

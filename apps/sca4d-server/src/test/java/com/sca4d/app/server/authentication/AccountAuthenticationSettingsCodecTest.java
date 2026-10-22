@@ -46,8 +46,8 @@ class AccountAuthenticationSettingsCodecTest {
     }
 
     @Test
-    @DisplayName("账号认证设置拒绝未经迁移的短方法编码")
-    void rejectsUnmigratedMethodCode() {
+    @DisplayName("账号认证设置要求完整的 AUTHENTICATION 方法编码")
+    void rejectsIncompleteMethodCode() {
         assertThatThrownBy(() -> codec.decode("""
                 {
                   "loginFactorCount": 1,

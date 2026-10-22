@@ -15,19 +15,19 @@ import java.util.Objects;
 /** 返回当前 Account 的全局通知语言、区域和可选渠道覆盖值。 */
 @SuppressWarnings("unused")
 public class NotificationSettingsView {
-    private final String languageTag;
-
-    private final String regionCode;
-
     private final JsonNode channels;
 
     private final JsonNode definitions;
 
+    private final String languageTag;
+
+    private final String regionCode;
+
+    private final long channelsVersion;
+
     private final long languageVersion;
 
     private final long regionVersion;
-
-    private final long channelsVersion;
 
     private NotificationSettingsView(
             NotificationSettingsSnapshot snapshot,

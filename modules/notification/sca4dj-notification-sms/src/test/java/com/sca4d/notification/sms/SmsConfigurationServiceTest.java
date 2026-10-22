@@ -106,9 +106,9 @@ class SmsConfigurationServiceTest {
     }
 
     private static class TestNotice {
-        private final long accountId;
-
         private final String code;
+
+        private final long accountId;
 
         private TestNotice(long accountId, String code) {
             this.accountId = accountId;

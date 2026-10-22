@@ -57,9 +57,9 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class PlatformRoleController {
 
-    private final @NotNull PlatformRbacService rbac;
-
     private final @NotNull PlatformAccountApplicationService accounts;
+
+    private final @NotNull PlatformRbacService rbac;
 
     /**
      * 创建 Platform 角色管理入口。

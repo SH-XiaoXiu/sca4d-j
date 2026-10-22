@@ -9,6 +9,7 @@ import com.sca4d.core.api.error.ErrorCategory;
 import com.sca4d.core.api.error.ErrorCode;
 import com.sca4d.core.api.i18n.MessageText;
 import com.sca4d.core.api.i18n.TextLocalizer;
+import com.sca4d.core.api.version.VersionCompatibilityException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
@@ -66,6 +67,20 @@ public class GlobalExceptionHandler {
      */
     public GlobalExceptionHandler(TextLocalizer localizer) {
         this.localizer = Objects.requireNonNull(localizer, "TextLocalizer 不能为空");
+    }
+
+    /** 将 Call 中的版本拒绝转换为统一错误，保留本地化、callId 与 SSE 行为。 */
+    @ExceptionHandler(VersionCompatibilityException.class)
+    public ResponseEntity<ApiResponse<Object>> clientVersion(
+            VersionCompatibilityException exception,
+            HttpServletRequest request) {
+        return failure(
+                ResponseEntity.status(status(exception.errorCode())),
+                exception.errorCode(),
+                exception.errorCode().messageKey(),
+                List.of(),
+                exception.decision(),
+                request);
     }
 
     /**

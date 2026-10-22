@@ -104,11 +104,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.amqp.rabbit.core.RabbitTemplate,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.config.MessagingProperties)" class="member-name-link">RabbitPublisher</a><wbr>(@NotNull org.springframework.amqp.rabbit.core.RabbitTemplate&nbsp;rabbit,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.amqp.rabbit.core.RabbitTemplate,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.config.MessagingProperties,com.sca4d.core.api.codec.Codec)" class="member-name-link">RabbitPublisher</a><wbr>(@NotNull org.springframework.amqp.rabbit.core.RabbitTemplate&nbsp;rabbit,
  @NotNull <a href="RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a>&nbsp;topology,
- @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties)</code></div>
+ @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties,
+ @NotNull com.sca4d.core.api.codec.Codec&lt;com.sca4d.core.api.retry.RetryRule,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;retryRules)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建向业务消息 exchange 和 Handler retry exchange 发布持久消息的操作。</div>
+<div class="block">创建向业务消息 exchange 和 Handler 主队列 发布持久消息的操作。</div>
 </div>
 </div>
 </section>
@@ -132,11 +133,14 @@ loadScripts(document, 'script');</script>
 <div class="block">发布持久业务消息，并等待 mandatory return 与 publisher confirm。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendRetry(com.sca4d.core.api.name.code.TreeCode,org.springframework.amqp.core.Message,int)" class="member-name-link">sendRetry</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
- @NotNull org.springframework.amqp.core.Message&nbsp;message,
- int&nbsp;attempt)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendHandler(com.sca4d.core.api.id.Id,com.sca4d.core.api.id.Id,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,long,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">sendHandler</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;outboxId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ byte @NotNull []&nbsp;envelope,
+ long&nbsp;attempt,
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;retryRule)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">把 Handler 请求再次处理的原消息发布到对应 retry queue，并在确认成功后返回。</div>
+<div class="block">把原始信封定向发布到一个 Handler 主队列，代理确认后才返回。</div>
 </div>
 </div>
 </div>
@@ -156,15 +160,17 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.amqp.rabbit.core.RabbitTemplate,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.config.MessagingProperties)">
+<section class="detail" id="&lt;init&gt;(org.springframework.amqp.rabbit.core.RabbitTemplate,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.config.MessagingProperties,com.sca4d.core.api.codec.Codec)">
 <h3>RabbitPublisher</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RabbitPublisher</span><wbr><span class="parameters">(@NotNull
  @NotNull org.springframework.amqp.rabbit.core.RabbitTemplate&nbsp;rabbit,
  @NotNull
  @NotNull <a href="RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a>&nbsp;topology,
  @NotNull
- @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties)</span></div>
-<div class="block">创建向业务消息 exchange 和 Handler retry exchange 发布持久消息的操作。</div>
+ @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties,
+ @NotNull
+ @NotNull com.sca4d.core.api.codec.Codec&lt;com.sca4d.core.api.retry.RetryRule,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;retryRules)</span></div>
+<div class="block">创建向业务消息 exchange 和 Handler 主队列 发布持久消息的操作。</div>
 </section>
 </li>
 </ul>
@@ -191,18 +197,19 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="sendRetry(com.sca4d.core.api.name.code.TreeCode,org.springframework.amqp.core.Message,int)">
-<h3>sendRetry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendRetry</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+<section class="detail" id="sendHandler(com.sca4d.core.api.id.Id,com.sca4d.core.api.id.Id,com.sca4d.core.api.name.code.TreeCode,byte[],long,com.sca4d.core.api.retry.RetryRule)">
+<h3>sendHandler</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendHandler</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.id.Id&nbsp;outboxId,
  @NotNull
- @NotNull org.springframework.amqp.core.Message&nbsp;message,
- int&nbsp;attempt)</span></div>
-<div class="block">把 Handler 请求再次处理的原消息发布到对应 retry queue，并在确认成功后返回。</div>
-<dl class="notes">
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - retry queue 不存在、代理拒绝、确认超时或等待被中断时抛出</dd>
-</dl>
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
+ @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ byte @NotNull []&nbsp;envelope,
+ long&nbsp;attempt,
+ @NotNull
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;retryRule)</span></div>
+<div class="block">把原始信封定向发布到一个 Handler 主队列，代理确认后才返回。</div>
 </section>
 </li>
 </ul>

@@ -1,12 +1,11 @@
 package com.sca4d.messaging.outbox;
 
-import com.sca4d.core.api.scheduling.ClusterTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** 由集群定时器直接触发一次超过保留期的 SENT Outbox 记录分批删除。 */
-public final class OutboxCleanupTask implements ClusterTask {
+public final class OutboxCleanupTask {
 
     private final @NotNull MessageOutboxDispatcher dispatcher;
 
@@ -20,7 +19,7 @@ public final class OutboxCleanupTask implements ClusterTask {
         this.dispatcher = Objects.requireNonNull(dispatcher, "MessageOutboxDispatcher 不能为空");
     }
 
-    @Override
+    /** 分批清理超过保留期的 SENT 记录。 */
     public void execute() {
         dispatcher.cleanup();
     }

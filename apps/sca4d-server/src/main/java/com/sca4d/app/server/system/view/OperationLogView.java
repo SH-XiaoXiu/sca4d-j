@@ -17,41 +17,41 @@ import java.util.Objects;
 /** 返回管理端展示一条操作日志所需的身份、目标、结果、payload 和 HTTP 快照。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class OperationLogView {
-    private final long id;
-
-    private final @NotNull String requestId;
-
-    private final long subjectId;
-
-    private final @Nullable Long accountId;
-
-    private final long principalId;
-
-    private final @Nullable String principalDisplayName;
-
-    private final @NotNull String operation;
-
-    private final @Nullable String targetType;
-
-    private final @Nullable String targetId;
-
-    private final @NotNull String result;
-
-    private final @Nullable String payloadType;
+    private final @NotNull Instant occurredAt;
 
     private final @Nullable Integer payloadVersion;
 
-    private final @Nullable String payloadJson;
+    private final @Nullable Long accountId;
+
+    private final @Nullable String clientIp;
 
     private final @Nullable String httpMethod;
 
     private final @Nullable String httpPath;
 
-    private final @Nullable String clientIp;
+    private final @NotNull String operation;
+
+    private final @Nullable String payloadJson;
+
+    private final @Nullable String payloadType;
+
+    private final @Nullable String principalDisplayName;
+
+    private final @NotNull String requestId;
+
+    private final @NotNull String result;
+
+    private final @Nullable String targetId;
+
+    private final @Nullable String targetType;
 
     private final @Nullable String userAgent;
 
-    private final @NotNull Instant occurredAt;
+    private final long id;
+
+    private final long principalId;
+
+    private final long subjectId;
 
     private OperationLogView(
             long id,

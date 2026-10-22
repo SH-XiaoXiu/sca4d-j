@@ -90,8 +90,9 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="CronSchedule.html" title="class in com.sca4d.core.api.scheduling">CronSchedule</a></code>, <code><a href="IntervalSchedule.html" title="class in com.sca4d.core.api.scheduling">IntervalSchedule</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">ScheduleTiming</span></div>
-<div class="block">标明 JobSchedule 或 ClusterTaskSchedule 使用 Cron 或固定间隔计算原定触发时间。</div>
+<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">ScheduleTiming</span>
+<span class="permits">permits <a href="CronSchedule.html" title="class in com.sca4d.core.api.scheduling">CronSchedule</a>, <a href="IntervalSchedule.html" title="class in com.sca4d.core.api.scheduling">IntervalSchedule</a></span></div>
+<div class="block">JobSchedule 只接受 Cron 或固定间隔两种时间定义。</div>
 </section>
 <!-- ========= END OF CLASS DATA ========= -->
 </main>

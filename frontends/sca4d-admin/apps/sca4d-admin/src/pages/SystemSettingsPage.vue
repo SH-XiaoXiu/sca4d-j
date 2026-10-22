@@ -1,47 +1,48 @@
 <script setup lang="ts">
 import type { SystemSetting } from '@sca4d/admin';
-import type { FormInstance } from 'ant-design-vue';
 
-import { computed, onMounted, reactive, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
+import { computed, onMounted, ref } from 'vue';
 
 import { message } from 'ant-design-vue';
 import { Pencil, RefreshCw, RotateCcw, Settings2 } from 'lucide-vue-next';
 
-import ResourceState from '../components/ResourceState.vue';
-import { useI18n } from '../i18n';
-import { useAdminStore } from '../store/business';
+import { SjDataGrid, SjPage, SjResourceState } from '#/components/sj';
+import { SjRowActions } from '#/components/sj';
+import SystemSettingEditor from '#/features/settings/SystemSettingEditor.vue';
+import { useSjAccess } from '#/features/sj-access';
+import { useSjControllerState } from '#/features/sj-controller-state';
+import { useSjPresentation } from '#/features/sj-presentation';
+import { $t as sjTranslate } from '#/locales';
+import { businessApplication } from '#/platform/business-application';
 
-const store = useAdminStore();
-const { errorText, t } = useI18n();
-const settingModalOpen = ref(false);
-const settingSaving = ref(false);
-const settingFormRef = ref<FormInstance>();
-const editingSetting = ref<null | SystemSetting>(null);
-const settingForm = reactive({ value: '' });
+const settingEditor = ref<InstanceType<typeof SystemSettingEditor>>();
 
-const canManage = computed(() => store.session.capabilities.settingsManage);
+const { t, errorText } = useSjPresentation();
+
+const systemSettings = useSjControllerState(businessApplication.systemSettings);
+const session = useSjAccess();
+
+const canManage = computed(() => session.value.capabilities.settingsManage);
 const settingColumns = computed(() => [
   {
-    key: 'setting',
+    field: 'setting',
     title: t('settings'),
   },
   {
-    key: 'value',
+    field: 'value',
     title: t('settingsValue'),
   },
   {
-    key: 'default',
+    field: 'default',
     title: t('defaultValue'),
   },
   {
-    key: 'source',
+    field: 'source',
     title: t('settingSource'),
     width: 180,
   },
   {
-    key: 'actions',
+    field: 'actions',
     title: t('actions'),
     width: 116,
   },
@@ -52,49 +53,19 @@ onMounted(() => void reload());
 /** 刷新当前应用已注册的设置分组。 */
 async function reload(): Promise<void> {
   try {
-    await store.loadSystemSettings();
+    await businessApplication.systemSettings.load();
   } catch {
     // Controller 已保存统一错误和加载阶段。
-  }
-}
-
-/** 打开设置覆盖窗口；敏感设置不回填当前值。 */
-function openSettingModal(setting: SystemSetting): void {
-  editingSetting.value = setting;
-  settingForm.value = setting.secret
-    ? ''
-    : settingInputValue(setting.value ?? setting.defaultValue);
-  settingModalOpen.value = true;
-}
-
-/** 把文本提交给后端对应 SettingCodec 校验和保存。 */
-async function saveSetting(): Promise<void> {
-  const setting = editingSetting.value;
-  if (!setting) return;
-  await settingFormRef.value?.validate();
-  settingSaving.value = true;
-  try {
-    const value: unknown =
-      setting.valueType === 'object'
-        ? JSON.parse(settingForm.value)
-        : settingForm.value;
-    await store.replaceSystemSetting(setting, value);
-    settingModalOpen.value = false;
-    message.success(t('saveSuccess'));
-  } catch {
-    message.error(errorText(store.systemSettings.error));
-  } finally {
-    settingSaving.value = false;
   }
 }
 
 /** 删除数据库覆盖值并恢复 Java 默认值。 */
 async function resetSetting(setting: SystemSetting): Promise<void> {
   try {
-    await store.resetSystemSetting(setting);
+    await businessApplication.systemSettings.reset(setting);
     message.success(t('updateSuccess'));
   } catch {
-    message.error(errorText(store.systemSettings.error));
+    message.error(errorText(systemSettings.value.error));
   }
 }
 
@@ -105,10 +76,11 @@ function settingInputValue(value: unknown): string {
 </script>
 
 <template>
-  <Page auto-content-height>
-    <ResourceState
-      :error="store.systemSettings.error"
-      :phase="store.systemSettings.phase"
+  <SjPage auto-content-height>
+    <SjResourceState
+      :has-data="systemSettings.groups.length > 0"
+      :error="systemSettings.error"
+      :phase="systemSettings.phase"
       @retry="reload"
     >
       <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -126,135 +98,111 @@ function settingInputValue(value: unknown): string {
       <a-collapse
         :bordered="false"
         class="bg-transparent"
-        :default-active-key="
-          store.systemSettings.groups.map((group) => group.key)
-        "
+        :default-active-key="systemSettings.groups.map((group) => group.key)"
       >
         <a-collapse-panel
-          v-for="group in store.systemSettings.groups"
+          v-for="group in systemSettings.groups"
           :key="group.key"
           :header="group.label"
         >
-          <a-table
+          <SjDataGrid
             :columns="settingColumns"
-            :data-source="group.settings"
-            :pagination="false"
-            row-key="key"
-            size="middle"
+            :items="group.settings"
+            key-field="key"
           >
-            <template #bodyCell="{ column, record }">
+            <template #cell="{ column, row, value }">
               <div
-                v-if="column.key === 'setting'"
+                v-if="column.field === 'setting'"
                 class="flex min-w-0 flex-col gap-0.5"
               >
-                <strong class="truncate">{{ record.label }}</strong>
-                <span class="text-muted-foreground truncate text-xs">{{
-                  record.description
-                }}</span>
-                <span class="text-muted-foreground font-mono text-xs">{{
-                  record.key
-                }}</span>
+                <strong class="truncate">{{ row.label }}</strong>
+                <span class="text-muted-foreground truncate text-xs">
+                  {{ row.description }}
+                </span>
+                <span class="text-muted-foreground font-mono text-xs">
+                  {{ row.key }}
+                </span>
               </div>
-              <template v-else-if="column.key === 'value'">
-                <span v-if="record.secret">{{ t('hiddenValue') }}</span>
-                <span v-else class="font-mono text-xs">{{
-                  settingInputValue(record.value ?? record.defaultValue)
-                }}</span>
+              <template v-else-if="column.field === 'value'">
+                <span v-if="row.secret">{{ t('hiddenValue') }}</span>
+                <span v-else class="font-mono text-xs">
+                  {{ settingInputValue(row.value ?? row.defaultValue) }}
+                </span>
               </template>
-              <template v-else-if="column.key === 'default'">
-                <span v-if="record.secret">{{ t('hiddenValue') }}</span>
-                <span v-else class="font-mono text-xs">{{
-                  settingInputValue(record.defaultValue)
-                }}</span>
+              <template v-else-if="column.field === 'default'">
+                <span v-if="row.secret">{{ t('hiddenValue') }}</span>
+                <span v-else class="font-mono text-xs">
+                  {{ settingInputValue(row.defaultValue) }}
+                </span>
               </template>
               <div
-                v-else-if="column.key === 'source'"
+                v-else-if="column.field === 'source'"
                 class="flex flex-wrap gap-1"
               >
-                <a-tag v-if="record.secret" color="gold">
+                <a-tag v-if="row.secret" color="gold">
                   {{ t('secretSetting') }}
                 </a-tag>
-                <a-tag v-if="record.readOnly" color="orange">
+                <a-tag v-if="row.readOnly" color="orange">
                   {{ t('environmentSynchronized') }}
                 </a-tag>
-                <a-tag v-else-if="record.stored" color="cyan">
+                <a-tag v-else-if="row.stored" color="cyan">
                   {{ t('storedValue') }}
                 </a-tag>
                 <a-tag v-else color="default">
                   {{ t('defaultSetting') }}
                 </a-tag>
               </div>
-              <div
-                v-else-if="column.key === 'actions'"
-                class="flex justify-center gap-1"
+              <SjRowActions
+                v-else-if="column.field === 'actions'"
+                :actions="[
+                  {
+                    key: 'action-0',
+                    label: t('editSetting'),
+                    icon: Pencil,
+                    run: async () => {
+                      await settingEditor?.open(row);
+                    },
+                    disabled: !canManage || row.readOnly,
+                    disabledReason: sjTranslate('sj.actionUnavailable'),
+                  },
+                  {
+                    key: 'action-1',
+                    label: t('resetSetting'),
+                    icon: RotateCcw,
+                    run: async () => {
+                      await resetSetting(row);
+                    },
+                    disabled: !canManage || row.readOnly || !row.stored,
+                    disabledReason: sjTranslate('sj.actionUnavailable'),
+                    confirm: {
+                      title: t('confirmResetSetting'),
+                      content: row.label,
+                      okText: t('resetSetting'),
+                    },
+                  },
+                ]"
+              />
+              <span
+                v-if="
+                  ![
+                    'actions',
+                    'default',
+                    'setting',
+                    'source',
+                    'value',
+                  ].includes(column.field)
+                "
               >
-                <a-tooltip :title="t('editSetting')">
-                  <a-button
-                    type="text"
-                    :aria-label="t('editSetting')"
-                    :disabled="!canManage || record.readOnly"
-                    @click="openSettingModal(record)"
-                  >
-                    <Pencil :size="17" aria-hidden="true" />
-                  </a-button>
-                </a-tooltip>
-                <a-popconfirm
-                  :title="t('confirmResetSetting')"
-                  :ok-text="t('resetSetting')"
-                  :cancel-text="t('cancel')"
-                  @confirm="resetSetting(record)"
-                >
-                  <a-tooltip :title="t('resetSetting')">
-                    <a-button
-                      type="text"
-                      :aria-label="t('resetSetting')"
-                      :disabled="
-                        !canManage || record.readOnly || !record.stored
-                      "
-                    >
-                      <RotateCcw :size="17" aria-hidden="true" />
-                    </a-button>
-                  </a-tooltip>
-                </a-popconfirm>
-              </div>
+                {{ value ?? '-' }}
+              </span>
             </template>
-          </a-table>
+          </SjDataGrid>
         </a-collapse-panel>
       </a-collapse>
-    </ResourceState>
+    </SjResourceState>
+  </SjPage>
 
-    <a-modal
-      v-model:open="settingModalOpen"
-      :cancel-text="t('cancel')"
-      :confirm-loading="settingSaving"
-      :ok-text="t('save')"
-      :title="t('editSetting')"
-      @ok="saveSetting"
-    >
-      <a-form ref="settingFormRef" layout="vertical" :model="settingForm">
-        <a-form-item :label="editingSetting?.label">
-          <a-input :value="editingSetting?.key" disabled />
-        </a-form-item>
-        <a-form-item :label="t('valueType')">
-          <a-tag color="blue">{{ editingSetting?.valueType }}</a-tag>
-        </a-form-item>
-        <a-form-item
-          name="value"
-          :label="t('settingsValue')"
-          :rules="[{ required: true, message: t('required') }]"
-        >
-          <a-input-password
-            v-if="editingSetting?.secret"
-            v-model:value="settingForm.value"
-          />
-          <a-textarea
-            v-else-if="editingSetting?.valueType === 'object'"
-            v-model:value="settingForm.value"
-            :auto-size="{ minRows: 5, maxRows: 14 }"
-          />
-          <a-input v-else v-model:value="settingForm.value" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
-  </Page>
+  <SystemSettingEditor ref="settingEditor" />
 </template>
+
+<!-- 系统设置编辑 -->

@@ -9,19 +9,19 @@ import java.util.Objects;
 /** 保存一个由系统管理数据库维护的 SMS Provider 实例。 */
 public class SmsProvider {
 
-    private final long providerId;
-
     private final @NotNull String code;
-
-    private final @NotNull String type;
 
     private final @NotNull String credentialRef;
 
-    private final int priority;
+    private final @NotNull String type;
+
+    private final @NotNull Version version;
 
     private final boolean enabled;
 
-    private final @NotNull Version version;
+    private final int priority;
+
+    private final long providerId;
 
     /** 创建一个 SMS Provider 配置快照。 */
     public SmsProvider(

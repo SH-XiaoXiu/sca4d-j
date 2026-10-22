@@ -1,1 +1,0 @@
--- TimescaleDB 使用独立数据源和独立 Flyway；主应用 V1 不拼接本文件。

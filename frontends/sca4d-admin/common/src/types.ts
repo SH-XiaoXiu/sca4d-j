@@ -19,8 +19,8 @@ export type JsonValue =
   | boolean
   | null
   | number
-  | string
   | readonly JsonValue[]
+  | string
   | { readonly [key: string]: JsonValue };
 
 /** 密码登录请求。 */
@@ -137,8 +137,8 @@ export interface FederatedProviderSettings {
 export interface CreateFederatedProviderInput {
   readonly code: string;
   readonly displayOrder: number;
-  readonly iconReference: null | string;
   readonly i18n: LocalizedFields;
+  readonly iconReference: null | string;
   readonly loginPageVisible: boolean;
   readonly protocol: 'OAUTH2' | 'OIDC';
 }
@@ -146,8 +146,8 @@ export interface CreateFederatedProviderInput {
 /** 替换联邦 Provider 的登录页展示信息。 */
 export interface ReplaceFederatedProviderInput {
   readonly displayOrder: number;
-  readonly iconReference: null | string;
   readonly i18n: LocalizedFields;
+  readonly iconReference: null | string;
   readonly loginPageVisible: boolean;
 }
 
@@ -262,10 +262,10 @@ export interface EmailSender {
   readonly passwordConfigured: boolean;
   readonly port: number;
   readonly replyTo: null | string;
-  readonly version: Int64String;
   readonly security: SmtpSecurity;
   readonly senderId: Int64String;
   readonly username: null | string;
+  readonly version: Int64String;
 }
 
 /** 创建 SMTP 配置所需的连接、认证和发件资料。 */
@@ -286,32 +286,6 @@ export interface ReplaceEmailSenderInput extends CreateEmailSenderInput {
   readonly passwordChanged: boolean;
 }
 
-/** 通知富文本中的 mark。 */
-export interface NotificationRichTextMark {
-  readonly attrs?: Readonly<Record<string, unknown>>;
-  readonly type: string;
-}
-
-/** 通知模板使用的受限 ProseMirror JSON 节点。 */
-export interface NotificationRichTextNode {
-  readonly attrs?: Readonly<Record<string, unknown>>;
-  readonly content?: readonly NotificationRichTextNode[];
-  readonly marks?: readonly NotificationRichTextMark[];
-  readonly text?: string;
-  readonly type: string;
-}
-
-/** 一个 Locale 的平台无关通知标题和正文。 */
-export interface NotificationTemplateLocaleContent {
-  readonly body: NotificationRichTextNode;
-  readonly title: NotificationRichTextNode;
-}
-
-/** Locale 到平台无关通知富文本的完整映射。 */
-export type NotificationTemplateContent = Readonly<
-  Record<string, NotificationTemplateLocaleContent>
->;
-
 /** Email 模板一个 Locale 的源码。 */
 export interface EmailTemplateSource {
   readonly html: string;
@@ -321,15 +295,12 @@ export interface EmailTemplateSource {
 
 /** 已保存的多语言 Email 模板。 */
 export interface EmailTemplate {
-  /** 后端持久化的 Email 源码，旧编辑器状态没有该字段时为空。 */
-  readonly locales?: Readonly<Record<string, EmailTemplateSource>>;
-  /** 管理端富文本编辑器使用的派生内容。 */
-  readonly content: NotificationTemplateContent;
   readonly enabled: boolean;
+  readonly locales: Readonly<Record<string, EmailTemplateSource>>;
   readonly notificationCode: string;
-  readonly version: Int64String;
   readonly templateId: Int64String;
   readonly variables: readonly string[];
+  readonly version: Int64String;
 }
 
 /** Controller 归一化后的统一通知模板分页。 */
@@ -342,16 +313,14 @@ export interface EmailTemplatePage {
 
 /** 创建或完整替换统一通知模板的输入。 */
 export interface EmailTemplateInput {
-  readonly content?: NotificationTemplateContent;
-  readonly locales?: Readonly<Record<string, EmailTemplateSource>>;
+  readonly locales: Readonly<Record<string, EmailTemplateSource>>;
   readonly notificationCode: string;
 }
 
-/** 使用未保存模板生成预览的输入。 */
+/** 使用未保存源码生成指定语言的安全预览。 */
 export interface PreviewEmailTemplateInput {
-  readonly content?: NotificationTemplateContent;
-  readonly source?: EmailTemplateSource;
   readonly languageTag: string;
+  readonly source: EmailTemplateSource;
   readonly variables: Readonly<Record<string, string>>;
 }
 

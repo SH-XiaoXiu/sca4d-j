@@ -13,15 +13,15 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class FileUploadView {
 
-    private final long fileId;
+    private final @NotNull Instant expiresAt;
+
+    private final @NotNull Map<@NotNull String, @NotNull String> headers;
 
     private final @NotNull String method;
 
     private final @NotNull String url;
 
-    private final @NotNull Map<@NotNull String, @NotNull String> headers;
-
-    private final @NotNull Instant expiresAt;
+    private final long fileId;
 
     private FileUploadView(
             long fileId,

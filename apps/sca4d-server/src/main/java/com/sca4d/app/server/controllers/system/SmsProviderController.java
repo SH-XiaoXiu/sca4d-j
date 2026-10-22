@@ -38,9 +38,9 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class SmsProviderController {
 
-    private static final String PROVIDER_RESOURCE = "notification:sms:provider";
-
     private static final String BINDING_RESOURCE = "notification:sms:binding";
+
+    private static final String PROVIDER_RESOURCE = "notification:sms:provider";
 
     private final SmsConfigurationService sms;
 

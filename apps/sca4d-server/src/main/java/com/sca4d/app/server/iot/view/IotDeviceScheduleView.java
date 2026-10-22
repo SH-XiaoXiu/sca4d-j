@@ -16,25 +16,25 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotDeviceScheduleView {
 
-    private final long scheduleId;
+    private final @NotNull DeviceScheduleStatus status;
 
-    private final long deviceId;
+    private final @Nullable Instant executeAt;
 
-    private final @NotNull String commandCode;
+    private final @Nullable Instant nextFireAt;
 
     private final @NotNull @Unmodifiable Map<String, Object> inputs;
 
-    private final @Nullable Instant executeAt;
+    private final @NotNull String commandCode;
 
     private final @Nullable String cronExpression;
 
     private final @Nullable String zoneId;
 
+    private final long deviceId;
+
+    private final long scheduleId;
+
     private final long validForMillis;
-
-    private final @NotNull DeviceScheduleStatus status;
-
-    private final @Nullable Instant nextFireAt;
 
     private final long version;
 

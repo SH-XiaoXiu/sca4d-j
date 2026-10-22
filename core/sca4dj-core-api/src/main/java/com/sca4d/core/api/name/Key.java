@@ -2,6 +2,7 @@ package com.sca4d.core.api.name;
 
 import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.name.code.Code;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -167,6 +168,8 @@ public class Key extends Name {
     }
 
     @Override
+
+    @SuppressFBWarnings(value = "EQ_OVERRIDING_EQUALS_NOT_SYMMETRIC", justification = "Name 和 Key 都按具体运行时类型比较，Key 的分段值与父类原文保持对称。")
     public final boolean equals(@Nullable Object other) {
         return this == other
                 || other instanceof Key key && getClass() == key.getClass() && segments.equals(key.segments);

@@ -1,6 +1,7 @@
 package com.sca4d.audit.recording.mapper;
 
 import com.sca4d.audit.query.AuditQuery;
+import com.sca4d.core.api.resource.Resource;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +10,18 @@ import java.util.List;
 
 /** 读写 `audit_record` 的审计列，并提供按条件统计、分页和单条查询。 */
 public interface AuditMapper {
+    /** 只从存在的原审计行复制时间，重复资源关联不重复插入。 */
+    int insertResources(@Param("id") long id, @Param("resources") List<Resource.Ref> resources);
+
+    /** 校验记录是否属于指定资源快照。 */
+    boolean relatesTo(@Param("id") long id, @Param("type") String type, @Param("resourceId") String resourceId);
+
+    /** 有界主键游标扫描，不依赖分页偏移。 */
+    List<EncodedAuditEntry> scan(
+            @Param("afterId") long afterId,
+            @Param("throughId") long throughId,
+            @Param("size") int size);
+
     /** @param row 待追加的审计列值 @return 影响行数 */
     int insert(@Param("row") @NotNull EncodedAuditEntry row);
 

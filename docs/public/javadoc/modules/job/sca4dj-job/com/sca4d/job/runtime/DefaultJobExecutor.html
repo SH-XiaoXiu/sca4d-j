@@ -108,11 +108,16 @@ implements com.sca4d.core.api.job.JobExecutor</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">DefaultJobExecutor</a><wbr>(@NotNull <a href="JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a>&nbsp;catalog,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.sca4d.core.spring.json.Sca4djMapper,com.sca4d.core.api.runtime.InstanceCapabilities,com.sca4d.core.spring.config.InstanceProperties,com.sca4d.core.api.concurrent.DistributedLock,java.time.Clock,com.sca4d.job.config.JobProperties)" class="member-name-link">DefaultJobExecutor</a><wbr>(@NotNull <a href="JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a>&nbsp;catalog,
  @NotNull <a href="JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a>&nbsp;runs,
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</code></div>
+ @NotNull com.sca4d.core.spring.json.Sca4djMapper&nbsp;objectMapper,
+ @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;instanceCapabilities,
+ @NotNull com.sca4d.core.spring.config.InstanceProperties&nbsp;instanceProperties,
+ @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull <a href="../config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a>&nbsp;properties)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建使用当前应用 Job 目录和 PostgreSQL Repository 的执行器。</div>
+<div class="block">创建同时支持持久化 Job 和无记录系统任务的执行器。</div>
 </div>
 </div>
 </section>
@@ -133,6 +138,19 @@ implements com.sca4d.core.api.job.JobExecutor</span></div>
  @NotNull com.sca4d.core.api.job.Job&lt;?,<wbr>O&gt;&nbsp;job,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
+O&gt;&nbsp;@NotNull com.sca4d.core.api.job.JobDispatch</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#broadcast(com.sca4d.core.api.job.Job,I)" class="member-name-link">broadcast</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
+O&gt;&nbsp;@NotNull com.sca4d.core.api.job.JobDispatch</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#broadcastScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">broadcastScheduled</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input,
+ @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull com.sca4d.core.api.scheduling.OverlapPolicy&nbsp;overlapPolicy)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;O&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)" class="member-name-link">result</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;runId,
  @NotNull com.sca4d.core.api.job.Job&lt;?,<wbr>O&gt;&nbsp;job)</code></div>
@@ -147,13 +165,27 @@ O&gt;&nbsp;O</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(com.sca4d.core.api.id.Id)" class="member-name-link">status</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;runId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
-O&gt;&nbsp;@NotNull com.sca4d.core.api.id.Id</code></div>
+O&gt;&nbsp;@NotNull com.sca4d.core.api.job.JobSubmission</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submit(com.sca4d.core.api.job.Job,I)" class="member-name-link">submit</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
  I&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
 O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.id.Id&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submitScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">submitScheduled</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input,
+ @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull com.sca4d.core.api.scheduling.OverlapPolicy&nbsp;overlapPolicy)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
+O&gt;&nbsp;boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#trigger(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">trigger</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input,
+ @NotNull com.sca4d.core.api.scheduling.OverlapPolicy&nbsp;overlapPolicy)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
+O&gt;&nbsp;boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#triggerScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">triggerScheduled</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
  I&nbsp;input,
  @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
@@ -177,21 +209,25 @@ O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.fasterxml.jackson.databind.ObjectMapper)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.sca4d.core.spring.json.Sca4djMapper,com.sca4d.core.api.runtime.InstanceCapabilities,com.sca4d.core.spring.config.InstanceProperties,com.sca4d.core.api.concurrent.DistributedLock,java.time.Clock,com.sca4d.job.config.JobProperties)">
 <h3>DefaultJobExecutor</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DefaultJobExecutor</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a>&nbsp;catalog,
  @NotNull
  @NotNull <a href="JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a>&nbsp;runs,
  @NotNull
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</span></div>
-<div class="block">创建使用当前应用 Job 目录和 PostgreSQL Repository 的执行器。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>catalog</code> - 当前应用登记的 Job 定义</dd>
-<dd><code>runs</code> - 持有 Job run 事务的服务</dd>
-<dd><code>objectMapper</code> - 脚手架统一 JSON 映射器</dd>
-</dl>
+ @NotNull com.sca4d.core.spring.json.Sca4djMapper&nbsp;objectMapper,
+ @NotNull
+ @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;instanceCapabilities,
+ @NotNull
+ @NotNull com.sca4d.core.spring.config.InstanceProperties&nbsp;instanceProperties,
+ @NotNull
+ @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull
+ @NotNull <a href="../config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a>&nbsp;properties)</span></div>
+<div class="block">创建同时支持持久化 Job 和无记录系统任务的执行器。</div>
 </section>
 </li>
 </ul>
@@ -207,7 +243,8 @@ O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <h3 id="submit(com.sca4d.core.api.job.Job,java.lang.Object)">submit</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
-O&gt;</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.id.Id</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
+O&gt;</span>
+<span class="return-type">@NotNull com.sca4d.core.api.job.JobSubmission</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
  @Nullable
  I&nbsp;input)</span></div>
@@ -236,6 +273,80 @@ O&gt;</span>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>submitScheduled</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.job.JobExecutor</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="broadcast(com.sca4d.core.api.job.Job,I)">
+<h3 id="broadcast(com.sca4d.core.api.job.Job,java.lang.Object)">broadcast</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>
+<span class="return-type">@NotNull com.sca4d.core.api.job.JobDispatch</span>&nbsp;<span class="element-name">broadcast</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>broadcast</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.job.JobExecutor</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="broadcastScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">
+<h3 id="broadcastScheduled(com.sca4d.core.api.job.Job,java.lang.Object,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">broadcastScheduled</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>
+<span class="return-type">@NotNull com.sca4d.core.api.job.JobDispatch</span>&nbsp;<span class="element-name">broadcastScheduled</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input,
+ @NotNull
+ @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull
+ @NotNull com.sca4d.core.api.scheduling.OverlapPolicy&nbsp;overlapPolicy)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>broadcastScheduled</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.job.JobExecutor</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="trigger(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.OverlapPolicy)">
+<h3 id="trigger(com.sca4d.core.api.job.Job,java.lang.Object,com.sca4d.core.api.scheduling.OverlapPolicy)">trigger</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">trigger</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input,
+ @NotNull
+ @NotNull com.sca4d.core.api.scheduling.OverlapPolicy&nbsp;overlapPolicy)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>trigger</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.job.JobExecutor</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="triggerScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">
+<h3 id="triggerScheduled(com.sca4d.core.api.job.Job,java.lang.Object,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">triggerScheduled</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">triggerScheduled</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input,
+ @NotNull
+ @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull
+ @NotNull com.sca4d.core.api.scheduling.OverlapPolicy&nbsp;overlapPolicy)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>triggerScheduled</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.job.JobExecutor</code></dd>
 </dl>
 </section>
 </li>

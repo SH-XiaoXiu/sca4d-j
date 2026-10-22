@@ -1,6 +1,5 @@
 package com.sca4d.audit.recording;
 
-import com.sca4d.audit.recording.mapper.EncodedAuditEntry;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.audit.AuditRecord;
 import com.sca4d.core.api.audit.AuditRecorder;
@@ -39,7 +38,7 @@ public class AfterCommitAuditRecorder implements AuditRecorder {
     @Override
     public void record(@NotNull AuditRecord record) {
         AuditRecord checked = Objects.requireNonNull(record, "审计记录不能为空");
-        EncodedAuditEntry frozen = repository.freeze(checked);
+        FrozenAuditEntry frozen = repository.freeze(checked);
         Call parent = CallHolder.currentOrNull();
         Call workerCall = parent == null
                 ? new Call(UUID.randomUUID().toString(), Instant.now())

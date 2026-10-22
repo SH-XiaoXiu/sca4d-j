@@ -11,9 +11,9 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotSecretView {
 
-    private final long version;
-
     private final @NotNull String secret;
+
+    private final long version;
 
     /** 创建只在当前响应中交付原始凭据的 HTTP 视图。 */
     private IotSecretView(long version, @NotNull String secret) {

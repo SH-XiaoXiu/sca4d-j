@@ -14,9 +14,9 @@ public class IotDeviceCredentials {
 
     private final @Nullable Long accountId;
 
-    private final @Nullable String sharedSecret;
-
     private final @Nullable String hmacKey;
+
+    private final @Nullable String sharedSecret;
 
     /** 创建只允许当前应用调用结果读取的一次性凭据。 */
     public IotDeviceCredentials(

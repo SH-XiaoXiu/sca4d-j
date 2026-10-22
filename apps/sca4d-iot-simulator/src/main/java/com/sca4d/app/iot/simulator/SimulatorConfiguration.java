@@ -10,13 +10,13 @@ import java.util.Map;
 /** 读取两个设备模拟器连接 EMQX 所需的进程环境变量。 */
 public class SimulatorConfiguration {
 
+    private final @NotNull Duration reportInterval;
+
     private final @NotNull String host;
 
-    private final int port;
+    private final @NotNull String legacyClientId;
 
-    private final boolean tls;
-
-    private final @NotNull Duration reportInterval;
+    private final @NotNull String legacySecret;
 
     private final @NotNull String selectedDevices;
 
@@ -24,9 +24,9 @@ public class SimulatorConfiguration {
 
     private final @NotNull String standardSecret;
 
-    private final @NotNull String legacyClientId;
+    private final boolean tls;
 
-    private final @NotNull String legacySecret;
+    private final int port;
 
     /** 从进程环境读取并校验模拟器连接参数。 */
     private SimulatorConfiguration(@NotNull Map<String, String> environment) {

@@ -9,6 +9,10 @@ import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.core.api.gateway.GatewayRegistrationRequest;
 import com.sca4d.core.api.gateway.GatewayRegistrationResponse;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.runtime.InstanceCapabilities;
 import com.sca4d.core.spring.config.InstanceProperties;
 import org.jetbrains.annotations.NotNull;
@@ -66,6 +70,10 @@ public class GatewayRegistrationLifecycle {
 
     private volatile @Nullable ScheduledFuture<?> scheduledTask;
 
+    private long failedAttempts;
+
+    private final RetryPolicy<Throwable> retryPolicy;
+
     /**
      * 创建注册生命周期并校验全部地址、Secret 和间隔。
      *
@@ -86,6 +94,7 @@ public class GatewayRegistrationLifecycle {
         this.serverBaseUrl = requireHttpUri(properties.getServerBaseUrl(), "Server Origin", true);
         this.secret = requireText(properties.getSecret(), "Gateway 控制 Secret");
         this.renewInterval = requirePositive(properties.getRenewInterval(), "Gateway 续租间隔");
+        this.retryPolicy = RetryPolicy.always(RetryRule.unlimited(Backoff.fixed(renewInterval)));
         Duration requestTimeout = requirePositive(properties.getRequestTimeout(), "Gateway 请求超时");
         this.readinessPath = requireText(properties.getReadinessPath(), "readiness 路径");
         if (!readinessPath.startsWith("/") || readinessPath.contains("?") || readinessPath.contains("#")) {
@@ -146,6 +155,7 @@ public class GatewayRegistrationLifecycle {
         if (closing.get()) {
             return;
         }
+        Duration nextDelay = renewInterval;
         try {
             String currentLeaseId = leaseId.get();
             if (currentLeaseId == null) {
@@ -153,14 +163,17 @@ public class GatewayRegistrationLifecycle {
             } else {
                 renew(currentLeaseId);
             }
+            failedAttempts = 0;
         } catch (RuntimeException exception) {
+            failedAttempts = Math.incrementExact(failedAttempts);
+            nextDelay = retryPolicy.evaluate(RetryContext.failed(failedAttempts, exception)).retryDelay().orElseThrow();
             leaseId.set(null);
             LOGGER.warn(
                     "Gateway 注册或续租失败，将继续重试 | instanceId={} failureType={}",
                     instanceId,
                     exception.getClass().getSimpleName());
         } finally {
-            schedule(renewInterval);
+            schedule(nextDelay);
         }
     }
 

@@ -28,9 +28,9 @@ public class RealtimeController {
     /** 示例 App 对外开放的原生 WebSocket/STOMP 路径。 */
     public static final String WEBSOCKET_PATH = WebRealtimeProtocol.WEBSOCKET_ENDPOINT;
 
-    private final WebRealtimeSseConnector connections;
-
     private final WebRealtimeTicketService tickets;
+
+    private final WebRealtimeSseConnector connections;
 
     /**
      * 创建 Realtime SSE 入口。

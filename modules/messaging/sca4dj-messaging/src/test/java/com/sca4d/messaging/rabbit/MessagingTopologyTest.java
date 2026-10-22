@@ -7,9 +7,11 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.messaging.EventHandler;
-import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.IncomingMessage;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +22,7 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
-/** 验证每个 Handler 获得独立主队列、可选 retry queue 和 DLQ。 */
+/** 验证每个 Handler 获得独立主队列、主队列和 DLQ，延迟重试由 Outbox 保存。 */
 class RabbitMessageTopologyTest {
     static {
         AppName.publish("sca4d-test");
@@ -29,7 +31,7 @@ class RabbitMessageTopologyTest {
     @Test
     @DisplayName("无重试 Handler 只声明持久主队列和 DLQ")
     void declaresMainQueueAndDlqWithoutRetryQueue() {
-        TestHandler handler = new TestHandler("BILLING/INVOICE", "INVOICE/CREATED", HandlingPolicy.noRetry());
+        TestHandler handler = new TestHandler("BILLING/INVOICE", "INVOICE/CREATED", RetryRule.once());
         RabbitMessageTopology topology = new RabbitMessageTopology();
 
         Collection<Declarable> declarations = topology.declarables(List.of(handler), List.of()).getDeclarables();
@@ -54,23 +56,21 @@ class RabbitMessageTopologyTest {
     }
 
     @Test
-    @DisplayName("重试 Handler 声明带固定延迟的 retry queue")
+    @DisplayName("重试 Handler 通过定向主队列投递，不建立延迟队列")
     void declaresRetryQueueForRetryingHandler() {
         TestHandler handler = new TestHandler(
                 "BILLING/INVOICE",
                 "INVOICE/CREATED",
-                new HandlingPolicy(3, Duration.ofSeconds(5)));
+                RetryRule.atMost(3, Backoff.fixed(Duration.ofSeconds(5))));
         Collection<Declarable> declarations = new RabbitMessageTopology()
                 .declarables(List.of(handler), List.of())
                 .getDeclarables();
 
-        Queue retry = declarations.stream()
-                .filter(Queue.class::isInstance)
-                .map(Queue.class::cast)
-                .filter(queue -> queue.getName().endsWith(":RETRY"))
-                .findFirst()
-                .orElseThrow();
-        assertThat(retry.getArguments()).containsEntry("x-message-ttl", 5000);
+        assertThat(declarations.stream().filter(Queue.class::isInstance).map(Queue.class::cast).toList())
+                .hasSize(2)
+                .allSatisfy(queue -> assertThat(queue.getArguments()).doesNotContainKey("x-message-ttl"));
+        assertThat(new RabbitMessageTopology().handlerQueueName(handler.code()).format(NameFormat.COLON))
+                .isEqualTo("SCA4D_TEST:MESSAGING:HANDLER:BILLING:INVOICE");
     }
 
     @Test
@@ -83,11 +83,11 @@ class RabbitMessageTopologyTest {
                                         new TestHandler(
                                                 "BILLING/DUPLICATE",
                                                 "INVOICE/CREATED",
-                                                HandlingPolicy.noRetry()),
+                                                RetryRule.once()),
                                         new TestHandler(
                                                 "BILLING/DUPLICATE",
                                                 "INVOICE/CANCELLED",
-                                                HandlingPolicy.noRetry())),
+                                                RetryRule.once())),
                                 List.of()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("重复");
@@ -95,13 +95,13 @@ class RabbitMessageTopologyTest {
 
     /** 测试使用的稳定 EventHandler 契约。 */
     private static class TestHandler implements EventHandler<String> {
-        private final HandlingPolicy policy;
-
         private final EventType<String> eventType;
+
+        private final RetryRule policy;
 
         private final TreeCode code;
 
-        private TestHandler(String code, String eventCode, HandlingPolicy policy) {
+        private TestHandler(String code, String eventCode, RetryRule policy) {
             this.code = TreeCode.of(code);
             this.eventType = new EventType<>(eventCode, 1, String.class);
             this.policy = policy;
@@ -118,7 +118,7 @@ class RabbitMessageTopologyTest {
         }
 
         @Override
-        public @NotNull HandlingPolicy handlingPolicy() {
+        public @NotNull RetryRule retryRule() {
             return policy;
         }
 

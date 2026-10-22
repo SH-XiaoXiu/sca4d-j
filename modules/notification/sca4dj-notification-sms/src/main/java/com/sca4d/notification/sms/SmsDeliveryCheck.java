@@ -11,21 +11,21 @@ import java.util.Objects;
 
 /** 请求查询一次已经提交的 SMS 是否最终送达。 */
 public class SmsDeliveryCheck extends Message {
-    public static final @NotNull TreeCode CODE = TreeCode.of("NOTIFICATION/SMS/DELIVERY_CHECK");
-
     public static final int PROTOCOL_VERSION = 1;
 
-    private final @NotNull Notification notification;
+    public static final @NotNull TreeCode CODE = TreeCode.of("NOTIFICATION/SMS/DELIVERY_CHECK");
 
     private final @NotNull Id messageId;
 
-    private final long providerId;
-
-    private final @Nullable String requestId;
+    private final @NotNull Notification notification;
 
     private final @Nullable String bizId;
 
+    private final @Nullable String requestId;
+
     private final int attempt;
+
+    private final long providerId;
 
     /**
      * @param notification 已冻结的通知

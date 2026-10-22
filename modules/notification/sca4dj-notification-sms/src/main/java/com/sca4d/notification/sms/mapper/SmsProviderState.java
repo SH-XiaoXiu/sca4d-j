@@ -7,19 +7,19 @@ import java.util.Objects;
 
 /** 保存 SMS Provider Mapper 返回的数据库状态。 */
 public class SmsProviderState {
-    private final long providerId;
-
     private final @NotNull String code;
-
-    private final @NotNull String type;
 
     private final @NotNull String credentialRef;
 
-    private final int priority;
+    private final @NotNull String type;
+
+    private final @NotNull Version version;
 
     private final boolean enabled;
 
-    private final @NotNull Version version;
+    private final int priority;
+
+    private final long providerId;
 
     /**
      * @param providerId Provider 数据库标识

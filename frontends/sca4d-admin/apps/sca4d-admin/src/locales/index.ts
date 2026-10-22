@@ -100,3 +100,6 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
 }
 
 export { $t, antdLocale, setupI18n };
+
+/** Sj 业务文案的稳定键名，由中文资源声明并与英文资源同步维护。 */
+export type SjTranslationKey = keyof typeof import('./langs/zh-CN/sj.json');

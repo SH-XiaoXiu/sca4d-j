@@ -2,10 +2,12 @@ package com.sca4d.audit.query;
 
 import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
+import java.util.List;
 
 /** 保存审计记录分页查询使用的可选身份、操作、结果、目标和时间条件。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
@@ -16,6 +18,8 @@ public class AuditQuery {
 
     private final @Nullable Instant occurredTo;
 
+    private final @Nullable List<Resource.Ref> resourceMatches;
+
     private final @Nullable Long accountId;
 
     private final @Nullable Long principalId;
@@ -24,11 +28,19 @@ public class AuditQuery {
 
     private final @Nullable String operation;
 
+    private final @Nullable String parentId;
+
+    private final @Nullable String relatedId;
+
+    private final @Nullable String relatedType;
+
     private final @Nullable String requestId;
 
     private final @Nullable String targetId;
 
     private final @Nullable String targetType;
+
+    private final @Nullable String trailId;
 
     /**
      * 创建审计记录分页查询。
@@ -56,6 +68,109 @@ public class AuditQuery {
             @Nullable Instant occurredFrom,
             @Nullable Instant occurredTo,
             @NotNull PageRequest page) {
+        this(
+                requestId,
+                accountId,
+                principalId,
+                operation,
+                result,
+                targetType,
+                targetId,
+                occurredFrom,
+                occurredTo,
+                page,
+                null,
+                null);
+    }
+
+    /** 在普通条件外按已冻结的关联资源过滤；必须同时提供类型和标识。 */
+    public AuditQuery(
+            @Nullable String requestId,
+            @Nullable Long accountId,
+            @Nullable Long principalId,
+            @Nullable String operation,
+            @Nullable AuditResult result,
+            @Nullable String targetType,
+            @Nullable String targetId,
+            @Nullable Instant occurredFrom,
+            @Nullable Instant occurredTo,
+            @NotNull PageRequest page,
+            @Nullable String relatedType,
+            @Nullable String relatedId) {
+        this(
+                requestId,
+                accountId,
+                principalId,
+                operation,
+                result,
+                targetType,
+                targetId,
+                occurredFrom,
+                occurredTo,
+                page,
+                relatedType,
+                relatedId,
+                null,
+                null,
+                null);
+    }
+
+    /** 在身份、资源和时间条件外按审计链或直接父记录筛选。 */
+    public AuditQuery(
+            @Nullable String requestId,
+            @Nullable Long accountId,
+            @Nullable Long principalId,
+            @Nullable String operation,
+            @Nullable AuditResult result,
+            @Nullable String targetType,
+            @Nullable String targetId,
+            @Nullable Instant occurredFrom,
+            @Nullable Instant occurredTo,
+            @NotNull PageRequest page,
+            @Nullable String relatedType,
+            @Nullable String relatedId,
+            @Nullable String trailId,
+            @Nullable String parentId) {
+        this(
+                requestId,
+                accountId,
+                principalId,
+                operation,
+                result,
+                targetType,
+                targetId,
+                occurredFrom,
+                occurredTo,
+                page,
+                relatedType,
+                relatedId,
+                null,
+                trailId,
+                parentId);
+    }
+
+    private AuditQuery(
+            @Nullable String requestId,
+            @Nullable Long accountId,
+            @Nullable Long principalId,
+            @Nullable String operation,
+            @Nullable AuditResult result,
+            @Nullable String targetType,
+            @Nullable String targetId,
+            @Nullable Instant occurredFrom,
+            @Nullable Instant occurredTo,
+            @NotNull PageRequest page,
+            @Nullable String relatedType,
+            @Nullable String relatedId,
+            @Nullable List<Resource.Ref> resourceMatches,
+            @Nullable String trailId,
+            @Nullable String parentId) {
+        this.resourceMatches = resourceMatches == null ? null : List.copyOf(resourceMatches);
+        this.relatedType = optional(relatedType);
+        this.relatedId = optional(relatedId);
+        if ((this.relatedType == null) != (this.relatedId == null)) {
+            throw new IllegalArgumentException("关联资源类型和标识必须同时提供");
+        }
         if (accountId != null && accountId <= 0) {
             throw new IllegalArgumentException("Account 标识必须为正数");
         }
@@ -78,6 +193,80 @@ public class AuditQuery {
         this.occurredFrom = occurredFrom;
         this.occurredTo = occurredTo;
         this.page = page.verifyMaxSize(100);
+        this.trailId = optional(trailId);
+        this.parentId = optional(parentId);
+    }
+
+    /** 限定主目标或关联资源；空集合明确不匹配记录，不会取消过滤。 */
+    public @NotNull AuditQuery matchingResources(@NotNull List<Resource.Ref> resources) {
+        return new AuditQuery(
+                requestId,
+                accountId,
+                principalId,
+                operation,
+                result,
+                targetType,
+                targetId,
+                occurredFrom,
+                occurredTo,
+                page,
+                relatedType,
+                relatedId,
+                List.copyOf(resources),
+                trailId,
+                parentId);
+    }
+
+    /** @return 限定同一业务审计链 */
+    public @NotNull AuditQuery trail(@NotNull String value) {
+        return new AuditQuery(
+                requestId,
+                accountId,
+                principalId,
+                operation,
+                result,
+                targetType,
+                targetId,
+                occurredFrom,
+                occurredTo,
+                page,
+                relatedType,
+                relatedId,
+                resourceMatches,
+                value,
+                null);
+    }
+
+    /** @return 限定直接父审计记录 */
+    public @NotNull AuditQuery parent(@NotNull String value) {
+        return new AuditQuery(
+                requestId,
+                accountId,
+                principalId,
+                operation,
+                result,
+                targetType,
+                targetId,
+                occurredFrom,
+                occurredTo,
+                page,
+                relatedType,
+                relatedId,
+                resourceMatches,
+                null,
+                value);
+    }
+
+    public @Nullable List<Resource.Ref> resourceMatches() {
+        return resourceMatches;
+    }
+
+    public @Nullable String relatedType() {
+        return relatedType;
+    }
+
+    public @Nullable String relatedId() {
+        return relatedId;
     }
 
     /** @return 可选精确调用标识 */
@@ -113,6 +302,14 @@ public class AuditQuery {
     /** @return 可选目标 Resource 标识 */
     public @Nullable String targetId() {
         return targetId;
+    }
+
+    public @Nullable String trailId() {
+        return trailId;
+    }
+
+    public @Nullable String parentId() {
+        return parentId;
     }
 
     /** @return 可选发生时间下界；MyBatis XML 通过 OGNL 读取 */

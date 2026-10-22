@@ -113,11 +113,13 @@ export class TotpCredentialController extends ObservableController<TotpCredentia
 
   /** 读取当前账号的 TOTP Credential；未配置时返回空凭据。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const result = await this.api.get<TotpCredential>(
         '/me/authentication/totp/credential',
       );
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         credential: Object.freeze(result.data),
         enrollment: null,
@@ -126,7 +128,9 @@ export class TotpCredentialController extends ObservableController<TotpCredentia
         qrCode: null,
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       if (error instanceof AdminError && error.kind === 'notFound') {
+        if (!this.isCurrentRead('load', read)) return;
         this.publish({
           credential: null,
           enrollment: null,

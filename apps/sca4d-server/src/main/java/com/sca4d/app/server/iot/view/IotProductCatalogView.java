@@ -29,9 +29,9 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotProductCatalogView {
 
-    private final @NotNull List<ProductItem> products;
-
     private final @NotNull List<String> accessMethods;
+
+    private final @NotNull List<ProductItem> products;
 
     private final @NotNull List<String> protocolCodes;
 

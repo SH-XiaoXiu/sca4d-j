@@ -1,6 +1,7 @@
 package com.sca4d.core.api.job;
 
 import com.sca4d.core.api.pipeline.Pipeline;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +69,7 @@ public class PipelineJobPlan<I, O> {
      * @param <N> 新终点输出类型
      * @param nodeKey 节点在当前 Job 内的稳定名称
      * @param pipeline 输入类型与当前输出相同的 Pipeline
-     * @param retryPolicy 当前 Pipeline 节点的重试策略
+     * @param retryRule 当前 Pipeline 节点的重试策略
      * @return 采用 Pipeline 输出作为新终点的计划
      * @throws NullPointerException 节点名称、Pipeline 或重试策略为空时抛出
      * @throws IllegalArgumentException 节点名称无效或重复，或 Pipeline 输入类型不能承接当前输出时抛出
@@ -78,7 +79,7 @@ public class PipelineJobPlan<I, O> {
     public <N> @NotNull PipelineJobPlan<I, N> then(
             @NotNull String nodeKey,
             @NotNull Pipeline<O, N> pipeline,
-            @NotNull JobRetryPolicy retryPolicy) {
+            @NotNull RetryRule retryRule) {
         Pipeline<O, N> checkedPipeline = Objects.requireNonNull(pipeline, "PipelineJob 节点不能为空");
         requireType(outputType, checkedPipeline.inputType(), "PipelineJob 顺序节点输入类型不一致");
         String checkedKey = requireNewKey(nodeKey);
@@ -87,7 +88,7 @@ public class PipelineJobPlan<I, O> {
                 new Node(
                         checkedKey,
                         checkedPipeline,
-                        Objects.requireNonNull(retryPolicy, "PipelineJob 重试策略不能为空"),
+                        Objects.requireNonNull(retryRule, "PipelineJob 重试策略不能为空"),
                         endpointKey == null ? List.of() : List.of(endpointKey),
                         false));
         Set<String> nextKeys = new HashSet<>(nodeKeys);
@@ -115,10 +116,10 @@ public class PipelineJobPlan<I, O> {
     public <L, R> @NotNull Parallel<I, L, R> parallel(
             @NotNull String leftKey,
             @NotNull Pipeline<O, L> left,
-            @NotNull JobRetryPolicy leftRetry,
+            @NotNull RetryRule leftRetry,
             @NotNull String rightKey,
             @NotNull Pipeline<O, R> right,
-            @NotNull JobRetryPolicy rightRetry) {
+            @NotNull RetryRule rightRetry) {
         Pipeline<O, L> checkedLeft = Objects.requireNonNull(left, "左分支 Pipeline 不能为空");
         Pipeline<O, R> checkedRight = Objects.requireNonNull(right, "右分支 Pipeline 不能为空");
         requireType(outputType, checkedLeft.inputType(), "左分支输入类型不一致");
@@ -204,11 +205,11 @@ public class PipelineJobPlan<I, O> {
     /** 保存一个可独立重试的 Pipeline 节点及其直接依赖。 */
     public static class Node {
 
-        private final @NotNull JobRetryPolicy retryPolicy;
-
         private final @NotNull List<@NotNull String> dependencies;
 
         private final @NotNull Pipeline<?, ?> pipeline;
+
+        private final @NotNull RetryRule retryRule;
 
         private final @NotNull String key;
 
@@ -217,12 +218,12 @@ public class PipelineJobPlan<I, O> {
         private Node(
                 @NotNull String key,
                 @NotNull Pipeline<?, ?> pipeline,
-                @NotNull JobRetryPolicy retryPolicy,
+                @NotNull RetryRule retryRule,
                 @NotNull List<@NotNull String> dependencies,
                 boolean parallelMerge) {
             this.key = key;
             this.pipeline = pipeline;
-            this.retryPolicy = retryPolicy;
+            this.retryRule = retryRule;
             this.dependencies = List.copyOf(dependencies);
             this.parallelMerge = parallelMerge;
         }
@@ -253,8 +254,8 @@ public class PipelineJobPlan<I, O> {
          * @return 当前节点自己的重试策略
          */
         @Contract(pure = true)
-        public @NotNull JobRetryPolicy retryPolicy() {
-            return retryPolicy;
+        public @NotNull RetryRule retryRule() {
+            return retryRule;
         }
 
         /**
@@ -287,15 +288,15 @@ public class PipelineJobPlan<I, O> {
      */
     public static class Parallel<I, L, R> {
 
-        private final @NotNull JobRetryPolicy leftRetry;
-
-        private final @NotNull JobRetryPolicy rightRetry;
-
         private final @NotNull Pipeline<?, L> left;
 
         private final @NotNull Pipeline<?, R> right;
 
         private final @NotNull PipelineJobPlan<I, ?> plan;
+
+        private final @NotNull RetryRule leftRetry;
+
+        private final @NotNull RetryRule rightRetry;
 
         private final @NotNull String leftKey;
 
@@ -305,10 +306,10 @@ public class PipelineJobPlan<I, O> {
                 @NotNull PipelineJobPlan<I, ?> plan,
                 @NotNull String leftKey,
                 @NotNull Pipeline<?, L> left,
-                @NotNull JobRetryPolicy leftRetry,
+                @NotNull RetryRule leftRetry,
                 @NotNull String rightKey,
                 @NotNull Pipeline<?, R> right,
-                @NotNull JobRetryPolicy rightRetry) {
+                @NotNull RetryRule rightRetry) {
             this.plan = plan;
             this.leftKey = leftKey;
             this.left = left;
@@ -324,7 +325,7 @@ public class PipelineJobPlan<I, O> {
          * @param <N> 合并节点输出类型
          * @param mergeKey 合并节点名称
          * @param merge 接受左右结果的合并 Pipeline
-         * @param retryPolicy 合并 Pipeline 的重试策略
+         * @param retryRule 合并 Pipeline 的重试策略
          * @return 以合并结果作为终点的完整计划
          * @throws NullPointerException 合并节点名称、Pipeline 或重试策略为空时抛出
          * @throws IllegalArgumentException 合并节点名称无效或重复，或合并 Pipeline 不接受 ParallelResults 时抛出
@@ -334,7 +335,7 @@ public class PipelineJobPlan<I, O> {
         public <N> @NotNull PipelineJobPlan<I, N> merge(
                 @NotNull String mergeKey,
                 @NotNull Pipeline<ParallelResults<L, R>, N> merge,
-                @NotNull JobRetryPolicy retryPolicy) {
+                @NotNull RetryRule retryRule) {
             String checkedMergeKey = plan.requireNewKey(mergeKey);
             if (leftKey.equals(checkedMergeKey) || rightKey.equals(checkedMergeKey)) {
                 throw new IllegalArgumentException("PipelineJob 分支和合并节点名称不能重复");
@@ -352,7 +353,7 @@ public class PipelineJobPlan<I, O> {
                     new Node(
                             checkedMergeKey,
                             checkedMerge,
-                            Objects.requireNonNull(retryPolicy, "合并重试策略不能为空"),
+                            Objects.requireNonNull(retryRule, "合并重试策略不能为空"),
                             List.of(leftKey, rightKey),
                             true));
             Set<String> nextKeys = new HashSet<>(plan.nodeKeys);

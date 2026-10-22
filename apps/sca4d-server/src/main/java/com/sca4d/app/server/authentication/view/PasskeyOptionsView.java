@@ -11,11 +11,11 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class PasskeyOptionsView {
 
+    private final Instant expiresAt;
+
     private final String ceremonyId;
 
     private final String optionsJson;
-
-    private final Instant expiresAt;
 
     private PasskeyOptionsView(String ceremonyId, String optionsJson, Instant expiresAt) {
         this.ceremonyId = ceremonyId;

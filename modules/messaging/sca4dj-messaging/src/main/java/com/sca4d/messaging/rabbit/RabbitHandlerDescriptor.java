@@ -3,9 +3,9 @@ package com.sca4d.messaging.rabbit;
 import static com.sca4d.core.api.name.NameFormat.SLASH;
 
 import com.sca4d.core.api.messaging.EventHandler;
-import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -13,11 +13,11 @@ import java.util.Objects;
 /** 统一 EventHandler 与普通 MessageHandler 的 RabbitMQ 拓扑字段。 */
 class RabbitHandlerDescriptor {
 
-    private final @NotNull HandlingPolicy handlingPolicy;
-
     private final EventHandler<?> eventHandler;
 
     private final MessageHandler<?> messageHandler;
+
+    private final @NotNull RetryRule retryRule;
 
     private final @NotNull TreeCode code;
 
@@ -26,12 +26,12 @@ class RabbitHandlerDescriptor {
     private RabbitHandlerDescriptor(
             @NotNull TreeCode code,
             @NotNull TreeCode messageCode,
-            @NotNull HandlingPolicy handlingPolicy,
+            @NotNull RetryRule retryRule,
             EventHandler<?> eventHandler,
             MessageHandler<?> messageHandler) {
         this.code = requireSlash(code, "Handler 编码");
         this.messageCode = requireSlash(messageCode, "消息编码");
-        this.handlingPolicy = Objects.requireNonNull(handlingPolicy, "Handler 策略不能为空");
+        this.retryRule = Objects.requireNonNull(retryRule, "Handler 策略不能为空");
         this.eventHandler = eventHandler;
         this.messageHandler = messageHandler;
     }
@@ -41,7 +41,7 @@ class RabbitHandlerDescriptor {
         return new RabbitHandlerDescriptor(
                 checked.code(),
                 checked.eventType().code(),
-                checked.handlingPolicy(),
+                checked.retryRule(),
                 checked,
                 null);
     }
@@ -51,7 +51,7 @@ class RabbitHandlerDescriptor {
         return new RabbitHandlerDescriptor(
                 checked.code(),
                 checked.codec().code(),
-                checked.handlingPolicy(),
+                checked.retryRule(),
                 null,
                 checked);
     }
@@ -67,8 +67,8 @@ class RabbitHandlerDescriptor {
     }
 
     @NotNull
-    HandlingPolicy handlingPolicy() {
-        return handlingPolicy;
+    RetryRule retryRule() {
+        return retryRule;
     }
 
     boolean event() {

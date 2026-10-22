@@ -27,9 +27,23 @@ const security = reactive({
 
 vi.mock('#/store/security', () => ({ useSecurityStore: () => security }));
 vi.mock('#/locales', () => ({ $t: (key: string) => key }));
-vi.mock('#/i18n', () => ({
-  useI18n: () => ({ errorText: () => 'Verification failed' }),
+vi.mock('#/features/sj-presentation', () => ({
+  useSjPresentation: () => ({
+    t: (key: string) => key,
+    errorText: () => 'Verification failed',
+  }),
 }));
+vi.mock('#/components/sj', async () => {
+  const { defineComponent } = await import('vue');
+  return {
+    SjDialog: defineComponent({
+      props: { open: Boolean, saving: Boolean, submitDisabled: Boolean },
+      emits: ['submit'],
+      template:
+        '<div v-if="open"><slot /><button data-test="verification-submit" :disabled="submitDisabled || saving" @click="$emit(\'submit\')">Submit</button></div>',
+    }),
+  };
+});
 vi.mock('./presentation', () => ({
   authenticationMethodLabel: (method: string) => method,
   browserPasskeyErrorText: () => undefined,
@@ -67,7 +81,7 @@ describe('action verification dialog', () => {
     await nextTick();
 
     const confirm = document.querySelector<HTMLButtonElement>(
-      '.ant-modal-footer .ant-btn-primary',
+      '[data-test="verification-submit"]',
     )!;
     confirm.click();
     confirm.click();

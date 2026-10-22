@@ -22,6 +22,29 @@
             AND (data_json -&gt;&gt; 'scheduleId')::BIGINT = #{scheduleId}
         </if>
     </sql>
+    <select id="selectRecentEvents" resultType="com.sca4d.iot.timescale.persistence.TimescaleThingEvent">
+        SELECT recent.* FROM (VALUES
+        <foreach collection="deviceIds" item="deviceId" separator=",">(CAST(#{deviceId} AS BIGINT))</foreach>
+        ) AS requested(device_id)
+        CROSS JOIN LATERAL (
+            SELECT <include refid="eventColumns"/>
+            FROM iot_event WHERE device_id = requested.device_id
+            ORDER BY occurred_at DESC, message_id DESC LIMIT #{limit}
+        ) recent
+        ORDER BY recent.device_id, recent.occurred_at DESC, recent.event_id DESC
+    </select>
+    <select id="selectRecentAcknowledgements" resultType="com.sca4d.iot.timescale.persistence.TimescaleThingEvent">
+        SELECT recent.* FROM (VALUES
+        <foreach collection="messageIds" item="messageId" separator=",">(CAST(#{messageId} AS BIGINT))</foreach>
+        ) AS requested(message_id)
+        CROSS JOIN LATERAL (
+            SELECT <include refid="eventColumns"/>
+            FROM iot_event WHERE (data_json -&gt;&gt; 'messageId')::BIGINT = requested.message_id AND event_code = '$downlink.ack'
+            ORDER BY received_at DESC, occurred_at DESC, event_id DESC LIMIT #{limit}
+        ) recent
+        ORDER BY requested.message_id, recent.received_at DESC, recent.occurred_at DESC, recent.event_id DESC
+    </select>
+
     <select id="countEvents" resultType="long">
         SELECT COUNT(*) FROM iot_event
         <where><include refid="eventFilters"/></where>
@@ -36,12 +59,12 @@
     <select id="countAcknowledgementsByMessageId" resultType="long">
         SELECT COUNT(*)
         FROM iot_event
-        WHERE message_id = #{messageId} AND event_code = '$downlink.ack'
+        WHERE (data_json -&gt;&gt; 'messageId')::BIGINT = #{messageId} AND event_code = '$downlink.ack'
     </select>
     <select id="selectAcknowledgementsByMessageId" resultType="com.sca4d.iot.timescale.persistence.TimescaleThingEvent">
         SELECT <include refid="eventColumns"/>
         FROM iot_event
-        WHERE message_id = #{messageId} AND event_code = '$downlink.ack'
+        WHERE (data_json -&gt;&gt; 'messageId')::BIGINT = #{messageId} AND event_code = '$downlink.ack'
         ORDER BY received_at DESC, occurred_at DESC, event_id DESC
         OFFSET #{offset} LIMIT #{limit}
     </select>

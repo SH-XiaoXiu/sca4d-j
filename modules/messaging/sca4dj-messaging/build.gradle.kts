@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.slf4j.api)
     api(libs.spring.boot.autoconfigure)
     compileOnlyApi(libs.jetbrains.annotations)
+    compileOnly(libs.spotbugs.annotations)
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
     annotationProcessor(libs.spring.boot.configuration.processor)
 
@@ -40,6 +41,7 @@ dependencies {
     add("integrationTestImplementation", libs.testcontainers.rabbitmq)
     add("integrationTestImplementation", libs.testcontainers.junit.jupiter)
     add("integrationTestRuntimeOnly", libs.postgresql)
+    add("integrationTestRuntimeOnly", libs.jakarta.servlet)
     add("integrationTestRuntimeOnly", libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.platform.launcher)
 }

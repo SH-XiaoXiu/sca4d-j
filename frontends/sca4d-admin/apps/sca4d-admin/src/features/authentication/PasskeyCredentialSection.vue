@@ -6,8 +6,8 @@ import { computed, ref } from 'vue';
 import { message } from 'ant-design-vue';
 import { KeyRound, Laptop, Trash2 } from 'lucide-vue-next';
 
-import ResourceState from '#/components/ResourceState.vue';
-import { useI18n } from '#/i18n';
+import { SjResourceEditor, SjResourceState } from '#/components/sj';
+import { useSjPresentation } from '#/features/sj-presentation';
 import { $t } from '#/locales';
 import { useSecurityStore } from '#/store/security';
 
@@ -15,8 +15,10 @@ import { browserPasskeyErrorText } from './presentation';
 
 /** Passkey registration 使用的账号显示名称。 */
 const props = defineProps<{ displayName: string }>();
+
+const { dateTime, errorText } = useSjPresentation();
+
 const store = useSecurityStore();
-const { dateTime, errorText } = useI18n();
 const registrationOpen = ref(false);
 const passkeyName = ref('');
 const loading = computed(
@@ -90,7 +92,7 @@ async function remove(credentialId: Int64String): Promise<void> {
       type="warning"
     />
 
-    <ResourceState
+    <SjResourceState
       v-if="
         store.passkeys.phase === 'error' || store.passkeys.phase === 'loading'
       "
@@ -125,8 +127,6 @@ async function remove(credentialId: Int64String): Promise<void> {
           </div>
         </div>
         <a-popconfirm
-          :cancel-text="$t('page.security.common.cancel')"
-          :ok-text="$t('page.security.common.remove')"
           :title="$t('page.security.passkeys.removeConfirm')"
           @confirm="remove(passkey.id)"
         >
@@ -138,14 +138,14 @@ async function remove(credentialId: Int64String): Promise<void> {
       </div>
     </div>
 
-    <a-modal
+    <SjResourceEditor
+      create
+      size="md"
       v-model:open="registrationOpen"
-      :cancel-text="$t('page.security.common.cancel')"
-      :confirm-loading="loading"
-      :ok-button-props="{ disabled: !passkeyName.trim() }"
-      :ok-text="$t('page.security.passkeys.register')"
+      :saving="loading"
+      :submit-disabled="!passkeyName.trim()"
       :title="$t('page.security.passkeys.register')"
-      @ok="register"
+      @submit="register"
     >
       <a-form layout="vertical" @finish="register">
         <a-form-item :label="$t('page.security.passkeys.name')" required>
@@ -157,6 +157,6 @@ async function remove(credentialId: Int64String): Promise<void> {
           />
         </a-form-item>
       </a-form>
-    </a-modal>
+    </SjResourceEditor>
   </section>
 </template>

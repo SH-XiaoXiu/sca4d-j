@@ -38,29 +38,182 @@
     </select>
     <select id="insertRun" resultType="long">
         INSERT INTO job.job_run (
-            app_name, job_key, job_definition_version, job_kind, input_json, status,
+            app_name, job_key, job_definition_version, job_kind,
+            capability_code, system_identity, work_key, overlap_policy,
+            target_instance_id, target_generation_id, target_expires_at, dispatch_id,
+            input_json, status,
             schedule_key, scheduled_fire_time)
         VALUES (#{appName}, #{jobKey}, #{definitionVersion}, #{kind},
+                #{capability}, #{systemIdentity}, #{workKey.value}, #{overlapPolicy},
+                #{targetInstanceId}, #{targetGenerationId}, #{targetExpiresAt}, #{dispatchId},
                 CAST(#{inputJson} AS jsonb), 'QUEUED', #{scheduleKey}, #{scheduledAt})
         RETURNING id
     </select>
+    <select id="selectActiveWork" resultType="com.sca4d.job.persistence.RunRecord">
+        SELECT id, job_key, job_definition_version,
+               input_json::text AS input_json, output_json::text AS output_json, status
+        FROM job.job_run
+        WHERE app_name = #{appName}
+          AND system_identity = #{systemIdentity}
+          AND job_key = #{jobKey}
+          AND work_key = #{workKey.value}
+          AND target_instance_id IS NOT DISTINCT FROM #{targetInstanceId}
+          AND status IN ('QUEUED', 'RUNNING')
+        ORDER BY id LIMIT 1
+    </select>
+    <insert id="upsertInstance">
+        INSERT INTO job.job_instance (
+            app_name, instance_id, generation_id, capabilities_json, expires_at)
+        VALUES (#{appName}, #{instanceId}, #{generationId},
+                CAST(#{capabilitiesJson} AS jsonb), #{expiresAt})
+        ON CONFLICT (app_name, instance_id)
+        DO UPDATE SET generation_id = EXCLUDED.generation_id,
+                      capabilities_json = EXCLUDED.capabilities_json,
+                      expires_at = EXCLUDED.expires_at
+    </insert>
+    <select id="selectEligibleInstances" resultType="com.sca4d.job.persistence.JobInstance">
+        SELECT instance_id, generation_id
+        FROM job.job_instance
+        WHERE app_name = #{appName}
+          AND expires_at &gt; #{now}
+          AND jsonb_exists(capabilities_json, #{capabilityCode})
+        ORDER BY instance_id
+    </select>
+    <delete id="deleteInstance">
+        DELETE FROM job.job_instance
+        WHERE app_name = #{appName}
+          AND instance_id = #{instanceId}
+          AND generation_id = #{generationId}
+    </delete>
+    <delete id="deleteExpiredInstances">
+        DELETE FROM job.job_instance
+        WHERE app_name = #{appName} AND expires_at &lt; #{expiredBefore}
+    </delete>
+    <select id="insertDispatch" resultType="long">
+        INSERT INTO job.job_dispatch (
+            app_name, job_key, schedule_key, scheduled_fire_time, targets_json)
+        VALUES (#{appName}, #{jobKey}, #{scheduleKey}, #{scheduledAt},
+                CAST(#{targetsJson} AS jsonb))
+        RETURNING id
+    </select>
+    <select id="selectScheduledDispatch" resultType="com.sca4d.job.persistence.JobDispatchRecord">
+        SELECT id, targets_json::text AS targets_json
+        FROM job.job_dispatch
+        WHERE app_name = #{appName}
+          AND schedule_key = #{scheduleKey}
+          AND scheduled_fire_time = #{scheduledAt}
+    </select>
+    <select id="selectDispatchRuns" resultType="com.sca4d.job.persistence.JobDispatchRun">
+        SELECT target_instance_id AS instance_id, id AS run_id
+        FROM job.job_run
+        WHERE app_name = #{appName} AND dispatch_id = #{dispatchId}
+        ORDER BY target_instance_id
+    </select>
+    <select id="selectActiveDelivery" resultType="long">
+        SELECT id FROM job.job_delivery
+        WHERE app_name = #{appName}
+          AND system_identity = #{systemIdentity}
+          AND job_key = #{jobKey}
+          AND work_key = #{workKey.value}
+          AND target_instance_id = #{targetInstanceId}
+          AND status IN ('READY', 'RUNNING')
+        ORDER BY id LIMIT 1
+    </select>
+    <insert id="insertDelivery">
+        INSERT INTO job.job_delivery (
+            app_name, dispatch_id, job_key, job_definition_version,
+            capability_code, system_identity, work_key, overlap_policy,
+            input_json, target_instance_id, target_generation_id, expires_at)
+        VALUES (#{appName}, #{dispatchId}, #{jobKey}, #{definitionVersion},
+                #{capability}, #{systemIdentity}, #{workKey.value}, #{overlapPolicy},
+                CAST(#{inputJson} AS jsonb), #{targetInstanceId}, #{targetGenerationId}, #{expiresAt})
+    </insert>
+    <select id="updateClaimableDelivery" resultType="com.sca4d.job.persistence.JobDelivery">
+        WITH candidate AS MATERIALIZED (
+            SELECT d.id
+            FROM job.job_delivery d
+            WHERE d.app_name = #{appName}
+              AND d.target_instance_id = #{instanceId}
+              AND (d.target_generation_id IS NULL OR d.target_generation_id = #{generationId})
+              AND d.status = 'READY'
+              AND d.expires_at &gt; #{now}
+              AND <foreach collection="definitions" index="jobKey" item="versions" open="(" separator=" OR " close=")">
+                  (d.job_key = #{jobKey} AND
+                    <foreach collection="versions" index="version" item="capability" open="(" separator=" OR " close=")">
+                      (d.job_definition_version = #{version}
+                       AND d.capability_code = #{capability.code}
+                       AND d.system_identity = #{capability.systemIdentity})
+                    </foreach>)
+              </foreach>
+              AND (d.overlap_policy = 'ALLOW' OR NOT EXISTS (
+                  SELECT 1 FROM job.job_delivery active
+                  WHERE active.app_name = d.app_name
+                    AND active.system_identity = d.system_identity
+                    AND active.job_key = d.job_key
+                    AND active.work_key = d.work_key
+                    AND active.target_instance_id = d.target_instance_id
+                    AND active.status = 'RUNNING'))
+            ORDER BY d.id LIMIT 1 FOR UPDATE SKIP LOCKED
+        )
+        UPDATE job.job_delivery d
+        SET status = 'RUNNING', started_at = #{now}, lease_until = #{leaseUntil}
+        FROM candidate c
+        WHERE d.id = c.id AND d.status = 'READY'
+        RETURNING d.id, d.job_key, d.job_definition_version,
+                  d.input_json::text AS input_json, d.target_instance_id
+    </select>
+    <update id="updateDeliveryLease">
+        UPDATE job.job_delivery
+        SET lease_until = #{leaseUntil}
+        WHERE id = #{deliveryId}
+          AND target_instance_id = #{instanceId}
+          AND (target_generation_id IS NULL OR target_generation_id = #{generationId})
+          AND status = 'RUNNING'
+          AND lease_until &gt; #{now}
+    </update>
+    <update id="updateDeliveryResult">
+        UPDATE job.job_delivery
+        SET status = #{status}, error_summary = #{error},
+            completed_at = #{completedAt}, lease_until = NULL
+        WHERE id = #{deliveryId}
+          AND target_instance_id = #{instanceId}
+          AND (target_generation_id IS NULL OR target_generation_id = #{generationId})
+          AND status = 'RUNNING'
+          AND lease_until &gt; #{completedAt}
+    </update>
+    <update id="updateExpiredDeliveries">
+        UPDATE job.job_delivery
+        SET status = 'FAILED', error_summary = '目标实例等待期限已到', completed_at = #{now}
+        WHERE app_name = #{appName}
+          AND ((status = 'READY' AND expires_at &lt;= #{now})
+            OR (status = 'RUNNING' AND lease_until &lt;= #{now}))
+    </update>
+    <delete id="deleteCompletedDeliveries">
+        DELETE FROM job.job_delivery
+        WHERE app_name = #{appName} AND status IN ('SUCCEEDED', 'FAILED')
+          AND completed_at &lt; #{completedBefore}
+    </delete>
+    <delete id="deleteCompletedDispatches">
+        DELETE FROM job.job_dispatch d
+        WHERE d.app_name = #{appName} AND d.created_at &lt; #{createdBefore}
+          AND NOT EXISTS (SELECT 1 FROM job.job_delivery child WHERE child.dispatch_id = d.id)
+          AND NOT EXISTS (SELECT 1 FROM job.job_run child WHERE child.dispatch_id = d.id)
+    </delete>
     <select id="selectScheduledRun" resultType="long">
         SELECT id FROM job.job_run
         WHERE app_name = #{appName}
           AND schedule_key = #{scheduleKey}
-        <if test="scheduledAt != null">AND scheduled_fire_time = #{scheduledAt}</if>
-        <if test="statuses != null">
-            AND status IN <foreach collection="statuses" item="status" open="(" separator="," close=")">#{status}</foreach>
-        </if>
+          AND scheduled_fire_time = #{scheduledAt}
+          AND target_instance_id IS NOT DISTINCT FROM #{targetInstanceId}
         ORDER BY id LIMIT 1
     </select>
     <select id="insertNode" resultType="long">
         INSERT INTO job.job_run_node (
             run_id, node_key, node_kind, input_json, status, parallel_merge,
-            max_attempts, retry_delay_millis, available_at)
+            retry_rule, available_at)
         VALUES (#{runId}, #{nodeKey}, #{kind}, CAST(#{inputJson} AS jsonb), #{status},
                 CASE WHEN #{parallelMerge} THEN 1 ELSE 0 END,
-                #{maxAttempts}, #{retryDelayMillis}, #{availableAt})
+                CAST(#{retryRule} AS jsonb), #{availableAt})
         RETURNING id
     </select>
     <insert id="insertDependencies">
@@ -73,26 +226,48 @@
         </foreach>
     </insert>
     <select id="selectRun" resultType="com.sca4d.job.persistence.RunRecord">
-        SELECT id, job_key, job_definition_version, output_json::text AS output_json, status
+        SELECT id, job_key, job_definition_version,
+               input_json::text AS input_json, output_json::text AS output_json, status
         FROM job.job_run
         WHERE app_name = #{appName} AND id = #{runId}
+    </select>
+    <select id="selectRunIdForUpdate" resultType="long">
+        SELECT id FROM job.job_run
+        WHERE app_name = #{appName} AND id = #{runId}
+        FOR UPDATE
     </select>
     <select id="updateClaimableNode" resultType="com.sca4d.job.persistence.NodeClaim">
         WITH candidate AS MATERIALIZED (
             SELECT n.id AS node_id, n.run_id, r.job_key, r.job_definition_version, r.job_kind,
                    n.node_key, n.input_json::text AS input_json,
                    n.attempt_count AS current_attempt, n.attempt_count + 1 AS next_attempt,
-                   n.max_attempts, n.retry_delay_millis
+                   n.retry_rule::text AS retry_rule
             FROM job.job_run_node n
             JOIN job.job_run r ON r.id = n.run_id
             WHERE r.app_name = #{appName}
-              AND <foreach collection="definitions" index="jobKey" item="version" open="(" separator=" OR " close=")">
-                (r.job_key = #{jobKey} AND r.job_definition_version = #{version})
+              AND (r.target_instance_id IS NULL OR r.target_instance_id = #{instanceId})
+              AND (r.target_generation_id IS NULL OR r.target_generation_id = #{generationId})
+              AND (r.target_expires_at IS NULL OR r.target_expires_at &gt; #{now})
+              AND (r.overlap_policy &lt;&gt; 'WAIT' OR NOT EXISTS (
+                  SELECT 1 FROM job.job_run earlier
+                  WHERE earlier.app_name = r.app_name
+                    AND earlier.system_identity = r.system_identity
+                    AND earlier.job_key = r.job_key
+                    AND earlier.work_key = r.work_key
+                    AND earlier.target_instance_id IS NOT DISTINCT FROM r.target_instance_id
+                    AND earlier.id &lt; r.id
+                    AND earlier.status IN ('QUEUED', 'RUNNING')))
+              AND <foreach collection="definitions" index="jobKey" item="versions" open="(" separator=" OR " close=")">
+                (r.job_key = #{jobKey} AND
+                  <foreach collection="versions" index="version" item="capability" open="(" separator=" OR " close=")">
+                    (r.job_definition_version = #{version}
+                     AND r.capability_code = #{capability.code}
+                     AND r.system_identity = #{capability.systemIdentity})
+                  </foreach>)
               </foreach>
               AND r.status IN ('QUEUED', 'RUNNING')
-              AND n.attempt_count &lt; n.max_attempts
-              AND ((n.status = 'READY' AND n.available_at &lt;= #{now})
-                   OR (n.status = 'RUNNING' AND n.lease_until &lt; #{now}))
+              AND (n.max_attempts IS NULL OR n.attempt_count &lt; n.max_attempts)
+              AND n.status = 'READY' AND n.available_at &lt;= #{now}
             ORDER BY n.available_at, n.id
             LIMIT 1
         ), node_started AS (
@@ -102,8 +277,7 @@
                 started_at = COALESCE(n.started_at, #{now}), error_summary = NULL
             FROM candidate c
             WHERE n.id = c.node_id AND n.attempt_count = c.current_attempt
-              AND ((n.status = 'READY' AND n.available_at &lt;= #{now})
-                   OR (n.status = 'RUNNING' AND n.lease_until &lt; #{now}))
+              AND n.status = 'READY' AND n.available_at &lt;= #{now}
             RETURNING n.id AS node_id, n.run_id
         ), abandoned AS (
             UPDATE job.job_run_attempt a
@@ -122,7 +296,7 @@
         )
         SELECT candidate.node_id, candidate.run_id, candidate.job_key, candidate.job_definition_version,
                candidate.job_kind, candidate.node_key, candidate.input_json,
-               candidate.next_attempt AS attempt, candidate.max_attempts, candidate.retry_delay_millis
+               candidate.next_attempt AS attempt, candidate.retry_rule
         FROM candidate
         JOIN node_started ON node_started.node_id = candidate.node_id
     </select>
@@ -221,6 +395,28 @@
         WHERE node_id IN (SELECT id FROM failed) AND attempt_number = #{attempt}
           AND worker_id = #{workerId} AND status = 'RUNNING'
     </update>
+    <select id="selectExpiredAttempts" resultType="com.sca4d.job.persistence.ExpiredJobAttempt">
+        SELECT n.id AS node_id, n.attempt_count AS attempt, n.lease_owner AS worker_id,
+               n.lease_until, n.retry_rule::text AS retry_rule
+        FROM job.job_run_node n JOIN job.job_run r ON r.id = n.run_id
+        WHERE r.app_name = #{appName} AND r.status IN ('QUEUED', 'RUNNING')
+          AND n.status = 'RUNNING' AND n.lease_until &lt; #{now}
+          AND (n.max_attempts IS NULL OR n.attempt_count &lt; n.max_attempts)
+        ORDER BY n.lease_until, n.id LIMIT 100 FOR UPDATE OF n SKIP LOCKED
+    </select>
+    <update id="rescheduleExpired">
+        WITH recovered AS (
+            UPDATE job.job_run_node SET status = 'READY', available_at = #{availableAt},
+                lease_owner = NULL, lease_until = NULL, error_summary = 'Job worker 租约到期'
+            WHERE id = #{nodeId} AND status = 'RUNNING' AND attempt_count = #{attempt}
+              AND lease_owner = #{workerId} AND lease_until = #{leaseUntil}
+            RETURNING id
+        )
+        UPDATE job.job_run_attempt SET status = 'ABANDONED', completed_at = #{now},
+            error_summary = 'Job worker 租约到期'
+        WHERE node_id IN (SELECT id FROM recovered) AND attempt_number = #{attempt}
+          AND worker_id = #{workerId} AND status = 'RUNNING'
+    </update>
     <update id="updateExpiredNodes">
         WITH RECURSIVE exhausted AS MATERIALIZED (
             SELECT n.id, n.run_id FROM job.job_run_node n
@@ -250,6 +446,22 @@
         )
         UPDATE job.job_run r SET status = 'FAILED', error_summary = 'Job worker 租约到期且重试次数耗尽', completed_at = #{now}
         WHERE r.id IN (SELECT run_id FROM failed) AND r.status IN ('QUEUED', 'RUNNING')
+    </update>
+    <update id="updateExpiredTargets">
+        WITH expired AS (
+            UPDATE job.job_run
+            SET status = 'FAILED',
+                error_summary = '目标实例等待期限已到',
+                completed_at = #{now}
+            WHERE app_name = #{appName}
+              AND status = 'QUEUED'
+              AND target_expires_at &lt;= #{now}
+            RETURNING id
+        )
+        UPDATE job.job_run_node
+        SET status = 'CANCELLED', completed_at = #{now}
+        WHERE run_id IN (SELECT id FROM expired)
+          AND status IN ('WAITING', 'READY')
     </update>
     <sql id="runIds"><foreach collection="runIds" item="runId" open="(" separator="," close=")">#{runId}</foreach></sql>
     <select id="selectExpiredRunIdsForUpdate" resultType="long">

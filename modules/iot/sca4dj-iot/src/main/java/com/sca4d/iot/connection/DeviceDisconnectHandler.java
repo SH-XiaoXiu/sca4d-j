@@ -3,14 +3,13 @@ package com.sca4d.iot.connection;
 import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
-import com.sca4d.core.api.id.Id;
-import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
@@ -21,9 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Objects;
 
 /** 消费可靠断连消息，并在协议实现暂时不可用时登记延迟重试。 */
@@ -35,13 +32,9 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
 
     private final @Nullable ConnectionRegistry commonConnections;
 
-    private final @NotNull Clock clock;
-
     private final @NotNull DeviceConnectionReceiver connections;
 
     private final @NotNull DeviceConnectionTerminatorRouter terminators;
-
-    private final @NotNull MessageBus messages;
 
     private final @NotNull MessageCodec<DeviceDisconnectMessage> codec;
 
@@ -50,22 +43,16 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
      *
      * @param terminators 按协议选择真实连接终止实现的路由
      * @param connections 保存 Device 当前连接的投影入口
-     * @param messages 发布延迟重试消息的通用入口
-     * @param clock 计算下一次重试时间的时钟
      * @param commonConnections 可选公共应用连接投影；未安装时只清理 Device 投影
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "ConnectionRegistry 是注入的共享协作接口，Consumer 不拥有或修改其内部表示")
     public DeviceDisconnectHandler(
             @NotNull DeviceConnectionTerminatorRouter terminators,
             @NotNull DeviceConnectionReceiver connections,
-            @NotNull MessageBus messages,
-            @NotNull Clock clock,
             @Nullable ConnectionRegistry commonConnections,
             @NotNull MessageCodec<DeviceDisconnectMessage> codec) {
         this.terminators = Objects.requireNonNull(terminators, "连接终止路由不能为空");
         this.connections = Objects.requireNonNull(connections, "Device 连接事件接收入口不能为空");
-        this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
-        this.clock = Objects.requireNonNull(clock, "断连时钟不能为空");
         this.commonConnections = commonConnections;
         this.codec = Objects.requireNonNull(codec, "断连消息 Codec 不能为空");
     }
@@ -80,10 +67,15 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
         return codec;
     }
 
+    @Override
+    public @NotNull RetryRule retryRule() {
+        return RetryRule.atMost(MAX_ATTEMPTS, Backoff.exponential(Duration.ofSeconds(1), 2, Duration.ofMinutes(5)));
+    }
+
     /**
      * 终止协议会话并删除协议、Device 和公共连接投影。
      *
-     * <p>断连操作必须幂等。任一阶段暂时失败时发布下一次延迟消息；达到最大次数后重新抛出异常，由可靠消息基础设施进入 DLQ。
+     * <p>断连操作必须幂等。任一阶段暂时失败时返回消费重试决定，由 Messaging 登记下一次定向投递或进入 DLQ。
      *
      * @param delivery 包含协议、连接标识、原因和当前尝试次数的可靠消息
      */
@@ -109,34 +101,10 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
                     disconnect.attempt());
         } catch (RuntimeException exception) {
             // 任一投影删除失败都重新执行协议终止和两类投影删除，直到成功或进入 DLQ。
-            if (disconnect.attempt() >= MAX_ATTEMPTS) {
-                throw exception;
-            }
-            int nextAttempt = disconnect.attempt() + 1;
-            Instant retryAt = clock.instant().plus(backoff(disconnect.attempt()));
-            DeviceDisconnectMessage retry = new DeviceDisconnectMessage(
-                    disconnect.deviceId(),
-                    disconnect.connectionId(),
-                    disconnect.protocol(),
-                    disconnect.reason(),
-                    nextAttempt);
-            Id retryMessageId = messages.dispatch(
-                    retry,
-                    DispatchPolicy.outboxNotBefore(retryAt)).messageId();
-            LOG.warn(
-                    "Device 断连等待重试 | deviceId={} protocol={} connectionId={} attempt={} retryAt={} retryMessageId={}",
-                    disconnect.deviceId(),
-                    disconnect.protocol().code(),
-                    disconnect.connectionId().value(),
-                    disconnect.attempt(),
-                    retryAt,
-                    retryMessageId);
+            return HandlingDecision.retry(
+                    exception.getClass().getSimpleName(),
+                    Math.max(disconnect.attempt(), delivery.attempt()));
         }
         return HandlingDecision.acknowledge();
-    }
-
-    /** 返回最高五分钟的指数退避。 */
-    private static @NotNull Duration backoff(int attempt) {
-        return Duration.ofSeconds(Math.min(300, 1L << Math.clamp(attempt - 1, 0, 9)));
     }
 }

@@ -19,9 +19,9 @@ import java.util.Optional;
 @Component
 public class PlatformEmailRecipientResolver implements EmailRecipientResolver {
 
-    private final @NotNull PlatformAccountDirectory accounts;
-
     private final @NotNull PlatformUserProfileService profiles;
+
+    private final @NotNull PlatformAccountDirectory accounts;
 
     /**
      * @param accounts Platform Account 与唯一 Principal 目录

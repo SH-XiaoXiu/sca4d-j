@@ -124,14 +124,21 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#acknowledge()" class="member-name-link">acknowledge</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#detail()" class="member-name-link">detail</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#completedAttempts()" class="member-name-link">completedAttempts</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#detail()" class="member-name-link">detail</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reject(java.lang.String)" class="member-name-link">reject</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#reject(java.lang.String)" class="member-name-link">reject</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#retry(java.lang.String)" class="member-name-link">retry</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#retry(java.lang.String)" class="member-name-link">retry</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#retry(java.lang.String,long)" class="member-name-link">retry</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail,
+ long&nbsp;completedAttempts)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="HandlingDecision.Status.html" title="enum class in com.sca4d.core.api.messaging">HandlingDecision.Status</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status()" class="member-name-link">status</a>()</code></div>
@@ -174,7 +181,35 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>detail</code> - 再次处理原因 @return 要求基础设施再次处理当前消息</dd>
+<dd><code>detail</code> - 再次处理原因</dd>
+<dt>Returns:</dt>
+<dd>要求基础设施再次处理当前消息</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="retry(java.lang.String,long)">
+<h3>retry</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></span>&nbsp;<span class="element-name">retry</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail,
+ long&nbsp;completedAttempts)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>detail</code> - 重试原因</dd>
+<dd><code>completedAttempts</code> - 领域消息中已经执行的次数下界</dd>
+<dt>Returns:</dt>
+<dd>延续已有进度的重试决定</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="completedAttempts()">
+<h3>completedAttempts</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">completedAttempts</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>已知执行次数的下界，不能降低 Broker 中已有次数</dd>
 </dl>
 </section>
 </li>
@@ -187,7 +222,9 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detail)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>detail</code> - 拒绝原因 @return 拒绝当前消息</dd>
+<dd><code>detail</code> - 拒绝原因</dd>
+<dt>Returns:</dt>
+<dd>拒绝当前消息</dd>
 </dl>
 </section>
 </li>

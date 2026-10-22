@@ -69,7 +69,6 @@ import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.permission.ResourceScope;
 import com.sca4d.core.api.permission.ResourceScopeRequirement;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.resource.ResourceReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.DisplayName;
@@ -835,7 +834,7 @@ class CallInvokerTest {
     }
 
     @Test
-    @DisplayName("从 AuditTarget 参数建立 ResourceReference")
+    @DisplayName("从 AuditTarget 参数建立 Resource.Ref")
     void resolvesSimpleAuditTargetParameter() throws Exception {
         AtomicReference<AuditRecord> recorded = new AtomicReference<>();
         CallInvoker executor = lifecycle(
@@ -862,7 +861,7 @@ class CallInvokerTest {
 
         assertEquals("done", result);
         Resource target = recorded.get().target().orElseThrow();
-        assertEquals(new ResourceReference(Account.RESOURCE_TYPE, "platform:42"), target);
+        assertEquals(new Resource.Ref(Account.RESOURCE_TYPE, "platform:42"), target);
     }
 
     @Test
@@ -1722,7 +1721,7 @@ class CallInvokerTest {
                 throw new IllegalStateException("批量资源解析要求第一个参数为标识列表");
             }
             return ids.stream()
-                    .map(value -> (Resource) new ResourceReference("BATCH/ITEM", value.toString()))
+                    .map(value -> (Resource) new Resource.Ref("BATCH/ITEM", value.toString()))
                     .toList();
         }
     }

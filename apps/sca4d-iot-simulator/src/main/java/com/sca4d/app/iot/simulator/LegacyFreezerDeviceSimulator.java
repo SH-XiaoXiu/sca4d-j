@@ -14,23 +14,23 @@ public class LegacyFreezerDeviceSimulator extends MqttDeviceSimulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(LegacyFreezerDeviceSimulator.class);
 
-    private static final int STATE_SYNC = 0x7E;
-
     private static final int ACK_SYNC = 0x6B;
 
     private static final int DOWNLINK_SYNC_HIGH = 0x55;
 
     private static final int DOWNLINK_SYNC_LOW = 0xAA;
 
-    private static final int TAG_POWER = 0x31;
-
-    private static final int TAG_TEMPERATURE = 0x07;
-
-    private static final int TAG_MODE = 0x44;
+    private static final int OP_SET_MODE = 0xC3;
 
     private static final int OP_WRITE_POWER = 0x19;
 
-    private static final int OP_SET_MODE = 0xC3;
+    private static final int STATE_SYNC = 0x7E;
+
+    private static final int TAG_MODE = 0x44;
+
+    private static final int TAG_POWER = 0x31;
+
+    private static final int TAG_TEMPERATURE = 0x07;
 
     private final @NotNull String clientId;
 

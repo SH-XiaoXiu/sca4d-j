@@ -9,9 +9,9 @@ import java.util.Objects;
 public class SmsDeliveryAttempt {
     private final @NotNull SmsDeliveryStatus status;
 
-    private final @Nullable String requestId;
-
     private final @Nullable String bizId;
+
+    private final @Nullable String requestId;
 
     /**
      * @param status Provider 投递状态

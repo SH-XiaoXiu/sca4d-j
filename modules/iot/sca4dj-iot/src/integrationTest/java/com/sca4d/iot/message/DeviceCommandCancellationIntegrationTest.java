@@ -14,9 +14,12 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
+import com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler;
+import com.sca4d.iot.api.message.DeviceDispatchDecision;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
@@ -102,6 +105,7 @@ class DeviceCommandCancellationIntegrationTest {
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setArgNameBasedConstructorAutoMapping(true);
         configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
+        configuration.getTypeHandlerRegistry().register(TreeCode.class, new TreeCodeTypeHandler.Colon());
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(dataSource);
         factory.setConfiguration(configuration);
@@ -212,7 +216,8 @@ class DeviceCommandCancellationIntegrationTest {
                         DeviceDispatchMessage.CODE,
                         DeviceDispatchMessage.PROTOCOL_VERSION,
                         DeviceDispatchMessage.class,
-                        new ObjectMapper()));
+                        new ObjectMapper()),
+                (message, attempt, now) -> DeviceDispatchDecision.allow());
         consumer.handle(
                 new IncomingMessage<>(
                         Id.of(31L),

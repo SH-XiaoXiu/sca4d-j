@@ -12,7 +12,7 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,10 +75,10 @@ class MessageContractTest {
         assertEquals("PRINCIPAL:13", WebRealtimeTarget.principal(13).key());
         assertEquals(
                 "RESOURCE:15:TENANT/RESOURCE:2:14",
-                WebRealtimeTarget.resource(new ResourceReference("TENANT/RESOURCE", "14")).key());
+                WebRealtimeTarget.resource(new Resource.Ref("TENANT/RESOURCE", "14")).key());
         assertNotEquals(
-                WebRealtimeTarget.resource(new ResourceReference("A/B", "c")).key(),
-                WebRealtimeTarget.resource(new ResourceReference("A/OTHER", "b:c")).key());
+                WebRealtimeTarget.resource(new Resource.Ref("A/B", "c")).key(),
+                WebRealtimeTarget.resource(new Resource.Ref("A/OTHER", "b:c")).key());
         assertEquals("TOPIC:orders", WebRealtimeTarget.topic("orders").key());
         assertEquals("SESSION:session-15", WebRealtimeTarget.session(new SessionId("session-15")).key());
         assertEquals(

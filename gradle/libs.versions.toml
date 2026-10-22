@@ -103,6 +103,7 @@ spring-amqp = { module = "org.springframework.amqp:spring-amqp" }
 spring-data-redis = { module = "org.springframework.data:spring-data-redis" }
 spring-jdbc = { module = "org.springframework:spring-jdbc" }
 spring-messaging = { module = "org.springframework:spring-messaging" }
+spring-retry = { module = "org.springframework.retry:spring-retry" }
 spring-rabbit = { module = "org.springframework.amqp:spring-rabbit" }
 spring-security-crypto = { module = "org.springframework.security:spring-security-crypto" }
 spring-tx = { module = "org.springframework:spring-tx" }

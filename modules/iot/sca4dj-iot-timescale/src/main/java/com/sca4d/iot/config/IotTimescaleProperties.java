@@ -18,12 +18,12 @@ public class IotTimescaleProperties {
 
     private int maxQueryResults = 1_000;
 
-    /** @return 是否创建独立 TimescaleDB 数据源、迁移和高频历史实现 */
+    /** @return 是否启用 IoT 历史查询、写入和定期清理 */
     public boolean isEnabled() {
         return enabled;
     }
 
-    /** @param enabled 是否创建独立 TimescaleDB 数据源、迁移和高频历史实现 */
+    /** @param enabled 是否启用 IoT 历史查询、写入和定期清理 */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

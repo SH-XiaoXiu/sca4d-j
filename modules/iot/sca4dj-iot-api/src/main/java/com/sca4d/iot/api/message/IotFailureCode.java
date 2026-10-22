@@ -44,19 +44,13 @@ public class IotFailureCode {
             "RETRY_POLICY_MISMATCH",
             "failure.iot.retry-policy-mismatch");
 
-    /** 迁移时无法映射成已知 code 的历史失败。 */
-    public static final IotFailureCode LEGACY_FAILURE = new IotFailureCode(
-            "LEGACY_FAILURE",
-            "failure.iot.legacy");
-
     private static final List<IotFailureCode> BUILT_INS = List.of(
             TRANSPORT_FAILED,
             ACK_TIMEOUT,
             DEVICE_REPORTED_FAILURE,
             COMMAND_RETRY_EXHAUSTED,
             RETRY_DISABLED,
-            RETRY_POLICY_MISMATCH,
-            LEGACY_FAILURE);
+            RETRY_POLICY_MISMATCH);
 
     private final @NotNull String code;
 

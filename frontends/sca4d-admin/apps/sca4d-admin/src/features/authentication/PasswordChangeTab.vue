@@ -6,13 +6,14 @@ import { computed, reactive, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { Save } from 'lucide-vue-next';
 
-import ResourceState from '#/components/ResourceState.vue';
-import { useI18n } from '#/i18n';
+import { SjResourceState } from '#/components/sj';
+import { useSjPresentation } from '#/features/sj-presentation';
 import { $t } from '#/locales';
 import { useSecurityStore } from '#/store/security';
 
+const { dateTime, errorText } = useSjPresentation();
+
 const store = useSecurityStore();
-const { dateTime, errorText } = useI18n();
 const formRef = ref<FormInstance>();
 const form = reactive({ confirmPassword: '', newPassword: '' });
 const loading = computed(
@@ -50,7 +51,7 @@ function validateConfirmation(): Promise<void> {
 </script>
 
 <template>
-  <ResourceState
+  <SjResourceState
     :error="store.password.error"
     :phase="store.password.phase"
     @retry="store.loadPassword"
@@ -117,5 +118,5 @@ function validateConfirmation(): Promise<void> {
         </a-button>
       </a-form>
     </section>
-  </ResourceState>
+  </SjResourceState>
 </template>

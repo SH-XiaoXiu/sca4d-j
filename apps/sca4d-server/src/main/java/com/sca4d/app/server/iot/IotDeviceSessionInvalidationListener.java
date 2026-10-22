@@ -13,9 +13,9 @@ import java.util.Objects;
 @Component
 public class IotDeviceSessionInvalidationListener implements SessionInvalidationListener {
 
-    private final @NotNull IdentityService identities;
-
     private final @NotNull DeviceConnectionService connections;
+
+    private final @NotNull IdentityService identities;
 
     /**
      * 创建 Device Session 失效监听器。

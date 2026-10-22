@@ -3,6 +3,7 @@ package com.sca4d.core.api.messaging;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 
 /** 声明一个业务 Event 的稳定 RabbitMQ Handler。 */
@@ -18,8 +19,8 @@ public interface EventHandler<T> {
 
     /** @return 当前 Handler 技术失败时的再次处理策略 */
     @NotNull
-    default HandlingPolicy handlingPolicy() {
-        return HandlingPolicy.noRetry();
+    default RetryRule retryRule() {
+        return RetryRule.once();
     }
 
     /** 处理当前 Event；正常返回表示本轮状态变化和随后发布的消息已经可靠保存。 */

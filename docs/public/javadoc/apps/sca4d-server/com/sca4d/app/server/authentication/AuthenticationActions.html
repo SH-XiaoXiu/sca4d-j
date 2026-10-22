@@ -186,15 +186,15 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="LOGIN_CODE">
-<h3>LOGIN_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">LOGIN_CODE</span></div>
-<div class="block">建立 Session 前必须完成的登录认证动作编码。</div>
+<section class="detail" id="ACCOUNT_DELETE_CODE">
+<h3>ACCOUNT_DELETE_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ACCOUNT_DELETE_CODE</span></div>
+<div class="block">删除平台账号的动作编码。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.LOGIN_CODE">Constant Field Values</a></li>
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.ACCOUNT_DELETE_CODE">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -210,96 +210,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <ul class="tag-list">
 <li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.AUTHENTICATION_SETTINGS_REPLACE_CODE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="TOTP_ENROLL_CODE">
-<h3>TOTP_ENROLL_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TOTP_ENROLL_CODE</span></div>
-<div class="block">注册新 TOTP 凭据的动作编码。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.TOTP_ENROLL_CODE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="TOTP_REPLACE_CODE">
-<h3>TOTP_REPLACE_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TOTP_REPLACE_CODE</span></div>
-<div class="block">删除或替换 TOTP 凭据的动作编码。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.TOTP_REPLACE_CODE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="PASSKEY_REGISTER_CODE">
-<h3>PASSKEY_REGISTER_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PASSKEY_REGISTER_CODE</span></div>
-<div class="block">注册新 Passkey 凭据的动作编码。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PASSKEY_REGISTER_CODE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="PASSKEY_DELETE_CODE">
-<h3>PASSKEY_DELETE_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PASSKEY_DELETE_CODE</span></div>
-<div class="block">删除 Passkey 凭据的动作编码。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PASSKEY_DELETE_CODE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="PASSWORD_REPLACE_CODE">
-<h3>PASSWORD_REPLACE_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PASSWORD_REPLACE_CODE</span></div>
-<div class="block">替换当前账号密码凭据的动作编码。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PASSWORD_REPLACE_CODE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="PHONE_VERIFY_CODE">
-<h3>PHONE_VERIFY_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PHONE_VERIFY_CODE</span></div>
-<div class="block">验证并绑定当前 Profile 手机号的动作编码。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PHONE_VERIFY_CODE">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -336,15 +246,105 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="ACCOUNT_DELETE_CODE">
-<h3>ACCOUNT_DELETE_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ACCOUNT_DELETE_CODE</span></div>
-<div class="block">删除平台账号的动作编码。</div>
+<section class="detail" id="LOGIN_CODE">
+<h3>LOGIN_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">LOGIN_CODE</span></div>
+<div class="block">建立 Session 前必须完成的登录认证动作编码。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.ACCOUNT_DELETE_CODE">Constant Field Values</a></li>
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.LOGIN_CODE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="PASSKEY_DELETE_CODE">
+<h3>PASSKEY_DELETE_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PASSKEY_DELETE_CODE</span></div>
+<div class="block">删除 Passkey 凭据的动作编码。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PASSKEY_DELETE_CODE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="PASSKEY_REGISTER_CODE">
+<h3>PASSKEY_REGISTER_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PASSKEY_REGISTER_CODE</span></div>
+<div class="block">注册新 Passkey 凭据的动作编码。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PASSKEY_REGISTER_CODE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="PASSWORD_REPLACE_CODE">
+<h3>PASSWORD_REPLACE_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PASSWORD_REPLACE_CODE</span></div>
+<div class="block">替换当前账号密码凭据的动作编码。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PASSWORD_REPLACE_CODE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="PHONE_VERIFY_CODE">
+<h3>PHONE_VERIFY_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PHONE_VERIFY_CODE</span></div>
+<div class="block">验证并绑定当前 Profile 手机号的动作编码。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.PHONE_VERIFY_CODE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="TOTP_ENROLL_CODE">
+<h3>TOTP_ENROLL_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TOTP_ENROLL_CODE</span></div>
+<div class="block">注册新 TOTP 凭据的动作编码。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.TOTP_ENROLL_CODE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="TOTP_REPLACE_CODE">
+<h3>TOTP_REPLACE_CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TOTP_REPLACE_CODE</span></div>
+<div class="block">删除或替换 TOTP 凭据的动作编码。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.authentication.AuthenticationActions.TOTP_REPLACE_CODE">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.sca4d.core.spring.json.NameJacksonModule;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.retry.RetryRuleCodec;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -38,6 +39,16 @@ public class CoreJacksonAutoConfiguration {
     @ConditionalOnMissingBean(annotation = Sca4djJson.class)
     public @NotNull Sca4djMapper sca4djObjectMapper() {
         return new Sca4djMapper();
+    }
+
+    /**
+     * @param mapper 脚手架内部共享 JSON 映射器
+     * @return 持久化与内部消息共用的版本化重试规则 Codec
+     */
+    @Bean
+    @ConditionalOnMissingBean(RetryRuleCodec.class)
+    public @NotNull RetryRuleCodec retryRuleCodec(@Sca4djJson ObjectMapper mapper) {
+        return new RetryRuleCodec(mapper);
     }
 
     /**

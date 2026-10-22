@@ -8,6 +8,7 @@ import com.hivemq.client.mqtt.mqtt5.Mqtt5ClientBuilder;
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
 import com.hivemq.client.mqtt.mqtt5.message.subscribe.Mqtt5Subscribe;
 import com.sca4d.core.api.data.DataOps;
+import com.sca4d.core.api.retry.RetryExecutor;
 import com.sca4d.iot.emqx.config.EmqxProperties;
 import com.sca4d.iot.emqx.connection.EmqxConnectionReconciler;
 import com.sca4d.iot.emqx.protocol.EncodedMqttMessage;
@@ -51,6 +52,8 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
 
     private final @NotNull MqttMessageRouter router;
 
+    private final @NotNull RetryExecutor retries;
+
     private final @NotNull Mqtt5AsyncClient client;
 
     private volatile @Nullable MqttInboundProcessor inbound;
@@ -65,8 +68,10 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
             @NotNull Collection<MqttMessageObserver> observers,
             @NotNull Collection<MqttMessageProcessingObserver> processingObservers,
             @Nullable MqttInboundFailureStore failureStore,
-            @NotNull EmqxConnectionReconciler connectionReconciler) {
+            @NotNull EmqxConnectionReconciler connectionReconciler,
+            @NotNull RetryExecutor retries) {
         this.properties = Objects.requireNonNull(properties, "EMQX 配置不能为空");
+        this.retries = Objects.requireNonNull(retries);
         this.properties.validate();
         this.router = Objects.requireNonNull(router, "MQTT 消息路由器不能为空");
         this.clock = Objects.requireNonNull(clock, "MQTT 时钟不能为空");
@@ -119,7 +124,8 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
                 properties.getInboundQueueCapacity(),
                 properties.getInboundMaximumAttempts(),
                 properties.getInboundRetryDelay(),
-                properties.getOperationTimeout());
+                properties.getOperationTimeout(),
+                retries);
         inbound = processor;
         try {
             await(

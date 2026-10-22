@@ -11,9 +11,9 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class PasswordView {
 
-    private final @NotNull String status;
-
     private final @NotNull Instant updatedAt;
+
+    private final @NotNull String status;
 
     private PasswordView(@NotNull String status, @NotNull Instant updatedAt) {
         this.status = status;

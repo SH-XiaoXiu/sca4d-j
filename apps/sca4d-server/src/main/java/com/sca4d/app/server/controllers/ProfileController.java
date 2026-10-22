@@ -33,9 +33,9 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class ProfileController {
 
-    private final @NotNull PlatformUserProfileService profiles;
-
     private final @NotNull PlatformAccountApplicationService accounts;
+
+    private final @NotNull PlatformUserProfileService profiles;
 
     /**
      * 创建当前账号资料入口。

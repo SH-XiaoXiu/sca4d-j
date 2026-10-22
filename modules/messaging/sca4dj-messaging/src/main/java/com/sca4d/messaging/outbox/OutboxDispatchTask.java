@@ -1,12 +1,11 @@
 package com.sca4d.messaging.outbox;
 
-import com.sca4d.core.api.scheduling.ClusterTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** 由集群定时器直接触发一次到期 Outbox 消息领取和发布。 */
-public final class OutboxDispatchTask implements ClusterTask {
+public final class OutboxDispatchTask {
 
     private final @NotNull MessageOutboxDispatcher dispatcher;
 
@@ -20,7 +19,7 @@ public final class OutboxDispatchTask implements ClusterTask {
         this.dispatcher = Objects.requireNonNull(dispatcher, "MessageOutboxDispatcher 不能为空");
     }
 
-    @Override
+    /** 领取并派发一批到期消息。 */
     public void execute() {
         dispatcher.dispatch();
     }

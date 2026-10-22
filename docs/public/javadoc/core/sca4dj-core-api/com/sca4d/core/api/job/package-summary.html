@@ -86,43 +86,65 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">表示可独立命名、持久化并由集群 worker 执行的一次工作定义。</div>
+<div class="block">表示可独立命名、由具备所需能力的实例执行的一项工作定义。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">向 DirectJob 明确提供当前持久化运行和尝试事实。</div>
+<div class="block">返回一次广播固定的目标及各目标持久化 Run；无记录广播不返回 Run。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">提交持久化 Job run，并查询、等待或读取其结果。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">向 DirectJob 提供当前执行、系统身份和尝试事实。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="JobHistory.html" title="interface in com.sca4d.core.api.job">JobHistory</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">提交持久化 Job Run、触发无记录工作，并查询或等待已保存的结果。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="JobHistory.html" title="interface in com.sca4d.core.api.job">JobHistory</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">只读查询当前 App 隔离名称中的持久化 Job 历史，不提交或推进 Job。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobKey.html" title="class in com.sca4d.core.api.job">JobKey</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobKey.html" title="class in com.sca4d.core.api.job">JobKey</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">使用稳定节点链标识 Job 定义，并保留独立领域类型。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobNodeOutput.html" title="class in com.sca4d.core.api.job">JobNodeOutput</a>&lt;T&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">声明 Job 历史查询要读取的 Pipeline 节点及其输出类型，不保存任一次运行的实际输出。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobNodeOutput.html" title="class in com.sca4d.core.api.job">JobNodeOutput</a>&lt;T&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">声明 Job 单个节点的最大尝试次数和固定重试间隔。</div>
+<div class="block">声明 Job 历史查询要读取的 Pipeline 节点及其输出类型，不保存任一次运行的实际输出。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab5"><a href="JobRunFailedException.html" title="class in com.sca4d.core.api.job">JobRunFailedException</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab5">
 <div class="block">表明调用方等待的 Job run 已失败，错误详情保存在对应运行记录中。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="JobRunRecording.html" title="enum class in com.sca4d.core.api.job">JobRunRecording</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">指定 Job 是否保存独立的持久化运行记录。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">表示持久化 Job run 是否排队、运行或已经结束。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">说明一次普通提交新建了运行、复用了同一输入，还是因占用而跳过。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="JobSubmission.Status.html" title="enum class in com.sca4d.core.api.job">JobSubmission.Status</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">指定一项工作由任一合格实例、某个实例或当前全部合格实例执行。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="JobTarget.Kind.html" title="enum class in com.sca4d.core.api.job">JobTarget.Kind</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="block">目标选择方式。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab5">
 <div class="block">表明调用方等待时间结束，持久化 Job run 仍继续执行。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">标识同一 Job 下参与并发控制的具体工作对象。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ParallelResults.html" title="class in com.sca4d.core.api.job">ParallelResults</a>&lt;L,<wbr>R&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

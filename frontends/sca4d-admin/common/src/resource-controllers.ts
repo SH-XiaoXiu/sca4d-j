@@ -16,16 +16,18 @@ import type {
   PlatformAccount,
   PlatformRole,
   Profile,
-  RolePermissions,
   RoleI18n,
+  RolePermissions,
   RoleStatus,
   Verification,
 } from './types';
 
 import { verificationHeaders } from './action-verification-controller';
-import { VERIFICATION_HEADER } from './http-contract';
 import { ObservableController } from './controller';
+import { SavedResourceRefreshError } from './errors';
+import { SupersededReadError } from './errors';
 import { AdminError } from './errors';
+import { VERIFICATION_HEADER } from './http-contract';
 import { freezeLocaleCatalog } from './localized-fields';
 import { permissionTree } from './permissions';
 
@@ -122,7 +124,11 @@ export class AccountsController extends ObservableController<AccountsState> {
         `/platform/accounts/${account.id}`,
         { status },
       );
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.resourceFailure(error);
       throw error;
@@ -135,7 +141,11 @@ export class AccountsController extends ObservableController<AccountsState> {
       '/platform/accounts',
       input,
     );
-    await this.load({ page: 1 });
+    try {
+      await this.load({ page: 1 });
+    } catch {
+      throw new SavedResourceRefreshError();
+    }
     return result.data;
   }
 
@@ -163,6 +173,7 @@ export class AccountsController extends ObservableController<AccountsState> {
 
   /** 使用完整筛选条件读取账号页。 */
   async load(filters: Partial<AccountFilters> = {}): Promise<void> {
+    const read = this.beginRead('load');
     const next = Object.freeze({ ...this.state.filters, ...filters });
     this.publish({
       ...this.state,
@@ -181,6 +192,7 @@ export class AccountsController extends ObservableController<AccountsState> {
         },
       );
       const page = freezePage(result.data);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         phase: page.items.length > 0 ? 'ready' : 'empty',
@@ -188,19 +200,7 @@ export class AccountsController extends ObservableController<AccountsState> {
         error: null,
       });
     } catch (error) {
-      this.resourceFailure(error);
-      throw error;
-    }
-  }
-
-  /** 读取一个完整 Platform Account，供深链接详情和资源引用使用。 */
-  async require(accountId: Int64String): Promise<PlatformAccount> {
-    try {
-      const result = await this.api.get<PlatformAccount>(
-        `/platform/accounts/${encodeURIComponent(accountId)}`,
-      );
-      return result.data;
-    } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.resourceFailure(error);
       throw error;
     }
@@ -208,12 +208,14 @@ export class AccountsController extends ObservableController<AccountsState> {
 
   /** 读取全部角色和指定账号当前角色。 */
   async loadRoles(accountId: Int64String): Promise<void> {
+    const read = this.beginRead('loadRoles');
     try {
       const [roles, selected] = await Promise.all([
         this.api.get<readonly PlatformRole[]>('/platform/roles'),
         this.api.get<AccountRoles>(`/platform/accounts/${accountId}/roles`),
       ]);
       if (!selected.etag) throw new Error('Account roles response has no ETag');
+      if (!this.isCurrentRead('loadRoles', read)) return;
       this.publish({
         ...this.state,
         roles: Object.freeze([...roles.data]),
@@ -224,6 +226,7 @@ export class AccountsController extends ObservableController<AccountsState> {
         selectedRolesEtag: selected.etag,
       });
     } catch (error) {
+      if (!this.isCurrentRead('loadRoles', read)) return;
       this.resourceFailure(error);
       throw error;
     }
@@ -274,6 +277,22 @@ export class AccountsController extends ObservableController<AccountsState> {
     }
   }
 
+  /** 读取一个完整 Platform Account，供深链接详情和资源引用使用。 */
+  async require(accountId: Int64String): Promise<PlatformAccount> {
+    const read = this.beginRead('detail');
+    try {
+      const result = await this.api.get<PlatformAccount>(
+        `/platform/accounts/${encodeURIComponent(accountId)}`,
+      );
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      return result.data;
+    } catch (error) {
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      this.resourceFailure(error);
+      throw error;
+    }
+  }
+
   /** 向待完成的账号删除 verification 提交 Passkey。 */
   async submitDeletionPasskey(
     proof: PasskeyProof,
@@ -305,7 +324,11 @@ export class AccountsController extends ObservableController<AccountsState> {
       'session',
     );
     this.publish({ ...this.state, pendingDeletion: null, error: null });
-    await this.load();
+    try {
+      await this.load();
+    } catch {
+      throw new SavedResourceRefreshError();
+    }
   }
 
   private publishPendingDeletion(
@@ -376,8 +399,12 @@ export interface RolesState {
   readonly catalog: null | PermissionCatalog;
   readonly error: AdminError | null;
   readonly i18n: null | RoleI18n;
-  readonly localeCatalog: null | LocaleCatalog;
+  /** 与名称快照一起读取的强 ETag，不由其他角色操作替换。 */
+  readonly i18nEtag: null | string;
+  readonly localeCatalog: LocaleCatalog | null;
   readonly permissions: null | RolePermissions;
+  /** 与权限集合一起读取的强 ETag。 */
+  readonly permissionsEtag: null | string;
   readonly permissionTree: readonly PermissionTreeItem[];
   readonly phase: ResourcePhase;
   readonly roleEtag: null | {
@@ -394,13 +421,44 @@ export class RolesController extends ObservableController<RolesState> {
       phase: 'idle',
       roles: Object.freeze([]),
       i18n: null,
+      i18nEtag: null,
       localeCatalog: null,
       permissions: null,
+      permissionsEtag: null,
       roleEtag: null,
       catalog: null,
       permissionTree: Object.freeze([]),
       error: null,
     });
+  }
+
+  /** 使用角色详情的统一 ETag 修改角色状态。 */
+  async changeStatus(role: PlatformRole, status: RoleStatus): Promise<void> {
+    try {
+      const current = await this.api.get<PlatformRole>(
+        `/platform/roles/${role.id}`,
+      );
+      if (!current.etag) throw new Error('Role response has no ETag');
+      const updated = await this.api.put<PlatformRole>(
+        `/platform/roles/${role.id}/status`,
+        { status },
+        { 'If-Match': current.etag },
+      );
+      if (!updated.etag) throw new Error('Role response has no ETag');
+      this.publish({
+        ...this.state,
+        roleEtag: Object.freeze({ roleId: role.id, value: updated.etag }),
+        error: null,
+      });
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
+    } catch (error) {
+      this.fail(error);
+      throw error;
+    }
   }
 
   /** 创建角色并刷新角色列表。 */
@@ -411,7 +469,11 @@ export class RolesController extends ObservableController<RolesState> {
         i18n,
         permissionCodes: [],
       });
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.fail(error);
       throw error;
@@ -440,7 +502,11 @@ export class RolesController extends ObservableController<RolesState> {
         roleEtag:
           this.state.roleEtag?.roleId === role.id ? null : this.state.roleEtag,
       });
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.fail(error);
       throw error;
@@ -449,11 +515,13 @@ export class RolesController extends ObservableController<RolesState> {
 
   /** 读取全部角色。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, phase: 'loading', error: null });
     try {
       const result =
         await this.api.get<readonly PlatformRole[]>('/platform/roles');
       const roles = Object.freeze([...result.data]);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         phase: roles.length > 0 ? 'ready' : 'empty',
@@ -461,34 +529,7 @@ export class RolesController extends ObservableController<RolesState> {
         error: null,
       });
     } catch (error) {
-      this.fail(error);
-      throw error;
-    }
-  }
-
-  /** 读取一个完整 Platform Role，供深链接详情和资源引用使用。 */
-  async require(roleId: Int64String): Promise<PlatformRole> {
-    try {
-      const result = await this.api.get<PlatformRole>(
-        `/platform/roles/${encodeURIComponent(roleId)}`,
-      );
-      return result.data;
-    } catch (error) {
-      this.fail(error);
-      throw error;
-    }
-  }
-
-  /** 读取应用支持和默认使用的 Locale。 */
-  async loadLocales(): Promise<void> {
-    try {
-      const result = await this.api.get<LocaleCatalog>('/system/locales');
-      this.publish({
-        ...this.state,
-        localeCatalog: freezeLocaleCatalog(result.data),
-        error: null,
-      });
-    } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error);
       throw error;
     }
@@ -496,20 +537,42 @@ export class RolesController extends ObservableController<RolesState> {
 
   /** 同时读取角色完整多语言字段和应用 Locale 目录。 */
   async loadI18n(roleId: Int64String): Promise<void> {
+    const read = this.beginRead('loadI18n');
     try {
       const [i18n, locales] = await Promise.all([
         this.api.get<RoleI18n>(`/platform/roles/${roleId}/i18n`),
         this.api.get<LocaleCatalog>('/system/locales'),
       ]);
       if (!i18n.etag) throw new Error('Role i18n response has no ETag');
+      if (!this.isCurrentRead('loadI18n', read)) return;
       this.publish({
         ...this.state,
         i18n: freezeRoleI18n(i18n.data),
+        i18nEtag: i18n.etag,
         localeCatalog: freezeLocaleCatalog(locales.data),
         roleEtag: Object.freeze({ roleId: i18n.data.roleId, value: i18n.etag }),
         error: null,
       });
     } catch (error) {
+      if (!this.isCurrentRead('loadI18n', read)) return;
+      this.fail(error);
+      throw error;
+    }
+  }
+
+  /** 读取应用支持和默认使用的 Locale。 */
+  async loadLocales(): Promise<void> {
+    const read = this.beginRead('loadLocales');
+    try {
+      const result = await this.api.get<LocaleCatalog>('/system/locales');
+      if (!this.isCurrentRead('loadLocales', read)) return;
+      this.publish({
+        ...this.state,
+        localeCatalog: freezeLocaleCatalog(result.data),
+        error: null,
+      });
+    } catch (error) {
+      if (!this.isCurrentRead('loadLocales', read)) return;
       this.fail(error);
       throw error;
     }
@@ -517,6 +580,7 @@ export class RolesController extends ObservableController<RolesState> {
 
   /** 同时读取角色权限和系统权限目录。 */
   async loadPermissions(roleId: Int64String): Promise<void> {
+    const read = this.beginRead('loadPermissions');
     try {
       const [permissions, catalog] = await Promise.all([
         this.api.get<RolePermissions>(`/platform/roles/${roleId}/permissions`),
@@ -524,17 +588,53 @@ export class RolesController extends ObservableController<RolesState> {
       ]);
       if (!permissions.etag)
         throw new Error('Role permissions response has no ETag');
+      if (!this.isCurrentRead('loadPermissions', read)) return;
       this.publish({
         ...this.state,
         permissions: Object.freeze({
           ...permissions.data,
           permissionCodes: Object.freeze([...permissions.data.permissionCodes]),
         }),
+        permissionsEtag: permissions.etag,
         roleEtag: Object.freeze({ roleId, value: permissions.etag }),
         catalog: catalog.data,
         permissionTree: permissionTree(catalog.data.tree),
         error: null,
       });
+    } catch (error) {
+      if (!this.isCurrentRead('loadPermissions', read)) return;
+      this.fail(error);
+      throw error;
+    }
+  }
+
+  /** 使用完整多语言字段的 ETag 原子替换角色多语言字段。 */
+  async replaceI18n(i18n: LocalizedFields): Promise<void> {
+    const current = this.state.i18n;
+    const etag = this.state.i18nEtag;
+    if (!current || !etag) throw new Error('No role i18n is loaded');
+    try {
+      const result = await this.api.put<RoleI18n>(
+        `/platform/roles/${current.roleId}/i18n`,
+        { i18n },
+        { 'If-Match': etag },
+      );
+      if (!result.etag) throw new Error('Role i18n response has no ETag');
+      this.publish({
+        ...this.state,
+        i18n: freezeRoleI18n(result.data),
+        i18nEtag: result.etag,
+        roleEtag: Object.freeze({
+          roleId: result.data.roleId,
+          value: result.etag,
+        }),
+        error: null,
+      });
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.fail(error);
       throw error;
@@ -547,84 +647,49 @@ export class RolesController extends ObservableController<RolesState> {
     const role = this.state.roles.find(
       (candidate) => candidate.id === permissions?.roleId,
     );
-    const roleEtag = this.state.roleEtag;
-    if (
-      !permissions ||
-      !role ||
-      !roleEtag ||
-      roleEtag.roleId !== permissions.roleId
-    )
+    const etag = this.state.permissionsEtag;
+    if (!permissions || !role || !etag)
       throw new Error('No role permissions are loaded');
     try {
       const result = await this.api.put<RolePermissions>(
         `/platform/roles/${role.id}/permissions`,
         { permissionCodes },
-        { 'If-Match': roleEtag.value },
+        { 'If-Match': etag },
       );
       if (!result.etag)
         throw new Error('Role permissions response has no ETag');
       this.publish({
         ...this.state,
         roleEtag: Object.freeze({ roleId: role.id, value: result.etag }),
-        error: null,
-      });
-      await this.load();
-      await this.loadPermissions(role.id);
-    } catch (error) {
-      this.fail(error);
-      throw error;
-    }
-  }
-
-  /** 使用角色详情的统一 ETag 修改角色状态。 */
-  async changeStatus(role: PlatformRole, status: RoleStatus): Promise<void> {
-    try {
-      const current = await this.api.get<PlatformRole>(
-        `/platform/roles/${role.id}`,
-      );
-      if (!current.etag) throw new Error('Role response has no ETag');
-      const updated = await this.api.put<PlatformRole>(
-        `/platform/roles/${role.id}/status`,
-        { status },
-        { 'If-Match': current.etag },
-      );
-      if (!updated.etag) throw new Error('Role response has no ETag');
-      this.publish({
-        ...this.state,
-        roleEtag: Object.freeze({ roleId: role.id, value: updated.etag }),
-        error: null,
-      });
-      await this.load();
-    } catch (error) {
-      this.fail(error);
-      throw error;
-    }
-  }
-
-  /** 使用完整多语言字段的 ETag 原子替换角色多语言字段。 */
-  async replaceI18n(i18n: LocalizedFields): Promise<void> {
-    const current = this.state.i18n;
-    const roleEtag = this.state.roleEtag;
-    if (!current || !roleEtag || roleEtag.roleId !== current.roleId)
-      throw new Error('No role i18n is loaded');
-    try {
-      const result = await this.api.put<RoleI18n>(
-        `/platform/roles/${current.roleId}/i18n`,
-        { i18n },
-        { 'If-Match': roleEtag.value },
-      );
-      if (!result.etag) throw new Error('Role i18n response has no ETag');
-      this.publish({
-        ...this.state,
-        i18n: freezeRoleI18n(result.data),
-        roleEtag: Object.freeze({
-          roleId: result.data.roleId,
-          value: result.etag,
+        permissionsEtag: result.etag,
+        permissions: Object.freeze({
+          ...result.data,
+          permissionCodes: Object.freeze([...result.data.permissionCodes]),
         }),
         error: null,
       });
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
+      this.fail(error);
+      throw error;
+    }
+  }
+
+  /** 读取一个完整 Platform Role，供深链接详情和资源引用使用。 */
+  async require(roleId: Int64String): Promise<PlatformRole> {
+    const read = this.beginRead('detail');
+    try {
+      const result = await this.api.get<PlatformRole>(
+        `/platform/roles/${encodeURIComponent(roleId)}`,
+      );
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
+      return result.data;
+    } catch (error) {
+      if (!this.isCurrentRead('detail', read)) throw new SupersededReadError();
       this.fail(error);
       throw error;
     }
@@ -660,11 +725,13 @@ export class PermissionsController extends ObservableController<PermissionsState
 
   /** 读取只读权限目录。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, phase: 'loading', error: null });
     try {
       const result = await this.api.get<PermissionCatalog>(
         '/system/permissions',
       );
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         phase: result.data.total ? 'ready' : 'empty',
         catalog: result.data,
@@ -672,7 +739,9 @@ export class PermissionsController extends ObservableController<PermissionsState
         error: null,
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       const value = asAdminError(error);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         phase: value.kind === 'permission' ? 'forbidden' : 'error',
@@ -713,15 +782,18 @@ export class ProfileController extends ObservableController<ProfileState> {
 
   /** 读取当前账号资料。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, phase: 'loading', error: null });
     try {
       const result = await this.api.get<Profile>('/me/profile');
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         phase: 'ready',
         profile: Object.freeze(result.data),
         error: null,
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error);
       throw error;
     }
@@ -812,15 +884,18 @@ export class PasswordController extends ObservableController<PasswordState> {
 
   /** 读取不含摘要的密码状态。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, phase: 'loading', error: null });
     try {
       const result = await this.api.get<PasswordStatus>('/me/password');
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         error: null,
         password: Object.freeze(result.data),
         phase: 'ready',
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error);
       throw error;
     }

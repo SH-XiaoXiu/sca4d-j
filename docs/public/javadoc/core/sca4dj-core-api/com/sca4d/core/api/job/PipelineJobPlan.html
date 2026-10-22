@@ -158,19 +158,19 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;L,<wbr>
 R&gt;&nbsp;@NotNull <a href="PipelineJobPlan.Parallel.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Parallel</a><wbr>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">I</a>,<wbr>L,<wbr>R&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parallel(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy,java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy)" class="member-name-link">parallel</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;leftKey,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parallel(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule,java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">parallel</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;leftKey,
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>,<wbr>L&gt;&nbsp;left,
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;leftRetry,
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;leftRetry,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rightKey,
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>,<wbr>R&gt;&nbsp;right,
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;rightRetry)</code></div>
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;rightRetry)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">从当前终点启动两条 Pipeline；调用方必须继续声明合并 Pipeline。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;N&gt;&nbsp;@NotNull <a href="PipelineJobPlan.html" title="class in com.sca4d.core.api.job">PipelineJobPlan</a><wbr>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">I</a>,<wbr>N&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#then(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy)" class="member-name-link">then</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeKey,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#then(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">then</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeKey,
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>,<wbr>N&gt;&nbsp;pipeline,
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;retryPolicy)</code></div>
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;retryRule)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">在当前终点后增加一条 Pipeline。</div>
 </div>
@@ -213,7 +213,7 @@ R&gt;&nbsp;@NotNull <a href="PipelineJobPlan.Parallel.html" title="class in com.
 </section>
 </li>
 <li>
-<section class="detail" id="then(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy)">
+<section class="detail" id="then(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule)">
 <h3>then</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Contract(pure=true)
@@ -223,7 +223,7 @@ R&gt;&nbsp;@NotNull <a href="PipelineJobPlan.Parallel.html" title="class in com.
  @NotNull
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>,<wbr>N&gt;&nbsp;pipeline,
  @NotNull
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;retryPolicy)</span></div>
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;retryRule)</span></div>
 <div class="block">在当前终点后增加一条 Pipeline。</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -231,7 +231,7 @@ R&gt;&nbsp;@NotNull <a href="PipelineJobPlan.Parallel.html" title="class in com.
 <dt>Parameters:</dt>
 <dd><code>nodeKey</code> - 节点在当前 Job 内的稳定名称</dd>
 <dd><code>pipeline</code> - 输入类型与当前输出相同的 Pipeline</dd>
-<dd><code>retryPolicy</code> - 当前 Pipeline 节点的重试策略</dd>
+<dd><code>retryRule</code> - 当前 Pipeline 节点的重试策略</dd>
 <dt>Returns:</dt>
 <dd>采用 Pipeline 输出作为新终点的计划</dd>
 <dt>Throws:</dt>
@@ -241,7 +241,7 @@ R&gt;&nbsp;@NotNull <a href="PipelineJobPlan.Parallel.html" title="class in com.
 </section>
 </li>
 <li>
-<section class="detail" id="parallel(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy,java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy)">
+<section class="detail" id="parallel(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule,java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule)">
 <h3>parallel</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Contract(pure=true)
@@ -253,13 +253,13 @@ R&gt;</span>
  @NotNull
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>,<wbr>L&gt;&nbsp;left,
  @NotNull
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;leftRetry,
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;leftRetry,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rightKey,
  @NotNull
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>,<wbr>R&gt;&nbsp;right,
  @NotNull
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;rightRetry)</span></div>
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;rightRetry)</span></div>
 <div class="block">从当前终点启动两条 Pipeline；调用方必须继续声明合并 Pipeline。</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
