@@ -14,7 +14,8 @@ import com.sca4d.core.api.audit.AuditOperation;
 import com.sca4d.core.api.audit.AuditRecord;
 import com.sca4d.core.api.audit.HttpCall;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.persistence.AffectedRows;
+import com.sca4d.core.api.persistence.AffectedRowCounts;
+import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.ApiStatus;
@@ -56,12 +57,14 @@ public class AuditRepository {
     }
 
     /**
-     * 追加一条写入后不再更新的审计行。
+     * 追加一条写入后不再更新的审计行，并在同一事务中写入关联资源。
+     *
+     * <p>审计行和关联资源是两次写入，不能使用只允许一条 DML 的 {@code @AffectedRows}，所以直接检查审计行的影响行数。
      */
-    @AffectedRows(target = "新增审计记录")
+    @Transactional
     public void append(@NotNull AuditRecord record) {
         EncodedAuditEntry entry = encode(Objects.requireNonNull(record, "审计记录不能为空"), ids.nextId().value());
-        mapper.insert(entry);
+        AffectedRowCounts.requireSingle(mapper.insert(entry), ZeroRowPolicy.ERROR, "新增审计记录");
         associate(entry.id(), record.relatedResources());
     }
 
@@ -72,11 +75,10 @@ public class AuditRepository {
     }
 
     /** 为已冻结字段分配主键并追加单条审计行。 */
-    @AffectedRows(target = "新增尽力审计记录")
     @Transactional
     public void appendFrozen(@NotNull FrozenAuditEntry frozen) {
         EncodedAuditEntry entry = frozen.entry().withId(ids.nextId().value());
-        mapper.insert(entry);
+        AffectedRowCounts.requireSingle(mapper.insert(entry), ZeroRowPolicy.ERROR, "新增尽力审计记录");
         associate(entry.id(), frozen.resources());
     }
 

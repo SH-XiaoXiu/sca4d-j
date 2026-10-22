@@ -37,6 +37,8 @@ import com.sca4d.core.spring.call.SpelCallValueResolver;
 import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
+import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
 import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +57,7 @@ import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -452,8 +455,21 @@ class AuditPersistenceIntegrationTest {
     /** 为 Audit 自动配置提供测试 DataSource、ObjectMapper 和标识生成器。 */
     @SpringBootConfiguration
     @ImportAutoConfiguration({DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
-            JdbcTemplateAutoConfiguration.class, MybatisAutoConfiguration.class, AuditAutoConfiguration.class})
+            JdbcTemplateAutoConfiguration.class, MybatisAutoConfiguration.class,
+            AuditAutoConfiguration.class})
+    @EnableAspectJAutoProxy
     static class TestApplication {
+        /** 与应用一致地检查 Repository 方法的影响行数声明，避免 @AffectedRows 违规只在应用里暴露。 */
+        @Bean
+        AffectedRowsAspect affectedRowsAspect() {
+            return new AffectedRowsAspect();
+        }
+
+        @Bean
+        AffectedRowsInterceptor affectedRowsInterceptor() {
+            return new AffectedRowsInterceptor();
+        }
+
         @Bean
         SPICallValueResolver expressionResolver(ApplicationContext context) {
             return new SpelCallValueResolver(context);
