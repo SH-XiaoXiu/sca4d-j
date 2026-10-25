@@ -4,6 +4,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.access.SettingReader;
 import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.core.api.setting.value.SettingValue;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -31,6 +32,13 @@ public final class JarSettingReader implements SettingReader<byte[]> {
         return TreeCode.of("SETTING:JAR");
     }
 
+    /**
+     * 从构造时指定的 JAR 中读取资源字节；资源不存在时返回值为 null 的 SettingValue。
+     * 每次调用都重新打开 JAR，不缓存读取结果。
+     *
+     * @throws IllegalArgumentException `owner` 与构造时的所属不一致，或资源超过 1 MiB 时抛出
+     * @throws IllegalStateException JAR 打开或资源读取发生 IO 错误时抛出
+     */
     @Override
     public @NotNull SettingValue<byte[]> read(@NotNull TreeCode setting, @NotNull SettingOwner requested) {
         if (!owner.equals(requested))
@@ -48,7 +56,7 @@ public final class JarSettingReader implements SettingReader<byte[]> {
                 return SettingValue.read(code(), setting, owner, bytes, 0, null, false);
             }
         } catch (IOException failure) {
-            throw new IllegalStateException("插件配置资源读取失败", failure);
+            throw new CoreSpringException("插件配置资源读取失败", failure);
         }
     }
 }

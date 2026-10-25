@@ -32,6 +32,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+/** 验证 CoreMyBatisAutoConfiguration 的配置定制、附加 SqlSessionFactory、默认 Executor 检查，以及 MyBatis 枚举处理器的 BaseEnum 限制。 */
 class CoreMyBatisAutoConfigurationTest {
 
     @Test

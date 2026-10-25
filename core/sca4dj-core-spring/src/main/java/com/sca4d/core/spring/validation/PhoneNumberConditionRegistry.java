@@ -18,6 +18,8 @@ public class PhoneNumberConditionRegistry {
      * 创建条件目录。
      *
      * @param conditions Spring 容器中的显式条件 Bean
+     * @throws NullPointerException 列表或其中任一元素为空时抛出
+     * @throws IllegalStateException 两个 Bean 的用户类型相同时抛出，启动阶段失败
      */
     public PhoneNumberConditionRegistry(@NotNull List<PhoneNumberCondition> conditions) {
         Objects.requireNonNull(conditions, "电话号码条件 Bean 不能为空");

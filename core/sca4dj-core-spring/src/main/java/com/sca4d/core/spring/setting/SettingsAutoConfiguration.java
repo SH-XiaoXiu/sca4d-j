@@ -27,7 +27,7 @@ public class SettingsAutoConfiguration {
     public SettingsAutoConfiguration() {
     }
 
-    /** @return 解析当前应用系统设置 ENV 名称的 Spring 配置边界 */
+    /** @return 按当前应用前缀把 ENV 后缀解析为环境变量名的解析器 */
     @Bean
     EnvironmentVariableResolver environmentVariableResolver(
             Environment environment,
@@ -41,7 +41,7 @@ public class SettingsAutoConfiguration {
         return new SettingCatalog(settings);
     }
 
-    /** @return 隔离 MyBatis 影响行数的设置 Repository */
+    /** @return 封装 MyBatis 影响行数检查的设置 Repository */
     @Bean
     SettingRepository settingRepository(SettingMapper mapper, SqlBatches sqlBatches) {
         return new SettingRepository(mapper, sqlBatches);

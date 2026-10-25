@@ -12,7 +12,7 @@ public class Sca4djMapper extends ObjectMapper {
 
     private static final long serialVersionUID = 1L;
 
-    /** 安装内部稳定的时间和严格输入规则，不继承 HTTP 或业务 Mapper 的定制。 */
+    /** 安装 Java Time 和名称类型模块，日期输出为 ISO 文本，遇到未知 JSON 属性时直接失败；不继承 HTTP 或业务 Mapper 的定制。 */
     public Sca4djMapper() {
         registerModule(new JavaTimeModule());
         registerModule(new NameJacksonModule());

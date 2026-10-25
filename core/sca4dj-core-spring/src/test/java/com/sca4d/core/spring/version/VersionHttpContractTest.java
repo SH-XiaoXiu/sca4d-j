@@ -9,8 +9,10 @@ import com.sca4d.core.api.call.*;
 import com.sca4d.core.api.i18n.TextLocalizer;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.version.*;
+import com.sca4d.core.api.version.exception.*;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.web.*;
+import com.sca4d.core.spring.web.exception.*;
 import org.junit.jupiter.api.*;
 import org.springframework.context.annotation.*;
 import org.springframework.mock.web.MockServletContext;
@@ -25,12 +27,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/** 验证 HTTP 路由、类型化参数、统一 Call 拒绝和两种版本入口。 */
+/** 验证 HTTP 路由、类型化参数、Call 拒绝时返回 409 或 400 且业务方法不执行，以及同一业务方法通过旧路径与 /v2 路径两种版本入口返回对应契约。 */
 class VersionHttpContractTest {
     private AnnotationConfigWebApplicationContext context;
 
     private MockMvc mvc;
 
+    /** 初始化 HttpConstants 与 GatewayConstants；它们是进程级配置，必须在 setup 创建 MockMvc 上下文前完成。 */
     @BeforeAll
     static void constants() {
         com.sca4d.core.api.setting.ConfiguredConstants.initialize(HttpConstants.class, ignored -> null);
@@ -202,7 +205,7 @@ class VersionHttpContractTest {
         }
     }
 
-    /** 观察统一 Call 的最终状态。 */
+    /** 记录 Call 完成时的最终 CallOutcome 状态，供测试断言被拒绝的调用是否记为 DENIED。 */
     static class Outcomes implements CallLifecycle.Completion {
         CallOutcome.Status last;
 

@@ -1,5 +1,6 @@
-package com.sca4d.core.api.data;
+package com.sca4d.core.api.data.exception;
 
+import com.sca4d.core.api.data.DataOperation;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -129,7 +130,7 @@ public class DataAssertionException extends RuntimeException {
      * @param operation 当前节点
      * @return 包含节点名称和输出键的新异常
      */
-    DataAssertionException at(DataOperation<?> operation) {
+    public DataAssertionException at(DataOperation<?> operation) {
         return new DataAssertionException(
                 field,
                 operation.name(),

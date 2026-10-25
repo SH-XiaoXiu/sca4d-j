@@ -45,7 +45,7 @@ class CoreI18nConfiguration {
         return new ClasspathMessageCatalog(resources, locales);
     }
 
-    /** @param locales Locale 目录 @param messages 静态消息目录 @return 统一文本本地化入口 */
+    /** @param locales Locale 目录 @param messages 静态消息目录 @return 按 Locale 查找消息文本的文本本地化入口 */
     @Bean
     @ConditionalOnMissingBean
     TextLocalizer textLocalizer(LocaleCatalog locales, MessageCatalog messages) {

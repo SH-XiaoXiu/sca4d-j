@@ -69,6 +69,9 @@ public class RetryRule {
         return backoff;
     }
 
+    /**
+     * @return 规则只允许首次执行、不进行任何重试时为 true
+     */
     public boolean isOnce() {
         return maximumAttempts == 1;
     }

@@ -1,7 +1,9 @@
 package com.sca4d.core.api.flow;
 
-import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +66,7 @@ public class FlowEngine {
                 new Version(0),
                 false);
         if (!store.create(instance)) {
-            throw new IllegalStateException("流程实例标识已经存在: " + flowId);
+            throw new BusinessException(CoreErrorCode.FLOW_ID_EXISTS);
         }
         LOG.trace(
                 "流程已创建 | flowId={} definition={}:{} node={}",
@@ -120,7 +122,7 @@ public class FlowEngine {
         FlowInstance current = activeInstance(flowId, consumedAt);
         FlowDefinition definition = catalog.loadByNameAndVersion(current.definitionName(), current.definitionVersion());
         if (definition.graph().node(current.currentNodeId()).type() != FlowNodeType.TERMINAL) {
-            throw new IllegalStateException("流程尚未完成，不能消费: " + flowId);
+            throw new BusinessException(CoreErrorCode.FLOW_NOT_COMPLETED);
         }
         FlowInstance consumed = current.consume();
         if (!store.update(current.version(), consumed)) {
@@ -136,10 +138,10 @@ public class FlowEngine {
         FlowInstance instance = store.find(flowId)
                 .orElseThrow(() -> new IllegalArgumentException("流程实例不存在: " + flowId));
         if (instance.isExpiredAt(instant)) {
-            throw new IllegalStateException("流程实例已经过期: " + flowId);
+            throw new BusinessException(CoreErrorCode.FLOW_EXPIRED);
         }
         if (instance.isConsumed()) {
-            throw new IllegalStateException("流程结果已经消费: " + flowId);
+            throw new BusinessException(CoreErrorCode.FLOW_RESULT_CONSUMED);
         }
         return instance;
     }

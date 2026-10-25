@@ -1,8 +1,8 @@
 package com.sca4d.core.spring.identity;
 
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.spring.web.HttpCallHandlerInterceptor;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
@@ -51,7 +51,7 @@ public class PrincipalSelectionInterceptor extends HttpCallHandlerInterceptor {
      * @param response 当前 HTTP 响应
      * @param handler Spring MVC 已选择的 Handler
      * @param call 当前请求唯一的调用
-     * @return 业务身份选择完成时为 {@code true}
+     * @return 始终为 {@code true}，表示继续执行后续拦截器和 Controller；未选出业务身份时由 {@link PrincipalSelectionCallInterceptor} 在参数绑定后继续处理
      * @throws BusinessException 必须选择 Principal 但请求尚未认证时抛出
      * @throws IllegalStateException 无法确定必须存在的 Principal 时抛出
      */

@@ -39,10 +39,26 @@ public interface Resource {
 
         private final @NotNull TreeCode type;
 
+        /**
+         * 使用文本形式的资源类型创建引用。
+         *
+         * @param type 资源类型编码，按 {@link TreeCode#of(String)} 的规则校验
+         * @param id 非空白业务标识
+         * @throws NullPointerException 类型或标识为空时抛出
+         * @throws IllegalArgumentException 类型编码不合法或标识为空白时抛出
+         */
         public Ref(@NotNull String type, @NotNull String id) {
             this(TreeCode.of(type), id);
         }
 
+        /**
+         * 使用已校验的资源类型创建引用。
+         *
+         * @param type 资源类型
+         * @param id 非空白业务标识
+         * @throws NullPointerException 类型或标识为空时抛出
+         * @throws IllegalArgumentException 标识为空白时抛出
+         */
         public Ref(@NotNull TreeCode type, @NotNull String id) {
             this.type = Objects.requireNonNull(type, "资源类型不能为空");
             this.id = Objects.requireNonNull(id, "资源标识不能为空");
@@ -51,6 +67,13 @@ public interface Resource {
             }
         }
 
+        /**
+         * 复制任意 Resource 的类型和标识，返回不依赖原对象的引用。
+         *
+         * @param resource 需要复制的资源
+         * @return 与资源类型和标识相同的引用
+         * @throws NullPointerException 资源为空时抛出
+         */
         public static @NotNull Ref of(@NotNull Resource resource) {
             Resource checked = Objects.requireNonNull(resource, "资源不能为空");
             return new Ref(checked.type(), checked.id());

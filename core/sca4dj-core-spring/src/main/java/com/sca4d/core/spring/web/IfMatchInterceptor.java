@@ -1,7 +1,7 @@
 package com.sca4d.core.spring.web;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.spring.web.annotation.IfMatch;
 import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +30,18 @@ public class IfMatchInterceptor implements HandlerInterceptor {
         this.versionConditions = Objects.requireNonNull(versionConditions, "HTTP 请求版本条件入口不能为空");
     }
 
+    /**
+     * 解析带 {@link IfMatch} 的方法请求中的 If-Match 头，并把版本交给 RequestVersionConditions。
+     * 异步分派直接放行，不重复校验。Header 缺失或为空白时抛出 HTTP 428 对应的 PRECONDITION_REQUIRED；
+     * 多个 Header 值、弱 ETag、通配符 ETag 或版本号不是整数时抛出 412 对应的 PRECONDITION_FAILED。
+     * 校验失败时不绑定版本，请求在进入 Controller 之前结束。
+     *
+     * @param request 当前 HTTP 请求
+     * @param response 当前 HTTP 响应
+     * @param handler Spring MVC 已选择的 Handler
+     * @return 非 {@link IfMatch} 方法或校验通过时为 {@code true}
+     * @throws BusinessException If-Match 缺失、重复或不符合强 ETag 格式时抛出，错误码见上文
+     */
     @Override
     public boolean preHandle(
             @NotNull HttpServletRequest request,

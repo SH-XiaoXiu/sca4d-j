@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Role;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/** 统一导入 Core Spring 的内部 Bean 工厂，保持自动配置条件和排除语义。 */
+/** 导入 Core Spring 各配置类并绑定其配置属性，启用 AspectJ 代理；本类不直接定义 Bean。 */
 @AutoConfiguration(after = WebMvcAutoConfiguration.class)
 @ConditionalOnClass(WebMvcConfigurer.class)
 @EnableAspectJAutoProxy

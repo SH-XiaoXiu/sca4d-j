@@ -50,7 +50,7 @@ public interface DictionaryMapper {
      * 新增一个数据库字典选项。
      *
      * @param key 字典键
-     * @param value 选项稳定值
+     * @param value 选项值
      * @param label 缺少翻译时使用的回退标签
      * @param i18n 按 Locale 保存的完整多语言 label
      * @param enabled 是否允许用于新的业务输入
@@ -70,7 +70,7 @@ public interface DictionaryMapper {
      * 按字典键、值和版本完整修改数据库选项。
      *
      * @param key 字典键
-     * @param value 选项稳定值
+     * @param value 选项值
      * @param label 缺少翻译时使用的回退标签
      * @param i18n 按 Locale 保存的完整多语言 label
      * @param enabled 是否允许用于新的业务输入

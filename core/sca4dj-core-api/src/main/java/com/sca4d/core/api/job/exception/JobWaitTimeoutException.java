@@ -1,4 +1,4 @@
-package com.sca4d.core.api.job;
+package com.sca4d.core.api.job.exception;
 
 import com.sca4d.core.api.id.Id;
 import org.jetbrains.annotations.Contract;

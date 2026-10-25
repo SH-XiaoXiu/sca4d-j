@@ -16,6 +16,10 @@ public class ClientStateFilter extends OncePerRequestFilter {
     public ClientStateFilter() {
     }
 
+    /**
+     * 执行后续过滤器链；响应尚未提交时把当前请求的状态刷新头写入响应，并在最后清理 ClientState。
+     * 异常情况下同样在 finally 中写入和清理，异常本身继续向上抛出。
+     */
     @Override
     protected void doFilterInternal(
             @NotNull HttpServletRequest request,

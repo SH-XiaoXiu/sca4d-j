@@ -27,6 +27,7 @@ import java.time.ZoneOffset;
 import java.util.Map;
 import java.util.Objects;
 
+/** 验证 IdempotencyKeyResolver 从 Call 输入读取幂等键并校验格式，HttpCallFilter 把请求头登记为输入，以及 MethodArgumentsIdempotencyKeyResolver 计算的方法参数摘要。 */
 class IdempotencyKeyResolverTest {
 
     @BeforeAll
@@ -34,6 +35,7 @@ class IdempotencyKeyResolverTest {
         ConfiguredConstants.initialize(HttpConstants.class, ignored -> null);
     }
 
+    /** 当前测试使用的 Call；bindHttpInput 会用携带 HTTP 输入的新 Call 替换它。 */
     private Call call = Call
             .system("idempotency-test", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
 
@@ -98,6 +100,7 @@ class IdempotencyKeyResolverTest {
                         .value());
     }
 
+    /** 创建指向 invoke(Object) 的 CallExecution，参数为给定 arguments，供方法参数解析器读取。 */
     private CallExecution execution(Object[] arguments) {
         try {
             Method method = getClass().getDeclaredMethod("invoke", Object.class);
@@ -118,6 +121,7 @@ class IdempotencyKeyResolverTest {
         call = new Call("http-input", Instant.EPOCH, inputs.build(), null);
     }
 
+    /** 仅作为 execution 中反射获取 Method 的目标，方法体不会被调用。 */
     private void invoke(Object value) {
         Objects.requireNonNull(value);
     }

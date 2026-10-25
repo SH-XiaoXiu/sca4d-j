@@ -1,7 +1,8 @@
-package com.sca4d.core.api.version;
+package com.sca4d.core.api.version.exception;
 
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
+import com.sca4d.core.api.version.CompatibilityDecision;
 import org.jetbrains.annotations.Nullable;
 
 /** 版本声明畸形或矩阵拒绝当前契约；不包含请求头原文。 */

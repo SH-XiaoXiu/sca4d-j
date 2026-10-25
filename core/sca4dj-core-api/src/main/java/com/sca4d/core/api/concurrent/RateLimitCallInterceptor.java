@@ -9,6 +9,7 @@ import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.SPICallValueResolver;
+import com.sca4d.core.api.concurrent.exception.RateLimitExceededException;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

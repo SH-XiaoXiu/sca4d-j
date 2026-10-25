@@ -42,6 +42,8 @@ public class TrustedGatewayRequestFilter extends OncePerRequestFilter {
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
+        // 只有 Secret 匹配时才采用 Gateway 转发的客户端地址和公开前缀；否则两者都被忽略，
+        // 审计与签名使用连接地址和 Servlet 请求路径。控制 Header 无论是否匹配都会被隐藏。
         if (matches(request.getHeader(GatewayConstants.SECRET_HEADER))) {
             String clientIp = firstForwardedAddress(request.getHeader(GatewayConstants.CLIENT_IP_HEADER));
             String externalPath = externalPath(
@@ -63,7 +65,9 @@ public class TrustedGatewayRequestFilter extends OncePerRequestFilter {
         return MessageDigest.isEqual(expectedSecret, actual);
     }
 
-    /** 读取最靠近客户端的转发地址，并拒绝控制字符和异常长度。 */
+    /**
+     * 读取 `X-Forwarded-For` 列表中最靠近客户端的地址；去除首尾空白后为空、超过 255 个字符或含控制字符时返回 {@code null}。
+     */
     private static @Nullable String firstForwardedAddress(@Nullable String value) {
         if (value == null) {
             return null;
@@ -75,7 +79,12 @@ public class TrustedGatewayRequestFilter extends OncePerRequestFilter {
         return first;
     }
 
-    /** 把 Gateway 移除的公开前缀加回应用内部路径，供审计和签名使用。 */
+    /**
+     * 把 Gateway 移除的公开前缀加回应用内部路径，供审计和签名使用。
+     *
+     * <p>前缀必须以斜杠开头，且不能包含查询参数、片段或控制字符；不合法时返回 {@code null}，
+     * 调用方退回 Servlet 请求路径。
+     */
     private static @Nullable String externalPath(@Nullable String prefix, @NotNull String requestPath) {
         if (prefix == null || prefix.isBlank()) {
             return null;

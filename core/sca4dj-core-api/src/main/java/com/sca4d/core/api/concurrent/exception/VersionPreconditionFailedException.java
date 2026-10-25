@@ -1,7 +1,7 @@
-package com.sca4d.core.api.concurrent;
+package com.sca4d.core.api.concurrent.exception;
 
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 
 /** 表示调用方提交的预期版本与持久化对象的当前版本不一致。 */
 public class VersionPreconditionFailedException extends BusinessException {

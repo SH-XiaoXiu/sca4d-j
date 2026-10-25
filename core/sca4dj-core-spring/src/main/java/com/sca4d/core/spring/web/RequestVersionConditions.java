@@ -90,6 +90,7 @@ public class RequestVersionConditions implements VersionConditions {
             this.expectedVersion = expectedVersion;
         }
 
+        /** 第一次调用返回 precondition 条件并标记已消费；同一请求内再次调用时抛出 IllegalStateException，防止两个根资源写入共用同一 If-Match。 */
         private @NotNull VersionCondition resolve(@NotNull Version currentVersion) {
             Objects.requireNonNull(currentVersion, "当前版本不能为空");
             if (!consumed.compareAndSet(false, true)) {

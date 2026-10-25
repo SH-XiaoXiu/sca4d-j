@@ -24,6 +24,7 @@ public class TransactionCallbacks {
      * 在当前真实事务提交后执行动作；回滚时不执行。
      *
      * <p>动作在提交线程执行，不持久化或重试。一个动作失败时仍执行其余动作，最后抛出第一个异常，并把后续异常放入 suppressed。
+     * 异常在事务已经提交后沿 commit 调用链抛出，调用方不能据此把该事务当作回滚。
      *
      * @param action 不依赖原事务继续写库的进程内动作
      * @throws IllegalStateException 没有真实事务或事务同步未启用时抛出
@@ -119,6 +120,8 @@ public class TransactionCallbacks {
                     try {
                         drain();
                     } catch (RuntimeException exception) {
+                        // 数据库已经提交且 Spring 不会把 afterCompletion 的异常返回给调用方；
+                        // 这里记录失败原因，未执行的动作不再重放，需要根据日志人工补偿。
                         LOG.error(
                                 "事务提交后动作失败，数据库已提交 | callbackCount={} completedCount={}",
                                 actions.size(),

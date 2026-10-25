@@ -87,7 +87,7 @@ class ApiResponseAdviceTest {
                 .doesNotContain("callId", "timestamp");
     }
 
-    /** 提供测试响应的稳定版本。 */
+    /** 提供带固定版本号的测试响应体，ETag 由 @ETag 标注的 revision() 返回值生成。 */
     static class VersionedBody {
 
         private final Version version;
@@ -103,7 +103,7 @@ class ApiResponseAdviceTest {
             return version;
         }
 
-        /** @return 稳定测试字段 */
+        /** @return 固定字符串 resource */
         public String getValue() {
             return "resource";
         }

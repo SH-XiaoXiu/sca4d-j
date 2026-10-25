@@ -3,8 +3,8 @@ package com.sca4d.core.spring.web;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
@@ -49,6 +49,8 @@ public class CurrentIdentityArgumentResolver implements HandlerMethodArgumentRes
      * @param webRequest 当前 HTTP 请求
      * @param binderFactory 数据绑定工厂
      * @return 注解对应的身份对象、标识或允许的空值
+     * @throws IllegalStateException 当前线程没有 Call，或参数类型与注解不匹配、nullable 的 primitive long 声明错误时抛出
+     * @throws BusinessException 身份未确定且注解未允许空值时抛出 AUTHENTICATION_REQUIRED
      */
     @Override
     public @Nullable Object resolveArgument(

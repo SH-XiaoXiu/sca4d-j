@@ -12,12 +12,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 隔离字典服务对 MyBatis 和空查询结果的依赖。 */
+/** 封装 `DictionaryMapper` 的动态字典与数据库选项读写，并把影响行数转换为 `boolean` 结果。 */
 public class DictionaryRepository {
 
     private final DictionaryMapper mapper;
 
-    /** 创建字典 Repository。 */
+    /**
+     * 创建字典 Repository。
+     *
+     * @param mapper 动态字典和数据库选项的 MyBatis Mapper，不能为空
+     */
     public DictionaryRepository(@NotNull DictionaryMapper mapper) {
         this.mapper = Objects.requireNonNull(mapper, "Dictionary Mapper 不能为空");
     }
@@ -40,7 +44,15 @@ public class DictionaryRepository {
         return List.copyOf(mapper.selectOptions(Objects.requireNonNull(key, "Dictionary 键不能为空")));
     }
 
-    /** 新增动态字典；键已经存在时返回 {@code false}。 */
+    /**
+     * 新增动态字典。
+     *
+     * @param key 字典键，同时作为数据库主键
+     * @param label 字典名称
+     * @param enabled 字典是否启用
+     * @param sortOrder 字典排序值
+     * @return 新增成功时为 {@code true}；键已经存在时为 {@code false}，原字典不变
+     */
     @CheckReturnValue
     public boolean createDictionary(
             @NotNull String key,
@@ -56,7 +68,16 @@ public class DictionaryRepository {
                 "新增动态字典");
     }
 
-    /** 按乐观版本修改动态字典；目标不存在或版本变化时返回 {@code false}。 */
+    /**
+     * 按乐观版本修改动态字典的名称、启用状态和排序值。
+     *
+     * @param key 字典键
+     * @param label 修改后的字典名称
+     * @param enabled 修改后的启用状态
+     * @param sortOrder 修改后的排序值
+     * @param version 调用方读取到的乐观锁版本
+     * @return 修改成功时为 {@code true}；目标不存在或版本变化时为 {@code false}
+     */
     @CheckReturnValue
     public boolean updateDictionary(
             @NotNull String key,
@@ -141,7 +162,14 @@ public class DictionaryRepository {
                 "修改字典选项");
     }
 
-    /** 按乐观版本删除数据库选项；目标不存在或版本变化时返回 {@code false}。 */
+    /**
+     * 按乐观版本删除一个数据库选项。
+     *
+     * @param key 字典键
+     * @param value 要删除的选项值
+     * @param version 调用方读取到的选项乐观锁版本
+     * @return 删除成功时为 {@code true}；目标不存在或版本变化时为 {@code false}
+     */
     @CheckReturnValue
     public boolean deleteOption(@NotNull String key, @NotNull String value, long version) {
         return AffectedRowCounts.changed(
@@ -152,7 +180,11 @@ public class DictionaryRepository {
                 "删除字典选项");
     }
 
-    /** 要求写入对象是包含回退标签和多语言字段的数据库选项。 */
+    /**
+     * 检查待写入选项是否来自数据库；代码定义的选项只存在于 Java 枚举中，不能写入数据库。
+     *
+     * @throws IllegalArgumentException option 的 `codeDefined()` 为 {@code true} 时抛出
+     */
     private static @NotNull DictionaryOption requireDatabaseOption(@NotNull DictionaryOption option) {
         DictionaryOption checked = Objects.requireNonNull(option, "Dictionary 选项不能为空");
         if (checked.codeDefined()) {

@@ -20,7 +20,9 @@ public class RedisRateLimiter implements RateLimiter {
     private final ProxyManager<String> proxyManager;
 
     /**
-     * 创建使用当前 App 隔离名称的共享限流器。
+     * 创建共享限流器。
+     *
+     * <p>Redis 键由 {@code RateLimitKey} 与额度、窗口拼接后按 {@code COLON} 格式生成，本类不加入 App 名称前缀。
      *
      * @param proxyManager Bucket4j Redis CAS 代理
      */
@@ -32,11 +34,13 @@ public class RedisRateLimiter implements RateLimiter {
     /**
      * 按业务键、额度和窗口取得共享令牌桶，并原子消耗一个令牌。
      *
-     * <p>额度和窗口进入 Redis 键，避免同一个业务键改变配置后继续使用旧令牌桶。
+     * <p>额度和窗口进入 Redis 键，避免同一个业务键改变配置后继续使用旧令牌桶。Redis 或 Bucket4j 代理异常原样传播，
+     * 不当作允许或拒绝处理。
      *
      * @param key 业务限流键
      * @param limit 令牌桶容量和完全恢复窗口
      * @return 是否消耗令牌以及被拒绝后的精确等待时间
+     * @throws NullPointerException key 或 limit 为空时抛出
      */
     @Override
     public @NotNull RateLimitDecision tryAcquire(@NotNull RateLimitKey key, @NotNull RateLimit limit) {

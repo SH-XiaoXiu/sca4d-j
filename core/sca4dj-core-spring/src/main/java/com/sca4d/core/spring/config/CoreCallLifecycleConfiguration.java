@@ -28,7 +28,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-/** 注册调用生命周期、AOP 桥接和事务预提交处理。 */
+/** 注册 Call 执行配置、AOP 切面、注解绑定和事务预提交监听器。 */
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 class CoreCallLifecycleConfiguration {
 
@@ -45,7 +45,13 @@ class CoreCallLifecycleConfiguration {
         return new SpelCallValueResolver(applicationContext);
     }
 
-    /** @param participants 功能和应用注册的阶段参与者 @param customizers 模块和应用补充的依赖 @return 待校验的生命周期配置 */
+    /**
+     * 合并功能和应用注册的执行参与者，再由 Customizer 补充依赖。
+     *
+     * @param participants 功能和应用注册的 Call 执行参与者
+     * @param customizers 模块和应用补充依赖的回调，按 Spring 注入顺序执行
+     * @return 已完成补充、待 CallInvoker 校验的 Call 执行配置
+     */
     @Bean
     @ConditionalOnMissingBean
     CallLifecycleConfiguration callLifecycleConfiguration(
@@ -80,7 +86,7 @@ class CoreCallLifecycleConfiguration {
         return () -> AnonymousAccess.class;
     }
 
-    /** 注册无内置注解但显式要求进入调用生命周期的方法。 */
+    /** 注册没有内置注解、但显式要求进入 Call 执行的方法标记。 */
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<CallLifecycle.Intercepted> interceptedCallBinding() {

@@ -3,7 +3,7 @@ package com.sca4d.core.spring.web.list;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.api.query.Sort;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+/** 验证 ListDefinition 解析排序参数：缺省时使用类型化默认排序，重复 sort 保持请求顺序，并拒绝格式错误、未知、重复字段和超出上限的输入。 */
 class ListDefinitionTest {
 
     private static final Sort STATUS = Sort.of("STATUS");

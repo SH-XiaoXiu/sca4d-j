@@ -6,11 +6,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sca4dj.core")
 public class CoreSpringProperties {
 
+    /** 分页配置，对应 `sca4dj.core.pagination.*`，由 `setPageDefaultSize` 和 `setPageMaxSize` 等方法共同维护。 */
     private final Pagination pagination = new Pagination();
 
-    /** 单次列表请求允许的排序字段数量上限。 */
+    /** 单次列表请求允许的排序字段数量上限，默认 5，取值范围 1 到 20。 */
     private int sortMaxFields = 5;
 
+    /** OpenAPI 基础配置，对应 `sca4dj.core.openapi.*`。 */
     private final OpenApi openapi = new OpenApi();
 
     public CoreSpringProperties() {
@@ -104,8 +106,10 @@ public class CoreSpringProperties {
     /** 配置分页默认值和上限。 */
     public static class Pagination {
 
+        /** 未指定分页数量时使用的默认值，默认 20，必须为正数且不大于 `maxSize`。 */
         private int defaultSize = 20;
 
+        /** 单次分页查询允许的最大数量，默认 200，不得小于 `defaultSize`。 */
         private int maxSize = 200;
 
         /** @return 未指定分页数量时使用的默认值 */
@@ -141,6 +145,7 @@ public class CoreSpringProperties {
     /** 配置 Core OpenAPI 基础资源。 */
     public static class OpenApi {
 
+        /** 是否注册 Core OpenAPI 基础配置，默认 `true`。 */
         private boolean enabled = true;
 
         /** @return 是否注册 Core OpenAPI 基础配置 */

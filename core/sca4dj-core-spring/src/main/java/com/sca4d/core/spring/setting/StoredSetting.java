@@ -36,7 +36,7 @@ public class StoredSetting {
     /**
      * 创建数据库设置行并校验 tombstone、文本和密文形状。
      *
-     * @param ownerType                   owner 稳定类型
+     * @param ownerType                   owner 类型编码，单段时按 TreeCode 段解析，否则按完整编码解析
      * @param ownerId                     owner 类型内标识
      * @param key                         设置键
      * @param schemaVersion               值结构版本

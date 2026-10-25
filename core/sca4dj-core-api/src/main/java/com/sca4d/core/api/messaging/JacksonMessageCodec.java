@@ -2,6 +2,7 @@ package com.sca4d.core.api.messaging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +56,7 @@ public class JacksonMessageCodec<M extends Message> implements MessageCodec<M> {
         try {
             return json.writeValueAsBytes(Objects.requireNonNull(value, "消息不能为空"));
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("消息无法编码: " + code, exception);
+            throw new CoreApiException("消息无法编码: " + code, exception);
         }
     }
 

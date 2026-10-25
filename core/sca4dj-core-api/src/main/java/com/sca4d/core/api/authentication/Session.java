@@ -223,7 +223,7 @@ public class Session {
     }
 
     /**
-     * Session 标识。
+     * 返回创建 Session 时确定的标识。
      *
      * @return Session 标识
      */
@@ -232,16 +232,16 @@ public class Session {
     }
 
     /**
-     * 建立当前 Session 的接入者。
+     * 返回当前 Session 绑定的 Subject。
      *
-     * @return 完成认证的 Subject
+     * @return 完成认证的 Subject，与 {@link #account()} 所属的 Subject 相同
      */
     public Subject subject() {
         return subject;
     }
 
     /**
-     * 建立当前 Session 的登录账号。
+     * 返回当前 Session 绑定的登录账号。
      *
      * @return 完成认证且属于当前 Subject 的 Account
      */
@@ -250,7 +250,7 @@ public class Session {
     }
 
     /**
-     * 建立 Session 时完整保存的可选业务主体快照。
+     * 返回 Session 创建时保存的完整业务主体快照。
      *
      * @return 当前 Account 可直接使用的不可修改完整 Principal 列表
      */
@@ -259,7 +259,7 @@ public class Session {
     }
 
     /**
-     * 建立 Session 时保存的 Principal 标识。
+     * 返回 Session 创建时保存的紧凑 Principal 标识。
      *
      * @return 按装载顺序保存的不可修改 Principal 标识集合
      */
@@ -341,7 +341,7 @@ public class Session {
     }
 
     /**
-     * 建立 Session 时用于满足认证要求的记录。
+     * 返回 Session 创建时保存的成功认证记录。
      *
      * @return 按输入顺序保存的不可修改成功认证列表
      */

@@ -1,15 +1,16 @@
 package com.sca4d.core.spring.web;
 
-import com.sca4d.core.api.concurrent.IdempotencyInProgressException;
-import com.sca4d.core.api.concurrent.RateLimitExceededException;
-import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.concurrent.exception.IdempotencyInProgressException;
+import com.sca4d.core.api.concurrent.exception.RateLimitExceededException;
+import com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.error.ErrorCategory;
 import com.sca4d.core.api.error.ErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.MessageText;
 import com.sca4d.core.api.i18n.TextLocalizer;
-import com.sca4d.core.api.version.VersionCompatibilityException;
+import com.sca4d.core.api.version.exception.VersionCompatibilityException;
+import com.sca4d.core.spring.web.exception.HttpInputValidationException;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
@@ -69,7 +70,14 @@ public class GlobalExceptionHandler {
         this.localizer = Objects.requireNonNull(localizer, "TextLocalizer 不能为空");
     }
 
-    /** 将 Call 中的版本拒绝转换为统一错误，保留本地化、callId 与 SSE 行为。 */
+    /**
+     * 把 Call 中记录的版本兼容拒绝转换为 ApiResponse 错误，HTTP 状态取自错误码。
+     * 错误消息按当前请求的 Locale 生成；SSE 请求只返回状态码，不返回 JSON。
+     *
+     * @param exception 版本兼容拒绝异常，携带错误码和判定结果
+     * @param request 当前 HTTP 请求
+     * @return 版本兼容拒绝对应的 HTTP 错误响应
+     */
     @ExceptionHandler(VersionCompatibilityException.class)
     public ResponseEntity<ApiResponse<Object>> clientVersion(
             VersionCompatibilityException exception,
@@ -458,10 +466,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> illegalArgument(
             IllegalArgumentException exception,
             HttpServletRequest request) {
-        LOG.trace(
-                "请求参数不正确 | request={} failureType={}",
+        LOG.warn(
+                "请求参数不正确 | request={} failureType={} reason={}",
                 requestLine(request),
-                exception.getClass().getName());
+                exception.getClass().getName(),
+                exception.getMessage());
         return failure(HttpErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST, null, request);
     }
 
@@ -540,6 +549,7 @@ public class GlobalExceptionHandler {
         return response.body(ApiResponse.failure(errorCode, messageKey, arguments, message, data));
     }
 
+    /** 把 Spring 字段绑定错误转换为字段拒绝原因；类型转换失败使用 validation.type 消息，其余无默认消息时使用 validation.invalid。 */
     private FieldViolation fieldViolation(FieldError error) {
         if (error.contains(TypeMismatchException.class)) {
             return new FieldViolation(
@@ -552,17 +562,20 @@ public class GlobalExceptionHandler {
         return new FieldViolation(error.getField(), message);
     }
 
+    /** 把 Bean Validation 约束违规转换为字段拒绝原因，字段名取自属性路径，消息直接使用约束默认消息。 */
     private FieldViolation fieldViolation(ConstraintViolation<?> violation) {
         String field = violation.getPropertyPath() == null ? "" : violation.getPropertyPath().toString();
         return new FieldViolation(field, violation.getMessage());
     }
 
+    /** 按当前请求的 Locale 解析 messageKey 对应的消息文本，arguments 按顺序替换占位符。 */
     private String localize(String messageKey, List<Object> arguments) {
         return localizer.localize(
                 MessageText.of(messageKey, arguments.toArray()),
                 LocaleContextHolder.getLocale());
     }
 
+    /** 返回错误码对应的 HTTP 状态：HttpErrorCode 使用自身声明的状态，其他错误码按错误分类映射。 */
     private HttpStatus status(ErrorCode errorCode) {
         if (errorCode instanceof HttpErrorCode httpErrorCode) {
             return httpErrorCode.httpStatus();
@@ -579,6 +592,7 @@ public class GlobalExceptionHandler {
         };
     }
 
+    /** 为 ResponseStatusException 的状态选择固定错误码；未列出的 4xx 使用 BAD_REQUEST，5xx 使用 INTERNAL。 */
     private ErrorCode errorCode(HttpStatus status) {
         return switch (status) {
             case UNAUTHORIZED -> CoreErrorCode.AUTHENTICATION_REQUIRED;
@@ -614,6 +628,7 @@ public class GlobalExceptionHandler {
         try {
             return onlyEventStream(MediaType.parseMediaTypes(accept));
         } catch (IllegalArgumentException ignored) {
+            // Accept 头格式无法解析时按非事件流处理，继续返回 JSON 错误体。
             return false;
         }
     }
@@ -637,6 +652,7 @@ public class GlobalExceptionHandler {
         return eventStream;
     }
 
+    /** 生成日志用的请求行，包含方法、URI 和请求参数名称；参数值不写入日志。 */
     private String requestLine(HttpServletRequest request) {
         String parameters = request.getParameterMap().keySet().toString();
         return request.getMethod() + " " + request.getRequestURI()

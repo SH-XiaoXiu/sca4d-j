@@ -1,6 +1,7 @@
-package com.sca4d.core.api.job;
+package com.sca4d.core.api.job.exception;
 
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.job.JobRunStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

@@ -6,16 +6,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sca4dj.core.http.input.validation")
 public class HttpInputValidationProperties {
 
+    /** 是否要求无显式范围约束的外部整数大于零，默认 `true`。 */
     private boolean positiveIntegerEnabled = true;
 
+    /** 是否校验每个 `@RequestBody` 对象上的 Bean Validation 约束，默认 `true`。 */
     private boolean requestBodyValidationEnabled = true;
 
+    /** 是否限制无显式 `@Size` 的外部字符串长度，默认 `true`。 */
     private boolean stringSizeEnabled = true;
 
+    /** 无显式 `@Size` 的外部字符串最大字符数，默认 4096，必须为正数。 */
     private int maxStringLength = 4096;
 
+    /** 是否限制无显式 `@Size` 的外部容器元素数，默认 `true`。 */
     private boolean containerSizeEnabled = true;
 
+    /** 无显式 `@Size` 的外部容器最大元素数，默认 1000，必须为正数。 */
     private int maxContainerSize = 1000;
 
     public HttpInputValidationProperties() {

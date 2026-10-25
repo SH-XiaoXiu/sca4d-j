@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.core.api.exception.CoreApiException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -39,7 +40,7 @@ public class IdempotencyFingerprints {
                             Objects.requireNonNull(arguments, "业务方法实参不能为空")));
             return objectMapper.writeValueAsString(argumentsNode);
         } catch (JsonProcessingException | IllegalArgumentException exception) {
-            throw new IllegalStateException("业务方法参数无法生成稳定幂等指纹", exception);
+            throw new CoreApiException("业务方法参数无法生成稳定幂等指纹", exception);
         }
     }
 

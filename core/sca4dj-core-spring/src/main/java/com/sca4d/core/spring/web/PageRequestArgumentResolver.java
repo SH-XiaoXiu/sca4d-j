@@ -1,7 +1,7 @@
 package com.sca4d.core.spring.web;
 
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.config.CoreSpringProperties;
 import com.sca4d.core.spring.web.annotation.PageOptions;

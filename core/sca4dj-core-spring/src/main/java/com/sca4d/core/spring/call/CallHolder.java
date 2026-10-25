@@ -24,6 +24,7 @@ public class CallHolder {
      * 绑定当前线程唯一的调用。
      *
      * @param call 当前 HTTP、消息或任务调用
+     * @throws IllegalStateException 当前线程已经绑定调用时抛出，调用方必须先清理原绑定
      */
     public static void set(Call call) {
         if (CURRENT.get() != null) {
@@ -53,7 +54,7 @@ public class CallHolder {
     }
 
     /**
-     * 把即将进入生命周期的方法执行压入当前线程。
+     * 把即将开始执行的方法执行压入当前线程的执行栈，栈顶为最内层方法。
      *
      * @param execution 与当前 `Call` 关联的方法执行
      */
@@ -67,7 +68,7 @@ public class CallHolder {
     }
 
     /**
-     * 移除刚刚离开生命周期的方法执行。
+     * 移除刚结束的方法执行；调用方必须在方法返回或抛出异常后的 finally 中调用。
      *
      * @param execution 必须是当前最内层的方法执行
      */
@@ -80,7 +81,7 @@ public class CallHolder {
     }
 
     /**
-     * 返回当前线程仍在生命周期内的方法执行。
+     * 返回当前线程执行栈中尚未结束的方法执行。
      *
      * @return 从最内层到最外层排列的方法执行
      */
@@ -98,7 +99,7 @@ public class CallHolder {
      *
      * <p>此方法不调度线程；已有调用派生的工作使用 Call.fork，自主系统任务使用 Call.system。
      * 每项工作独立使用一个 Call，不复制事务或方法执行栈，也不改变当前线程已经存在的事务。
-     * 业务方法仍通过统一生命周期切面执行。
+     * 业务方法仍由 `CallLifecycleAdvisor` 切面建立方法执行。
      *
      * @param call 仅由当前任务使用的独立调用
      * @param task 当前线程执行的完整任务
@@ -106,8 +107,8 @@ public class CallHolder {
      * @throws Exception 原始任务异常
      */
     public static <T> T run(Call call, Callable<T> task) throws Exception {
-        Objects.requireNonNull(call);
-        Objects.requireNonNull(task);
+        Objects.requireNonNull(call, "独立任务的调用不能为空");
+        Objects.requireNonNull(task, "独立任务不能为空");
         State previous = CURRENT.get();
         if (previous != null && previous.call == call) {
             throw new IllegalStateException("不能把活动 Call 当作独立任务重复绑定");
@@ -153,7 +154,7 @@ public class CallHolder {
 
         private final Deque<CallExecution> executions = new ArrayDeque<>();
 
-        /** @param call 当前线程唯一的调用 */
+        /** @param call 绑定到当前线程的调用 */
         private State(Call call) {
             this.call = call;
         }

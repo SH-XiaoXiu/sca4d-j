@@ -190,12 +190,14 @@ class CallLifecycleAdvisorTest {
         }
     }
 
+    /** 不带任何注解的普通业务对象，由 MethodBinding 按方法名 update 匹配，用于验证非注解方法也会进入 CallInvoker 执行。 */
     public static class PlainService {
         public String update() {
             return "actual";
         }
     }
 
+    /** 返回调用方持有的 CompletableFuture，用于验证异步完成前后 CallHolder 的绑定状态。 */
     private static class AsyncRiskService implements RiskApi {
         private final CompletableFuture<String> work;
 

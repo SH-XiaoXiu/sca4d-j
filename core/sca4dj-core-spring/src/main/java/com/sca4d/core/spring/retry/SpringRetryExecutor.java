@@ -3,10 +3,10 @@ package com.sca4d.core.spring.retry;
 import com.sca4d.core.api.retry.RetryContext;
 import com.sca4d.core.api.retry.RetryDecision;
 import com.sca4d.core.api.retry.RetryExecutor;
-import com.sca4d.core.api.retry.RetryInterruptedException;
 import com.sca4d.core.api.retry.RetryListener;
 import com.sca4d.core.api.retry.RetryOperation;
 import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.exception.RetryInterruptedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.concurrent.CancellationException;
 
 /**
- * 使用 Spring Retry 执行同步重试，共同策略是次数和退避判断的唯一来源。
+ * 使用 Spring Retry 的重试循环执行同步操作；是否重试和等待时间由每次失败后的 `RetryPolicy` 决定。
  */
 public class SpringRetryExecutor implements RetryExecutor {
     private static final Logger LOG = LoggerFactory.getLogger(SpringRetryExecutor.class);
@@ -37,6 +37,11 @@ public class SpringRetryExecutor implements RetryExecutor {
         this(Thread::sleep);
     }
 
+    /**
+     * 创建使用指定等待实现的执行器，默认构造器传入 `Thread.sleep`。
+     *
+     * @param sleeper 等待退避时间的实现，不能为空
+     */
     SpringRetryExecutor(Sleeper sleeper) {
         this.sleeper = Objects.requireNonNull(sleeper);
     }

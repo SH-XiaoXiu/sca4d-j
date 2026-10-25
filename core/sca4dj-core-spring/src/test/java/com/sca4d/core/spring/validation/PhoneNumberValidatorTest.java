@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import java.util.List;
 
+/** 验证 @PhoneNumber 的 E.164 格式、地区规则的 AND/OR 组合、排除规则和自定义 PhoneNumberCondition Bean 的解析。 */
 class PhoneNumberValidatorTest {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();

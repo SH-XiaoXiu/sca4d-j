@@ -6,6 +6,7 @@ import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.SPICallValueResolver;
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
@@ -307,7 +308,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
                 }
                 id = integer.toString();
             } catch (ArithmeticException | NumberFormatException exception) {
-                throw new IllegalStateException("审计资源标识必须是正整数", exception);
+                throw new CoreApiException("审计资源标识必须是正整数", exception);
             }
         } else if (value instanceof String text && !text.isBlank()) {
             id = text.trim();

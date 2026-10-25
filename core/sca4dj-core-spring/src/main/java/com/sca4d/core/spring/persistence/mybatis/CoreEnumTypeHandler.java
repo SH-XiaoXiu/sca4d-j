@@ -24,6 +24,8 @@ public class CoreEnumTypeHandler<E extends Enum<E> & BaseEnum> extends BaseTypeH
      * 创建指定枚举类型的处理器。
      *
      * @param enumType 枚举类型
+     * @throws NullPointerException 枚举类型为空时抛出
+     * @throws IllegalArgumentException 枚举类型没有实现 BaseEnum 时抛出
      */
     public CoreEnumTypeHandler(Class<E> enumType) {
         this.enumType = Objects.requireNonNull(enumType, "枚举类型不能为空");

@@ -58,11 +58,11 @@ public class GatewaySpringAutoConfiguration {
     }
 
     /**
-     * 创建 readiness 后的实例租约注册生命周期。
+     * 创建在应用 ready 后向 Gateway 注册、续租并在关闭时注销的 `GatewayRegistrationLifecycle`。
      *
      * @param properties Gateway 注册配置
      * @param callbacks 当前实例声明的全部回调
-     * @return Server 实例注册、续租和注销生命周期
+     * @return Server 实例的注册租约管理器
      * @throws IllegalStateException Gateway 注册配置不合法时抛出
      */
     @Bean

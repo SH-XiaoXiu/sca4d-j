@@ -34,7 +34,10 @@ public class FlowEvent {
     /**
      * 事件类型。
      *
-     * @return 事件类型
+     * <p>取值由接入的 {@link FlowGraph} 转换规则声明，流程核心不预设集合，因此保留为字符串。
+     * 没有转换接受该类型时，{@link FlowGraph#selectTransition} 抛出 {@link IllegalStateException}。
+     *
+     * @return 非空白事件类型
      */
     public String type() {
         return type;

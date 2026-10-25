@@ -8,7 +8,10 @@ import java.time.Duration;
 @ConfigurationProperties("sca4dj.redis.rate-limit")
 public class RedisRateLimitProperties {
 
-    /** 额度完全恢复后继续保留限流状态的时间，避免频繁删除和重建 Redis 键。 */
+    /**
+     * 配置键 {@code sca4dj.redis.rate-limit.keep-after-refill}，默认 1 小时，取值必须为正数。
+     * 额度完全恢复后继续保留限流状态的时间，避免频繁删除和重建 Redis 键。
+     */
     private Duration keepAfterRefill = Duration.ofHours(1);
 
     /**
@@ -24,6 +27,7 @@ public class RedisRateLimitProperties {
      * 设置额度完全恢复后的额外保留时间。
      *
      * @param keepAfterRefill 正数保留时间
+     * @throws IllegalArgumentException 值为 null、零或负数时抛出
      */
     public void setKeepAfterRefill(Duration keepAfterRefill) {
         if (keepAfterRefill == null || keepAfterRefill.isZero() || keepAfterRefill.isNegative()) {

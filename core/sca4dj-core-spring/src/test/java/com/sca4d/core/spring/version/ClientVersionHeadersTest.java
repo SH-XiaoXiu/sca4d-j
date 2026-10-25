@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.function.Function;
 
-/** 在隔离的进程常量空间验证应用可以覆盖协议头且不能在启动后改变名称。 */
+/** 通过独立 ClassLoader 重新加载 HttpConstants，验证应用配置的客户端 Header 名称替代默认名称，启动校验拒绝保留名和非法名称，初始化后不能再次修改名称。 */
 class ClientVersionHeadersTest {
     @Test
     void consumesApplicationConfiguredHeadersInsteadOfFixedNames() throws Exception {
@@ -56,6 +56,7 @@ class ClientVersionHeadersTest {
         }
     }
 
+    /** 在给定 loader 中用 values 初始化 ConfiguredConstants 与 HttpConstants，并返回 HttpConstants 类型；同一 loader 内再次初始化会失败。 */
     private static Class<?> initialize(ClassLoader loader, Map<String, String> values) throws Exception {
         Class<?> configured = loader.loadClass("com.sca4d.core.api.setting.ConfiguredConstants");
         var initializer = configured.getMethod("initialize", Class.class, Function.class);

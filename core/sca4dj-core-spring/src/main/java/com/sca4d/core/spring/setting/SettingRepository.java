@@ -196,7 +196,7 @@ public class SettingRepository {
     }
 
     /**
-     * owner 生命周期结束时物理删除指定设置行。
+     * 物理删除指定 owner 的设置行；owner 被删除时由调用方使用。
      */
     @AffectedRows(target = "删除 owner 设置", whenZero = ZeroRowPolicy.ALLOW)
     public void erase(@NotNull SettingOwner owner, @NotNull String key) {
@@ -205,7 +205,9 @@ public class SettingRepository {
     }
 
     /**
-     * 取得当前事务持有的初始化互斥锁。
+     * 尝试取得初始化互斥锁，锁由当前数据库事务持有，事务结束后自动释放。
+     *
+     * @throws IllegalStateException 其他初始化节点已持有该锁时抛出，调用方应中止本次 Settings 同步
      */
     public void lockBootstrap() {
         if (!mapper.tryLockBootstrap()) {
@@ -213,7 +215,14 @@ public class SettingRepository {
         }
     }
 
-    /** 拒绝旧编码和归一冲突；只有确实不存在任何对应记录时才返回空。 */
+    /**
+     * 按标准编码读取设置行；同一 owner 下同时存在标准编码和旧编码，或只有旧编码时抛出异常，不回退到默认值。
+     *
+     * @param owner 设置所属 owner
+     * @param code 标准编码
+     * @return 找到的设置行；两种编码都不存在时返回空
+     * @throws IllegalStateException 查询结果含多行，或只命中旧编码行时抛出，需要显式迁移
+     */
     public @NotNull Optional<StoredSetting> findCanonical(@NotNull SettingOwner owner, @NotNull String code) {
         List<StoredSetting> values = mapper.selectCanonicalOrLegacy(owner.type(), owner.id(), code);
         if (values.size() > 1 || !values.isEmpty() && !values.getFirst().key().equals(code)) {

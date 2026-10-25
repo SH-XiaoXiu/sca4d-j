@@ -17,9 +17,14 @@ public class ErrorCodeCatalog {
     private final Map<String, ErrorCode> errorCodes;
 
     /**
-     * 创建错误码目录。
+     * 校验所有错误码枚举并建立编码索引，校验通过后目录不再变化。
      *
-     * @param enumTypes 实现 {@link ErrorCode} 的错误码枚举类型
+     * <p>校验失败时构造器不返回目录，调用方应在应用启动阶段让异常中断启动。
+     *
+     * @param enumTypes 实现 {@link ErrorCode} 的错误码枚举类型，不能为 null
+     * @throws NullPointerException enumTypes 为 null 时抛出
+     * @throws IllegalArgumentException 类型未声明 {@link ErrorCodeRange}、号段起止倒置、号段与其他枚举重叠、
+     *     错误码不是整数文本、错误码超出号段或编码重复时抛出
      */
     public ErrorCodeCatalog(List<Class<? extends Enum<?>>> enumTypes) {
         Objects.requireNonNull(enumTypes, "错误码枚举类型不能为空");
@@ -60,10 +65,11 @@ public class ErrorCodeCatalog {
     }
 
     /**
-     * 按编码取得错误码。
+     * 按编码取得已注册的错误码。只读取内存索引，不修改目录。
      *
-     * @param code 错误编码
-     * @return 对应枚举常量
+     * @param code 错误编码，例如 {@code "1000"}
+     * @return 对应的枚举常量
+     * @throws IllegalArgumentException 编码未在构造时注册时抛出
      */
     public ErrorCode loadByCode(String code) {
         ErrorCode errorCode = errorCodes.get(code);

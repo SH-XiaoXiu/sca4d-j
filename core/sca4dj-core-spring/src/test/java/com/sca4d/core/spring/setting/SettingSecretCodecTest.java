@@ -43,13 +43,17 @@ class SettingSecretCodecTest {
     }
 
     @Test
-    @DisplayName("版本目录写入当前格式，拒绝未登记的历史格式")
+    @DisplayName("版本目录写入 V2，同时可以读取已登记的 V1，拒绝未登记版本")
     void selectsRegisteredCodecAndRejectsUnsupportedVersion() {
-        SettingSecretCodecCatalog catalog = new SettingSecretCodecCatalog(new FakeCipher(), OWNER, KEY);
+        FakeCipher cipher = new FakeCipher();
+        SettingSecretCodecCatalog catalog = new SettingSecretCodecCatalog(cipher, OWNER, KEY);
         EncryptedSecret encrypted = catalog.current().encode(bytes());
+        EncryptedSecret legacy = new SettingSecretCodecV1(cipher, OWNER, KEY).encode(bytes());
 
+        assertThat(catalog.current().version()).isEqualTo(2);
         assertThat(catalog.select(catalog.current().version()).decode(encrypted)).containsExactly(bytes());
-        assertThatThrownBy(() -> catalog.select(1)).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catalog.select(1).decode(legacy)).containsExactly(bytes());
+        assertThatThrownBy(() -> catalog.select(3)).isInstanceOf(IllegalArgumentException.class);
     }
 
     /** 返回本测试使用的 UTF-8 明文。 */
@@ -57,7 +61,7 @@ class SettingSecretCodecTest {
         return "secret".getBytes(StandardCharsets.UTF_8);
     }
 
-    /** 校验加密用途并保存测试密文，隔离真实密钥生成。 */
+    /** 不使用真实密钥的 SecretCipher：加密时记录用途并把用途与 Base64 明文拼成密文，解密时要求密文以相同用途开头，否则抛出 IllegalArgumentException。 */
     private static class FakeCipher implements SecretCipher {
         private String lastPurpose;
 

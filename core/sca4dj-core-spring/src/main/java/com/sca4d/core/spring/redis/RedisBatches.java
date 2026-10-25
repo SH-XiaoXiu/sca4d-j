@@ -54,7 +54,17 @@ public class RedisBatches {
         return List.copyOf(result);
     }
 
-    /** 分批执行没有合并结果的 Redis pipeline 操作，失败时停止并传播异常。 */
+    /**
+     * 分批执行没有合并结果的 Redis pipeline 操作。
+     *
+     * <p>操作抛出异常时立即停止并原样传播；之前批次已经提交到 Redis 的写入不会回滚，剩余批次不再执行。
+     *
+     * @param items 保持调用方顺序的非空元素集合，为空时不调用 operation
+     * @param commandsPerItem 每个集合元素生成的 pipeline 命令数量，必须在 1 到 maxCommands 之间
+     * @param operation 接收一个不可修改批次并提交该批次命令的操作
+     * @param <T> 批量输入类型
+     * @throws IllegalArgumentException commandsPerItem 超出范围时抛出
+     */
     public <T> void forEach(
             @NotNull Collection<? extends T> items,
             int commandsPerItem,

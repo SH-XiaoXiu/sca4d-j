@@ -3,7 +3,7 @@ package com.sca4d.core.spring.web;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.api.query.Sort;
@@ -18,6 +18,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.ServletWebRequest;
 
+/** 验证 ListParametersArgumentResolver 解析重复 sort 参数和分页参数，拒绝旧版 sortBy 参数，并让 @PageOptions 限制分页大小。 */
 class ListParametersArgumentResolverTest {
 
     @Test

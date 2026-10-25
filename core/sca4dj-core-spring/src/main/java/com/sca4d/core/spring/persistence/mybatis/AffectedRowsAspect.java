@@ -18,6 +18,9 @@ public class AffectedRowsAspect {
     /**
      * 在 Repository 方法执行期间建立影响行数声明。
      *
+     * <p>方法正常返回时，要求它恰好执行过一条 DML 并且影响行数满足 {@code @AffectedRows} 声明；方法抛出异常时
+     * 不再解释影响行数，异常原样向上传播，当前线程的声明在 finally 中清理。
+     *
      * @param joinPoint Spring 拦截的 Repository 方法
      * @return Repository 方法结果
      * @throws Throwable Repository 方法、声明检查或影响行数解释报告的失败

@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
 import com.sca4d.core.api.dictionary.DictionaryOption;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -66,7 +66,8 @@ class ConfigurationPersistenceIntegrationTest {
     }
 
     /**
-     * 加载正式表结构和 Mapper，设置保留行内的版本字段为 long。
+     * 用 `dictionary-settings.sql` 创建表，注册 `DictionaryMapper.xml` 与 `SettingMapper.xml`，
+     * 并通过 `LocalizedFieldsTypeHandler` 处理 `LocalizedFields` 字段。
      */
     @BeforeAll
     static void initialize() throws Exception {
@@ -118,7 +119,7 @@ class ConfigurationPersistenceIntegrationTest {
     }
 
     /**
-     * 每例使用独立配置记录。
+     * 每例开始前清空字典、字典选项和设置三张表，避免测试之间共享数据。
      */
     @BeforeEach
     void reset() {
@@ -142,6 +143,7 @@ class ConfigurationPersistenceIntegrationTest {
         assertThat(dictionaries.deleteDictionary("test", 0)).isFalse();
         assertThat(dictionaries.findOptions("test")).hasSize(1);
         assertThat(dictionaries.findDictionary("test").orElseThrow().enabled()).isFalse();
+        // 在选项表上注入删除失败的触发器，使字典删除在删除选项时报错，验证字典记录被同一事务回滚。
         jdbc.execute(
                 "CREATE OR REPLACE FUNCTION reject_option_delete() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'test rollback'; END $$");
         jdbc.execute(
@@ -161,6 +163,7 @@ class ConfigurationPersistenceIntegrationTest {
     @DisplayName("设置从明文切换密文、恢复默认和再次覆盖时保持版本与 ENV 写保护")
     void settingReplacementPreservesOwnerAndTombstoneSemantics() {
         SettingOwner owner = new SettingOwner(TreeCode.ofSegment("TEST"), "one");
+        // 修订号从 0 开始，每次成功写入后递增；后续调用必须传入上一次写入后的修订号。
         settings.replace(owner, "value", 1, "plain", null, null, null, VersionCondition.optimistic(new Version(0)));
         settings.replace(
                 owner,
@@ -181,6 +184,7 @@ class ConfigurationPersistenceIntegrationTest {
         assertThat(tombstone.valueCiphertext()).isNull();
         settings.replace(owner, "value", 1, "", null, null, null, VersionCondition.optimistic(new Version(3)));
         assertThat(settings.find(owner, "value").orElseThrow().valueText()).isEmpty();
+        // 系统设置被 SYNC 同步后，即使传入的修订号匹配，普通 reset 也必须被拒绝；释放同步后才允许再次 replace。
         settings.initializeSystem("env", 1, "initial", null, null, null);
         settings.synchronizeSystem("env", 1, "environment", null, null, null);
         assertThatThrownBy(

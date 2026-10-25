@@ -70,15 +70,20 @@ public class GatewayRegistrationLifecycle {
 
     private volatile @Nullable ScheduledFuture<?> scheduledTask;
 
+    /** 连续失败次数，只在 scheduler 线程中读写；一次成功注册或续租后清零。 */
     private long failedAttempts;
 
     private final RetryPolicy<Throwable> retryPolicy;
 
     /**
-     * 创建注册生命周期并校验全部地址、Secret 和间隔。
+     * 创建 Gateway 注册租约管理器，并校验地址、Secret、readiness 路径和时长配置。
+     *
+     * <p>创建时只保存校验后的值，不发起网络请求；注册在 `ApplicationReadyEvent` 后才开始。
      *
      * @param properties Gateway 注册配置
-     * @param callbacks 当前实例声明的全部回调
+     * @param callbacks 当前实例声明的全部回调，用于注册时上报回调编码
+     * @param instanceProperties 提供注册使用的实例标识
+     * @param capabilities 注册时上报的已启用功能码和 API 要求
      * @throws IllegalStateException 地址、Secret、路径或时长配置不合法时抛出
      */
     public GatewayRegistrationLifecycle(
@@ -115,7 +120,7 @@ public class GatewayRegistrationLifecycle {
                 Thread.ofPlatform().name("sca4dj-gateway-registration").daemon(true).factory());
     }
 
-    /** 应用完成启动并进入 readiness 后立即发起第一次注册。 */
+    /** 应用进入 ready 状态后，在 scheduler 线程上立即执行第一次注册，不阻塞启动线程。 */
     @EventListener(ApplicationReadyEvent.class)
     public void applicationReady() {
         schedule(Duration.ZERO);
@@ -150,7 +155,11 @@ public class GatewayRegistrationLifecycle {
         scheduler.shutdownNow();
     }
 
-    /** 注册新租约或续租现有租约，失败后保留应用进程并继续重试。 */
+    /**
+     * 有租约时续租，没有租约时注册；失败后清空当前租约并按重试策略安排下一次执行。
+     *
+     * <p>异常只记录 WARN 日志，不向调度线程抛出，应用进程保持运行。
+     */
     private void registerOrRenew() {
         if (closing.get()) {
             return;
@@ -177,7 +186,11 @@ public class GatewayRegistrationLifecycle {
         }
     }
 
-    /** 创建新租约，并用 Gateway 返回的租约 ID 保护之后的续租和注销。 */
+    /**
+     * 向 Gateway 提交注册请求，并保存返回的租约 ID 用于之后的续租和注销。
+     *
+     * @throws IllegalStateException Gateway 响应为空或租约 ID 为空白时抛出，调用方会清空租约并重试
+     */
     private void register() {
         GatewayRegistrationRequest registration = new GatewayRegistrationRequest(
                 instanceId,
@@ -231,7 +244,11 @@ public class GatewayRegistrationLifecycle {
         }
     }
 
-    /** 构建包含 URL 编码安全 UUID 标识的租约路径。 */
+    /**
+     * 构建 `{registrationsUri}/{instanceId}/leases/{leaseId}` 形式的租约路径。
+     *
+     * <p>`instanceId` 和 `leaseId` 直接拼接，不做 URL 编码；值中包含 `/`、空白或其他 URI 保留字符时，`URI.create` 会抛出异常。
+     */
     private @NotNull URI leaseUri(@NotNull String currentLeaseId) {
         return endpoint(registrationsUri, "/" + instanceId + "/leases/" + currentLeaseId);
     }

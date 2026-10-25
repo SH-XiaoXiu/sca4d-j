@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.concurrent.CompletionStage;
 
 /**
- * 在统一调用生命周期内执行 CurrentPrincipal 声明的主体选择。
+ * 在 {@link CallLifecycle} 的环绕阶段执行 {@link CurrentPrincipal} 声明的业务身份选择，并把结果写入当前 {@link Call}。
  */
 public class PrincipalSelectionCallInterceptor
         implements
@@ -70,53 +70,69 @@ public class PrincipalSelectionCallInterceptor
      */
     @Override
     public @NotNull CallOutcome around(@NotNull CallExecution execution, @NotNull CallLifecycle.Next next) {
-        CurrentPrincipal declaration = execution.declaration(CurrentPrincipal.class).orElseThrow();
-
-        Call call = execution.call();
-        if (!call.isPrincipalAssessed()) {
-            // 只在一次调用中选择一次 Principal；之后的切面和业务方法复用 Call 中的选择结果。
-            PrincipalSelection<?> selection = CurrentPrincipalDeclaration.selection(
-                    declaration,
-                    applicationContext);
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
-                    .getRequestAttributes();
-            if (attributes == null) {
-                throw new IllegalStateException("业务身份选择只能在 HTTP 请求中执行");
-            }
-            HttpServletRequest request = attributes.getRequest();
-            PrincipalSelectionInput input = inputResolver.resolve(
-                    execution.method(),
-                    execution.arguments(),
-                    request);
-            Principal principal = invoker.select(
-                    selection,
-                    call.session().orElse(null),
-                    call.subject().orElse(null),
-                    call.account().orElse(null),
-                    input);
-            if (principal != null) {
-                call.selectPrincipal(principal);
-                MDC.put("principalId", Long.toString(principal.principalId()));
-                LOG.trace(
-                        "业务身份已选择 | callId={} principalId={} selector={}",
-                        call.callId(),
-                        principal.principalId(),
-                        selection.getClass().getName());
-            } else if (declaration.principalRequired()) {
-                throw new IllegalStateException("当前接口必须确定业务身份");
-            }
-        }
+        selectPrincipal(execution);
         // Principal 已写入 Call 后才继续 Controller，权限判断不会重新选择业务身份。
         return next.proceed();
     }
 
-    /** 异步业务复用已经完成的主体选择，并将异步等待交给内层生命周期。 */
+    /**
+     * 异步调用先执行与同步相同的业务身份选择，再把异步等待交给内层调用。
+     *
+     * @param execution 当前方法执行
+     * @param next 剩余的异步调用
+     * @return 内层异步调用的结果
+     */
     @Override
     public @NotNull CompletionStage<CallOutcome> aroundAsync(
             @NotNull CallExecution execution,
             @NotNull CallLifecycle.AsyncNext next) {
-        around(execution, () -> CallOutcome.replayed("principal-selection"));
+        selectPrincipal(execution);
         return next.proceedAsync();
+    }
+
+    /**
+     * 在当前 Call 尚未选择业务身份时，按 {@link CurrentPrincipal} 声明选出一个 Principal 并写入 Call。
+     *
+     * @param execution 当前方法执行
+     * @throws IllegalStateException 不在 HTTP 请求中执行、需要选择主体但缺少 HTTP 输入，或必需的主体没有解析到时抛出
+     */
+    private void selectPrincipal(CallExecution execution) {
+        CurrentPrincipal declaration = execution.declaration(CurrentPrincipal.class).orElseThrow();
+        Call call = execution.call();
+        if (call.isPrincipalAssessed()) {
+            // 只在一次调用中选择一次 Principal；之后的切面和业务方法复用 Call 中的选择结果。
+            return;
+        }
+        PrincipalSelection<?> selection = CurrentPrincipalDeclaration.selection(
+                declaration,
+                applicationContext);
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes();
+        if (attributes == null) {
+            throw new IllegalStateException("业务身份选择只能在 HTTP 请求中执行");
+        }
+        HttpServletRequest request = attributes.getRequest();
+        PrincipalSelectionInput input = inputResolver.resolve(
+                execution.method(),
+                execution.arguments(),
+                request);
+        Principal principal = invoker.select(
+                selection,
+                call.session().orElse(null),
+                call.subject().orElse(null),
+                call.account().orElse(null),
+                input);
+        if (principal != null) {
+            call.selectPrincipal(principal);
+            MDC.put("principalId", Long.toString(principal.principalId()));
+            LOG.trace(
+                    "业务身份已选择 | callId={} principalId={} selector={}",
+                    call.callId(),
+                    principal.principalId(),
+                    selection.getClass().getName());
+        } else if (declaration.principalRequired()) {
+            throw new IllegalStateException("当前接口必须确定业务身份");
+        }
     }
 
     @Override

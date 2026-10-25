@@ -1,7 +1,8 @@
-package com.sca4d.core.api.concurrent;
+package com.sca4d.core.api.concurrent.exception;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 
 /**
  * 预期版本与当前版本不一致时抛出的乐观锁异常（Optimistic Lock Exception）。

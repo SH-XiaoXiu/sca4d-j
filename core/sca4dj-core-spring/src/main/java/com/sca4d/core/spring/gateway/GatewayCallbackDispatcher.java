@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 把 `/callbacks/{code}` 的 JSON 请求转换为应用声明的 `GatewayCallback` 调用。 */
+/** 把 `sca4dj.gateway.protocol.callback-path` 下 `/{code}` 的 JSON 请求转换为应用声明的 `GatewayCallback` 调用。 */
 @RestController
 @AnonymousAccess
 @Hidden
@@ -69,6 +69,7 @@ public class GatewayCallbackDispatcher {
      * @param headers HTTP 请求 Header
      * @param body 可选 JSON 请求体
      * @return 回调给出的原始 HTTP 结果；编码不存在时返回 404
+     * @throws IllegalArgumentException 请求体 JSON 无法转换为回调声明的 `requestType()` 时抛出，由 Spring MVC 处理为错误响应
      */
     @PostMapping("/{code}")
     @CheckReturnValue

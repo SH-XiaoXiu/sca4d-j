@@ -7,7 +7,7 @@ import org.springframework.core.env.Environment;
 import java.util.Locale;
 import java.util.Objects;
 
-/** 在 Spring 配置边界把中性 ENV 后缀解析为当前应用的实际变量名。 */
+/** 把不带前缀的 ENV 后缀（如 `DB_URL`）解析为当前应用的实际环境变量名（前缀加后缀）。 */
 public final class EnvironmentVariableResolver {
 
     private final String prefix;

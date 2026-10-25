@@ -1,5 +1,6 @@
-package com.sca4d.core.spring.web;
+package com.sca4d.core.spring.web.exception;
 
+import com.sca4d.core.spring.web.FieldViolation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 

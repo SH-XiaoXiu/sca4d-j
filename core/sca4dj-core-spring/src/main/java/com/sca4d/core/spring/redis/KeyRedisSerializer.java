@@ -13,12 +13,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-/** 在 Redis key 字节边界应用 App 隔离及模块声明的 Cluster 同槽分组。 */
+/** 序列化和反序列化 Redis key 字节时应用 App 隔离，并按模块声明把同组 key 放入同一个 Cluster 槽。 */
 public class KeyRedisSerializer implements RedisSerializer<Key> {
 
     private final @NotNull List<RedisHashTag> hashTags;
 
-    /** 保存按最长稳定根编码优先匹配的同槽声明；App 名必须已经初始化。 */
+    /** 保存同槽声明，并按根编码长度从长到短排序，较长的根优先匹配；构造时要求 AppName 已经初始化。 */
     public KeyRedisSerializer(@NotNull List<RedisHashTag> hashTags) {
         AppName.current();
         this.hashTags = Objects.requireNonNull(hashTags)

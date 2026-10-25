@@ -11,7 +11,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import java.util.List;
 import java.util.Objects;
 
-/** 在 Bean 定义阶段读取实例能力选择，防止停用功能启动消费者或监听器。 */
+/** 在 Bean 定义阶段读取 `sca4dj.instance.capabilities`，未启用功能的 Bean 不会被创建，因此其中的消费者和监听器也不会启动。 */
 public class InstanceCapabilityCondition implements Condition {
     @Override
     public boolean matches(@NotNull ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {

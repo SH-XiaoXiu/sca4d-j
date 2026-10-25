@@ -1,7 +1,7 @@
 package com.sca4d.core.spring.web.list;
 
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.api.query.Sort;
@@ -67,7 +67,8 @@ public class ListDefinition {
      * @param values 按 HTTP 参数出现顺序保存的 sort 值
      * @param maxSortFields 全局允许的最大排序字段数量
      * @return 包含默认或请求排序条件的列表要求
-     * @throws BusinessException 页大小或任一 sort 参数无效时抛出
+     * @throws BusinessException 页大小超过声明上限、sort 数量超过全局上限或任一 sort 参数无效时抛出，错误码为 VALIDATION_FAILED
+     * @throws IllegalStateException 请求没有 sort 参数，且默认排序字段数量超过全局上限时抛出；这是接口声明与配置不一致，不是客户端输入错误
      */
     @CheckReturnValue
     @Contract(pure = true)
@@ -112,7 +113,7 @@ public class ListDefinition {
         }
     }
 
-    /** 把列表协议错误转换为统一 HTTP 输入错误。 */
+    /** 创建 VALIDATION_FAILED 业务异常；cause 为空时不保留原因，供 resolve 处理分页和 sort 参数错误。 */
     private static @NotNull BusinessException validationFailure(@Nullable RuntimeException cause) {
         return cause == null
                 ? new BusinessException(CoreErrorCode.VALIDATION_FAILED)

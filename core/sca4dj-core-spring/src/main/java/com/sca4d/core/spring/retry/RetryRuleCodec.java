@@ -117,6 +117,14 @@ public class RetryRuleCodec implements VersionedCodec<RetryRule, String> {
         }
     }
 
+    /**
+     * 读取必填的整数字段。
+     *
+     * @param node 包含字段的 JSON 对象
+     * @param name 字段名
+     * @return 字段值
+     * @throws IllegalArgumentException 字段缺失、不是整数或超出 long 范围时抛出
+     */
     private static long number(JsonNode node, String name) {
         JsonNode value = node.required(name);
         if (!value.isIntegralNumber() || !value.canConvertToLong())

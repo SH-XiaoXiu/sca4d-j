@@ -1,6 +1,7 @@
 package com.sca4d.core.spring.web;
 
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import com.sca4d.core.spring.web.annotation.ETag;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,7 @@ class ResponseETagResolver {
      * 读取响应数据声明的版本。
      *
      * @param data 响应中的顶层 data；为空时不发布 ETag
-     * @return 数据没有声明 {@link ETag} 或当前实例不是稳定表示时为空，否则返回声明方法产生的版本
+     * @return 数据类型没有声明 {@link ETag}，或声明方法返回 null（动态投影实例）时为空，否则返回声明方法产生的版本
      */
     @CheckReturnValue
     Optional<Version> resolve(@Nullable Object data) {
@@ -52,9 +53,9 @@ class ResponseETagResolver {
             }
             return Optional.of(version);
         } catch (IllegalAccessException exception) {
-            throw new IllegalStateException("无法访问 @ETag 方法: " + method.get(), exception);
+            throw new CoreSpringException("无法访问 @ETag 方法: " + method.get(), exception);
         } catch (InvocationTargetException exception) {
-            throw new IllegalStateException("@ETag 方法执行失败: " + method.get(), exception.getCause());
+            throw new CoreSpringException("@ETag 方法执行失败: " + method.get(), exception.getCause());
         }
     }
 

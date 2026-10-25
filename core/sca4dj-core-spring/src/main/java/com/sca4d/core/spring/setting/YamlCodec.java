@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Objects;
 
-/** 用独立 YAML 解析器与领域 JsonCodec 转换内容，不访问文件或启用 Java 多态类型。 */
+/** 通过 YAML 解析器在 JsonCodec 的 JSON 树与 YAML 文本之间转换内容，不访问文件也不启用 Java 多态类型。 */
 public final class YamlCodec<T> implements Codec<T, byte[]> {
     private final JsonCodec<T> domain;
 
@@ -22,7 +22,7 @@ public final class YamlCodec<T> implements Codec<T, byte[]> {
                     .build())
             .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
 
-    /** 保存领域解码规则，YAML 格式不决定字段含义。 */
+    /** 保存 JsonCodec 的字段解析规则；YAML 语法本身不决定字段含义。 */
     public YamlCodec(@NotNull JsonCodec<T> domain) {
         this.domain = Objects.requireNonNull(domain);
     }

@@ -1,5 +1,6 @@
-package com.sca4d.core.api.data;
+package com.sca4d.core.api.data.exception;
 
+import com.sca4d.core.api.data.DataOperation;
 import org.jetbrains.annotations.NotNull;
 
 /** 表示 DataOperation 代码或其依赖在执行时发生了非数据契约异常。 */
@@ -17,7 +18,7 @@ public class DataOperationExecutionException extends RuntimeException {
      * @param operation 失败节点
      * @param cause 原始异常
      */
-    DataOperationExecutionException(@NotNull DataOperation<?> operation, @NotNull RuntimeException cause) {
+    public DataOperationExecutionException(@NotNull DataOperation<?> operation, @NotNull RuntimeException cause) {
         super("数据操作执行失败: " + operation.name(), cause);
         operationName = operation.name();
         outputKey = operation.output().name();

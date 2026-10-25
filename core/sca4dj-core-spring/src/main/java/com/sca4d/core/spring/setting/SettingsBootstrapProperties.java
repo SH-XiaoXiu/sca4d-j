@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sca4dj.bootstrap")
 public class SettingsBootstrapProperties {
 
+    /** 配置键 `sca4dj.bootstrap.enabled`，默认 `false`；为 `true` 时本节点启动后执行一次 Settings 初始化。 */
     private boolean enabled;
 
     public SettingsBootstrapProperties() {

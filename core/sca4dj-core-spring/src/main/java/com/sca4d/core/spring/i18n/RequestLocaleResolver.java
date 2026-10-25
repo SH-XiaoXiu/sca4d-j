@@ -25,7 +25,7 @@ public class RequestLocaleResolver implements LocaleResolver {
     }
 
     /**
-     * 返回请求优先级最高的合法 Locale；没有 `Accept-Language` 时返回应用默认 Locale。
+     * 返回请求优先级最高的合法 Locale；没有 `Accept-Language` 或所有条目都无法解析出语言时返回应用默认 Locale。
      *
      * @param request 当前 HTTP 请求
      * @return 未按静态消息目录截断的请求 Locale
@@ -51,6 +51,7 @@ public class RequestLocaleResolver implements LocaleResolver {
      * @param request 当前 HTTP 请求
      * @param response 当前 HTTP 响应；可能为空
      * @param locale 调用方尝试设置的 Locale；可能为空
+     * @throws UnsupportedOperationException 每次调用都会抛出，请求 Locale 只能来自 `Accept-Language`
      */
     @Override
     public void setLocale(

@@ -1,5 +1,7 @@
 package com.sca4d.core.api.error;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * 表示可由 HTTP 响应转换器识别的错误码（Error Code）。
  *
@@ -13,6 +15,7 @@ public interface ErrorCode {
      *
      * @return 全局错误码
      */
+    @NotNull
     String code();
 
     /**
@@ -20,12 +23,14 @@ public interface ErrorCode {
      *
      * @return 错误分类
      */
+    @NotNull
     ErrorCategory category();
 
     /**
      * 返回默认消息键，由外围国际化实现解析。
      *
-     * @return 默认消息键，由外围国际化实现解析
+     * @return 默认消息键；外围国际化实现据此查找文案
      */
+    @NotNull
     String messageKey();
 }

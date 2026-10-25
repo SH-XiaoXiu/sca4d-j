@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 使用规范化方法参数摘要生成不暴露原始参数的幂等键。 */
+/** 使用 IdempotencyFingerprints 计算方法参数摘要，生成幂等键，不保存原始参数值。 */
 public class MethodArgumentsIdempotencyKeyResolver implements CallValueResolver<IdempotencyKey> {
 
     private final IdempotencyFingerprints fingerprints;
@@ -16,7 +16,7 @@ public class MethodArgumentsIdempotencyKeyResolver implements CallValueResolver<
     /**
      * 创建方法参数幂等键解析器。
      *
-     * @param fingerprints 公共参数规范化入口
+     * @param fingerprints 计算方法参数摘要的 IdempotencyFingerprints
      */
     public MethodArgumentsIdempotencyKeyResolver(IdempotencyFingerprints fingerprints) {
         this.fingerprints = Objects.requireNonNull(fingerprints, "幂等参数规范化入口不能为空");

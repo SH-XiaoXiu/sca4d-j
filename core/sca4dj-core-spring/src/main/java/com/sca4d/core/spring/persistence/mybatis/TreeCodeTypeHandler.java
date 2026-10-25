@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/** 在 SQL VARCHAR 边界读写稳定 TreeCode，资源分类默认输出斜杠格式。 */
+/** 在 SQL VARCHAR 列中读写 TreeCode，资源分类默认输出斜杠格式。 */
 public class TreeCodeTypeHandler extends BaseTypeHandler<TreeCode> {
 
     private final NameFormat format;
@@ -57,7 +57,7 @@ public class TreeCodeTypeHandler extends BaseTypeHandler<TreeCode> {
     /** 为系统身份编码等明确声明的数据库列输出冒号格式。 */
     public static class Colon extends TreeCodeTypeHandler {
 
-        /** 创建冒号编码的 SQL 边界转换器。 */
+        /** 创建输出冒号格式 TreeCode 的 SQL 列转换器。 */
         public Colon() {
             super(NameFormat.COLON);
         }

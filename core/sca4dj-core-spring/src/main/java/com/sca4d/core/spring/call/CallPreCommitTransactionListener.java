@@ -2,6 +2,7 @@ package com.sca4d.core.spring.call;
 
 import com.sca4d.core.api.call.CallExecution;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.transaction.TransactionExecution;
 import org.springframework.transaction.TransactionExecutionListener;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -31,7 +32,7 @@ public class CallPreCommitTransactionListener implements TransactionExecutionLis
     @Override
     public void afterBegin(
             @NotNull TransactionExecution transaction,
-            @org.jetbrains.annotations.Nullable Throwable failure) {
+            @Nullable Throwable failure) {
         if (failure != null || CallHolder.currentOrNull() == null) {
             return;
         }

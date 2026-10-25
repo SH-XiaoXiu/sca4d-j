@@ -81,7 +81,11 @@ public class SettingCatalog {
         return setting instanceof PreferenceSetting<?> preference ? Optional.of(preference) : Optional.empty();
     }
 
-    /** 校验调用方使用的是目录中注册的同一个设置对象。 */
+    /**
+     * 校验 `setting` 是目录中注册的同一个对象，按 code 查找后比较对象引用。
+     *
+     * @throws IllegalArgumentException 同 code 的设置不存在或不是同一个对象时抛出
+     */
     public void assertRegistered(@NotNull Setting<?> setting) {
         Setting<?> checked = Objects.requireNonNull(setting, "设置定义不能为空");
         if (settings.get(checked.code()) != checked) {

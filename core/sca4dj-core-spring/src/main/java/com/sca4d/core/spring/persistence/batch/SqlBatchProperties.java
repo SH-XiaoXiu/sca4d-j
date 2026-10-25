@@ -6,8 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sca4dj.persistence.batch")
 public class SqlBatchProperties {
 
+    /** 配置键 {@code sca4dj.persistence.batch.max-items}，默认 1000，单位为集合条目，必须为正数。 */
     private int maxItems = 1_000;
 
+    /** 配置键 {@code sca4dj.persistence.batch.max-bind-parameters}，默认 30000，取值 1 到 65535，单位为 SQL 绑定参数。 */
     private int maxBindParameters = 30_000;
 
     public SqlBatchProperties() {

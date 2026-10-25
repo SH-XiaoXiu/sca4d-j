@@ -1,6 +1,8 @@
 package com.sca4d.core.api.job;
 
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.job.exception.JobRunFailedException;
+import com.sca4d.core.api.job.exception.JobWaitTimeoutException;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import org.jetbrains.annotations.CheckReturnValue;

@@ -1,6 +1,7 @@
 package com.sca4d.core.api.call;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,11 +56,13 @@ public class CallInvoker {
      */
     @SuppressWarnings("unchecked")
     public <T> @Nullable T execute(CallExecution execution, Callable<T> target) throws Exception {
+        // 在入口线程选定参与者并登记提交后回调，再开始方法执行。
         CallExecution checkedExecution = Objects.requireNonNull(execution);
         List<CallLifecycleConfiguration.Registration> active = active(checkedExecution);
         registerAfterCommit(checkedExecution, active);
         checkedExecution.beginExecution();
         Objects.requireNonNull(target);
+        // 环绕处理和目标方法返回后，依次执行结果阶段并保存最终结果。
         CallOutcome outcome = complete(execution, active, invoke(execution, target, active, 0));
         checkedExecution.recordOutcome(outcome);
         LOG.trace(
@@ -322,6 +325,7 @@ public class CallInvoker {
         });
     }
 
+    /** 取出 CompletionException 层层包装的原始失败；其他 Throwable 原样返回。 */
     private static Throwable unwrap(Throwable failure) {
         Throwable current = failure;
         while ((current instanceof CompletionException) && current.getCause() != null) {
@@ -342,7 +346,7 @@ public class CallInvoker {
         } catch (Exception | Error failure) {
             throw failure;
         } catch (Throwable throwable) {
-            throw new IllegalStateException("调用抛出了非 Exception/ Error 的 Throwable", throwable);
+            throw new CoreApiException("调用抛出了非 Exception/ Error 的 Throwable", throwable);
         }
     }
 

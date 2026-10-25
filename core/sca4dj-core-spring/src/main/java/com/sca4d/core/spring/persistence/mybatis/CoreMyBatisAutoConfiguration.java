@@ -39,7 +39,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 
 /**
- * 注册 Core 标识、版本、认证域和枚举在 MyBatis 中使用的类型处理器。
+ * 注册 MyBatis 的 Repository 影响行数切面与插件、禁止 BATCH 执行器、Core 类型处理器和默认 Mapper XML 位置。
  */
 @AutoConfiguration(after = CoreJacksonAutoConfiguration.class, afterName = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @ConditionalOnClass(name = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
@@ -72,6 +72,8 @@ public class CoreMyBatisAutoConfiguration {
 
     /**
      * 拒绝把 MyBatis 默认执行器配置为 BATCH。
+     *
+     * <p>配置为 BATCH 时，定制器在 SqlSessionFactory 创建阶段抛出 IllegalStateException，应用无法启动。
      *
      * @return MyBatis 配置定制器
      */
@@ -113,7 +115,9 @@ public class CoreMyBatisAutoConfiguration {
     }
 
     /**
-     * 在应用没有自行指定 XML 位置时加载所有模块的标准 Mapper 目录。
+     * 在应用没有设置 {@code mybatis.mapper-locations} 时，加载类路径中所有 {@code mapper/} 目录下的 XML。
+     *
+     * <p>应用已经设置 {@code mapper-locations} 时定制器不做任何修改，由应用配置决定 Mapper XML 位置。
      *
      * @param properties MyBatis 运行配置
      * @return SQL 会话工厂定制器
@@ -132,8 +136,13 @@ public class CoreMyBatisAutoConfiguration {
     }
 
     /**
-     * 注册 Core 标识、版本、认证域和枚举处理器。
+     * 开启下划线到驼峰的字段映射，设置枚举默认处理器，并登记 Core 类型与列值的转换规则。
      *
+     * <p>{@code RetryRule} 使用 {@code RetryRuleCodec} 编解码；{@code LocalizedFields} 使用 JSONB 与严格 JSON 映射器转换。
+     * 其余类型按各自的字符串或 BIGINT 格式读写。
+     *
+     * @param objectMapper 严格 JSON 映射器，用于 {@code LocalizedFields} 的 JSONB 转换
+     * @param retryRules 重试规则编解码器
      * @return MyBatis 配置定制器
      */
     @Bean

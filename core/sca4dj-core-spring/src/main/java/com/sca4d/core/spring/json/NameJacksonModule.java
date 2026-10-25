@@ -24,12 +24,12 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.function.Function;
 
-/** 在 JSON 字符串边界恢复名称类型；Code 保持业务编码，只有 Key 应用 App 隔离。 */
+/** 在 JSON 字符串读写时恢复名称类型；Code 保持业务编码，只有 Key 按 App 隔离输出。 */
 public class NameJacksonModule extends SimpleModule {
 
     private static final long serialVersionUID = 1L;
 
-    /** 注册公共名称类型与明确的领域协议格式，不根据 JSON 字段名猜测隔离规则。 */
+    /** 注册公共名称类型及各自协议约定的输出格式，不根据 JSON 字段名推断 App 隔离规则。 */
     public NameJacksonModule() {
         super("sca4dj-names");
         register(Name.class, Name::new, NameFormat.COLON);

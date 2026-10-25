@@ -11,7 +11,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.util.ArrayList;
 import java.util.List;
 
-/** 验证提交后动作的事务边界、顺序、嵌套事务隔离和失败结果。 */
+/** 验证 TransactionCallbacks 在无事务时的 afterCommit 与 afterCommitOrNow 行为、提交时按注册顺序执行回调、回滚时丢弃回调，以及单个回调失败时继续执行其余回调并保留失败结果。 */
 class TransactionCallbacksTest {
 
     @AfterEach

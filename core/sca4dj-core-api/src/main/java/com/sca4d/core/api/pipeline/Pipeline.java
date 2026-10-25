@@ -1,5 +1,6 @@
 package com.sca4d.core.api.pipeline;
 
+import com.sca4d.core.api.pipeline.exception.PipelineExecutionException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.util.Locale;
 import java.util.Map;
 
+/** 验证 LocalizedFieldsTypeHandler 把多语言字段以 JSON 文本写入 JDBC OTHER 参数，并从结果集读回后按语言和字段名查找。 */
 class LocalizedFieldsTypeHandlerTest {
 
     @Test

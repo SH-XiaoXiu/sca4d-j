@@ -16,6 +16,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 
+/** 验证 ApiResponse 的成功响应与 callId 来源、无 HTTP 请求时的构造、REST 状态码和资源响应头，以及幂等重放时恢复 HTTP 元数据。 */
 class ApiResponseTest {
 
     @AfterEach

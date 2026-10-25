@@ -114,16 +114,16 @@ public class HttpInputOpenApiCustomizer
     /**
      * 给 Springdoc 已识别的 Controller 参数添加类型和显式覆盖标记。
      *
-     * @param parameterModel Springdoc 生成的参数；无法生成参数模型时为空
+     * @param parameterModel Springdoc 生成的参数定义；Springdoc 未生成参数定义时为空
      * @param methodParameter Controller 方法参数
-     * @return 带有标记的参数定义；输入参数模型为空时仍返回空
+     * @return 带有标记的参数定义；传入为空时返回空
      */
     @Override
     public @Nullable Parameter customize(
             @Nullable Parameter parameterModel,
             @NotNull MethodParameter methodParameter) {
-        if (parameterModel == null) {
-            return null;
+        if (parameterModel == null || methodParameter.getParameterIndex() < 0) {
+            return parameterModel;
         }
         mark(
                 parameterModel.getSchema(),
@@ -132,7 +132,13 @@ public class HttpInputOpenApiCustomizer
         return parameterModel;
     }
 
-    /** @return 带有当前请求字段类型和显式覆盖标记的 Schema */
+    /**
+     * 为 Springdoc 生成的属性 Schema 写入类型和显式覆盖标记，供最终文档阶段判断是否应用默认限制。
+     *
+     * @param property Springdoc 生成的属性 Schema
+     * @param type 属性所在 Java 类型的注解上下文
+     * @return 同一个属性 Schema，已写入内部标记
+     */
     @Override
     @SuppressWarnings("rawtypes") // springdoc PropertyCustomizer 的方法签名使用原始 Schema。
     public @NotNull Schema customize(@NotNull Schema property, @NotNull AnnotatedType type) {
@@ -140,7 +146,14 @@ public class HttpInputOpenApiCustomizer
         return property;
     }
 
-    /** @return 带有方法级关闭标记和请求体根类型标记的接口定义 */
+    /**
+     * 为接口写入关闭默认校验的内部标记，并补充 {@code If-Match}、响应 ETag 和分页、排序参数。
+     * 方法或 Controller 类声明 {@link NoDefaultValidation} 时，最终文档阶段跳过该接口的默认限制。
+     *
+     * @param operation Springdoc 生成的接口定义
+     * @param handlerMethod Spring MVC 处理方法
+     * @return 同一个接口定义，已写入补充参数和内部标记
+     */
     @Override
     public @NotNull Operation customize(
             @NotNull Operation operation,
@@ -199,7 +212,7 @@ public class HttpInputOpenApiCustomizer
         });
     }
 
-    /** @return Controller 返回的 {@code ApiResponse.data} 类型是否声明了 {@link ETag} */
+    /** @return 方法返回的 {@code ApiResponse} 数据类型的公开方法中是否有标注 {@link ETag} 的方法 */
     private static boolean hasResponseETag(@NotNull Method method) {
         Type returnType = Objects.requireNonNull(method, "Controller 方法不能为空").getGenericReturnType();
         if (!(returnType instanceof ParameterizedType responseType)
@@ -484,7 +497,7 @@ public class HttpInputOpenApiCustomizer
 
     /** 清理接口参数和请求体中的内部 Schema 标记。 */
     private void clearMarkers(
-            List<Parameter> parameters,
+            @Nullable List<Parameter> parameters,
             @Nullable RequestBody requestBody,
             @Nullable Components components,
             @NotNull Set<Schema<?>> visited) {
@@ -609,7 +622,7 @@ public class HttpInputOpenApiCustomizer
         return false;
     }
 
-    /** @return 声明或组合注解中是否包含目标注解 */
+    /** @return 类或方法声明的注解中是否包含 {@link NoDefaultValidation}（含组合注解） */
     private boolean hasNoDefaultValidation(@NotNull AnnotatedElement element) {
         return hasAnnotation(element.getAnnotations(), NoDefaultValidation.class);
     }
@@ -621,7 +634,7 @@ public class HttpInputOpenApiCustomizer
         return extensions != null && Boolean.TRUE.equals(extensions.get(name));
     }
 
-    /** 删除一个 extensions 标记，并在其为空时交由模型保留空 Map。 */
+    /** 删除接口级关闭默认校验的内部标记；extensions 变为空时保留空 Map。 */
     private void removeOperationMarker(@Nullable Map<String, Object> extensions) {
         if (extensions != null) {
             extensions.remove(OPERATION_NO_DEFAULT);

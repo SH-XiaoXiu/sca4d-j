@@ -1,6 +1,8 @@
 package com.sca4d.core.api.flow;
 
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Unmodifiable;
@@ -193,7 +195,7 @@ public class FlowInstance {
     @Contract(value = "-> new", pure = true)
     public FlowInstance consume() {
         if (consumed) {
-            throw new IllegalStateException("流程结果只能消费一次");
+            throw new BusinessException(CoreErrorCode.FLOW_RESULT_CONSUMED);
         }
         return new FlowInstance(
                 id,

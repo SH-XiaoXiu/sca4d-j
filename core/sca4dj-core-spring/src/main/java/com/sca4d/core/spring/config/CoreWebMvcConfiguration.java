@@ -62,7 +62,7 @@ class CoreWebMvcConfiguration {
 
     /**
      * @param clock 调用开始时间使用的时钟
-     * @param invoker 调用生命周期执行器
+     * @param invoker 负责按顺序执行 Call 各阶段的调用执行器
      * @param properties HTTP 请求配置
      * @return 最外层调用过滤器
      */
@@ -122,7 +122,7 @@ class CoreWebMvcConfiguration {
     /**
      * 创建将业务异常和 Spring MVC 异常写入 HTTP 响应的处理器。
      *
-     * @param localizer 统一文本本地化入口
+     * @param localizer 文本本地化入口
      * @return HTTP 异常处理器
      */
     @Bean
@@ -137,8 +137,8 @@ class CoreWebMvcConfiguration {
     }
 
     /**
-     * @param handlerAdapter MVC 实际请求处理适配器
-     * @param localizer 统一文本本地化入口
+     * @param handlerAdapter Spring MVC 实际调用 Controller 方法的组件
+     * @param localizer 文本本地化入口
      * @return BaseView Jackson 模块安装器
      */
     @Bean
@@ -167,7 +167,14 @@ class CoreWebMvcConfiguration {
         };
     }
 
-    /** @param properties 分页配置 @return MVC 参数解析器注册 */
+    /**
+     * 注册日期格式化器、当前身份和分页参数解析器，并按顺序安装 If-Match、主体选择和身份 MDC 拦截器。
+     *
+     * @param properties 分页和列表参数的默认配置
+     * @param principalSelectionInterceptor 在 Controller 执行前选择当前主体的拦截器
+     * @param ifMatchInterceptor 校验 `If-Match` 请求头的拦截器
+     * @return 注册到 Spring MVC 的 WebMvcConfigurer
+     */
     @Bean
     WebMvcConfigurer coreWebMvcConfigurer(
             CoreSpringProperties properties,

@@ -6,11 +6,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.sca4d.core.api.concurrent.OptimisticLockException;
-import com.sca4d.core.api.concurrent.RateLimitExceededException;
-import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.concurrent.exception.RateLimitExceededException;
+import com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.TextLocalizer;
 import com.sca4d.core.spring.web.clientstate.ClientState;
@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+/** 验证 GlobalExceptionHandler 把业务异常、限流、版本前置条件失败和乐观锁冲突转换为 HTTP 状态与 ApiResponse，并区分 JSON 与 text/event-stream 的响应体策略。 */
 class GlobalExceptionHandlerTest {
 
     private final GlobalExceptionHandler handler = new GlobalExceptionHandler(localizer());
@@ -215,6 +216,7 @@ class GlobalExceptionHandlerTest {
         assertThat(ClientState.currentOrNull()).isNull();
     }
 
+    /** 创建只包含 zh-CN 测试消息的 TextLocalizer，未登记的消息键返回 Optional.empty。 */
     private static TextLocalizer localizer() {
         Locale zhCn = Locale.forLanguageTag("zh-CN");
         Map<String, String> messages = Map.of(

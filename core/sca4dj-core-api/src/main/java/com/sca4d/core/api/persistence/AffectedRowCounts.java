@@ -1,7 +1,8 @@
 package com.sca4d.core.api.persistence;
 
-import com.sca4d.core.api.concurrent.OptimisticLockException;
-import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException;
+import com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

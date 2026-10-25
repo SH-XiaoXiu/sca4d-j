@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-/** 定义统一 `sys_setting` 表的最小查询、条件写入和初始化锁 SQL。 */
+/** 定义 `sys_setting` 表的查询、条件写入和初始化锁 SQL。 */
 public interface SettingMapper {
     /** 查询规范编码及可能冲突的旧编码，旧值只用于阻止静默采用默认值。 */
     @NotNull
@@ -76,7 +76,7 @@ public interface SettingMapper {
             @Param("encryptionContextVersion") @NotNull Patch<Integer> encryptionContextVersion,
             @Param("expectedVersion") long expectedVersion);
 
-    /** @return owner 生命周期结束时物理删除的指定设置行数 */
+    /** @return 物理删除的指定 owner 设置行数 */
     int erase(
             @Param("ownerType") @NotNull TreeCode ownerType,
             @Param("ownerId") @NotNull String ownerId,

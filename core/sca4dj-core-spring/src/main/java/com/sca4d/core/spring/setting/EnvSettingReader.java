@@ -27,6 +27,11 @@ public final class EnvSettingReader implements SettingReader<String> {
         return TreeCode.of("SETTING:ENV");
     }
 
+    /**
+     * 读取 `setting` 经 `variable` 映射得到的环境变量；变量不存在时返回值为 null 的 SettingValue，不写入数据库。
+     *
+     * @throws IllegalArgumentException owner 不是 `SettingOwner.system()` 时抛出
+     */
     @Override
     public @NotNull SettingValue<String> read(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
         if (!SettingOwner.system().equals(owner))

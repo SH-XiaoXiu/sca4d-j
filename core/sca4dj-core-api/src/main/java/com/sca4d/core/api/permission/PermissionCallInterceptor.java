@@ -7,8 +7,9 @@ import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.NoCallValueResolver;
 import com.sca4d.core.api.call.SPICallValueResolver;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
@@ -45,6 +46,7 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
      *
      * @param permissionAssessment 按资源查找唯一策略的权限评估器
      * @param resolverLookup 动态资源解析器查找入口
+     * @param expressionResolver 解析 {@code @RequirePermission} 资源表达式的解析器
      */
     public PermissionCallInterceptor(
             @NotNull PermissionAssessment permissionAssessment,
@@ -115,7 +117,15 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
         return next.proceed();
     }
 
-    /** 异步业务只延后通过权限判断后的内层调用。 */
+    /**
+     * 异步执行前先完成全部权限判断，只有全部允许后才调用 {@code next.proceedAsync()}。
+     *
+     * @param execution 已完成身份和 Principal 选择的方法执行
+     * @param next 通过全部权限后启动的异步内层调用
+     * @return 内层异步调用的完成阶段
+     * @throws BusinessException 任一权限被拒绝时同步抛出，不启动内层调用
+     * @throws IllegalStateException 尚未选择 Principal 或权限声明无效时同步抛出
+     */
     @Override
     public @NotNull CompletionStage<CallOutcome> aroundAsync(
             @NotNull CallExecution execution,
@@ -212,6 +222,17 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
         return permissions;
     }
 
+    /**
+     * 把权限表达式的返回值转换为 Permission 使用的 Resource。
+     *
+     * <p>{@link Resource} 必须与 {@code resourceType} 的类型一致；正整数或非空文本只作为标识，并与 {@code resourceType} 组成 {@link Resource.Ref}。
+     *
+     * @param value 表达式或解析器返回的单个资源值
+     * @param resourceType 注解声明的资源类型，可以为空白，但标识值要求它非空
+     * @return 可以交给权限策略判断的资源
+     * @throws IllegalStateException 资源类型不一致、标识不是正整数或非空文本，或缺少必需的资源类型时抛出
+     * @throws CoreApiException 数字标识无法精确转换为整数时抛出
+     */
     private static @NotNull Resource reference(@NotNull Object value, @NotNull String resourceType) {
         if (value instanceof Resource resource) {
             if (!resourceType.isBlank() && !TreeCode.of(resourceType).equals(resource.type())) {
@@ -231,7 +252,7 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
                 }
                 id = integer.toString();
             } catch (ArithmeticException | NumberFormatException exception) {
-                throw new IllegalStateException("权限资源标识必须是正整数", exception);
+                throw new CoreApiException("权限资源标识必须是正整数", exception);
             }
         } else if (value instanceof String text && !text.isBlank()) {
             id = text.trim();

@@ -21,7 +21,9 @@ import org.mockito.ArgumentMatchers;
 import java.time.Duration;
 import java.util.function.Supplier;
 
+/** 验证 RedisRateLimiter 使用当前 App 命名空间和限流规则构造 bucket 键，并在访问 Redis 前拒绝非法业务键。 */
 class RedisRateLimiterTest {
+    // 限流键前缀由进程级 AppName 决定，必须在任何测试访问 Redis 名称之前发布为 sca4d-test。
     static {
         AppName.publish("sca4d-test");
     }

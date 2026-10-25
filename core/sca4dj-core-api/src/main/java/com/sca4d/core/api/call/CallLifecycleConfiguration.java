@@ -29,7 +29,12 @@ public final class CallLifecycleConfiguration {
 
     private final Map<TreeCode, Registration> registrations = new LinkedHashMap<>();
 
-    /** 从已注册的环绕处理创建默认配置；处理自身的依赖会作为初始约束。 */
+    /**
+     * 从已注册的生命周期参与者创建默认配置；参与者自身声明的 before/after 依赖作为初始约束，并应用内置顺序。
+     *
+     * @param interceptors 生命周期参与者，每个参与者只能实现一种阶段回调，编码不能重复
+     * @throws IllegalArgumentException 参与者没有阶段回调、实现多个阶段或编码重复时抛出
+     */
     public CallLifecycleConfiguration(@NotNull List<? extends CallLifecycle.Participant> interceptors) {
         for (CallLifecycle.Participant interceptor : Objects.requireNonNull(interceptors)) {
             register(
@@ -59,7 +64,16 @@ public final class CallLifecycleConfiguration {
         afterIfRegistered(LockCallInterceptor.CODE, IdempotencyCallInterceptor.CODE);
     }
 
-    /** 登记一个阶段参与者。 */
+    /**
+     * 登记一个阶段参与者及其排序约束。
+     *
+     * @param lifecycle 参与者声明的阶段，必须与其实现的回调接口一致
+     * @param interceptor 阶段参与者，编码在配置中必须唯一
+     * @param after 当前节点必须排在其之后的节点编码
+     * @param before 当前节点必须排在其之前的节点编码
+     * @param priority 无硬依赖时的排序优先级
+     * @throws IllegalArgumentException 阶段与回调类型不一致或编码重复时抛出
+     */
     public void register(
             @NotNull CallLifecycle lifecycle,
             @NotNull CallLifecycle.Participant interceptor,
@@ -127,6 +141,13 @@ public final class CallLifecycleConfiguration {
         return List.copyOf(registrations.values());
     }
 
+    /**
+     * 按编码查找已登记的节点。
+     *
+     * @param code 节点编码
+     * @return 已登记节点的可修改依赖视图
+     * @throws IllegalArgumentException 编码未登记时抛出
+     */
     private Registration registration(TreeCode code) {
         Registration registration = registrations.get(Objects.requireNonNull(code, "节点编码不能为空"));
         if (registration == null) {
@@ -158,6 +179,14 @@ public final class CallLifecycleConfiguration {
         return selected;
     }
 
+    /**
+     * 确认参与者只实现一种阶段回调，并返回该阶段。
+     *
+     * @param previous 已经为同一参与者选中的阶段，尚未选中时为 {@code null}
+     * @param selected 本次检查到的阶段
+     * @return 本次选中的阶段
+     * @throws IllegalArgumentException 已经选中另一阶段时抛出
+     */
     private static CallLifecycle single(CallLifecycle previous, CallLifecycle selected) {
         if (previous != null) {
             throw new IllegalArgumentException("一个调用参与者只能实现一个阶段回调: " + previous + "/" + selected);

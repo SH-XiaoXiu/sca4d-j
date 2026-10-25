@@ -12,6 +12,7 @@ import com.sca4d.core.api.concurrent.IdempotencyKey;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import com.sca4d.core.spring.web.ApiResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +61,7 @@ public class RedisIdempotencyStore implements IdempotencyStore {
     private final RedisTemplate<Key, String> redis;
 
     /**
-     * 创建使用脚手架 Redis 模板和内部稳定 JSON 契约的幂等存储。
+     * 创建幂等存储；幂等记录以 JSON 字符串形式写入 Redis，并由 Lua 脚本原子修改。
      *
      * @param redis 脚手架内部字符串 Redis 模板
      * @param objectMapper 脚手架内部 JSON 映射器
@@ -131,7 +132,7 @@ public class RedisIdempotencyStore implements IdempotencyStore {
             }
             return IdempotencyBeginResult.replay(result);
         } catch (IOException exception) {
-            throw new IllegalStateException("Redis 幂等结果无法按当前方法类型读取", exception);
+            throw new CoreSpringException("Redis 幂等结果无法按当前方法类型读取", exception);
         }
     }
 
@@ -192,7 +193,7 @@ public class RedisIdempotencyStore implements IdempotencyStore {
                         DigestUtil.sha256Hex(Objects.requireNonNull(key, "幂等键不能为空").value()));
     }
 
-    /** 将正数时间规范到 Redis 毫秒精度。 */
+    /** 把正数 TTL 转换为毫秒；不足 1 毫秒的部分按 1 毫秒计算，因为 Redis 脚本只接受毫秒参数。 */
     private static Duration ttl(Duration value) {
         Duration checked = Objects.requireNonNull(value, "Redis TTL 不能为空");
         if (checked.isZero() || checked.isNegative()) {
@@ -224,7 +225,7 @@ public class RedisIdempotencyStore implements IdempotencyStore {
         try {
             return objectMapper.writeValueAsString(record);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Redis 幂等记录序列化失败", exception);
+            throw new CoreSpringException("Redis 幂等记录序列化失败", exception);
         }
     }
 
@@ -240,7 +241,7 @@ public class RedisIdempotencyStore implements IdempotencyStore {
             }
             return record;
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Redis 幂等记录无法读取", exception);
+            throw new CoreSpringException("Redis 幂等记录无法读取", exception);
         }
     }
 

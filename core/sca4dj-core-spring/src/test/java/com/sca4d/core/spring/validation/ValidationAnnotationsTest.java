@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
+/** 验证 BizId、DisplayName、SafeText、MacAddress 等格式注解对非空值的判定，null 视为可选，以及 @TimeRange 的起止时间比较。 */
 class ValidationAnnotationsTest {
 
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -91,7 +92,7 @@ class ValidationAnnotationsTest {
         }
     }
 
-    /** 校验错误的属性声明应明确失败。 */
+    /** 声明 start 属性 missing 不存在的 @TimeRange，用于验证校验器在属性名无法解析时抛出异常，而不是静默通过。 */
     @TimeRange(start = "missing", end = "startTo")
     private static class InvalidRangeInput {
 

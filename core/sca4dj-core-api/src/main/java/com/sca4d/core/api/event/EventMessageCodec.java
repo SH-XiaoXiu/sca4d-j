@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +58,7 @@ public class EventMessageCodec<T> implements MessageCodec<Event<T>> {
         try {
             return json.writeValueAsBytes(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Event 无法编码", exception);
+            throw new CoreApiException("Event 无法编码", exception);
         }
     }
 

@@ -57,12 +57,16 @@ public class GatewayRegistrationProperties {
         this.serverBaseUrl = serverBaseUrl;
     }
 
-    /** @return 当前进程的可选固定实例标识 */
+    /**
+     * @return 配置中的实例标识；注册时不读取该值，实际注册使用 `InstanceProperties` 的实例标识
+     */
     public @Nullable String getInstanceId() {
         return instanceId;
     }
 
-    /** @param instanceId 当前进程在 Gateway 注册表中的唯一标识 */
+    /**
+     * @param instanceId 配置的实例标识；修改该值不会改变 `GatewayRegistrationLifecycle` 注册时使用的实例标识
+     */
     public void setInstanceId(@Nullable String instanceId) {
         this.instanceId = instanceId;
     }
@@ -87,7 +91,7 @@ public class GatewayRegistrationProperties {
         this.secret = secret;
     }
 
-    /** @return 成功注册后发送续租请求的间隔 */
+    /** @return 两次注册或续租之间的间隔；注册或续租失败后也按同一间隔重试 */
     public @NotNull Duration getRenewInterval() {
         return renewInterval;
     }

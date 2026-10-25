@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sca4dj.redis.pipeline")
 public class RedisPipelineProperties {
 
+    /** 配置键 `sca4dj.redis.pipeline.max-commands`，默认 `1000`，只能通过 setter 设置为正数。 */
     private int maxCommands = 1_000;
 
     public RedisPipelineProperties() {

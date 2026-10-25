@@ -2,6 +2,7 @@ package com.sca4d.core.spring.security;
 
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -41,6 +42,14 @@ public class AesGcmSecretCipher implements SecretCipher {
         this(keyId, keyBytes, new SecureRandom());
     }
 
+    /**
+     * 使用调用方提供的随机数源生成 nonce，并校验 key-id 和密钥长度。
+     *
+     * @param keyId 部署配置维护的密钥标识
+     * @param keyBytes 精确 32 字节的 AES 密钥，构造时复制
+     * @param random 每次加密生成 96-bit nonce 的随机数源
+     * @throws IllegalArgumentException key-id 格式无效或密钥不是 32 字节时抛出
+     */
     AesGcmSecretCipher(
             @NotNull String keyId,
             byte @NotNull [] keyBytes,
@@ -59,6 +68,14 @@ public class AesGcmSecretCipher implements SecretCipher {
         return keyId;
     }
 
+    /**
+     * 加密秘密明文，并把 purpose 作为 AAD 参与认证。
+     *
+     * @param purpose 秘密所属的业务用途，解密时必须传入相同值
+     * @param plaintext 秘密明文
+     * @return 包含当前 key-id 的密文，内容为 nonce 加 GCM 密文和 tag
+     * @throws IllegalStateException 加密算法不可用时抛出
+     */
     @Override
     public @NotNull EncryptedSecret encrypt(
             @NotNull String purpose,
@@ -79,10 +96,19 @@ public class AesGcmSecretCipher implements SecretCipher {
                             .put(encrypted)
                             .array());
         } catch (GeneralSecurityException exception) {
-            throw new IllegalStateException("秘密值加密失败", exception);
+            throw new CoreSpringException("秘密值加密失败", exception);
         }
     }
 
+    /**
+     * 验证并解密由当前 key-id 加密的秘密值。
+     *
+     * @param purpose 加密时使用的业务用途，不一致时认证失败
+     * @param secret 待解密的加密秘密
+     * @return 解密后的明文字节
+     * @throws IllegalArgumentException 密文的 key-id 不是当前密钥时抛出
+     * @throws IllegalStateException 密文长度不足、标签验证失败或解密失败时抛出，不返回部分明文
+     */
     @Override
     public byte @NotNull [] decrypt(
             @NotNull String purpose,
@@ -108,10 +134,17 @@ public class AesGcmSecretCipher implements SecretCipher {
             cipher.updateAAD(requirePurpose(purpose));
             return cipher.doFinal(ciphertext);
         } catch (GeneralSecurityException exception) {
-            throw new IllegalStateException("加密秘密无法验证或解密", exception);
+            throw new CoreSpringException("加密秘密无法验证或解密", exception);
         }
     }
 
+    /**
+     * 检查 key-id 能否安全写入密文元数据。
+     *
+     * @param keyId 待检查的密钥标识
+     * @return 通过检查的原值
+     * @throws IllegalArgumentException 不符合字母数字开头且最长 64 字符的格式时抛出
+     */
     private static String requireKeyId(String keyId) {
         String checked = Objects.requireNonNull(keyId, "Secret key-id 不能为空");
         if (!checked.matches("[A-Za-z0-9][A-Za-z0-9._-]{0,63}")) {
@@ -120,6 +153,13 @@ public class AesGcmSecretCipher implements SecretCipher {
         return checked;
     }
 
+    /**
+     * 把业务用途转换为 AAD 字节。
+     *
+     * @param purpose 业务用途
+     * @return UTF-8 编码的用途字节
+     * @throws IllegalArgumentException 用途为空白时抛出
+     */
     private static byte[] requirePurpose(String purpose) {
         String checked = Objects.requireNonNull(purpose, "秘密值用途不能为空");
         if (checked.isBlank()) {

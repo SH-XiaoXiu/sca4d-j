@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-/** 验证 Key 的 App 前缀、Cluster 同槽分组及反序列化边界。 */
+/** 验证 Key 序列化结果带当前 App 前缀，声明 hash tag 的 Key 进入同一 Redis Cluster 槽，并拒绝其他 App 前缀、伪造 hash tag 和非规范格式的输入。 */
 class KeyRedisSerializerTest {
 
     /** 在序列化设施创建前固定当前测试进程的 App 名。 */

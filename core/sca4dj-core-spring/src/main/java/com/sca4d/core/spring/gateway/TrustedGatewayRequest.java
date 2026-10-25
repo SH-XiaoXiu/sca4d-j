@@ -7,8 +7,10 @@ import org.jetbrains.annotations.NotNull;
 /** 读取已经由 `TrustedGatewayRequestFilter` 验证的外部请求路径和客户端地址。 */
 public class TrustedGatewayRequest {
 
+    /** Servlet 请求属性名，由 `TrustedGatewayRequestFilter` 在 Secret 匹配时写入外部路径。 */
     static final String EXTERNAL_PATH_ATTRIBUTE = TrustedGatewayRequest.class.getName() + ".externalPath";
 
+    /** Servlet 请求属性名，由 `TrustedGatewayRequestFilter` 在 Secret 匹配时写入客户端地址。 */
     static final String CLIENT_IP_ATTRIBUTE = TrustedGatewayRequest.class.getName() + ".clientIp";
 
     private TrustedGatewayRequest() {

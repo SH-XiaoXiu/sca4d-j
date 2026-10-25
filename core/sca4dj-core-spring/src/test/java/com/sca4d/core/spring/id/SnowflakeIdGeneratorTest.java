@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/** 验证 SnowflakeIdGenerator 的节点号范围、同一节点内的递增顺序，以及多线程并发生成的唯一性。 */
 class SnowflakeIdGeneratorTest {
 
     @Test

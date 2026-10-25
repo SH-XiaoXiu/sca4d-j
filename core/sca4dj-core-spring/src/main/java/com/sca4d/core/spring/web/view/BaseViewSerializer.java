@@ -10,10 +10,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.util.TokenBuffer;
-import com.sca4d.core.api.data.DataAssertionException;
+import com.sca4d.core.api.data.exception.DataAssertionException;
 import com.sca4d.core.api.i18n.LocalizableText;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.TextLocalizer;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -239,26 +240,19 @@ public class BaseViewSerializer extends StdSerializer<BaseView> {
             throw new IllegalStateException("@Localize source 不能为空白: " + viewType.getName());
         }
         for (Class<?> type = viewType; type != null && type != Object.class; type = type.getSuperclass()) {
-            Method method = declaredMethod(type, sourceName);
-            if (method != null) {
-                validateSourceMethod(viewType, sourceName, method);
-                method.setAccessible(true);
-                return method;
+            // 只检查当前类型直接声明的方法；未声明时继续向父类查找。
+            Method method;
+            try {
+                method = type.getDeclaredMethod(sourceName);
+            } catch (NoSuchMethodException ignored) {
+                continue;
             }
+            validateSourceMethod(viewType, sourceName, method);
+            method.setAccessible(true);
+            return method;
         }
         throw new IllegalStateException(
                 "@Localize source 方法不存在: " + viewType.getName() + "." + sourceName);
-    }
-
-    /** 查找当前类型直接声明的 source 方法，未找到时由调用方继续遍历父类。 */
-    private static @Nullable Method declaredMethod(
-            @NotNull Class<?> type,
-            @NotNull String sourceName) {
-        try {
-            return type.getDeclaredMethod(sourceName);
-        } catch (NoSuchMethodException ignored) {
-            return null;
-        }
     }
 
     /** 校验 source 方法满足 BaseView 本地化契约。 */
@@ -287,7 +281,7 @@ public class BaseViewSerializer extends StdSerializer<BaseView> {
             }
             return (LocalizableText) result;
         } catch (IllegalAccessException | IllegalArgumentException exception) {
-            throw new IllegalStateException("无法调用 @Localize source: " + source, exception);
+            throw new CoreSpringException("无法调用 @Localize source: " + source, exception);
         } catch (InvocationTargetException exception) {
             Throwable cause = exception.getCause();
             if (cause instanceof RuntimeException runtimeException) {
@@ -296,7 +290,7 @@ public class BaseViewSerializer extends StdSerializer<BaseView> {
             if (cause instanceof Error error) {
                 throw error;
             }
-            throw new IllegalStateException("@Localize source 执行失败: " + source, cause);
+            throw new CoreSpringException("@Localize source 执行失败: " + source, cause);
         }
     }
 

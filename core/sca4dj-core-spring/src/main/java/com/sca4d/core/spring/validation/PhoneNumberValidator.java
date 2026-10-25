@@ -22,6 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 /** 使用 libphonenumber 和 PhoneNumberCondition Bean 执行 PhoneNumber 约束。 */
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
@@ -58,7 +59,7 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
             expression = DnfExpression.always("always", true);
             return;
         }
-        List<DnfClause<ParsedPhoneNumber, Boolean>> clauses = java.util.stream.IntStream
+        List<DnfClause<ParsedPhoneNumber, Boolean>> clauses = IntStream
                 .range(0, annotation.anyOf().length)
                 .mapToObj(index -> clause("phone-rule-" + index, annotation.anyOf()[index]))
                 .toList();
@@ -135,7 +136,7 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
         }
     }
 
-    /** 规范化注解中的地区代码。 */
+    /** 将 @PhoneNumber 声明的地区代码转为大写并去重，任一代码为空白时抛出 IllegalArgumentException。 */
     private static Set<Region> regions(String[] values) {
         Set<Region> result = new HashSet<>();
         for (String value : values) {

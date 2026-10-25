@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.core.api.data.exception.DataAssertionException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -126,6 +127,7 @@ public class DataOps {
      *
      * @param length 输出字节数，不能为负数
      * @return 初始内容全部为零的字节构建器
+     * @throws IllegalArgumentException length 为负数时抛出
      */
     @CheckReturnValue
     public static @NotNull ByteBuilder bytes(int length) {
@@ -375,8 +377,8 @@ public class DataOps {
         /**
          * 从文本开头截取不超过指定 UTF-16 长度的内容。
          *
-         * @param maxLength 允许保留的最大长度；非正数产生空文本
-         * @return 当前值为空时保留空值，否则返回包含截取结果的新对象
+         * @param maxLength 允许保留的最大长度；非正数时结果为空文本
+         * @return 当前值为空且 maxLength 为正数时保留空值；maxLength 非正数时返回空文本；否则返回包含截取结果的新对象
          */
         public @NotNull TextPipe cut(int maxLength) {
             if (maxLength <= 0 || value == null) {
@@ -623,7 +625,7 @@ public class DataOps {
             return value;
         }
 
-        /** 安全尝试转换 BigDecimal。 */
+        /** 尝试把数字或文本转换为 BigDecimal；空值、空白或无法解析的文本返回 null，不抛出异常。 */
         private static @Nullable BigDecimal decimal(@Nullable Object value) {
             if (value instanceof BigDecimal decimal) {
                 return decimal;
@@ -971,7 +973,7 @@ public class DataOps {
             return values.clone();
         }
 
-        /** 创建限制在指定范围和字节序内的只读视图。 */
+        /** 创建覆盖指定范围并使用指定字节序的读取缓冲区；调用方只能通过它读取，不会写回字节快照。 */
         private @NotNull ByteBuffer buffer(
                 int offset,
                 int length,
@@ -1791,7 +1793,14 @@ public class DataOps {
         }
     }
 
-    /** 校验 JSON 字段名非空。 */
+    /**
+     * 校验 JSON 字段名非空，并返回去除首尾空白后的字段名。
+     *
+     * @param field 待检查的 JSON 字段名
+     * @return 去除首尾空白后的非空字段名
+     * @throws NullPointerException field 为 {@code null} 时抛出
+     * @throws IllegalArgumentException 去除首尾空白后为空时抛出
+     */
     private static @NotNull String fieldName(@NotNull String field) {
         Objects.requireNonNull(field, "JSON 字段名不能为空");
         String clean = field.strip();

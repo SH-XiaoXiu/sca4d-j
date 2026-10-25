@@ -1,5 +1,6 @@
 package com.sca4d.core.api.data;
 
+import com.sca4d.core.api.data.exception.DataAssertionException;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -129,7 +130,13 @@ public class DataOperation<T> {
         return output;
     }
 
-    /** 同步执行节点函数并检查输出类型。 */
+    /**
+     * 同步执行节点函数并检查输出类型；只有异步操作时，在当前线程阻塞等待其完成。
+     *
+     * @param values 节点允许读取的输入快照
+     * @return 通过类型检查的非空输出
+     * @throws DataAssertionException 输出为 null 或类型与输出键不一致时抛出
+     */
     @NotNull
     T execute(@NotNull DataValues values) {
         T result;
@@ -151,6 +158,13 @@ public class DataOperation<T> {
                 .thenApply(this::checkOutput);
     }
 
+    /**
+     * 拒绝 null 输出，并把输出转换为输出键声明的类型。
+     *
+     * @param result 节点函数返回的原始结果
+     * @return 通过类型检查的输出
+     * @throws DataAssertionException 结果为 null 或类型与输出键不一致时抛出
+     */
     private @NotNull T checkOutput(T result) {
         if (result == null) {
             throw new DataAssertionException("数据操作不能返回 null");

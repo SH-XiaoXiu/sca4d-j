@@ -1,5 +1,6 @@
 package com.sca4d.core.api.authentication;
 
+import com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException;
 import com.sca4d.core.api.identity.Account;
 import org.jetbrains.annotations.NotNull;
 

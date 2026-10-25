@@ -41,7 +41,11 @@ public class CatalogMessageSource implements MessageSource {
                 .orElse(defaultMessage);
     }
 
-    /** 按 Spring MessageSource 约定读取必需消息；Locale 为空时使用 JVM 默认值。 */
+    /**
+     * 按 Spring MessageSource 约定读取必需消息；Locale 为空时使用 JVM 默认值。
+     *
+     * @throws NoSuchMessageException 消息目录中找不到 `code` 时抛出
+     */
     @Override
     public @NotNull String getMessage(
             @NotNull String code,
@@ -52,7 +56,11 @@ public class CatalogMessageSource implements MessageSource {
                 .orElseThrow(() -> new NoSuchMessageException(code, checkedLocale));
     }
 
-    /** 按 MessageSourceResolvable 中的候选键顺序读取消息；Locale 为空时使用 JVM 默认值。 */
+    /**
+     * 按 `MessageSourceResolvable` 中的候选键顺序读取第一条存在的消息；Locale 为空时使用 JVM 默认值。
+     *
+     * @throws NoSuchMessageException 所有候选键都找不到消息，且 `getDefaultMessage()` 为空时抛出
+     */
     @Override
     public @NotNull String getMessage(
             @NotNull MessageSourceResolvable resolvable,

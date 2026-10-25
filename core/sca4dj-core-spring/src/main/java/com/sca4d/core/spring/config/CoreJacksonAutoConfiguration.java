@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-/** 配置 Spring Boot HTTP JSON 格式和脚手架内部稳定 JSON 映射器。 */
+/** 配置 Spring Boot HTTP JSON 的名称类型和长整数输出，并提供脚手架内部使用的 `Sca4djMapper`。 */
 @AutoConfiguration(before = JacksonAutoConfiguration.class)
 @ConditionalOnClass(ObjectMapper.class)
 public class CoreJacksonAutoConfiguration {

@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/** 验证 Req.NotNull、Req.NotBlank 和 Req.NotEmpty 组合了对应的 Jakarta Bean Validation 约束。 */
 class ReqTest {
 
     @Test

@@ -4,6 +4,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.access.SettingReader;
 import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.core.api.setting.value.SettingValue;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-/** 按明确所属读取手工维护的文件字节；格式由构造 Setting 时选择的 Codec 解释。 */
+/** 按明确所属读取手工维护的文件字节；字节内容由设置声明的 Codec 解释。 */
 public final class FileSettingReader implements SettingReader<byte[]> {
     private final BiFunction<TreeCode, SettingOwner, Path> location;
 
@@ -29,6 +30,12 @@ public final class FileSettingReader implements SettingReader<byte[]> {
         return TreeCode.of("SETTING:FILE");
     }
 
+    /**
+     * 读取 `owner` 映射到的设置文件内容；文件不存在时返回值为 null 的 SettingValue。
+     *
+     * @throws IllegalArgumentException 定位路径超出根目录、路径中包含符号链接或文件超过 1 MiB 时抛出
+     * @throws IllegalStateException 文件读取发生 IO 错误时抛出，异常消息只包含设置键
+     */
     @Override
     public @NotNull SettingValue<byte[]> read(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
         Path path = checkedPath(root, location.apply(setting, owner));
@@ -37,7 +44,7 @@ public final class FileSettingReader implements SettingReader<byte[]> {
                 return SettingValue.read(code(), setting, owner, null, 0, null, false);
             return SettingValue.read(code(), setting, owner, readBytes(path), 0, null, false);
         } catch (IOException failure) {
-            throw new IllegalStateException("设置文件读取失败: " + setting, failure);
+            throw new CoreSpringException("设置文件读取失败: " + setting, failure);
         }
     }
 

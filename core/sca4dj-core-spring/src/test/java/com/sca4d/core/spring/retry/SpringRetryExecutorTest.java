@@ -6,10 +6,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.sca4d.core.api.retry.Backoff;
 import com.sca4d.core.api.retry.RetryContext;
 import com.sca4d.core.api.retry.RetryDecision;
-import com.sca4d.core.api.retry.RetryInterruptedException;
 import com.sca4d.core.api.retry.RetryListener;
 import com.sca4d.core.api.retry.RetryPolicy;
 import com.sca4d.core.api.retry.RetryRule;
+import com.sca4d.core.api.retry.exception.RetryInterruptedException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/** 验证同步执行保留原异常、等待、中断、观察和并发上下文边界。 */
+/** 验证 SpringRetryExecutor 同步执行时保留原异常、按 RetryRule 等待、中断后停止重试、隔离观察者异常，并让并发调用各自计数。 */
 class SpringRetryExecutorTest {
     @Test
     @DisplayName("按共同规则等待且每次失败只判断一次")

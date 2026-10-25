@@ -43,6 +43,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.time.Duration;
 import java.time.Instant;
 
+/** 验证 CoreSpringAutoConfiguration 装配 Web、幂等、操作目录、ID 生成器和 OpenAPI，并允许应用替换其中的部分 Bean。 */
 class CoreSpringAutoConfigurationTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()

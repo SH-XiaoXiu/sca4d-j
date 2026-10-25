@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sca4dj.id")
 public class IdProperties {
 
+    /** 当前进程的雪花 ID 节点编号，默认 0，范围 0 至 `SnowflakeIdGenerator.MAX_NODE_ID`。 */
     private long nodeId;
 
     /** 创建使用本地单节点编号 0 的配置。 */

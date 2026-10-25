@@ -9,6 +9,7 @@ import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.TextLocalizer;
 import com.sca4d.core.spring.config.HttpInputValidationProperties;
 import com.sca4d.core.spring.validation.NoDefaultValidation;
+import com.sca4d.core.spring.web.exception.HttpInputValidationException;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -30,6 +31,7 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.*;
 
+/** 验证 HttpInputValidationAspect 对 Controller 参数执行 Bean Validation 与类型默认约束，显式约束会替换默认约束，并在循环对象图中停止递归。 */
 @SuppressWarnings("unused") // Controller 方法和请求字段由测试通过反射读取。
 class HttpInputValidationAspectTest {
 
@@ -136,6 +138,7 @@ class HttpInputValidationAspectTest {
         VALIDATOR_FACTORY.close();
     }
 
+    /** 通过 mock 的 ProceedingJoinPoint 调用 aspect.validate，参数类型由 parameterTypes 指定；校验通过时目标方法返回 "ok"。 */
     private Object invoke(String methodName, Class<?>[] parameterTypes, Object... arguments) throws Throwable {
         Method method = TestController.class.getDeclaredMethod(methodName, parameterTypes);
         MethodSignature signature = mock(MethodSignature.class);
@@ -147,6 +150,7 @@ class HttpInputValidationAspectTest {
         return aspect.validate(joinPoint);
     }
 
+    /** 创建字符串最大长度为 4、容器最大元素数为 2 的校验配置，使默认约束在小数据量时即可触发。 */
     private static HttpInputValidationProperties properties() {
         HttpInputValidationProperties result = new HttpInputValidationProperties();
         result.setMaxStringLength(4);
@@ -154,10 +158,12 @@ class HttpInputValidationAspectTest {
         return result;
     }
 
+    /** 返回共享 ValidatorFactory 创建的 Validator，工厂在 closeValidatorFactory 中关闭。 */
     private static Validator validator() {
         return VALIDATOR_FACTORY.getValidator();
     }
 
+    /** 创建只包含 zh-CN 校验消息的 TextLocalizer，供默认约束的违规信息使用。 */
     private static TextLocalizer localizer() {
         Locale locale = Locale.forLanguageTag("zh-CN");
         Map<String, String> messages = Map.of(

@@ -59,7 +59,13 @@ public class LocalizedFieldsTypeHandler extends BaseTypeHandler<LocalizedFields>
         return decode(statement.getString(columnIndex));
     }
 
-    /** 把 JDBC 返回的 JSON 文本转换为结构化多语言字段。 */
+    /**
+     * 把 JDBC 返回的 JSON 文本转换为多语言字段。
+     *
+     * @param json 数据库列文本，为 SQL NULL 时返回 {@code null}
+     * @return 解析后的多语言字段
+     * @throws SQLException JSON 无法解析为 LocalizedFields 时抛出，不返回空对象
+     */
     private LocalizedFields decode(String json) throws SQLException {
         if (json == null) {
             return null;

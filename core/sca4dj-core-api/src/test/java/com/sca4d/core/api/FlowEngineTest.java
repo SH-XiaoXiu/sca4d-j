@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.flow.FlowCatalog;
 import com.sca4d.core.api.flow.FlowDefinition;
 import com.sca4d.core.api.flow.FlowEngine;
@@ -54,9 +56,10 @@ class FlowEngineTest {
         assertEquals("review", review.currentNodeId());
         assertEquals("completed", completed.currentNodeId());
         assertTrue(consumed.isConsumed());
-        assertThrows(
-                IllegalStateException.class,
+        BusinessException consumedAgain = assertThrows(
+                BusinessException.class,
                 () -> engine.consume(flowId, START.plusSeconds(31)));
+        assertEquals(CoreErrorCode.FLOW_RESULT_CONSUMED, consumedAgain.errorCode());
     }
 
     @Test
@@ -69,12 +72,13 @@ class FlowEngineTest {
         FlowId expiredId = new FlowId("review-expired");
         FlowInstance expiredStarted = engine.start(expiredId, definition.name(), 1, Map.of(), START);
         assertEquals("draft", expiredStarted.currentNodeId());
-        assertThrows(
-                IllegalStateException.class,
+        BusinessException expired = assertThrows(
+                BusinessException.class,
                 () -> engine.advance(
                         expiredId,
                         new FlowEvent("submitted", Map.of()),
                         START.plusSeconds(30)));
+        assertEquals(CoreErrorCode.FLOW_EXPIRED, expired.errorCode());
     }
 
     @Test

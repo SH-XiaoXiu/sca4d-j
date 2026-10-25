@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 验证 Spring 回调分发器按稳定编码转换 JSON 并保留原始 HTTP 结果。 */
+/** 验证 GatewayCallbackDispatcher 按回调编码（code）查找回调、把 JSON 转换为请求类型，并原样返回回调的 HTTP 状态、Header 和 body。 */
 class GatewayCallbackDispatcherTest {
 
     @Test
@@ -47,7 +47,7 @@ class GatewayCallbackDispatcherTest {
                 .isEqualTo(404);
     }
 
-    /** 回调分发测试使用的稳定输入类型。 */
+    /** 回调分发测试的请求体类型，字段 value 由请求 JSON 中的 value 绑定。 */
     public static class TestInput {
 
         private String value;

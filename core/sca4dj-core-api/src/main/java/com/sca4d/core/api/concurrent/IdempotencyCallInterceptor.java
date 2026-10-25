@@ -8,6 +8,10 @@ import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.NoCallValueResolver;
 import com.sca4d.core.api.call.SPICallValueResolver;
+import com.sca4d.core.api.concurrent.exception.IdempotencyInProgressException;
+import com.sca4d.core.api.concurrent.exception.IdempotencyKeyConflictException;
+import com.sca4d.core.api.error.exception.BusinessException;
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.DurationUtils;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -109,7 +114,15 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         return execution.declaration(Idempotent.class).isPresent();
     }
 
-    /** Future 不能作为幂等重放结果；异步提交应返回持久任务标识或在工作方法声明幂等。 */
+    /**
+     * 对声明 {@link Idempotent} 的同步方法执行幂等控制。首次调用取得处理权后执行内层方法并保存成功结果；
+     * 相同键和指纹的已完成调用直接返回保存的结果，存储返回处理中状态时抛出 IdempotencyInProgressException，返回冲突状态时抛出 IdempotencyKeyConflictException。
+     * 方法返回 Future 或 CompletionStage 时直接抛出 IllegalStateException，不取得处理权。
+     *
+     * @param execution 当前方法执行上下文，包含声明、方法和客户端键
+     * @param next 内层调用，只会在取得处理权后执行一次
+     * @return 内层结果，或重放的已保存结果
+     */
     @Override
     public @NotNull CallOutcome around(@NotNull CallExecution execution, @NotNull CallLifecycle.Next next) {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
@@ -130,6 +143,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
                 checked.resultType(),
                 processingTtl,
                 retryAfter);
+        // 已有完成结果时直接重放，不再执行业务方法；处理中或指纹冲突时拒绝本次调用，避免重复执行或覆盖已有请求。
         if (begin.status() == IdempotencyBeginStatus.REPLAY) {
             LOG.trace(
                     "调用复用幂等结果 | callId={} method={}",
@@ -149,6 +163,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
                 checked.call().callId(),
                 checked.invocationName());
 
+        // 内层方法抛出异常时释放处理权并原样抛出，下次同一键的调用可以重新执行。
         CallOutcome outcome;
         try {
             outcome = Objects.requireNonNull(next.proceed(), "幂等内层结果不能为空");
@@ -156,6 +171,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
             release(key, token, failure, checked);
             throw failure;
         }
+        // 内层以 CallOutcome 返回的失败同样释放处理权且不保存结果，之后相同请求会重新执行。
         Throwable executionFailure = outcome.error();
         if (executionFailure != null) {
             release(
@@ -253,11 +269,11 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
             completed.set(true);
             heartbeat.cancel(false);
             if (failure != null) {
-                Throwable cause = failure instanceof java.util.concurrent.CompletionException
+                Throwable cause = failure instanceof CompletionException
                         ? failure.getCause()
                         : failure;
                 release(key, token, cause, checked);
-                return cause instanceof com.sca4d.core.api.error.BusinessException
+                return cause instanceof BusinessException
                         ? CallOutcome.denied(cause)
                         : CallOutcome.failed(cause);
             }
@@ -401,7 +417,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         try {
             return IdempotencyKey.fromValue(value);
         } catch (IllegalArgumentException failure) {
-            throw new IllegalStateException("幂等键必须是 IdempotencyKey 或非空文本", failure);
+            throw new CoreApiException("幂等键必须是 IdempotencyKey 或非空文本", failure);
         }
     }
 

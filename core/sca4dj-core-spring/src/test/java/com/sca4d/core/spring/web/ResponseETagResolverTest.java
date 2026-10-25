@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-/** 验证响应数据 ETag 声明的解析和失败边界。 */
+/** 验证 ResponseETagResolver 只读取顶层响应数据上唯一的 @ETag Version 声明，并拒绝重复、非公开或返回类型错误的声明。 */
 class ResponseETagResolverTest {
 
     private final ResponseETagResolver resolver = new ResponseETagResolver();
@@ -91,7 +91,7 @@ class ResponseETagResolverTest {
         }
     }
 
-    /** 提供没有稳定版本的动态响应实例。 */
+    /** 提供 revision() 返回 null 的响应类型，表示当前实例不发布 ETag。 */
     static class DynamicBody {
 
         /** @return 动态实例不发布 ETag */

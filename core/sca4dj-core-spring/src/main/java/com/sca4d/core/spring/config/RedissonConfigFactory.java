@@ -19,8 +19,11 @@ class RedissonConfigFactory {
     /**
      * 转换单机、Sentinel 或 Cluster 连接信息，并保留认证与 SSL Bundle。
      *
-     * @param details Spring Boot 解析后的 Redis 连接信息
+     * @param details Spring Boot 解析后的 Redis 连接信息，Sentinel、Cluster 和单机地址按此顺序选择
      * @return Redisson 连接配置
+     * @throws NullPointerException 连接信息为空时抛出
+     * @throws IllegalStateException 连接信息中没有任何地址时抛出
+     * @throws IllegalArgumentException 节点主机和端口无法组成合法 URI 时抛出
      */
     static Config create(RedisConnectionDetails details) {
         RedisConnectionDetails checked = Objects.requireNonNull(details, "Redis 连接信息不能为空");
@@ -67,7 +70,7 @@ class RedissonConfigFactory {
         return config;
     }
 
-    /** 为服务器配置认证和 SSL 选项。 */
+    /** 把用户名、密码写入 Redisson 配置；SSL Bundle 为空时不设置任何 TLS 选项。 */
     private static void configureCommon(Config config, RedisConnectionDetails details, SslBundle sslBundle) {
         config.setUsername(details.getUsername());
         config.setPassword(details.getPassword());
@@ -85,7 +88,7 @@ class RedissonConfigFactory {
         }
     }
 
-    /** 创建保留 IPv6 主机格式的 Redis URI。 */
+    /** 为节点创建 Redis URI；SSL Bundle 不为空时使用 `rediss` 协议，IPv6 主机由 `URI` 按方括号格式输出。 */
     private static String address(RedisConnectionDetails.Node node, SslBundle sslBundle) {
         try {
             return new URI(sslBundle == null ? "redis" : "rediss", null, node.host(), node.port(), null, null, null)

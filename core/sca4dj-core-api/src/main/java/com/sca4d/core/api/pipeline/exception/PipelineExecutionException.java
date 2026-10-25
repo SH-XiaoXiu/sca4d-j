@@ -1,4 +1,4 @@
-package com.sca4d.core.api.pipeline;
+package com.sca4d.core.api.pipeline.exception;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,5 +1,6 @@
 package com.sca4d.core.api.call;
 
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -153,7 +154,16 @@ public class CallExecution {
         this(call, declaringType, method, arguments, resultType, null);
     }
 
-    /** 创建带有当前线程外层业务调用关系的执行描述。 */
+    /**
+     * 创建嵌套在 {@code parent} 之下的方法执行描述；{@code parent} 为空时本次执行成为新审计链的根。
+     *
+     * @param call 当前往返调用
+     * @param declaringType 声明业务方法的具体类型
+     * @param method 被调用方法
+     * @param arguments 方法实参，会被复制
+     * @param resultType 业务返回类型
+     * @param parent 外层方法执行，用于审计父子关系；可以为空
+     */
     public CallExecution(
             Call call,
             Class<?> declaringType,
@@ -235,11 +245,11 @@ public class CallExecution {
             }
             throw primary instanceof RuntimeException runtime
                     ? runtime
-                    : new IllegalStateException("事务已经提交，但调用提交后回调失败", primary);
+                    : new CoreApiException("事务已经提交，但调用提交后回调失败", primary);
         }
     }
 
-    /** 返回指定类型的预提交条件，供所属功能读取和消费；不能修改条件集合。 */
+    /** 返回已登记且属于指定类型的预提交条件；返回列表不可修改，不会改变已登记的条件集合。 */
     @Contract(pure = true)
     public <C extends CallLifecycle.PreCommit> @NotNull @Unmodifiable List<C> preCommitConditions(
             @NotNull Class<C> type) {
@@ -278,7 +288,7 @@ public class CallExecution {
         return invoking;
     }
 
-    /** @return 当前往返调用 */
+    /** @return 创建本执行描述的往返调用 */
     @Contract(pure = true)
     public Call call() {
         return call;
@@ -321,7 +331,7 @@ public class CallExecution {
         return Arrays.copyOf(arguments, arguments.length);
     }
 
-    /** @return 业务返回类型 */
+    /** @return Java 方法或纯函数声明的完整返回类型 */
     @Contract(pure = true)
     public Type resultType() {
         return resultType;

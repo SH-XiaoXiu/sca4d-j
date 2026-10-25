@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.spring.web.annotation.IfMatch;
 import jakarta.servlet.DispatcherType;
 import org.junit.jupiter.api.AfterEach;
@@ -15,6 +15,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 
+/** 验证 IfMatchInterceptor 把 @IfMatch 方法的 If-Match 头解析为 RequestVersionConditions 的版本条件，拒绝缺失、弱校验、通配符、多值和非数字的 ETag，并在 ASYNC 重新分派时跳过绑定。 */
 class IfMatchInterceptorTest {
 
     private final RequestVersionConditions versionConditions = new RequestVersionConditions();
@@ -106,10 +107,12 @@ class IfMatchInterceptorTest {
         assertThat(versionConditions.resolve(new Version(7)).expected()).isEqualTo(new Version(7));
     }
 
+    /** 声明 @IfMatch 的测试方法，供 HandlerMethod 读取版本保护声明。 */
     @IfMatch
     private void versionAware() {
     }
 
+    /** 不带 @IfMatch 的测试方法，拦截器应忽略它。 */
     private void ordinary() {
     }
 }

@@ -7,8 +7,8 @@ import com.sca4d.core.api.id.IdGenerator;
 /**
  * 使用 Hutool 雪花算法生成全局正整数标识（Snowflake ID Generator）。
  *
- * <p>外部使用一个 10 位节点编号。低 5 位映射为 Hutool worker ID，高 5 位映射为 data center ID，因此仍支持 1024
- * 个节点组合。部署系统必须保证同一集群内节点编号唯一。
+ * <p>调用方传入一个 0 至 1023 的节点编号。低 5 位映射为 Hutool worker ID，高 5 位映射为 data center ID，
+ * 两者组合共 1024 个节点。部署时必须保证同一集群内每个进程的节点编号唯一，重复编号可能在同一毫秒内生成相同的 ID。
  */
 public class SnowflakeIdGenerator implements IdGenerator {
 
@@ -23,6 +23,7 @@ public class SnowflakeIdGenerator implements IdGenerator {
      * 创建雪花 ID 生成器。
      *
      * @param nodeId 当前进程使用的唯一节点编号，范围为 0 至 1023
+     * @throws IllegalArgumentException 节点编号小于 0 或大于 1023 时抛出
      */
     public SnowflakeIdGenerator(long nodeId) {
         if (nodeId < 0 || nodeId > MAX_NODE_ID) {

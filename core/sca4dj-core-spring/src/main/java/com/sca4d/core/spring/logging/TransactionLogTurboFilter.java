@@ -20,6 +20,18 @@ import java.util.Objects;
 /** 把带 {@link LogMark#AFTER_COMMIT} 的 INFO 交给当前事务，并在提交后按原 logger 输出。 */
 public class TransactionLogTurboFilter extends TurboFilter {
 
+    /**
+     * 处理带 {@link LogMark#AFTER_COMMIT} 的 Marker 日志。Marker 与其他 Marker 同时使用时抛出 IllegalArgumentException；
+     * 日志被登记到当前事务后返回 DENY，因此原 logger 不会立即输出。
+     *
+     * @param marker 日志调用携带的 Marker
+     * @param logger 发起日志调用的 logger
+     * @param level 日志级别
+     * @param format 日志消息模板；只用于级别探测时为空
+     * @param params 日志参数
+     * @param throwable 日志携带的异常
+     * @return 非提交后日志返回 NEUTRAL，已登记或已被级别过滤的提交后日志返回 DENY
+     */
     @Override
     public FilterReply decide(
             Marker marker,
@@ -45,6 +57,13 @@ public class TransactionLogTurboFilter extends TurboFilter {
         return FilterReply.DENY;
     }
 
+    /**
+     * 处理 SLF4J fluent API 产生的提交后日志事件，逻辑与 {@link #decide(Marker, Logger, Level, String, Object[], Throwable)} 相同。
+     *
+     * @param logger 发起日志调用的 logger
+     * @param event SLF4J 日志事件
+     * @return 非提交后日志返回 NEUTRAL，已登记或已被级别过滤的提交后日志返回 DENY
+     */
     @Override
     public FilterReply decide(Logger logger, LoggingEvent event) {
         List<Marker> markers = event.getMarkers();
@@ -70,7 +89,17 @@ public class TransactionLogTurboFilter extends TurboFilter {
         return FilterReply.DENY;
     }
 
-    /** 在登记处校验日志，并冻结参数与 MDC。 */
+    /**
+     * 校验提交后日志的级别、消息、异常和参数，复制参数与 MDC，并把输出动作登记到当前事务的提交回调。
+     * 校验失败时抛出 IllegalArgumentException 或 NullPointerException，不登记任何输出；提交后写入失败只通过 addError 记录，不影响已提交的数据库结果。
+     *
+     * @param logger 原始 logger
+     * @param level 日志级别，只允许 INFO
+     * @param message 日志消息模板，不能为空或空白
+     * @param arguments 日志参数，只允许 null 和基本类型包装类、String、BigInteger、BigDecimal、Enum
+     * @param throwable 必须为空，成功日志不携带异常
+     * @param keyValuePairs 必须为空，成功日志不携带结构化字段
+     */
     private void defer(
             Logger logger,
             Level level,
@@ -85,7 +114,7 @@ public class TransactionLogTurboFilter extends TurboFilter {
         if (checkedMessage.isBlank()) {
             throw new IllegalArgumentException("提交后日志消息不能为空白");
         }
-        if (throwable != null || keyValuePairs != null && !keyValuePairs.isEmpty()) {
+        if (throwable != null || (keyValuePairs != null && !keyValuePairs.isEmpty())) {
             throw new IllegalArgumentException("提交后成功日志不能携带异常或额外结构化字段");
         }
         Object[] snapshot = arguments == null ? new Object[0] : arguments.clone();

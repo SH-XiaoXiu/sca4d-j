@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * 标记 HTTP 响应数据中用于生成强 ETag 的 {@link Version} 方法。
  *
  * <p>一个响应数据类型最多声明一个公开、无参数且返回 {@link Version} 的方法。返回的版本必须覆盖顶层
- * {@code ApiResponse.data} 当前实例的全部可观察字段；同一类型同时用于稳定资源和动态投影时，动态实例返回
+ * {@code ApiResponse.data} 当前实例的全部可观察字段；同一类型既用于固定资源又用于动态投影时，动态实例返回
  * {@code null}，Core Spring 不发布 ETag。集合元素和短期访问地址不使用本注解。
  */
 @Documented

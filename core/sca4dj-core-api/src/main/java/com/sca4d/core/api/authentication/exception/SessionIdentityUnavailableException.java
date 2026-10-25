@@ -1,4 +1,4 @@
-package com.sca4d.core.api.authentication;
+package com.sca4d.core.api.authentication.exception;
 
 import org.jetbrains.annotations.NotNull;
 

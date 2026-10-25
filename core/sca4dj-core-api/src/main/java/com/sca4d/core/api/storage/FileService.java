@@ -1,6 +1,6 @@
 package com.sca4d.core.api.storage;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.SystemPrincipals;
 import org.jetbrains.annotations.CheckReturnValue;

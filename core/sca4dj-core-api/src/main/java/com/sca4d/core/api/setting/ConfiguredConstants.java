@@ -1,5 +1,6 @@
 package com.sca4d.core.api.setting;
 
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.access.SettingReader;
 import com.sca4d.core.api.setting.codec.SettingCodec;
@@ -93,7 +94,7 @@ public final class ConfiguredConstants {
             values.forEach((key, value) -> effective.put(key, value.resolved));
             return Map.copyOf(effective);
         } catch (ClassNotFoundException exception) {
-            throw new IllegalStateException("找不到配置常量类: " + checkedGroup.getName(), exception);
+            throw new CoreApiException("找不到配置常量类: " + checkedGroup.getName(), exception);
         } finally {
             INITIALIZATION.remove();
         }

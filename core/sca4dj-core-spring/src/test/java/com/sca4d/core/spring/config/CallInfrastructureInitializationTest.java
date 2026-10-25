@@ -117,14 +117,14 @@ class CallInfrastructureInitializationTest {
             };
         }
 
-        /** 保存后处理结果，基础设施观察器不参与代理。 */
+        /** 保存 processedBeanObserver 记录的 Bean 名称，供测试断言普通后处理器是否处理过目标 Bean；注册角色为 ROLE_INFRASTRUCTURE。 */
         @Bean
         @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
         static ProcessedBeans processedBeans() {
             return new ProcessedBeans();
         }
 
-        /** 提供不访问数据库的真实 Spring 事务生命周期。 */
+        /** 提供不连接数据库的 ProbeTransactionManager，使 @Transactional 方法经过真实 Spring 事务同步回调并统计提交次数。 */
         @Bean
         ProbeTransactionManager transactionManager() {
             return new ProbeTransactionManager();
@@ -136,7 +136,7 @@ class CallInfrastructureInitializationTest {
             return new TransactionProbe();
         }
 
-        /** 模拟 Audit 等参与者对事务记录器的依赖。 */
+        /** 模拟 Around 参与者：先执行后续调用，返回后在 TransactionProbe 的事务方法中写入记录。 */
         @Bean
         CallLifecycle.Around recordingParticipant(TransactionProbe recorder) {
             return new CallLifecycle.Around() {

@@ -21,6 +21,16 @@ public class InstanceEnvironmentPostProcessor implements EnvironmentPostProcesso
 
     private static final String SOURCE = "sca4djInstanceIdentity";
 
+    /**
+     * 发布 `AppName`，校验网关协议常量和 HTTP 头常量后，把它们作为最高优先级属性源加入环境。
+     *
+     * <p>`sca4dj.instance.id` 未配置时生成一次随机 UUID；环境中已有实例标识属性源时不再生成，保证同一进程内的解析结果一致。
+     * 配置的实例标识不符合 `[A-Za-z0-9._-]{1,128}` 时抛出 `IllegalStateException`，进程不启动。
+     *
+     * @param environment 正在加载的 Spring 环境，属性源会被修改
+     * @param application 当前 Spring 应用
+     * @throws IllegalStateException 实例标识格式无效时抛出
+     */
     @Override
     public void postProcessEnvironment(
             @NotNull ConfigurableEnvironment environment,

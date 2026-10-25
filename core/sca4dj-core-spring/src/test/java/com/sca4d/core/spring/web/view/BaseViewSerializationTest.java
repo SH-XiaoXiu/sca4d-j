@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.sca4d.core.api.data.DataAssertionException;
+import com.sca4d.core.api.data.exception.DataAssertionException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizableText;
 import com.sca4d.core.api.i18n.LocalizedFields;
@@ -185,14 +185,14 @@ class BaseViewSerializationTest {
     @DisplayName("Preserves Runtime Failure From Localize Source")
     void preservesRuntimeFailureFromLocalizeSource() {
         assertThatThrownBy(() -> mapper().writeValueAsString(new ThrowingSourceView()))
-                .hasRootCauseInstanceOf(SourceFailure.class);
+                .hasRootCauseInstanceOf(SourceException.class);
     }
 
     @Test
     @DisplayName("Invalid Json And Action Failures Write No Partial Json")
     void invalidJsonAndActionFailuresWriteNoPartialJson() throws Exception {
         assertNoPartialOutput(new InvalidJsonView(), DataAssertionException.class);
-        assertNoPartialOutput(new FailingActionView(), ViewFailure.class);
+        assertNoPartialOutput(new FailingActionView(), ViewException.class);
     }
 
     @Test
@@ -253,6 +253,7 @@ class BaseViewSerializationTest {
                 (key, locale, arguments) -> Optional.of(locale.toLanguageTag() + ":" + key));
     }
 
+    /** 不注册任何 json 动作或 render 的普通视图，用于验证无定制时输出与普通 Bean 相同的字段。 */
     private static class PlainView extends BaseView {
 
         private final String name;
@@ -273,6 +274,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 注册两个 json 动作并在 render 中写入 finalValue；动作按注册顺序执行，render 最后执行并覆盖动作写入的 finalValue。 */
     private static class OrderedView extends BaseView {
 
         private final String value = "bean";
@@ -292,6 +294,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 通过 json 动作派生、删除、重命名、合并和编辑字段的视图；secret 与 legacyName 是被动作处理的源字段。 */
     private static class StructuralView extends BaseView {
 
         private final String name = "alpha";
@@ -348,6 +351,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 注册输出 CustomValue 的 json 动作；ordinaryName 用于验证 mapper 的 SNAKE_CASE 命名策略同样作用于普通字段。 */
     private static class MapperAwareView extends BaseView {
 
         private final String ordinaryName = "ordinary";
@@ -361,6 +365,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 测试用自定义值，由 CustomValueSerializer 决定最终 JSON 形式。 */
     @SuppressWarnings("ClassCanBeRecord")
     private static class CustomValue {
 
@@ -371,6 +376,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 把 CustomValue 写为 custom:{value} 字符串，验证 mapper 中注册的序列化器会被 BaseView 输出使用。 */
     private static class CustomValueSerializer extends StdSerializer<CustomValue> {
 
         private CustomValueSerializer() {
@@ -387,6 +393,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 在 json 动作中先直接修改根对象，再通过点路径写入嵌套字段；用于验证直接修改的根对象内容在后续 ViewJson 操作后仍被保留。 */
     private static class RootView extends BaseView {
 
         private final String name = "root";
@@ -405,6 +412,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 带 @Localize 字段的基类，name 的值由子类实现的 nameText() 返回的 LocalizableText 决定。 */
     private abstract static class LocalizedView extends BaseView {
 
         private final String key;
@@ -426,6 +434,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 在 json 动作中把本地化字段 name 重命名为 displayName，并在 render 中写入 displayName；用于验证动作先于 render 执行。 */
     private static class LocalizedOverrideView extends LocalizedView {
 
         private LocalizedOverrideView(String key) {
@@ -439,6 +448,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 在 json 动作中删除本地化字段 name，用于验证动作可以移除本地化后的字段。 */
     private static class LocalizedRemoveView extends LocalizedView {
 
         private LocalizedRemoveView(String key) {
@@ -447,6 +457,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 同时使用 @JsonProperty、@JsonInclude 和 @JsonIgnore 的视图，用于验证注解对输出字段名、null 值和忽略规则的影响。 */
     private static class AnnotatedView extends BaseView {
 
         private final String key;
@@ -486,6 +497,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 通过 @Localize(key) 读取构造时传入的 LocalizedFields，输出结果随当前 Locale 变化。 */
     private static class DynamicLocalizedView extends BaseView {
 
         @Localize(key = "name")
@@ -500,6 +512,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 同时声明 source 与 key 的非法 @Localize 组合，用于验证序列化时拒绝该声明。 */
     private static class InvalidMixedLocalizeView extends BaseView {
 
         @Localize(source = "nameText", key = "name")
@@ -514,6 +527,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 声明 @Localize(key) 但构造时没有提供 LocalizedFields，用于验证缺少动态字段数据时序列化失败。 */
     private static class MissingDynamicFieldsView extends BaseView {
 
         @Localize(key = "name")
@@ -524,6 +538,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 字段 name 不是 final 的 @Localize 视图，用于验证序列化时拒绝非 final 的本地化字段。 */
     private static class NonFinalLocalizedView extends BaseView {
 
         @Localize(source = "nameText")
@@ -538,6 +553,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 用 @Localize 指向的 source 方法 nameText() 声明为 public，用于验证 source 方法不是 protected 时序列化失败。 */
     private static class InvalidSourceView extends BaseView {
 
         @Localize(source = "nameText")
@@ -552,6 +568,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 两个字段都映射到 JSON 属性 name，用于验证重复目标属性名时序列化失败。 */
     private static class DuplicateTargetView extends BaseView {
 
         @JsonProperty("name")
@@ -579,6 +596,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** nameText() 返回 null，用于验证本地化源返回 null 时按数据契约失败。 */
     private static class NullSourceView extends BaseView {
 
         @Localize(source = "nameText")
@@ -593,13 +611,14 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** nameText() 抛出 SourceException，用于验证本地化源的运行时异常原样传播到序列化调用方。 */
     private static class ThrowingSourceView extends BaseView {
 
         @Localize(source = "nameText")
         private final String name = "placeholder";
 
         protected LocalizableText nameText() {
-            throw new SourceFailure();
+            throw new SourceException();
         }
 
         public String getName() {
@@ -607,6 +626,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** json 动作写入非法 JSON 片段 not-json，用于验证合并失败时整个视图不输出部分 JSON。 */
     private static class InvalidJsonView extends BaseView {
 
         private final String name = "value";
@@ -620,6 +640,7 @@ class BaseViewSerializationTest {
         }
     }
 
+    /** 第一个 json 动作成功写入 before，第二个动作抛出 ViewException；用于验证后续动作失败时已执行的动作也不输出部分 JSON。 */
     private static class FailingActionView extends BaseView {
 
         private final String name = "value";
@@ -627,7 +648,7 @@ class BaseViewSerializationTest {
         private FailingActionView() {
             json(value -> value.put("before", true));
             json(value -> {
-                throw new ViewFailure();
+                throw new ViewException();
             });
         }
 
@@ -636,9 +657,11 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static class SourceFailure extends RuntimeException {
+    /** 由 ThrowingSourceView 的 nameText() 抛出的测试运行时异常，用于确认异常来源。 */
+    private static class SourceException extends RuntimeException {
     }
 
-    private static class ViewFailure extends RuntimeException {
+    /** 由 FailingActionView 的第二个 json 动作抛出的测试运行时异常。 */
+    private static class ViewException extends RuntimeException {
     }
 }

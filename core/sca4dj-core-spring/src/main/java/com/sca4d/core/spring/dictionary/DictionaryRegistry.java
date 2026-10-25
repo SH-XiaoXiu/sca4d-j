@@ -28,9 +28,14 @@ public class DictionaryRegistry {
     private final Set<String> extensibleKeys;
 
     /**
-     * 从扫描结果创建代码字典目录。
+     * 从扫描结果创建代码字典目录，并校验每个枚举的键、扩展规则和选项值。
+     *
+     * <p>每个枚举的全部常量必须返回同一个键和同一个扩展规则；选项值忽略大小写后不能重复，
+     * 选项排序值按声明顺序生成。
      *
      * @param enumTypes 实现 `Dictionary` 的枚举类型
+     * @throws IllegalArgumentException 枚举没有常量、键格式错误、键重复、常量之间的键或扩展规则不一致，
+     *         或选项值忽略大小写后重复时抛出
      */
     public DictionaryRegistry(@NotNull Collection<Class<? extends Enum<?>>> enumTypes) {
         Map<String, List<DictionaryOption>> byKey = new LinkedHashMap<>();
@@ -99,7 +104,13 @@ public class DictionaryRegistry {
         return extensibleKeys.contains(Objects.requireNonNull(key, "Dictionary 键不能为空"));
     }
 
-    /** @return 指定代码字典按枚举声明顺序生成的选项 */
+    /**
+     * 返回指定代码字典的选项副本，排序值相同时按选项值排序。
+     *
+     * @param key 代码字典键
+     * @return 代码字典选项列表，列表本身不可修改
+     * @throws IllegalArgumentException 键不是由 Java 枚举声明的代码字典时抛出
+     */
     @CheckReturnValue
     public @NotNull @Unmodifiable List<@NotNull DictionaryOption> options(@NotNull String key) {
         List<DictionaryOption> result = options.get(Objects.requireNonNull(key, "Dictionary 键不能为空"));

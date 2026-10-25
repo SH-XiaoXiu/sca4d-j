@@ -30,7 +30,7 @@ public class PrincipalSelectionInputResolver {
      * 收集当前业务身份选择器可使用的 HTTP 输入。
      *
      * <p>固定名称 {@code path}、{@code query}、{@code header} 和 {@code body} 分别表示路径变量、查询参数、
-     * 请求头和请求体。可发现的 Controller 方法参数也按参数名写入同一输入。
+     * 请求头和请求体。可发现的 Controller 方法参数也按参数名写入同一输入；与固定名称同名的方法参数会被固定输入覆盖。
      *
      * @param method 当前 Controller 方法
      * @param arguments Spring 已经绑定的方法参数

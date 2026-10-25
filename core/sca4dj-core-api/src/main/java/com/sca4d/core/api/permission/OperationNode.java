@@ -53,6 +53,8 @@ public abstract class OperationNode {
      * @param sortOrder 模块排序值
      * @param resources 局部 RESOURCE 声明
      * @return 只包含完整编码节点的 MODULE 聚合
+     * @throws IllegalArgumentException 锚点不是单段编码、锚点含通配符、RESOURCE 或 ACTION 编码重复时抛出
+     * @throws NullPointerException 任一 RESOURCE 声明为 {@code null} 时抛出
      */
     @CheckReturnValue
     @Contract("_, _, _, _ -> new")
@@ -171,13 +173,19 @@ public abstract class OperationNode {
 
     /**
      * 校验模块、资源或动作的单个编码段。
+     *
+     * @param value 待校验的编码段，必须只包含一个节点
+     * @param name 失败消息中使用的段名称
+     * @param wildcardAllowed 为 {@code false} 时拒绝通配段 {@code *}
+     * @return 通过校验的原编码段
+     * @throws IllegalArgumentException 编码段包含多个节点，或在不允许通配时使用了 {@code *} 时抛出
      */
     private static @NotNull TreeCode requireSegment(
             @NotNull TreeCode value,
             @NotNull String name,
             boolean wildcardAllowed) {
         TreeCode checked = Objects.requireNonNull(value, name + "不能为空");
-        if (checked.size() != 1 || !wildcardAllowed && checked.equals(TreeCode.ofSegment("*"))) {
+        if (checked.size() != 1 || (!wildcardAllowed && checked.equals(TreeCode.ofSegment("*")))) {
             throw new IllegalArgumentException(name + "必须是不含分隔符的单节点 TreeCode: " + checked);
         }
         return checked;

@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.codec.Codec;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
@@ -16,6 +16,7 @@ import com.sca4d.core.api.setting.access.SettingReader;
 import com.sca4d.core.api.setting.access.SettingWriter;
 import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.core.api.setting.value.SettingValue;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -62,6 +63,13 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
         return TreeCode.of("SETTING:FILE_STORE");
     }
 
+    /**
+     * 读取设置文件并校验元数据与 `setting`、`owner` 是否一致；文件不存在时返回修订为 0 且值为 null 的结果。
+     * 敏感设置使用元数据中 keyId 对应的密钥解密密文后再由 Codec 解码。
+     *
+     * @throws IllegalArgumentException 定位路径超出根目录、包含符号链接或文件超过 1 MiB 时抛出
+     * @throws IllegalStateException 元数据不一致或无效、敏感设置缺少密钥环或密钥、内容缺失或读取发生 IO 错误时抛出，异常消息不包含设置值
+     */
     @Override
     public @NotNull SettingValue<JsonNode> read(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
         Path path = path(setting, owner);
@@ -99,7 +107,7 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
             LOG.trace("设置文件已读取 | settingCode={} revision={}", setting, revision);
             return SettingValue.read(code(), setting, owner, value, codecVersion, new Version(revision), false);
         } catch (IOException failure) {
-            throw new IllegalStateException("设置文件读取失败: " + setting, failure);
+            throw new CoreSpringException("设置文件读取失败: " + setting, failure);
         }
     }
 
@@ -114,6 +122,10 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
         save(setting, owner, Objects.requireNonNull(value), codecVersion, secret, expected);
     }
 
+    /**
+     * 将设置文件改写为 `present=false` 的版本，修订号加一，不删除文件。
+     * 修订与 `expected` 不一致时抛出 OptimisticLockException，文件保持原内容。
+     */
     @Override
     public void reset(
             @NotNull TreeCode setting,
@@ -123,6 +135,12 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
         save(setting, owner, null, codecVersion, false, expected);
     }
 
+    /**
+     * 删除 `setting` 与 `owner` 对应的设置文件，文件不存在时不报错。
+     * 不比较修订号；删除后 `read` 返回修订为 0 的空值。
+     *
+     * @throws IllegalStateException 删除文件失败时抛出
+     */
     @Override
     public void erase(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
         lock.execute(
@@ -132,13 +150,16 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
                     try {
                         Files.deleteIfExists(path(setting, owner));
                     } catch (IOException failure) {
-                        throw new IllegalStateException("设置文件删除失败", failure);
+                        throw new CoreSpringException("设置文件删除失败", failure);
                     }
                     return null;
                 });
     }
 
-    /** 在同一把跨实例锁下检查修订并原子发布，内容与版本不会分开提交。 */
+    /**
+     * 在同一把跨实例锁下检查修订并原子发布，内容与版本不会分开提交。
+     * 修订与 `expected` 不一致时抛出 OptimisticLockException 且不改动文件；临时文件在 finally 中删除。
+     */
     private void save(
             TreeCode setting,
             SettingOwner owner,
@@ -196,7 +217,7 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
                         LOG.debug("设置文件已保存 | settingCode={} revision={}", setting, expected.value() + 1);
                         return null;
                     } catch (IOException failure) {
-                        throw new IllegalStateException("设置文件原子保存失败", failure);
+                        throw new CoreSpringException("设置文件原子保存失败", failure);
                     } finally {
                         if (temporary != null)
                             try {
@@ -213,7 +234,7 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
         return new LockKey(TreeCode.of("SETTING:FILE"), path(setting, owner).toString());
     }
 
-    /** 解析并检查映射路径。 */
+    /** 按 `location` 解析设置文件路径，并用 `FileSettingReader.checkedPath` 拒绝根目录外路径和符号链接。 */
     private Path path(TreeCode setting, SettingOwner owner) {
         return FileSettingReader.checkedPath(root, location.apply(setting, owner));
     }

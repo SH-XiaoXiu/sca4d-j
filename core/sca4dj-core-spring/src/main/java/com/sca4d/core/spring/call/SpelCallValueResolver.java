@@ -3,6 +3,7 @@ package com.sca4d.core.spring.call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.SPICallValueResolver;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -47,6 +48,7 @@ public class SpelCallValueResolver implements SPICallValueResolver {
      * @param expression 非空白 SpEL
      * @param execution 当前方法执行
      * @return 表达式原始值，包括明确的空值
+     * @throws IllegalStateException 表达式为空白、解析失败、引用未定义变量，或在调用前读取 `result`、`error`、`outcome` 时抛出
      */
     @Override
     public @Nullable Object resolve(@NotNull String expression, @NotNull CallExecution execution) {
@@ -65,7 +67,7 @@ public class SpelCallValueResolver implements SPICallValueResolver {
                     value == null ? null : value.getClass().getName());
             return value;
         } catch (ExpressionException exception) {
-            throw new IllegalStateException("注解表达式解析或取值失败: " + execution.method().toGenericString(), exception);
+            throw new CoreSpringException("注解表达式解析或取值失败: " + execution.method().toGenericString(), exception);
         }
     }
 

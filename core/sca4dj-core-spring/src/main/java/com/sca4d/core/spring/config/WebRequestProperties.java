@@ -10,7 +10,7 @@ import java.util.Objects;
 @ConfigurationProperties("sca4dj.web")
 public class WebRequestProperties {
 
-    /** 请求耗时达到该值时记录 ERROR 慢请求日志，默认 200 毫秒。 */
+    /** 请求耗时达到该值时由 `HttpCallFilter` 记录 WARN 级慢请求日志，默认 200 毫秒。 */
     private @NotNull Duration slowRequestThreshold = Duration.ofMillis(200);
 
     /** @return 至少 1 毫秒且可表示为 long 纳秒数的阈值 */

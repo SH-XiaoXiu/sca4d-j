@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+/** 验证 PrincipalSelectionInputResolver 把路径变量、查询参数、Header、请求体和方法参数绑定到 PrincipalSelection 声明的参数类型。 */
 class PrincipalSelectionInputResolverTest {
 
     @Test
@@ -44,10 +45,12 @@ class PrincipalSelectionInputResolverTest {
         assertThat(selection.parameters.getDeviceId()).isEqualTo(42L);
     }
 
+    /** 仅提供参数类型给 Method 反射使用，方法体为空，不会被实际调用。 */
     @SuppressWarnings("unused")
     private void endpoint(Long deviceId, @RequestBody RequestBodyValue body) {
     }
 
+    /** 记录解析器传入的 SelectionParameters，供测试断言绑定结果。 */
     private static class CapturingSelection implements PrincipalSelection<SelectionParameters> {
 
         private SelectionParameters parameters;

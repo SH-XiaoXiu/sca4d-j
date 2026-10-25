@@ -1,6 +1,6 @@
 package com.sca4d.core.spring.web.list;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.PageRequest;
 import org.jetbrains.annotations.CheckReturnValue;

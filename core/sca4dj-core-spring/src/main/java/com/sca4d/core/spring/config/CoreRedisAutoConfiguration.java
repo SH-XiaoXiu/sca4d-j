@@ -53,7 +53,7 @@ public class CoreRedisAutoConfiguration {
     /**
      * 使用应用唯一或默认的 Redis 连接工厂创建脚手架内部字符串操作模板。
      *
-     * @param connectionFactory 应用默认基础设施 Redis 连接工厂
+     * @param connectionFactory 应用默认 Redis 连接工厂（Spring Data Redis）
      * @return 使用字符串 key 和 value 序列化的脚手架 Redis 模板
      */
     @Bean(name = "sca4djRedisTemplate", defaultCandidate = false)

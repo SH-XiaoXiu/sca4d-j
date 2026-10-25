@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** 读取应用支持的语言标签和默认语言标签。 */
+/** 保存 `sca4dj.i18n` 下配置的应用支持语言标签和默认语言标签。 */
 @ConfigurationProperties("sca4dj.i18n")
 public class I18nProperties {
 

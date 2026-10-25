@@ -48,7 +48,7 @@ public class DataGraph {
     /**
      * 构建阶段完成依赖校验和排序后的节点。
      *
-     * @return 按节点登记顺序确定拓扑次序的不可变节点列表
+     * @return 不可变节点列表；每个节点排在其全部输入节点之后，依赖关系相同的节点保持登记顺序
      */
     public @Unmodifiable @NotNull List<DataOperation<?>> operations() {
         return operations;
@@ -135,13 +135,14 @@ public class DataGraph {
 
         private final List<DataOperation<?>> operations = new ArrayList<>();
 
+        /** 创建空构建器；通常通过 {@link DataGraph#builder()} 获取。 */
         public Builder() {
         }
 
         /**
-         * 登记调用方必须提供的输入。
+         * 登记调用方必须提供的输入。同名键和引用错误在 {@link #build()} 时才报告。
          *
-         * @param key 输入键
+         * @param key 输入键，不能为空
          * @return 当前构建器
          */
         public @NotNull Builder input(@NotNull DataKey<?> key) {
@@ -150,9 +151,9 @@ public class DataGraph {
         }
 
         /**
-         * 登记一个数据操作。
+         * 登记一个数据操作。重复名称、重复输出键和未声明的输入在 {@link #build()} 时才报告。
          *
-         * @param operation 数据操作
+         * @param operation 数据操作，不能为空
          * @return 当前构建器
          */
         public @NotNull Builder operation(@NotNull DataOperation<?> operation) {
@@ -164,6 +165,7 @@ public class DataGraph {
          * 校验键、节点名称、依赖和环并创建不可变 Graph。
          *
          * @return 已按稳定拓扑顺序排列的数据图
+         * @throws IllegalArgumentException 节点名称或输入输出键重复、节点引用未声明或类型不一致的输入、存在依赖环时抛出
          */
         @CheckReturnValue
         public @NotNull DataGraph build() {

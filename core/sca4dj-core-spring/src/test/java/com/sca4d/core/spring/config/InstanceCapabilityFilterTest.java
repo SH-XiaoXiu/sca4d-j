@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 验证直接访问服务器端口也不能进入停用能力对应的 API。 */
+/** 验证实例未启用 IOT:API 时，直接访问 /iot 路径返回 503；MAIN:API 路径、/iot-other 和就绪检查路径继续放行。 */
 class InstanceCapabilityFilterTest {
 
     @BeforeAll

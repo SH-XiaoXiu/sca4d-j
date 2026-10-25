@@ -8,8 +8,8 @@ import com.sca4d.core.api.codec.JsonCodec;
 import com.sca4d.core.api.codec.VersionedCodec;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.Setting;
 import com.sca4d.core.api.setting.value.SettingOwner;
@@ -137,7 +137,7 @@ class FileSettingStoreTest {
         assertThat(store.read(CODE, owner).value().path("name").textValue()).isEqualTo("old");
     }
 
-    /** 仅在测试中以共享锁对象模拟两个存储实例的协调入口。 */
+    /** 以 synchronized 方法直接执行 task 模拟 DistributedLock；每个测试 store 持有各自的实例，不会在多个存储实例之间互斥。 */
     private static final class TestLock implements DistributedLock {
         @Override
         public synchronized <T> T execute(LockKey key, Duration waitTime, Supplier<T> task) {

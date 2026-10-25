@@ -281,6 +281,7 @@ public interface SettingCodec<T> extends VersionedCodec<T, String> {
 
             @Override
             public @NotNull String encode(@NotNull JsonNode value) {
+                // 先确认根节点是 object 并复制，再按 UTF-8 字节数判断是否超过上限，超限时不生成文本。
                 JsonNode checked = requireObject(value);
                 String encoded = checked.toString();
                 if (encoded.getBytes(StandardCharsets.UTF_8).length > maximumBytes) {
@@ -291,6 +292,7 @@ public interface SettingCodec<T> extends VersionedCodec<T, String> {
 
             @Override
             public @NotNull JsonNode decode(@NotNull String value) {
+                // 解析结果为空或根节点不是 object 时拒绝，数组和标量不能作为 JSON 设置保存。
                 JsonNode node = DataOps.j(Objects.requireNonNull(value, "JSON 设置文本不能为空")).node();
                 if (node == null) {
                     throw new IllegalArgumentException("JSON 设置必须是 object");
@@ -298,6 +300,7 @@ public interface SettingCodec<T> extends VersionedCodec<T, String> {
                 return requireObject(node);
             }
 
+            // 两个 Json 方法都先 encode 再 decode，返回值经过与持久化文本相同的 object 校验和字节数限制。
             @Override
             public @NotNull JsonNode encodeJson(@NotNull JsonNode value) {
                 return decode(encode(value));

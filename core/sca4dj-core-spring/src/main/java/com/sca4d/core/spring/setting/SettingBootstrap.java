@@ -1,11 +1,10 @@
 package com.sca4d.core.spring.setting;
 
 import com.sca4d.core.api.name.NameFormat;
-import com.sca4d.core.api.security.EncryptedSecret;
-import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -53,7 +51,7 @@ public class SettingBootstrap {
     private final SettingCatalog catalog;
 
     /**
-     * 创建 Settings ENV 初始化器。
+     * 创建 Settings ENV 初始化器。`keyring` 可以为 null，但初始化敏感设置时必须提供。
      */
     public SettingBootstrap(
             @NotNull SettingCatalog catalog,
@@ -70,6 +68,9 @@ public class SettingBootstrap {
 
     /**
      * 在一个事务中取得互斥锁并应用全部 Settings ENV；任何标记或值非法时全部回滚。
+     * 没有 `_INIT` 或 `_SYNC` 标记且 ENV 值不存在的设置保持数据库现状；ENV 值存在但缺少标记时抛出 IllegalStateException。
+     *
+     * @throws IllegalStateException 标记值不是 true 或 false、INIT 与 SYNC 同时声明、INIT 设为 false、标记缺少值、值无法解码或敏感设置缺少密钥环时抛出
      */
     @Transactional
     public void initialize() {
@@ -90,7 +91,7 @@ public class SettingBootstrap {
                 throw new IllegalStateException("设置 INIT 只接受 true；不初始化时应删除标记: " + variable);
             }
             if (initialize == BootstrapFlag.ENABLED) {
-                DatabaseSettingStore.EncodedSetting encoded = encoded(setting, requiredValue(variable, rawValue));
+                DatabaseSettingStore.EncodedSetting encoded = encoded(setting, nonBlankValue(variable, rawValue));
                 repository.initializeSystem(
                         setting.code().format(NameFormat.COLON),
                         setting.codec().version(),
@@ -102,7 +103,7 @@ public class SettingBootstrap {
                 continue;
             }
             if (synchronize == BootstrapFlag.ENABLED) {
-                DatabaseSettingStore.EncodedSetting encoded = encoded(setting, requiredValue(variable, rawValue));
+                DatabaseSettingStore.EncodedSetting encoded = encoded(setting, nonBlankValue(variable, rawValue));
                 repository.synchronizeSystem(
                         setting.code().format(NameFormat.COLON),
                         setting.codec().version(),
@@ -130,7 +131,9 @@ public class SettingBootstrap {
     }
 
     /**
-     * 读取严格布尔标记；未声明时返回 {@link BootstrapFlag#ABSENT}。
+     * 读取 `name` 对应的环境标记。忽略首尾空白并不区分大小写，只接受 true 或 false；未声明时返回 {@link BootstrapFlag#ABSENT}。
+     *
+     * @throws IllegalStateException 标记值不是 true 或 false 时抛出
      */
     private @NotNull BootstrapFlag flag(@NotNull String name) {
         String value = environment.getProperty(name);
@@ -145,9 +148,11 @@ public class SettingBootstrap {
     }
 
     /**
-     * 返回标记要求的非空设置文本。
+     * 返回 `variable` 对应的非空白 ENV 值，用于 INIT 或 SYNC 标记要求写入的场景。
+     *
+     * @throws IllegalStateException 值为 null 或只包含空白时抛出，消息只包含变量名
      */
-    private static @NotNull String requiredValue(@NotNull String variable, String value) {
+    private static @NotNull String nonBlankValue(@NotNull String variable, String value) {
         if (value == null || value.isBlank()) {
             throw new IllegalStateException("Settings ENV 标记缺少值: " + variable);
         }
@@ -164,7 +169,7 @@ public class SettingBootstrap {
         try {
             value = setting.codec().decode(rawValue);
         } catch (IllegalArgumentException exception) {
-            throw new IllegalStateException(
+            throw new CoreSpringException(
                     "Settings ENV 值不合法: " + variables.resolve(setting.environmentVariableSuffix()),
                     exception);
         }
@@ -176,16 +181,10 @@ public class SettingBootstrap {
             throw new IllegalStateException(
                     "初始化节点声明了敏感设置但没有 SecretKeyring: " + setting.code().format(NameFormat.COLON));
         }
-        SecretCipher cipher = keyring.activeCipher();
-        SettingSecretCodecCatalog codecs = new SettingSecretCodecCatalog(
-                cipher,
+        return DatabaseSettingStore.EncodedSetting.encrypted(
+                keyring.activeCipher(),
                 SettingOwner.system(),
-                setting.code().format(NameFormat.COLON));
-        EncryptedSecret encrypted = codecs.current().encode(text.getBytes(StandardCharsets.UTF_8));
-        return new DatabaseSettingStore.EncodedSetting(
-                null,
-                encrypted.keyId(),
-                encrypted.ciphertext(),
-                codecs.current().version());
+                setting.code().format(NameFormat.COLON),
+                text);
     }
 }

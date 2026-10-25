@@ -29,7 +29,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/** 验证 RedisDistributedLock 使用当前 App 命名空间获取 Redisson 锁，覆盖同线程重入、所有权丢失、异步取消和延迟取得锁的行为。 */
 class RedisDistributedLockTest {
+    // 锁键前缀由进程级 AppName 决定，必须在任何测试访问 Redis 名称之前发布为 sca4d-test。
     static {
         AppName.publish("sca4d-test");
     }

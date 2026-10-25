@@ -1,4 +1,4 @@
-package com.sca4d.core.api.persistence;
+package com.sca4d.core.api.persistence.exception;
 
 import org.jetbrains.annotations.NotNull;
 

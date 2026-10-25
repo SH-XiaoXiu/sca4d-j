@@ -30,7 +30,11 @@ public class DictionaryAutoConfiguration {
                 classLoader == null ? DictionaryAutoConfiguration.class.getClassLoader() : classLoader);
     }
 
-    /** @return 扫描应用基础包和 Sca4d-J 公共包得到的代码字典目录 */
+    /**
+     * 扫描 `com.sca4d` 包和自动配置包下的 Dictionary 枚举，并构建代码字典目录。
+     *
+     * @return 代码字典目录；任一枚举定义不合法时 `DictionaryRegistry` 抛出异常，应用启动失败
+     */
     @Bean
     DictionaryRegistry dictionaryRegistry(
             DictionaryScanner scanner,
@@ -49,7 +53,7 @@ public class DictionaryAutoConfiguration {
         return new DictionaryRepository(mapper);
     }
 
-    /** @return 聚合 Java 枚举与数据库选项的字典查询入口 */
+    /** @return 聚合 Java 枚举与数据库选项的字典查询入口；应用已声明 `Dictionaries` Bean 时不注册本实现 */
     @Bean
     @ConditionalOnMissingBean(Dictionaries.class)
     DatabaseDictionaries dictionaries(DictionaryRegistry registry, DictionaryRepository repository) {

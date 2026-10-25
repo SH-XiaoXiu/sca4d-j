@@ -39,6 +39,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+/** 验证 HttpInputOpenApiCustomizer 为请求体字段补充长度、数量和格式约束，为 If-Match 与 ETag 补充 Header，并为列表查询参数补充 sort 说明。 */
 class HttpInputOpenApiCustomizerTest {
 
     @Test
@@ -199,7 +200,7 @@ class HttpInputOpenApiCustomizerTest {
                 .allSatisfy(schema -> assertThat(schema.getExtensions()).isNullOrEmpty());
     }
 
-    /** @return 使用字段声明类型和注解添加内部生成标记后的 Schema */
+    /** @return 以字段的泛型类型和字段注解调用 customize 后得到的 Schema */
     @SuppressWarnings("unchecked")
     private static <S extends Schema<?>> S customized(
             HttpInputOpenApiCustomizer customizer,

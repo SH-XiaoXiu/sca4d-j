@@ -24,6 +24,7 @@ import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.LongSupplier;
 import java.util.regex.Pattern;
 
-/** 为 HTTP 请求建立和清理 {@link Call}，在同步或异步请求完成时记录慢请求。 */
+/** 为 HTTP 请求建立和清理 {@link Call}，在同步或异步请求完成时记录访问结果。 */
 public class HttpCallFilter extends OncePerRequestFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpCallFilter.class);
@@ -89,6 +90,11 @@ public class HttpCallFilter extends OncePerRequestFilter {
                 .toNanos();
     }
 
+    /**
+     * 为本次请求建立 Call：请求头 X-Call-Id 符合 {@code [A-Za-z0-9._-]{1,128}} 时沿用，否则生成 UUID；
+     * 随后把 callId 写入响应头和 MDC，并把 CallHolder 绑定到当前线程。
+     * 无论同步还是异步启动，finally 都会清理 CallHolder 与 MDC；未启动异步时在 finally 中记录请求结果，已启动异步时由 AsyncListener 在完成事件中记录。
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -103,7 +109,7 @@ public class HttpCallFilter extends OncePerRequestFilter {
                 request.getMethod(),
                 TrustedGatewayRequest.externalPath(request),
                 TrustedGatewayRequest.clientIp(request),
-                request.getHeader("User-Agent"));
+                request.getHeader(HttpHeaders.USER_AGENT));
         DataValues.Builder inputs = DataValues.builder().put(HttpCall.KEY, http);
         String idempotencyKey = request.getHeader(HttpConstants.IDEMPOTENCY_KEY_HEADER);
         if (idempotencyKey != null)
@@ -214,9 +220,8 @@ public class HttpCallFilter extends OncePerRequestFilter {
                 return;
             long durationNanos = nanoTime.getAsLong() - startedNanos;
             String contentType = response.getContentType();
-            // SSE 和已升级的 WebSocket 生命周期不属于普通 HTTP 请求处理耗时。
-            if (durationNanos < slowRequestThresholdNanos
-                    || response.getStatus() == 101
+            // SSE 连接和已升级的 WebSocket 连接会长期保持，不输出普通 HTTP 访问日志。
+            if (response.getStatus() == 101
                     || (contentType != null
                             && contentType.split(";", 2)[0].trim().equalsIgnoreCase("text/event-stream")))
                 return;
@@ -225,15 +230,27 @@ public class HttpCallFilter extends OncePerRequestFilter {
                 if (asyncStarted)
                     MDC.setContextMap(loggingContext);
                 MDC.put(CALL_ID_MDC, callId);
-                LOG.warn(
-                        "慢 HTTP 请求 | callId={} method={} path={} status={} durationMs={} thresholdMs={} failed={}",
-                        callId,
-                        method,
-                        path,
-                        response.getStatus(),
-                        TimeUnit.NANOSECONDS.toMillis(durationNanos),
-                        TimeUnit.NANOSECONDS.toMillis(slowRequestThresholdNanos),
-                        failed);
+                long durationMs = TimeUnit.NANOSECONDS.toMillis(durationNanos);
+                if (durationNanos >= slowRequestThresholdNanos) {
+                    LOG.warn(
+                            "慢 HTTP 请求 | callId={} method={} path={} status={} durationMs={} thresholdMs={} failed={}",
+                            callId,
+                            method,
+                            path,
+                            response.getStatus(),
+                            durationMs,
+                            TimeUnit.NANOSECONDS.toMillis(slowRequestThresholdNanos),
+                            failed);
+                } else {
+                    LOG.info(
+                            "HTTP 请求完成 | callId={} method={} path={} status={} durationMs={} failed={}",
+                            callId,
+                            method,
+                            path,
+                            response.getStatus(),
+                            durationMs,
+                            failed);
+                }
             } finally {
                 if (previousContext == null)
                     MDC.clear();

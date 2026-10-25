@@ -1,6 +1,7 @@
 package com.sca4d.core.spring.dictionary;
 
 import com.sca4d.core.api.dictionary.Dictionary;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -31,10 +32,11 @@ public class DictionaryScanner {
     }
 
     /**
-     * 查找指定包下全部 Dictionary 枚举。
+     * 查找指定包下全部实现 `Dictionary` 的枚举，包含子包；只加载类型，不校验枚举常量。
      *
      * @param packages 应用基础包与 Sca4d-J 公共包
-     * @return 按完整类名排序的枚举类型
+     * @return 按完整类名排序的枚举类型；没有匹配类型时返回空列表
+     * @throws IllegalStateException 扫描结果缺少类名、类型无法加载或加载的类型不是枚举时抛出
      */
     public @NotNull List<@NotNull Class<? extends Enum<?>>> scan(
             @NotNull Collection<@NotNull String> packages) {
@@ -54,7 +56,7 @@ public class DictionaryScanner {
                 try {
                     type = ClassUtils.forName(className, classLoader);
                 } catch (ClassNotFoundException | LinkageError exception) {
-                    throw new IllegalStateException("无法加载 Dictionary 类型: " + className, exception);
+                    throw new CoreSpringException("无法加载 Dictionary 类型: " + className, exception);
                 }
                 if (!type.isEnum()) {
                     throw new IllegalStateException("Dictionary 只能由枚举实现: " + className);

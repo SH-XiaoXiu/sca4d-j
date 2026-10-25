@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存动态字典选项或代码字典扩展项的配置。 */
-@SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
+@SuppressWarnings("ClassCanBeRecord") // 项目禁止声明 record，这里使用普通 class。
 public class DatabaseDictionaryOption {
 
     private final LocalizedFields i18n;
@@ -24,7 +24,7 @@ public class DatabaseDictionaryOption {
     /**
      * 创建数据库字典选项。
      *
-     * @param value 提交给业务接口的稳定值
+     * @param value 提交给业务接口的选项值
      * @param label 所有目标 Locale 都没有翻译时使用的回退标签
      * @param i18n 按 Locale 保存的完整多语言 label，可以不包含任何 Locale
      * @param enabled 是否允许用于新的业务输入

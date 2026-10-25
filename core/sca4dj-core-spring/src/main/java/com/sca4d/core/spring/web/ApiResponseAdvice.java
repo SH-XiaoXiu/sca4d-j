@@ -13,7 +13,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-/** 在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头。 */
+/** 在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 {@code @ETag} 时写入强 ETag。 */
 @ControllerAdvice
 public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 

@@ -29,6 +29,11 @@ public class DatabaseSettingStore implements SettingReader<String>, SettingWrite
 
     private final VersionConditions versionConditions;
 
+    /**
+     * 创建数据库设置存储。
+     *
+     * @param keyring 敏感设置使用的密钥环；为 null 时只能读写非敏感设置，写入敏感设置会失败
+     */
     public DatabaseSettingStore(
             @NotNull SettingRepository repository,
             @Nullable SecretKeyring keyring,
@@ -119,19 +124,17 @@ public class DatabaseSettingStore implements SettingReader<String>, SettingWrite
         repository.erase(owner, setting.format(NameFormat.COLON));
     }
 
-    /** 用明确的设置身份编码敏感文本；格式转换已由领域 Codec 完成。 */
+    /**
+     * 按 owner 和设置键绑定的加密 Codec 加密敏感文本；非敏感文本原样返回。
+     *
+     * @throws IllegalStateException 敏感设置需要加密但 SecretKeyring 未配置时抛出
+     */
     EncodedSetting encode(TreeCode setting, SettingOwner owner, String text, boolean secret) {
         if (!secret)
             return new EncodedSetting(text, null, null, null);
         if (keyring == null)
             throw new IllegalStateException("敏感设置缺少 SecretKeyring");
-        SecretCipher cipher = keyring.activeCipher();
-        SettingSecretCodecCatalog codecs = new SettingSecretCodecCatalog(
-                cipher,
-                owner,
-                setting.format(NameFormat.COLON));
-        EncryptedSecret encrypted = codecs.current().encode(text.getBytes(StandardCharsets.UTF_8));
-        return new EncodedSetting(null, encrypted.keyId(), encrypted.ciphertext(), codecs.current().version());
+        return EncodedSetting.encrypted(keyring.activeCipher(), owner, setting.format(NameFormat.COLON), text);
     }
 
     /** 使用数据库保存的原始编码和加密上下文版本解密，不借用当前 Codec 结构版本。 */
@@ -152,7 +155,7 @@ public class DatabaseSettingStore implements SettingReader<String>, SettingWrite
     /**
      * 保存一个设置编码后互斥的文本或密文字段。
      */
-    @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
+    @SuppressWarnings("ClassCanBeRecord") // 项目禁止声明 record，这里使用普通 class。
     static final class EncodedSetting {
         private final Integer encryptionContextVersion;
 
@@ -210,6 +213,21 @@ public class DatabaseSettingStore implements SettingReader<String>, SettingWrite
         @Nullable
         Integer encryptionContextVersion() {
             return encryptionContextVersion;
+        }
+
+        /**
+         * 用 owner 和设置键绑定的当前 V2 Codec 加密敏感文本，结果只包含密文、密钥标识和用途版本。
+         *
+         * @param cipher 当前激活的加密器
+         * @param owner 设置所属 owner，参与加密用途绑定
+         * @param key 规范化后的设置编码，参与加密用途绑定
+         * @param text 待加密的敏感设置文本，按 UTF-8 编码后加密
+         * @return 只包含密文字段的编码结果
+         */
+        static EncodedSetting encrypted(SecretCipher cipher, SettingOwner owner, String key, String text) {
+            SettingSecretCodecCatalog codecs = new SettingSecretCodecCatalog(cipher, owner, key);
+            EncryptedSecret encrypted = codecs.current().encode(text.getBytes(StandardCharsets.UTF_8));
+            return new EncodedSetting(null, encrypted.keyId(), encrypted.ciphertext(), codecs.current().version());
         }
     }
 }

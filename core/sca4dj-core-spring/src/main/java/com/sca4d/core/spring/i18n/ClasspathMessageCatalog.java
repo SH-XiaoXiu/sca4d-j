@@ -2,6 +2,7 @@ package com.sca4d.core.spring.i18n;
 
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.MessageCatalog;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class ClasspathMessageCatalog implements MessageCatalog {
     /**
      * 读取并格式化静态消息。
      *
-     * @param key 稳定消息键
+     * @param key 消息键，在同一 Locale 的资源文件中唯一
      * @param locale 要读取的 Locale
      * @param arguments 消息模板参数
      * @return 找到消息时返回格式化结果，否则返回空
@@ -106,7 +107,7 @@ public class ClasspathMessageCatalog implements MessageCatalog {
                 }
             }
         } catch (IOException exception) {
-            throw new IllegalStateException("读取模块 I18n 资源失败", exception);
+            throw new CoreSpringException("读取模块 I18n 资源失败", exception);
         }
         Map<Locale, Map<String, String>> immutable = new LinkedHashMap<>();
         loaded.forEach((locale, values) -> immutable.put(locale, Collections.unmodifiableMap(values)));

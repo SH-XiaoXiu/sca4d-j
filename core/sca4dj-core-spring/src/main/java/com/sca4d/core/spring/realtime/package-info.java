@@ -1,2 +1,2 @@
-/** 定义实时消息接入 Spring Web 的公开接口。 */
+/** 当前包没有 Java 类型；浏览器实时通道的实现位于 modules/web-realtime。 */
 package com.sca4d.core.spring.realtime;

@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
@@ -35,6 +35,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
+/** 验证 PrincipalSelectionInterceptor 在参数绑定前执行声明为提前选择的 PrincipalSelection，把结果交给 CurrentIdentityArgumentResolver，并在匿名请求时拒绝。 */
 class PrincipalSelectionInterceptorTest {
 
     @AfterEach

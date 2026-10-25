@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 /**
  * 校验规范 E.164 电话号码及 libphonenumber 元数据，不表达号码已分配、归属或可以接通。
  *
- * <p>空白值视为未提供；需要必填时组合使用 Req.NotBlank。每个 Rule 内的非空条件必须同时满足，anyOf 中任意 Rule 满足即可。
+ * <p>空白值视为未提供；需要必填时组合使用 Req.NotBlank。同一个 Rule 中声明的包含条件、排除条件和 conditions 必须全部满足，anyOf 中任意一个 Rule 满足即可。
  */
 @Documented
 @Constraint(validatedBy = PhoneNumberValidator.class)

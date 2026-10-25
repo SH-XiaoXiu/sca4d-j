@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-/** 验证自主执行选择稳定领域身份、保留已有调用并清理失败后的线程状态。 */
+/** 验证 @SystemExecution 入口使用 IOT 系统主体创建 Call、保留调用方已有的 Call，并在方法抛出异常后清理 CallHolder。 */
 class SystemExecutionCallTest {
 
     @BeforeAll

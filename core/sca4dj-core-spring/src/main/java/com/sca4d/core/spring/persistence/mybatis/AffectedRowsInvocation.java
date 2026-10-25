@@ -17,6 +17,12 @@ class AffectedRowsInvocation {
 
     private @Nullable Integer affectedRows;
 
+    /**
+     * 保存声明并检查 target 不为空白。
+     *
+     * @param declaration Repository 方法上的 {@code @AffectedRows} 声明
+     * @throws IllegalArgumentException target 为空白字符串时抛出
+     */
     private AffectedRowsInvocation(AffectedRows declaration) {
         this.declaration = Objects.requireNonNull(declaration, "影响行数声明不能为空");
         if (declaration.target().isBlank()) {
@@ -24,7 +30,12 @@ class AffectedRowsInvocation {
         }
     }
 
-    /** 打开 Repository 影响行数声明；同一线程不能嵌套执行两个声明。 */
+    /**
+     * 在当前线程登记 Repository 影响行数声明。
+     *
+     * @param declaration 当前 Repository 方法的声明
+     * @throws IllegalStateException 当前线程已有未结束的声明时抛出，即 @AffectedRows 方法嵌套调用
+     */
     static void open(AffectedRows declaration) {
         if (CURRENT.get() != null) {
             throw new IllegalStateException("@AffectedRows Repository 方法不能嵌套调用");

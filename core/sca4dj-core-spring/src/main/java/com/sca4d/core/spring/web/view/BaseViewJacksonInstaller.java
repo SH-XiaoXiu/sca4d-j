@@ -27,7 +27,7 @@ public class BaseViewJacksonInstaller implements SmartInitializingSingleton {
     /**
      * 创建在 Spring 单例初始化完成后安装 BaseView Jackson 模块的对象。
      *
-     * @param handlerAdapter MVC 实际请求处理适配器
+     * @param handlerAdapter MVC 实际用于处理请求的 RequestMappingHandlerAdapter
      * @param localizer 应用文本本地化入口
      */
     public BaseViewJacksonInstaller(

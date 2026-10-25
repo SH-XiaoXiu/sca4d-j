@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
@@ -66,7 +67,7 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
         bindings.initialize();
     }
 
-    /** 使用 Spring 延迟提供者，避免 Advisor 创建时提前实例化调用基础设施。 */
+    /** 通过 Spring `ObjectProvider` 延迟获取调用执行器、绑定声明和时钟，避免 Advisor 创建时提前实例化这些 Bean。 */
     public CallLifecycleAdvisor(
             ObjectProvider<CallInvoker> invoker,
             ObjectProvider<AnnotationBinding<?>> declarations,
@@ -126,6 +127,7 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
         Method method = CallBindingRegistry.concreteMethod(invocation.getMethod(), targetType);
         List<CallBindingRegistry.Binding> matchedBindings = this.bindings.resolve(invocation.getMethod(), targetType);
         CallInvoker invoker = invokerSource.get();
+        // 外层已经存在 Call 时复用它，只有最外层入口创建新 Call 并在 finally 中清理线程上下文。
         boolean ownsCall = CallHolder.currentOrNull() == null;
         if (ownsCall) {
             List<Call> supplied = new ArrayList<>();
@@ -155,26 +157,28 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
                 binding.attach(execution);
             }
             CallPreCommitTransactionListener.track(execution);
+            // 返回 CompletionStage 的方法通过 invokeAsync 执行，完成时才结束 Call；其他方法在当前线程同步执行。
             if (CompletionStage.class.isAssignableFrom(method.getReturnType())) {
                 return CallHolder.current().invokeAsync(execution, () -> {
                     try {
                         Object result = proceed(invocation);
                         if (!(result instanceof CompletionStage<?> stage)) {
-                            return java.util.concurrent.CompletableFuture.failedFuture(
+                            return CompletableFuture.failedFuture(
                                     new IllegalStateException("异步方法必须返回 CompletionStage: " + method));
                         }
                         @SuppressWarnings("unchecked")
                         CompletionStage<Object> typed = (CompletionStage<Object>) stage;
                         return typed;
                     } catch (Exception failure) {
-                        return java.util.concurrent.CompletableFuture.failedFuture(failure);
+                        return CompletableFuture.failedFuture(failure);
                     }
                 });
             }
             return CallHolder.current().invoke(execution, () -> proceed(invocation));
-        } catch (WrappedThrowable failure) {
+        } catch (CallInvocationException failure) {
             throw failure.getCause();
         } finally {
+            // 先弹出本次方法执行，再由最外层入口清理整个 Call 上下文，避免外层调用仍能读取到已结束的执行。
             if (execution != null) {
                 CallHolder.pop(execution);
             }
@@ -205,7 +209,7 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
         } catch (Exception | Error exception) {
             throw exception;
         } catch (Throwable failure) {
-            throw new WrappedThrowable(failure);
+            throw new CallInvocationException(failure);
         }
     }
 
@@ -259,8 +263,8 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
     /**
      * 保留标准 Callable 不能声明的原始 Throwable。
      */
-    private static class WrappedThrowable extends RuntimeException {
-        private WrappedThrowable(Throwable failure) {
+    private static class CallInvocationException extends RuntimeException {
+        private CallInvocationException(Throwable failure) {
             super(failure);
         }
     }

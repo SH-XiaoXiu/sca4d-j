@@ -1,5 +1,6 @@
 package com.sca4d.core.api.gateway;
 
+import com.sca4d.core.api.exception.CoreApiException;
 import com.sca4d.core.api.setting.ConfiguredConstants;
 import org.jetbrains.annotations.NotNull;
 
@@ -124,7 +125,7 @@ public final class GatewayConstants {
                     .formatHex(
                             MessageDigest.getInstance("SHA-256").digest(contract.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("运行环境缺少 SHA-256", exception);
+            throw new CoreApiException("运行环境缺少 SHA-256", exception);
         }
     }
 }

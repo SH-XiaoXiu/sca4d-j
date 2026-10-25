@@ -10,7 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/** 校验同一对象的两个 Instant 属性构成严格递增的时间范围。 */
+/** 校验同一对象的两个 Instant 属性满足开始时间严格早于结束时间；任一属性为 null 时不校验。 */
 @Documented
 @Constraint(validatedBy = TimeRangeValidator.class)
 @Target(ElementType.TYPE)

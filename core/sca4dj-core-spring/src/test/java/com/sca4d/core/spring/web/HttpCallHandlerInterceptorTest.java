@@ -16,7 +16,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.time.Instant;
 
-/** 验证依赖 Call 的 MVC 拦截器跳过没有请求线程 Call 的 Spring MVC 异步分派。 */
+/** 验证 HttpCallHandlerInterceptor 在普通请求中把当前 Call 传给子类的 preHandleWithCall，在 Spring MVC ASYNC 重新分派时直接放行而不调用子类。 */
 class HttpCallHandlerInterceptorTest {
 
     @AfterEach

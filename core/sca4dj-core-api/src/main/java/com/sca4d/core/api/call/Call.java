@@ -8,6 +8,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.identity.SystemPrincipals;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionDecision;
@@ -153,7 +154,7 @@ public final class Call {
         return system(callId, startedAt, SystemPrincipals.mainPrincipal());
     }
 
-    /** 创建绑定生命周期执行器的系统调用。 */
+    /** 使用 {@link SystemPrincipals#mainPrincipal()} 创建绑定生命周期执行器的系统调用。 */
     public static Call system(@NotNull CallInvoker invoker, String callId, Instant startedAt) {
         return system(invoker, callId, startedAt, SystemPrincipals.mainPrincipal());
     }
@@ -177,7 +178,16 @@ public final class Call {
         return call;
     }
 
-    /** 执行带 Java Method 元数据的调用。 */
+    /**
+     * 执行带 Java Method 元数据的同步调用，并按生命周期参与者的顺序完成环绕处理。
+     *
+     * @param method 被调用的 Java 方法，用于记录声明类和返回类型
+     * @param arguments 方法参数快照
+     * @param target 实际执行的业务函数
+     * @return 业务函数或环绕处理重放的结果，可以为 null
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     * @throws Exception 业务函数或生命周期处理失败时抛出原始异常
+     */
     public <T> @Nullable T invoke(
             @NotNull Method method,
             Object @NotNull [] arguments,
@@ -187,7 +197,16 @@ public final class Call {
                 target);
     }
 
-    /** 使用已经附着声明的执行描述进入生命周期；供 Spring 适配器和高级绑定使用。 */
+    /**
+     * 使用已经附着声明的执行描述同步进入生命周期；供 Spring 适配器和高级绑定使用。
+     *
+     * @param execution 必须由当前 Call 创建的方法执行描述
+     * @param target 实际执行的业务函数
+     * @return 业务函数或环绕处理重放的结果，可以为 null
+     * @throws IllegalArgumentException 执行描述不属于当前 Call 时抛出
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     * @throws Exception 业务函数或生命周期处理失败时抛出原始异常
+     */
     public <T> @Nullable T invoke(
             @NotNull CallExecution execution,
             @NotNull Callable<T> target) throws Exception {
@@ -197,9 +216,19 @@ public final class Call {
         return requireInvoker().execute(execution, target);
     }
 
-    /** 执行使用稳定 TreeCode 标识的纯函数。 */
+    /**
+     * 同步执行使用稳定 TreeCode 标识的纯函数。
+     *
+     * @param operation 纯函数的 TreeCode 标识
+     * @param arguments 函数参数快照
+     * @param resultType 返回值的完整 Java 类型
+     * @param target 实际执行的纯函数
+     * @return 纯函数结果，可以为 null
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     * @throws Exception 纯函数或生命周期处理失败时抛出原始异常
+     */
     public <T> @Nullable T invoke(
-            @NotNull com.sca4d.core.api.name.code.TreeCode operation,
+            @NotNull TreeCode operation,
             Object @NotNull [] arguments,
             @NotNull Type resultType,
             @NotNull Callable<T> target) throws Exception {
@@ -208,20 +237,38 @@ public final class Call {
                 target);
     }
 
-    /** 使用冒号格式字符串解析 TreeCode 后执行纯函数。 */
+    /**
+     * 解析冒号格式的 TreeCode 字符串后同步执行纯函数。
+     *
+     * @param operation 冒号格式的 TreeCode 字符串，格式错误时由 {@link TreeCode#ofColon(String)} 抛出异常
+     * @param arguments 函数参数快照
+     * @param resultType 返回值的完整 Java 类型
+     * @param target 实际执行的纯函数
+     * @return 纯函数结果，可以为 null
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     * @throws Exception 纯函数或生命周期处理失败时抛出原始异常
+     */
     public <T> @Nullable T invoke(
             @NotNull String operation,
             Object @NotNull [] arguments,
             @NotNull Type resultType,
             @NotNull Callable<T> target) throws Exception {
         return invoke(
-                com.sca4d.core.api.name.code.TreeCode.ofColon(operation),
+                TreeCode.ofColon(operation),
                 arguments,
                 resultType,
                 target);
     }
 
-    /** 执行异步 Java Method 调用。 */
+    /**
+     * 异步执行 Java Method 调用；返回结果在目标 CompletionStage 完成后才由生命周期处理完成。
+     *
+     * @param method 被调用的 Java 方法，用于记录声明类和返回类型
+     * @param arguments 方法参数快照
+     * @param target 返回业务最终结果的异步函数
+     * @return 业务结果或环绕处理重放结果的完成阶段
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     */
     public <T> @NotNull CompletionStage<T> invokeAsync(
             @NotNull Method method,
             Object @NotNull [] arguments,
@@ -231,7 +278,15 @@ public final class Call {
                 target);
     }
 
-    /** 使用已经附着声明的异步执行描述进入生命周期。 */
+    /**
+     * 使用已经附着声明的异步执行描述进入生命周期。
+     *
+     * @param execution 必须由当前 Call 创建的方法执行描述
+     * @param target 返回业务最终结果的异步函数
+     * @return 业务结果或环绕处理重放结果的完成阶段
+     * @throws IllegalArgumentException 执行描述不属于当前 Call 时抛出
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     */
     public <T> @NotNull CompletionStage<T> invokeAsync(
             @NotNull CallExecution execution,
             @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
@@ -241,9 +296,18 @@ public final class Call {
         return requireInvoker().executeAsync(execution, target);
     }
 
-    /** 执行异步纯函数调用。 */
+    /**
+     * 异步执行纯函数调用。
+     *
+     * @param operation 纯函数的 TreeCode 标识
+     * @param arguments 函数参数快照
+     * @param resultType 返回值的完整 Java 类型
+     * @param target 返回函数结果的异步函数
+     * @return 函数结果的完成阶段
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     */
     public <T> @NotNull CompletionStage<T> invokeAsync(
-            @NotNull com.sca4d.core.api.name.code.TreeCode operation,
+            @NotNull TreeCode operation,
             Object @NotNull [] arguments,
             @NotNull Type resultType,
             @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
@@ -252,26 +316,42 @@ public final class Call {
                 target);
     }
 
-    /** 使用冒号格式字符串解析 TreeCode 后执行异步纯函数。 */
+    /**
+     * 解析冒号格式的 TreeCode 字符串后异步执行纯函数。
+     *
+     * @param operation 冒号格式的 TreeCode 字符串，格式错误时由 {@link TreeCode#ofColon(String)} 抛出异常
+     * @param arguments 函数参数快照
+     * @param resultType 返回值的完整 Java 类型
+     * @param target 返回函数结果的异步函数
+     * @return 函数结果的完成阶段
+     * @throws NullPointerException 当前 Call 没有绑定 CallInvoker 时抛出
+     */
     public <T> @NotNull CompletionStage<T> invokeAsync(
             @NotNull String operation,
             Object @NotNull [] arguments,
             @NotNull Type resultType,
             @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
         return invokeAsync(
-                com.sca4d.core.api.name.code.TreeCode.ofColon(operation),
+                TreeCode.ofColon(operation),
                 arguments,
                 resultType,
                 target);
     }
 
+    /** 返回已经绑定的生命周期执行器；没有绑定时抛出 {@link NullPointerException}。 */
     private @NotNull CallInvoker requireInvoker() {
         return Objects.requireNonNull(
                 invoker,
                 "当前 Call 没有绑定 CallInvoker，不能执行生命周期");
     }
 
-    /** 把生命周期执行器绑定到已有入口快照；身份和权限事实保持不变。 */
+    /**
+     * 把生命周期执行器绑定到当前 Call；身份和权限事实保持不变。
+     *
+     * @param invoker 执行生命周期的执行器，不能为空
+     * @return 当前 Call
+     * @throws IllegalStateException 当前 Call 已经绑定另一个执行器时抛出
+     */
     public @NotNull Call withInvoker(@NotNull CallInvoker invoker) {
         CallInvoker checked = Objects.requireNonNull(invoker, "调用执行器不能为空");
         if (this.invoker == null) {
@@ -390,13 +470,13 @@ public final class Call {
         return Optional.ofNullable(permissionDecisions.get(Objects.requireNonNull(permission, "权限不能为空")));
     }
 
-    /** @return 调用标识 */
+    /** 返回入口或 {@link #fork} 指定的调用标识；fork 产生的子调用标识必须与父调用不同。 */
     @Contract(pure = true)
     public String callId() {
         return callId;
     }
 
-    /** @return 调用开始时间 */
+    /** 返回入口或 {@link #fork} 指定的调用开始时间。 */
     @Contract(pure = true)
     public Instant startedAt() {
         return startedAt;

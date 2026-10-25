@@ -1,4 +1,6 @@
-package com.sca4d.core.api.error;
+package com.sca4d.core.api.error.exception;
+
+import com.sca4d.core.api.error.ErrorCode;
 
 import java.util.Objects;
 
@@ -12,20 +14,22 @@ public class BusinessException extends RuntimeException {
     private final Object[] messageArguments;
 
     /**
-     * 创建业务异常。
+     * 创建不带根因和消息参数的业务异常。
      *
-     * @param errorCode 错误码
+     * @param errorCode 错误码，不能为 null
+     * @throws NullPointerException errorCode 为 null 时抛出
      */
     public BusinessException(ErrorCode errorCode) {
         this(errorCode, null);
     }
 
     /**
-     * 创建带根因的业务异常。
+     * 创建带可选根因的业务异常，并复制消息参数数组。
      *
-     * @param errorCode 错误码
-     * @param cause 原始异常
-     * @param messageArguments 国际化消息参数
+     * @param errorCode 错误码，不能为 null
+     * @param cause 原始异常，可以为 null；不会被包装或改写，仅保存为 cause
+     * @param messageArguments 国际化消息参数，不能为 null；传入数组的后续修改不影响本异常
+     * @throws NullPointerException errorCode 或 messageArguments 为 null 时抛出
      */
     public BusinessException(ErrorCode errorCode, Throwable cause, Object... messageArguments) {
         super(Objects.requireNonNull(errorCode, "错误码不能为空").code(), cause);

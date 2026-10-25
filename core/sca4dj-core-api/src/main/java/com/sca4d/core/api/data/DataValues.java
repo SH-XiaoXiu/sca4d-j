@@ -1,5 +1,6 @@
 package com.sca4d.core.api.data;
 
+import com.sca4d.core.api.data.exception.DataAssertionException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

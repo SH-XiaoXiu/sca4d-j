@@ -31,7 +31,11 @@ public class CallPreCommitTransactionInstaller implements BeanPostProcessor {
         this.listenerSource = Objects.requireNonNull(listenerSource, "预提交条件监听器来源不能为空");
     }
 
-    /** 在事务管理器完成初始化后安装监听器。 */
+    /**
+     * 在事务管理器完成初始化后把监听器加入其执行监听器列表。
+     *
+     * <p>同一监听器已经存在时原样返回，不重复添加；非 `ConfigurableTransactionManager` 的 Bean 不做修改。
+     */
     @Override
     public @NotNull Object postProcessAfterInitialization(@NotNull Object bean, @NotNull String beanName) {
         if (bean instanceof ConfigurableTransactionManager transactionManager) {

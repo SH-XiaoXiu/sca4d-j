@@ -3,7 +3,9 @@ package com.sca4d.core.spring.web;
 import com.sca4d.core.api.i18n.MessageText;
 import com.sca4d.core.api.i18n.TextLocalizer;
 import com.sca4d.core.spring.config.HttpInputValidationProperties;
+import com.sca4d.core.spring.exception.CoreSpringException;
 import com.sca4d.core.spring.validation.NoDefaultValidation;
+import com.sca4d.core.spring.web.exception.HttpInputValidationException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
@@ -262,7 +264,7 @@ public class HttpInputValidationAspect {
                         violations,
                         visited);
             } catch (IllegalAccessException exception) {
-                throw new IllegalStateException("无法读取 HTTP 请求字段 " + field.getName(), exception);
+                throw new CoreSpringException("无法读取 HTTP 请求字段 " + field.getName(), exception);
             }
         }
     }
@@ -437,9 +439,11 @@ public class HttpInputValidationAspect {
         return result;
     }
 
-    /** @return 请求体子字段路径 */
+    /**
+     * 生成请求体子字段的路径。父路径为空，或为 Spring 未保留参数名时的 {@code argN} 占位名（如 arg0）时直接使用字段名，不保留父路径。
+     */
     private @NotNull String child(@NotNull String parent, @NotNull String name) {
-        return parent.isBlank() || parent.startsWith("arg") ? name : parent + "." + name;
+        return parent.isBlank() || parent.matches("arg[0-9]+") ? name : parent + "." + name;
     }
 
     /** @return 容器元素路径 */

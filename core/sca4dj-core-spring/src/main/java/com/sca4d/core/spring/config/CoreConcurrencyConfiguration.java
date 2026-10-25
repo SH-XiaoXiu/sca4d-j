@@ -30,14 +30,14 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 class CoreConcurrencyConfiguration {
 
-    /** @param objectMapper 脚手架内部 JSON 映射器 @return 幂等参数规范化和摘要入口 */
+    /** @param objectMapper 脚手架内部 JSON 映射器 @return 计算幂等参数摘要的入口 */
     @Bean
     @ConditionalOnMissingBean
     IdempotencyFingerprints idempotencyFingerprints(@Sca4djJson Sca4djMapper objectMapper) {
         return new IdempotencyFingerprints(objectMapper);
     }
 
-    /** @param fingerprints 幂等参数规范化入口 @return 使用方法参数摘要的幂等键解析器 */
+    /** @param fingerprints 幂等参数摘要入口 @return 使用方法参数摘要生成幂等键的解析器 */
     @Bean
     @ConditionalOnMissingBean
     MethodArgumentsIdempotencyKeyResolver methodArgumentsIdempotencyKeyResolver(
@@ -45,7 +45,7 @@ class CoreConcurrencyConfiguration {
         return new MethodArgumentsIdempotencyKeyResolver(fingerprints);
     }
 
-    /** @param rateLimiter 共享限流器 @param resolverLookup 调用值解析器目录 @return 限流调用前评估器 */
+    /** @param rateLimiter 共享限流器 @param resolverLookup 调用值解析器目录 @return 限流调用拦截器 */
     @Bean
     RateLimitCallInterceptor rateLimitCallInterceptor(
             RateLimiter rateLimiter,

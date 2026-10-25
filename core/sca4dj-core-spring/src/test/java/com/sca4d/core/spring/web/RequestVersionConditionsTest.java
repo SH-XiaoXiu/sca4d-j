@@ -68,6 +68,7 @@ class RequestVersionConditionsTest {
                 .hasMessageContaining("只能由一个根资源写入消费");
     }
 
+    /** 用给定 Call 和 Fixture 方法创建 CallExecution，参数列表为空。 */
     private static CallExecution execution(Call call, Method method) {
         return new CallExecution(call, Fixture.class, method, new Object[0], method.getGenericReturnType());
     }

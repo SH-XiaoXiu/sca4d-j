@@ -116,6 +116,7 @@ class CallPreCommitIntegrationTest {
         CallHolder.set(call);
         CallHolder.push(execution);
         execution.beginInvocation();
+        // 先标记实际事务已开始并初始化同步，再调用 track 登记 execution，模拟方法执行发生在 Spring 事务内的顺序。
         TransactionSynchronizationManager.setActualTransactionActive(true);
         TransactionSynchronizationManager.initSynchronization();
         CallPreCommitTransactionListener.track(execution);

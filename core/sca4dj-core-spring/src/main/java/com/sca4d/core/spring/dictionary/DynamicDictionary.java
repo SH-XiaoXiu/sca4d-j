@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存数据库动态字典的管理配置。 */
-@SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
+@SuppressWarnings("ClassCanBeRecord") // 项目禁止声明 record，这里使用普通 class。
 public class DynamicDictionary {
 
     private final String key;

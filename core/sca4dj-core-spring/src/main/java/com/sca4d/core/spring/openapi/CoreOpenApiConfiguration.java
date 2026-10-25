@@ -42,7 +42,7 @@ public class CoreOpenApiConfiguration {
     /**
      * 创建应用的 OpenAPI 基础定义。
      *
-     * @param environment 应用名称配置；不使用中间件隔离前缀作为对外名称
+     * @param environment 读取 spring.application.name 作为文档标题前缀，未配置时使用 Sca4d-J
      * @return 包含 Bearer 认证方案的 OpenAPI 定义
      */
     @Bean

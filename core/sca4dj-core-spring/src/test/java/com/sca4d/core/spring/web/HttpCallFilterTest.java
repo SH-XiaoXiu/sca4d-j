@@ -32,7 +32,7 @@ import java.time.ZoneOffset;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 
-/** 用可控单调时钟验证慢请求阈值、异步完成、日志字段和请求上下文清理。 */
+/** 用可控单调时钟验证请求日志、慢请求阈值、异步完成和请求上下文清理。 */
 class HttpCallFilterTest {
     private final AtomicLong nanos = new AtomicLong();
 
@@ -63,7 +63,7 @@ class HttpCallFilterTest {
                 new WebRequestProperties(),
                 nanos::get);
         previousLevel = logger.getLevel();
-        logger.setLevel(Level.WARN);
+        logger.setLevel(Level.INFO);
         events = new ListAppender<>() {
             @Override
             protected void append(ILoggingEvent event) {
@@ -86,9 +86,22 @@ class HttpCallFilterTest {
     }
 
     @Test
-    void ignoresRequestsBelowThreshold() throws Exception {
+    void logsNormalRequestsAtInfoWithoutSensitiveMetadata() throws Exception {
+        request.setRequestURI("/resources?token=do-not-log");
+        request.setQueryString("password=do-not-log");
+        request.addHeader("Authorization", "Bearer do-not-log");
         filter.doFilter(request, response, (req, res) -> nanos.set(Duration.ofMillis(199).toNanos()));
-        assertThat(events.list).isEmpty();
+        assertThat(events.list).singleElement().satisfies(event -> {
+            assertThat(event.getLevel()).isEqualTo(Level.INFO);
+            assertThat(event.getFormattedMessage()).contains(
+                    "HTTP 请求完成",
+                    "callId=slow-test-call",
+                    "method=GET",
+                    "path=/resources ",
+                    "status=200",
+                    "durationMs=199",
+                    "failed=false").doesNotContain("do-not-log", "token", "password");
+        });
         assertThat(CallHolder.currentOrNull()).isNull();
         assertThat(MDC.get("callId")).isNull();
     }
@@ -123,12 +136,16 @@ class HttpCallFilterTest {
         properties.setSlowRequestThreshold(Duration.ofMillis(750));
         filter = new HttpCallFilter(Clock.fixed(Instant.EPOCH, ZoneOffset.UTC), null, properties, nanos::get);
         filter.doFilter(request, response, (req, res) -> nanos.set(Duration.ofMillis(700).toNanos()));
-        assertThat(events.list).isEmpty();
+        assertThat(events.list).singleElement().satisfies(event -> {
+            assertThat(event.getLevel()).isEqualTo(Level.INFO);
+            assertThat(event.getFormattedMessage()).contains("durationMs=700", "failed=false");
+        });
         filter.doFilter(request, response, (req, res) -> nanos.addAndGet(Duration.ofMillis(750).toNanos()));
-        assertThat(events.list).singleElement()
-                .satisfies(
-                        event -> assertThat(event.getFormattedMessage())
-                                .contains("durationMs=750", "thresholdMs=750"));
+        assertThat(events.list).hasSize(2);
+        assertThat(events.list.get(1)).satisfies(event -> {
+            assertThat(event.getLevel()).isEqualTo(Level.WARN);
+            assertThat(event.getFormattedMessage()).contains("durationMs=750", "thresholdMs=750");
+        });
     }
 
     @Test

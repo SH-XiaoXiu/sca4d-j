@@ -1,5 +1,7 @@
 package com.sca4d.core.api.data;
 
+import com.sca4d.core.api.data.exception.DataAssertionException;
+import com.sca4d.core.api.data.exception.DataOperationExecutionException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +31,8 @@ public class DataGraphExecutor {
      * @param graph 已完成结构校验的数据图
      * @param inputs 与 Graph 输入完全一致的非空值
      * @return 包含输入和全部节点输出的不可变值集合
+     * @throws DataAssertionException 输入与 Graph 不一致，或节点抛出数据断言异常时抛出，异常会标注失败节点
+     * @throws DataOperationExecutionException 节点抛出其他运行时异常时抛出，原异常保留为 cause
      */
     @CheckReturnValue
     public static @NotNull DataValues execute(
@@ -62,7 +66,7 @@ public class DataGraphExecutor {
      *
      * <p>节点只在直接输入全部成功后运行；任一失败立即结束返回值并取消未完成节点。
      * 取消不能强制终止已经运行的 Java 函数，节点必须遵守纯数据操作契约。
-     * 不传播 CallHolder、事务或其他线程状态，不关闭调用方 Executor。
+     * 不传播调用线程上的事务或上下文绑定，不关闭调用方 Executor。
      *
      * @param graph 已校验的计算图
      * @param inputs 与图输入严格一致的不可变数据

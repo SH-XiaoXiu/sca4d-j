@@ -16,7 +16,8 @@ public class ClientState {
     }
 
     /**
-     * 标记客户端需要重新读取指定状态。
+     * 把状态目标记入当前线程的变化集合，同一目标重复登记只保留一次。
+     * 变化保存在 ThreadLocal 中，由 ClientStateFilter 在响应结束后清理；异步线程不会继承这里的记录。
      *
      * @param target 需要客户端重新读取的状态目标
      */
@@ -47,7 +48,7 @@ public class ClientState {
         return change;
     }
 
-    /** 当前调用收集到的客户端状态变化快照。 */
+    /** 保存当前线程登记的客户端状态目标，按登记顺序去重。 */
     public static class Change {
 
         private final Set<ClientStateTarget> targets = new LinkedHashSet<>();

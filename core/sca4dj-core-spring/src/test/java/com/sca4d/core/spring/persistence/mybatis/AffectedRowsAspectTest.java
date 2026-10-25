@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.concurrent.OptimisticLockException;
-import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException;
 import com.sca4d.core.api.persistence.AffectedRows;
-import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
+import com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException;
 import org.apache.ibatis.executor.BatchExecutor;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
 
+/** 验证 AffectedRowsAspect 按 @AffectedRows 声明解释 MyBatis 影响行数，并拒绝 BATCH 和多条 DML 语句。 */
 class AffectedRowsAspectTest {
 
     private static final Method EXECUTOR_UPDATE;

@@ -1,7 +1,7 @@
-package com.sca4d.core.api.concurrent;
+package com.sca4d.core.api.concurrent.exception;
 
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.utils.DurationUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

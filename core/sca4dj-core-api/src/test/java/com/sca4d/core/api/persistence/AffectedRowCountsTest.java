@@ -6,8 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.sca4d.core.api.concurrent.OptimisticLockException;
-import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException;
+import com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

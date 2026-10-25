@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
-/** 验证默认摘要实现生成可自描述且不可直接还原的 Argon2id 摘要。 */
+/** 验证默认 SecretHasher 把明文秘密转换为不等于明文的摘要，能用正确秘密校验、拒绝错误秘密，并允许应用替换该 Bean。 */
 class Argon2SecretHasherTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
