@@ -1,133 +1,247 @@
 # 开发后端业务接口
 
-新增业务字段要同时处理数据库存储、Service 规则和 HTTP 请求与响应。下面沿 Sca4d Server 的 `GET /me/profile`、`PUT /me/profile` 说明修改位置和验证方法，再补充分页、排序与字段部分更新的写法。
+本页以「为工作区文档增加摘要字段」为例，说明新增业务字段、局部更新和分页列表时需要改动的位置。适合修改 Sca4d Server 后端接口的开发者。
 
-## 找到负责的代码
+场景：工作区（Workspace）中的文档（Document）需要一个可选的摘要（`summary`）。成员（Member）可以修改摘要，也可以清空；文档列表要支持按更新时间排序和分页。
 
-以下路径均相对于 `apps/sca4d-server/src/main/`：
+需要解决三个问题：
 
-| 文件 | 修改内容 |
-|---|---|
-| `java/com/sca4d/app/server/platform/request/ReplaceProfileRequest.java` | HTTP 输入字段和校验 |
-| `java/com/sca4d/app/server/controllers/ProfileController.java` | 路由、当前 Principal、审计目标和响应转换 |
-| `java/com/sca4d/app/server/service/PlatformAccountApplicationService.java` | 资料修改与 Account 邮箱标识同步 |
-| `java/com/sca4d/app/server/service/PlatformUserProfileService.java` | 资料读取、头像绑定和删除 |
-| `java/com/sca4d/app/server/repository/PlatformUserProfileRepository.java` | 资料持久化操作 |
-| `java/com/sca4d/app/server/mapper/PlatformUserProfileMapper.java` | MyBatis 方法 |
-| `resources/mapper/app/PlatformUserProfileMapper.xml` | 查询和写入 SQL |
-| `java/com/sca4d/app/server/platform/view/ProfileView.java` | HTTP 返回字段 |
+- 数据库、请求、响应各改哪里。
+- 请求不提交 `summary` 与提交 `null` 的区别怎样保留到 SQL。
+- 列表的分页和排序怎样声明，才不会把请求字符串拼进 SQL。
 
-资料通过 `principal_id` 关联业务身份。用户名、密码和账号状态由 IAM 与认证模块管理。新增显示资料放在应用自己的表中；需要修改 Account 时调用 IAM 公开接口。
+前置条件：已按[认证与 Session](/tutorials/authentication-and-session)取得 Token，并按[身份与权限](/tutorials/identity-and-permission)为文档接口配置了 Principal 选择和权限。
 
-## 定义字段和写入规则
+本页的 `Document`、`DocumentService`、`DocumentRepository`、`DocumentMapper`、`DocumentController` 等类型由具体应用定义。
 
-为字段确定类型、长度、空值含义、默认值和允许修改的条件。已有数据库通过新的 Flyway 迁移增加字段；检查旧记录怎样取得有效值，再增加非空或唯一约束。迁移要求见[数据库规范](/standards/06_database)。
+## 实现步骤
 
-在 `ReplaceProfileRequest` 中声明输入及校验，在 `ProfileView` 中声明返回值。确认修改是替换完整资料还是只改变一个字段：完整替换中，空值可能表示清除；局部修改中，未提交字段必须与明确清空区分。
+各层职责如下。路径相对于应用模块的 `src/main/`。
 
-## 实现业务修改
+| 层 | 位置 | 本例的改动 |
+|---|---|---|
+| 迁移 | `resources/db/migration/` | 增加 `summary` 列 |
+| 请求与响应 | `java/.../request/`、`java/.../view/` | 声明输入校验和返回字段 |
+| Controller | `java/.../controllers/` | 路由、当前 Principal、权限、审计、响应转换 |
+| Service | `java/.../service/` | 业务规则 |
+| Repository | `java/.../repository/` | 把意图转换为 Patch，并解释影响行数 |
+| Mapper | `java/.../mapper/`、`resources/mapper/app/` | 明确列出列的 SQL |
 
-`ProfileController` 使用 `@CurrentPrincipal(selection = PlatformPrincipalSelection.class)` 选择当前 Platform Principal。`@CurrentPrincipal Long principalId` 参数由服务端填充，客户端不通过请求体指定正在修改哪个人的个人资料。
+### 1. 增加数据库字段
 
-读取调用 `PlatformUserProfileService.loadByPrincipalId(...)`。替换资料调用 `PlatformAccountApplicationService.replaceProfile(...)`，因为邮箱还参与 Account 登录标识和通知地址解析。修改这条流程时，资料与登录标识必须共同提交或回滚。
+已有数据库通过新的 Flyway 迁移增加字段，文件放在 `resources/db/migration/`，命名为 `V<版本>__<说明>.sql`。
 
-Controller 返回 `ApiResponse.ok(ProfileView.from(updated))`，并通过 `@Audit` 和 `@AuditTarget` 声明操作及资料目标。审计只保存允许记录的标识和字段变化，不写入密码、验证码或完整个人资料。
+```sql
+ALTER TABLE public.document
+    ADD COLUMN summary VARCHAR(500);
 
-Repository 组合 Mapper 查询与写入，向 Service 返回业务对象。SQL 明确列出本次更新的列，保留访问范围、状态和必要的版本条件。影响行数由 Repository 解释，具体写法见[持久化规范](/standards/05_persistence)。
+COMMENT ON COLUMN public.document.summary IS '文档摘要；NULL 表示没有摘要';
+```
 
-## 调用接口确认资料变化
+先确定字段类型、长度、空值含义、默认值和允许修改的条件。增加非空或唯一约束前，检查旧记录怎样取得有效值。迁移要求见[数据库规范](/standards/06_database)。
 
-先按[认证与 Session](/tutorials/authentication-and-session)取得 Session Token，在 Swagger UI 中设置 Bearer Token，再读取 `GET /api/me/profile`。
+### 2. 声明请求和响应
 
-以下请求会清除邮箱和手机号，只在测试账号上执行。保存当前资料后，向 Gateway 提交完整替换请求；字段限制以 `ReplaceProfileRequest` 为准：
+`summary` 有三种意图：保留原值、写入新值、清空。请求对象用「是否提供」标志区分保留与清空，再转换为 `Patch`。
 
-```http
-PUT /api/me/profile
-Content-Type: application/json
-Authorization: Bearer <sessionToken>
+```java
+public final class ChangeDocumentRequest {
 
-{
-  "displayName": "测试用户",
-  "email": null,
-  "phoneNumber": null
+    @Size(max = 500)
+    private @Nullable String summary;
+
+    private boolean summaryProvided;
+
+    public @Nullable String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(@Nullable String summary) {
+        this.summary = summary;
+        this.summaryProvided = true; // Jackson 只在 JSON 含该字段时调用 setter
+    }
+
+    /** 未提交时保留，提交 null 时清空，提交文本时写入。 */
+    public Patch<String> getSummaryPatch() {
+        if (!summaryProvided) {
+            return Patch.ignore();
+        }
+        return summary == null ? Patch.clear() : Patch.set(summary);
+    }
 }
 ```
 
-再次读取，应得到修改后的资料。当前个人资料接口没有要求 `If-Match`；增加其他资源的完整编辑接口时，按[HTTP 并发契约](/reference/http/common#etag、if-match-与修改冲突)判断是否需要 ETag。
+响应对象声明返回字段。需要乐观并发的资源，在响应类型上用 `@ETag` 标记一个返回 `Version` 的方法，Core Spring 把它发布为强 ETag。
 
-测试覆盖有效输入、非法值、清空和事务失败。涉及邮箱时，还要覆盖标识冲突及回滚后资料与 Account 是否一致。只修改本应用时，先编译 `:apps:sca4d-server:compileJava`，再运行直接相关测试；检查范围见[测试规范](/standards/10_testing)，资源限制以仓库构建指令为准。
+```java
+public final class DocumentView {
 
-## 列表查询
+    private final long id;
 
-Sca4d-J 使用同一组公共类型处理列表分页和动态排序。业务筛选字段仍由具体接口声明，不使用字段 Map、查询 Wrapper 或自动 SQL 生成器。
+    private final @Nullable String summary;
 
-### HTTP 参数
+    private final Version version;
+
+    // 构造方法与 getter 省略
+
+    @ETag
+    public Version revision() {
+        return version;
+    }
+}
+```
+
+`@ETag` 返回的版本必须覆盖当前实例的全部可观察字段。同一类型既用于固定资源又用于列表元素时，列表实例的 `revision()` 返回 `null`，不发布 ETag。
+
+### 3. 编写 Controller
+
+Controller 选择当前 Principal、声明权限和审计、要求 `If-Match`。
+
+```java
+@PatchMapping("/{documentId}")
+@IfMatch
+@RequirePermission(operation = WorkspaceOperations.DOCUMENTS_WRITE_VALUE)
+@RequirePermission(
+        resource = "#documentId",
+        resourceType = Document.RESOURCE_TYPE_VALUE,
+        action = Action.UPDATE_VALUE)
+@Audit(
+        operation = "WORKSPACE/DOCUMENT/UPDATE",
+        target = "#documentId",
+        resourceType = Document.RESOURCE_TYPE_VALUE)
+public ApiResponse<DocumentView> change(
+        @PathVariable long workspaceId,
+        @PathVariable long documentId,
+        @CurrentPrincipal WorkspaceMemberPrincipal member,
+        @RequestBody @Valid ChangeDocumentRequest request) {
+    Document updated = documents.change(member, documentId, request.getSummaryPatch());
+    return ApiResponse.ok(DocumentView.from(updated));
+}
+```
+
+`WorkspaceOperations.DOCUMENTS_WRITE_VALUE` 按[身份与权限](/tutorials/identity-and-permission)的方式声明。类级别的 `@CurrentPrincipal(selection = ...)` 同样见该页。
+
+`@CurrentPrincipal` 参数由服务端填充，客户端不通过请求体指定修改的是谁。`@Audit` 只保存允许记录的标识和字段变化，不写入密码、验证码或完整个人资料。
+
+### 4. 在 Repository 解释影响行数
+
+`@IfMatch` 把请求中的强 ETag 绑定到当前请求。Repository 通过 `VersionConditions` 取得条件，并把预期版本交给 Mapper。
+
+```java
+// DocumentRepository
+public void changeSummary(long workspaceId, long documentId, Patch<String> summary) {
+    Document current = findInWorkspace(workspaceId, documentId)
+            .orElseThrow(() -> new BusinessException(CoreErrorCode.NOT_FOUND));
+    VersionCondition condition = versions.resolve(new Version(current.version()));
+    AffectedRowCounts.requireSingle(
+            mapper.updateSummary(documentId, new DocumentSummaryUpdate(summary), condition.expected()),
+            condition.whenZero(),
+            "文档摘要");
+}
+```
+
+`DocumentSummaryUpdate` 是只保存 `Patch<String> summary` 的参数对象，由具体应用定义。只更新一个字段时，Mapper 方法也可以直接接收具名 `Patch` 参数。
+
+Repository 在调用 Mapper 前拒绝所有字段均为 `IGNORE` 的更新，避免生成没有列的 `UPDATE`。
+
+### 5. 在 Mapper 明确列出列
+
+```java
+@CheckReturnValue
+int updateSummary(
+        @Param("documentId") long documentId,
+        @Param("update") DocumentSummaryUpdate update,
+        @Param("expectedVersion") Version expectedVersion);
+```
+
+```xml
+<update id="updateSummary">
+    UPDATE document
+    <set>
+        <choose>
+            <when test="update.summary.set">
+                summary = #{update.summary.value},
+            </when>
+            <when test="update.summary.clear">
+                summary = NULL,
+            </when>
+        </choose>
+        version = version + 1
+    </set>
+    WHERE id = #{documentId}
+    AND version = #{expectedVersion}
+</update>
+```
+
+Patch 不生成 SQL，也不通过反射推断列名。Mapper XML 明确写出每个允许修改的列、状态条件、版本条件和 `WHERE` 条件。`IGNORE` 状态不生成列赋值。
+Principal 选择、权限、审计和 `If-Match` 在进入 Service 前按固定顺序完成，Service 只处理业务规则。
+
+### 6. 增加分页列表
 
 所有分页接口接受 `page` 和 `size`：
 
 | 参数 | 默认值 | 限制 |
 |---|---:|---|
 | `page` | 1 | 不小于 1 |
-| `size` | `sca4dj.core.pagination.default-size`，默认 20 | 不大于全局或当前接口声明的上限 |
+| `size` | `sca4dj.core.pagination.default-size`，默认 20 | 不大于全局上限 `sca4dj.core.pagination.max-size`（默认 200）或当前接口声明的上限 |
 
 支持动态排序的接口另外接受可以重复的 `sort`：
 
 ```http
-GET /projects?page=2&size=20&status=ACTIVE&sort=STATUS,ASC&sort=UPDATED_AT,DESC
+GET /workspaces/101/documents?page=2&size=20&status=PUBLISHED&sort=TITLE,ASC&sort=UPDATED_AT,DESC
 ```
 
-服务端按参数出现顺序应用排序。字段名和方向区分大小写，方向只能是 `ASC` 或 `DESC`。`sca4dj.core.sort-max-fields` 控制单次请求的字段数量，默认 5，配置范围是 1..20。
+服务端按参数出现顺序应用排序。字段名和方向区分大小写，方向只能是 `ASC` 或 `DESC`。`sca4dj.core.sort-max-fields` 控制单次请求的字段数量，默认 5，配置范围是 1 到 20。
 
 没有提交 `sort` 时使用接口声明的默认排序。动态排序接口不接受旧的 `sortBy` 和 `sortDirection`，出现任一旧参数都会返回 400。
 
-### 声明排序字段
+`Sort` 内置 `Sort.CREATED_AT`、`Sort.UPDATED_AT`、`Sort.NAME`（ASCII 稳定名称，不表示本地化展示名称）和 `Sort.SERIAL`（数据库标识、序号或同类稳定流水字段）。业务字段通过 `Sort.of(...)` 创建，只接受大写协议标识符，返回的 `Sort` 不包含数据库列或 SQL。
 
-[Sort](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/query/Sort.html) 内置常用字段：
-
-- `Sort.CREATED_AT`：创建时间；
-- `Sort.UPDATED_AT`：最近修改时间；
-- `Sort.NAME`：ASCII 稳定名称，不表示本地化展示名称；
-- `Sort.SERIAL`：数据库标识、序号或同类稳定流水字段。
-
-业务字段通过 `Sort.of(...)` 创建。它只接受大写协议标识符，结果不包含数据库列或 SQL：
+`ListDefinition` 是当前接口的字段白名单。默认排序必须使用已经登记的字段，同一个字段不能重复登记或重复排序。
 
 ```java
-private static final Sort STATUS = Sort.of("STATUS");
+private static final Sort TITLE = Sort.of("TITLE");
 
-private static final ListDefinition PROJECT_LIST = ListDefinition.builder()
-        .fields(Sort.CREATED_AT, Sort.UPDATED_AT, STATUS)
+private static final ListDefinition DOCUMENT_LIST = ListDefinition.builder()
+        .fields(Sort.CREATED_AT, Sort.UPDATED_AT, TITLE)
         .defaultSort(Sort.UPDATED_AT.desc())
         .maxSize(100)
         .build();
 ```
 
-`ListDefinition` 是当前接口的字段白名单。默认排序必须使用已经登记的字段，同一个字段不能重复登记或重复排序。
-
-### Controller 与业务筛选
-
 Controller 显式绑定业务筛选参数，再用列表声明解析公共参数：
 
 ```java
 @GetMapping
-public ApiResponse<Page<ProjectView>> find(
+@RequirePermission(operation = WorkspaceOperations.DOCUMENTS_READ_VALUE)
+public ApiResponse<Page<DocumentView>> find(
+        @PathVariable long workspaceId,
         @RequestParam @Nullable String search,
-        @RequestParam @Nullable ProjectStatus status,
+        @RequestParam @Nullable DocumentStatus status, // 由具体应用定义
         @NotNull ListParameters parameters) {
-    ProjectQuery query = new ProjectQuery(
+    DocumentQuery query = new DocumentQuery(
+            workspaceId,
             search,
             status,
-            parameters.resolve(PROJECT_LIST));
-    return ApiResponse.ok(projects.find(query).map(ProjectView::from));
+            parameters.resolve(DOCUMENT_LIST));
+    return ApiResponse.ok(documents.find(query).map(DocumentView::from));
 }
 ```
 
-`ListParameters` 只存在于 Controller 边界。`resolve(...)` 完成后，`ProjectQuery` 保存业务筛选条件和不含外部字符串的 `ListRequest`。固定排序接口直接接收 `PageRequest`；需要更小页大小上限时使用 `@PageOptions(maxSize = 100)`。
+`ListParameters` 只存在于 Controller 中。`resolve(...)` 完成后，`DocumentQuery`（由具体应用定义）保存业务筛选条件和不含外部字符串的 `ListRequest`。固定排序接口直接接收 `PageRequest`。需要更小的页大小上限时，使用 `@PageOptions(maxSize = 100)`。
 
-业务 Query 负责自己的筛选规则，例如空白搜索词、标识正数、两个字段必须同时提供或时间下界必须早于上界。公共列表类型不解释这些业务条件。
+业务 Query 负责自己的筛选规则，例如空白搜索词、标识正数、两个字段必须同时提供，或时间下界必须早于上界。公共列表类型不解释这些业务条件。
 
-### Repository 与 Mapper
+Repository 使用同一个 Query 执行 count 和当前页查询，并返回 `Page<T>`。没有命中记录时可以跳过 rows 查询。超过末页时返回空 `items` 和不变的 `total`。
 
-Repository 使用同一个 Query 执行 count 和当前页查询，并返回 `Page<T>`。没有命中记录时可以跳过 rows 查询；超过末页时返回空 `items` 和不变的 `total`。
+```java
+// DocumentRepository
+public Page<Document> find(DocumentQuery query) {
+    long total = mapper.count(query);
+    List<Document> rows = total == 0 ? List.of() : mapper.find(query);
+    return new Page<>(rows, query.list().getPage(), total);
+}
+```
 
 Mapper 的筛选 SQL 由 count 和 rows 共用，排序列逐项显式映射：
 
@@ -135,20 +249,19 @@ Mapper 的筛选 SQL 由 count 和 rows 共用，排序列逐项显式映射：
 ORDER BY
 <foreach collection="query.list.sort" item="order" separator=",">
     <choose>
-        <when test="order.field.name() == 'CREATED_AT'">p.created_at</when>
-        <when test="order.field.name() == 'UPDATED_AT'">p.updated_at</when>
-        <when test="order.field.name() == 'STATUS'">p.status</when>
+        <when test="order.field.name() == 'CREATED_AT'">d.created_at</when>
+        <when test="order.field.name() == 'UPDATED_AT'">d.updated_at</when>
+        <when test="order.field.name() == 'TITLE'">d.title</when>
     </choose>
     <include refid="com.sca4d.core.spring.persistence.mybatis.SortSql.direction"/>
 </foreach>,
-p.id DESC
+d.id DESC
+OFFSET #{query.list.page.offset} LIMIT #{query.list.page.size}
 ```
 
 请求字段不会作为 SQL 片段传入 Mapper。每个 Mapper 仍需明确列出允许排序的数据库列，并追加能够消除相同字段值歧义的稳定排序。
 
-### 分页响应
-
-`Page<T>` 的 JSON 形状固定为：
+`Page<T>` 的 JSON 结构固定为：
 
 ```json
 {
@@ -161,88 +274,69 @@ p.id DESC
 
 `total` 表示满足全部筛选和数据范围条件的记录总数，不是当前页数量。Java `long` 在 HTTP JSON 中使用十进制字符串，`page` 和 `size` 保持数字。
 
-页码、页大小、排序格式、字段、方向、重复字段或字段数量无效时，Core Spring 返回 `VALIDATION_FAILED`，HTTP 状态为 400。
+## 验证
 
-## Patch
+前置条件：已取得 Token，Token 对应的 Account 是工作区 `101` 的成员，角色已授予读写文档的 Operation。
 
-源码：`core/sca4dj-core-api/src/main/java/com/sca4d/core/api/persistence/Patch.java`
+1. 读取文档，记录响应头 `ETag`（例如 `"3"`）。
 
-数据库字段的部分更新必须区分三种结果：保留原值、写入一个值、写入数据库 `NULL`。只传递可空 Java 值无法区分前两种结果；把数值零、`false` 或空字符串统一当作「空」又会丢失调用方明确给出的数据。Patch 使用三个互斥状态保存 Repository 已经确定的字段写入意图。
-
-| 状态 | 构造方式 | Mapper 行为 |
-|---|---|---|
-| IGNORE | `Patch.ignore()` | 不在 `SET` 子句中写该列，数据库保留原值 |
-| SET | `Patch.set(value)` | 把非空 value 绑定到该列 |
-| CLEAR | `Patch.clear()` | 把该列写为数据库 `NULL` |
-
-`Patch.set(null)` 抛出 NullPointerException。数值零、`false`、空字符串和空集合不是特殊状态，均由 SET 原样保存。只有 `value()` 或供映射框架读取的 `getValue()` 可以取得 SET 值；在 IGNORE 或 CLEAR 状态读取值会抛出 IllegalStateException。
-
-```mermaid
-flowchart LR
-    Business[Service 已完成业务处理和校验]
-    Repository[Repository<br/>决定各字段写入意图]
-    Patch[Patch<br/>IGNORE / SET / CLEAR]
-    Mapper[Mapper XML<br/>明确列出更新列]
-    Database[(PostgreSQL)]
-
-    Business --> Repository --> Patch --> Mapper --> Database
+```http
+GET /api/workspaces/101/documents/9001
+Authorization: Bearer <accessToken>
 ```
 
-Service 把已经校验的业务结果交给 Repository。Repository 根据稳定的持久化规则构造 Patch；Mapper XML 逐列读取状态，SET 绑定值、CLEAR 写 `NULL`、IGNORE 不生成列赋值。Repository 在调用 Mapper 前拒绝所有字段均为 IGNORE 的更新，避免生成没有列的 `UPDATE`。
+2. 写入摘要。
 
-Patch 不依赖 HTTP Request、Jackson、Jakarta Validation、Spring 或 MyBatis。Controller 仍负责 HTTP 绑定和统一请求校验，实体和值对象仍在自己的构造入口检查字段限制，Service 仍负责跨字段和业务规则。Patch 只在这些处理完成后表达数据库字段怎样写入，不能代替任何一层校验。
+```http
+PATCH /api/workspaces/101/documents/9001
+Authorization: Bearer <accessToken>
+If-Match: "3"
+Content-Type: application/json
 
-### 构造写入意图
-
-固定结果直接使用三个静态方法：
-
-```java
-Patch<String> name = Patch.set(displayName);
-Patch<String> remark = remarkValue == null ? Patch.clear() : Patch.set(remarkValue);
-Patch<String> unchanged = Patch.ignore();
+{"summary": "季度回顾"}
 ```
 
-`resolve(source, resolver)` 让 Repository 使用回调集中解释一个业务处理结果。source 可以为 `null`，resolver 必须返回非空 Patch；回调返回 `null` 时立即失败。
+预期：200，`data.summary` 为「季度回顾」，`ETag` 递增为 `"4"`。
 
-```java
-Patch<String> remark = Patch.resolve(
-        change,
-        value -> {
-            if (value.clearRemark()) {
-                return Patch.clear();
-            }
-            if (value.updateRemark()) {
-                return Patch.set(value.remark());
-            }
-            return Patch.ignore();
-        });
+3. 提交 `{}`，预期摘要保持不变。提交 `{"summary": null}`，预期摘要被清空。每次请求都使用最近一次响应的 `ETag`。
+4. 使用旧的 `If-Match: "3"` 再提交一次，预期 412。
+5. 读取列表，预期 `data.items`、`page`、`size` 和字符串形式的 `total`。
+
+```http
+GET /api/workspaces/101/documents?page=1&size=20&sort=UPDATED_AT,DESC
+Authorization: Bearer <accessToken>
 ```
 
-条件较少时可以使用 `choose()` 连续声明候选结果，并以 `otherwiseIgnore()`、`otherwiseSet(...)` 或 `otherwiseClear()` 明确没有条件命中时的结果。
+测试至少覆盖：有效输入、超长摘要、保留、写入、清空、版本冲突、无权限成员，以及分页越界。涉及事务时，覆盖回滚后数据是否保持一致。
 
-```java
-Patch<String> remark = Patch.<String>choose()
-        .setIf(copyDefault, defaultRemark)
-        .setIf(useGenerated, () -> generateRemark())
-        .clearIf(removeRemark)
-        .otherwiseIgnore();
-```
+只修改本应用时，先编译 `:apps:<应用名>-server:compileJava`，再运行直接相关测试。检查范围见[测试规范](/standards/10_testing)，资源限制以仓库构建指令为准。
 
-零个条件命中时返回结束方法声明的结果。一个以上条件命中时抛出 IllegalStateException，不按声明先后静默覆盖。Supplier 只在对应分支唯一命中且结束构造时执行；未命中的分支和未使用的默认 Supplier 不执行。
+## 失败结果与限制
 
-### Mapper 限制
+| 条件 | 结果 |
+|---|---|
+| 请求字段不满足校验（例如 `summary` 超过 500 个字符） | 400，`HttpErrorCode.BAD_REQUEST`（`1100`），响应数据为各字段的拒绝原因 |
+| 页码、页大小、排序格式、字段、方向、重复字段或字段数量无效 | 400，`VALIDATION_FAILED`（`1000`） |
+| 动态排序接口收到 `sortBy` 或 `sortDirection` | 400 |
+| `@IfMatch` 接口缺少 `If-Match` 头 | 428，`PRECONDITION_REQUIRED`（`1105`） |
+| `If-Match` 有多个值、是弱 ETag、通配符，或不是整数 | 412，`PRECONDITION_FAILED`（`1106`） |
+| `If-Match` 版本与当前版本不一致，Mapper 影响 0 行 | 412，抛出 `VersionPreconditionFailedException` |
+| 内部对象的乐观版本已经变化（`OPTIMISTIC_LOCK` 策略） | 抛出 `OptimisticLockException` |
+| 影响行数不是预期值且不属于上述零行策略 | 抛出 `AffectedRowsMismatchException` |
+| 当前 Principal 没有权限 | 403，`PERMISSION_DENIED`（`1002`） |
+| 目标文档不存在 | 404，`NOT_FOUND`（`1003`） |
 
-Patch 不生成 SQL，也不通过反射推断列名。Mapper 方法可以直接接收具名 Patch 参数，或者接收包含 Patch 字段的模块持久化参数对象。字段数量、共同使用方式和实际复用决定是否需要更新对象，不为每个 update 机械建立 Update 类。Mapper XML 明确写出每个允许修改的列、状态条件、版本条件和 `WHERE` 条件。例如，直接传入名为 `remark` 的 Patch：
+- `Patch.set(null)` 抛出 `NullPointerException`。在 `IGNORE` 或 `CLEAR` 状态读取 `value()` 抛出 `IllegalStateException`。
+- `Patch.choose()` 中两个或更多条件同时命中时抛出 `IllegalStateException`，不按声明先后静默覆盖。`Patch.resolve(...)` 的回调返回 `null` 时立即失败。
+- Patch 只表达字段怎样写入，不代替 Controller 的 HTTP 校验、实体构造入口的字段限制，也不代替 Service 的跨字段和业务规则。
+- Patch 不依赖 HTTP Request、Jackson、Jakarta Validation、Spring 或 MyBatis。
+- 增加其他资源的完整编辑接口时，按[HTTP 并发约定](/reference/http/common#etag、if-match-与修改冲突)判断是否需要 ETag。
+- 与 Account 登录标识关联的字段（例如邮箱）不放在业务表中修改。修改 Account 时调用 IAM 公开接口，并使两处在同一事务中提交或回滚。
 
-```xml
-<choose>
-    <when test="remark.set">
-        remark = #{remark.value},
-    </when>
-    <when test="remark.clear">
-        remark = NULL,
-    </when>
-</choose>
-```
+## 相关页面
 
-Repository 将允许修改的字段转换为明确的 SQL 列。完整规则见[持久化规范](/standards/05_persistence)。
+- [接入身份与权限](/tutorials/identity-and-permission)
+- [接入认证与 Session](/tutorials/authentication-and-session)
+- [编写与运行测试](/tutorials/testing)
+- [持久化规范](/standards/05_persistence)
+- [HTTP 通用约定](/reference/http/common)

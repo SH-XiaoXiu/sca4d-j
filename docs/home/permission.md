@@ -1,6 +1,8 @@
 # 权限与调用
 
-权限检查用 Principal 确定谁在操作，用 Resource 确定操作目标，用 Action 确定要做什么。接入接口时，先选择当前 Principal，再用 `@RequirePermission` 声明要检查的权限；只有 PermissionPolicy 允许后，业务方法才执行。
+本页说明 Sca4d-J 怎样用 Principal、Resource 和 Action 判断一次调用能否执行，适用于接入接口和业务对象权限的开发者。
+
+权限检查用 Principal 确定谁在操作，用 Resource 确定操作目标，用 Action 确定要做什么。接入接口时，先选择当前 Principal，再用 `@RequirePermission` 声明要检查的权限。只有 PermissionPolicy 允许后，业务方法才执行。
 
 Permission 将 Resource 与 Action 组成待检查的权限，PermissionPolicy 读取当前 Call 中的身份并返回 PermissionDecision。
 
@@ -9,7 +11,7 @@ Permission = Resource + Action
 授权判断 = 当前 Principal + Permission
 ```
 
-平台角色读取接口检查 `operation + platform:roles:read + invoke`；订单读取接口检查 `order + orderId + read`。Operation 管固定入口，对象权限管具体数据，两者可以同时检查，接入步骤见[身份与权限教程](/tutorials/identity-and-permission)。
+平台角色读取接口检查 `operation + platform:roles:read + invoke`；订单读取接口检查 `order + orderId + read`。Operation 检查固定入口，对象权限检查具体数据，两者可以同时检查。接入步骤见[身份与权限教程](/tutorials/identity-and-permission)。
 
 ## 两类权限
 
@@ -21,7 +23,7 @@ Permission = Resource + Action
 角色适合保存稳定职责。对象所属模块负责解释对象状态、组织关系和数据范围。两类权限可以同时作用于一次调用。
 
 ```mermaid
-flowchart LR
+flowchart TB
     Principal[当前 Principal] --> Policy[PermissionPolicy]
     Resource[Resource] --> Permission[Permission]
     Action[Action] --> Permission
@@ -58,7 +60,7 @@ PermissionPolicy 在 Session 静态资源中找到目标 Operation 时返回允�
 
 ## 资源
 
-资源（Resource）是权限判断和审计所指向的对象。一次调用选定当前 [Principal](/home/identity) 后，还要明确这个业务身份准备操作什么，以及要执行什么动作。
+资源（Resource）是权限判断和审计所指向的对象。一次调用选定当前 [Principal](/home/identity) 后，还要说明操作哪个资源，以及执行什么动作。
 
 Sca4d-J 使用 [Resource](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/resource/Resource.html) 表示资源。每个 Resource 都由稳定的资源类型和该类型内唯一的资源标识共同确定：
 
@@ -99,7 +101,7 @@ Resource 的身份只取决于 `type()` 和 `id()`，不取决于具体 Java 类
 业务对象通过 Resource 向权限判断和审计暴露稳定身份，原有业务模型继续负责对象的数据和生命周期。文件、账号、角色、设备和订单可以使用不同的表、Repository 和领域类型；Core 只约定怎样通过 `type + id` 指向目标。
 
 ```mermaid
-flowchart LR
+flowchart TB
     Module["所属业务模块"] --> Data["业务表、状态和生命周期"]
     Data --> Domain["领域对象"]
     Domain --> Identity["Resource type + id"]
@@ -141,7 +143,7 @@ Permission invoke = new Permission(operation, Action.INVOKE);
 
 接口和具体业务对象使用同一种 Permission 结构。接口通常判断 `operation + code + invoke`，具体业务对象可以判断 `file + fileId + read`、`account + accountId + update`，或者业务模块定义的其他 Action。这样，权限判断、Call 记录和审计都可以直接使用 Resource 和 Action。
 
-Operation 数量有限，而且角色变化后可以按 Principal 预先计算。ResourceLoader 在 Session 建立或刷新时把当前 Principal 获得的 Operation 装入静态资源快照；调用选择 Principal 后，SessionOperationPermissionPolicy 直接判断快照中是否存在目标 Operation。
+Operation 数量有限，而且角色变化后可以按 Principal 预先计算。ResourceLoader 在 Session 建立或刷新时把当前 Principal 获得的 Operation 装入静态资源快照。调用选择 Principal 后，SessionOperationPermissionPolicy 直接判断快照中是否存在目标 Operation。
 
 文件、设备、订单等业务资源数量可能很大，状态也会持续变化，通常不应全部放入 Session。调用根据当前参数确定具体 Resource，再由所属模块的 PermissionPolicy 读取最新授权数据并作出判断。
 
@@ -152,7 +154,7 @@ Operation 数量有限，而且角色变化后可以按 Principal 预先计算�
 ResourceScope 保存 PermissionPolicy 在这次权限判断中批准的数据访问条件，例如当前 Principal 可以访问的组织、区域或设备集合。Repository 消费这些条件并转换成查询限制，使查询只返回本次调用允许访问的数据。
 
 ```mermaid
-flowchart LR
+flowchart TB
     Principal["当前 Principal"] --> Policy["PermissionPolicy"]
     Permission["集合 Resource + READ"] --> Policy
     Policy --> Decision["PermissionDecision"]
@@ -197,7 +199,7 @@ Action   = invoke
 
 | 层级 | 示例 | 含义 |
 |---|---|---|
-| 模块 | `platform` | 声明功能边界 |
+| 模块 | `platform` | 声明功能范围 |
 | 资源 | `roles` | 声明入口处理的对象类别 |
 | 动作 | `read`、`manage` | 声明可授予的操作 |
 | 完整编码 | `platform:roles:read` | Operation 的稳定 id |
@@ -213,7 +215,7 @@ Action   = invoke
 角色关系变化后，IAM 使受影响的 Session 失效或刷新。新的请求重新装载操作快照。
 
 ```mermaid
-flowchart LR
+flowchart TB
     Catalog[Operation 目录] --> Role[角色关系]
     Role --> IAM[IAM]
     IAM --> Session[Session 静态资源]
@@ -340,7 +342,7 @@ ResourceScope、版本条件和幂等结果绑定到声明它们的方法。嵌�
 
 从已有调用发起独立工作时，在发起端使用 `Call.fork` 复制已确认身份和明确输入，获得独立标识与 `parentCallId`；权限判定和方法执行栈不复制。`fork()` 默认生成独立标识和当前时间，输入与主要资源均为空；`fork(inputs)` 和 `fork(inputs, resource)` 用于明确任务输入，指定时钟的入口使用 `fork(callId, startedAt)` 或完整重载。
 
-工作入口通过 `CallHolder.run` 绑定任务 Call，结束或失败后恢复该线程原绑定和 MDC。此方法不调度线程、不复制或挂起事务；同线程调用仍遵循该线程已有事务。自主任务没有父 Call 时使用 `Call.system` 或 `@SystemExecution`。普通 HTTP 方法无需手写 fork/run。每项并行工作独立使用一个 Call，输入保持不可变；等待、超时和兄弟任务取消由发起代码明确安排，不等待的工作先完成其公开契约要求的交接。
+工作入口通过 `CallHolder.run` 绑定任务 Call，结束或失败后恢复该线程原绑定和 MDC。此方法不调度线程、不复制或挂起事务；同线程调用仍遵循该线程已有事务。自主任务没有父 Call 时使用 `Call.system` 或 `@SystemExecution`。普通 HTTP 方法无需手写 fork/run。每项并行工作独立使用一个 Call，输入保持不可变；等待、超时和兄弟任务取消由发起代码明确安排，不等待的工作先完成其公开接口约定要求的交接。
 
 返回 `CompletionStage<T>` 的方法由 `CallInvoker.executeAsync` 等待实际完成值，再保存幂等结果、释放异步锁并记录最终审计。`@Locked` 的 Redis 实现在入口线程等待取得锁并启动目标，随后使用独立逻辑 owner ID 和 watchdog 持锁到目标阶段终止；取消返回值不会提前释放仍在运行的目标。异步幂等处理权在目标完成前按 token 续期，续期或最终保存失败会使调用失败。Spring 事务和 `CallHolder` 仍只属于原线程；异步工作若需访问 Repository，必须建立自己的事务，并显式传入所需数据。`Around` 没有实现 `aroundAsync` 时直接失败，不会隐式 `join` 阻塞入口线程。
 

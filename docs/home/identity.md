@@ -35,7 +35,7 @@ RBAC 按角色授予权限。Principal 确定当前业务身份后，权限策�
 | Principal #3002 | 张三在租户 A 中的成员身份 |
 
 ```mermaid
-flowchart LR
+flowchart TB
     Subject["Subject #1001<br/>张三"]
     AdminAccount["Account #2001<br/>admin"]
     TenantAccount["Account #2002<br/>tenant"]
@@ -199,7 +199,7 @@ RealmKey 是开放字符串，具体应用可以定义自己的 Realm。新增�
 | Password 凭据 | Account #2001 的密码摘要 |
 
 ```mermaid
-flowchart LR
+flowchart TB
     Username["输入 zhangsan"] -->|"admin + USERNAME"| Account["Account #2001"]
     Email["输入 zhangsan@example.com"] -->|"admin + EMAIL"| Account
     Account -->|"accountId = 2001"| Password["同一份 Password 凭据"]
@@ -261,7 +261,7 @@ Sca4d-J 使用 [Principal](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/iden
 | Principal #3102 | 李四的骑手身份 |
 
 ```mermaid
-flowchart LR
+flowchart TB
     Subject["Subject #1101<br/>李四"] --> Account["Account #2101<br/>配送应用账号"]
     Account --> Customer["Principal #3101<br/>顾客"]
     Account --> Rider["Principal #3102<br/>骑手"]
@@ -388,7 +388,7 @@ Sca4d-J 使用 [RealmKey](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/ident
 | 租户入口 | `tenant` | `tenant + USERNAME + zhangsan` | 租户 Account #2002 |
 
 ```mermaid
-flowchart LR
+flowchart TB
     AdminLogin["管理登录入口"] -->|"admin"| AdminLookup["AccountDirectory.resolve"]
     TenantLogin["租户登录入口"] -->|"tenant"| TenantLookup["AccountDirectory.resolve"]
     Identifier["USERNAME + zhangsan"] --> AdminLookup

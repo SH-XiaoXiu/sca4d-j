@@ -2,7 +2,7 @@
 
 本页说明数据库保存什么、怎样维护数据完整性，以及结构变化如何同时覆盖新安装和已有数据。具体迁移工具、版本命名与目录由项目构建文档规定。
 
-Mapper 与 Repository 的职责见[SQL 与持久化](./05_persistence)。
+Mapper 与 Repository 的职责见[SQL 与持久化](/standards/05_persistence)。
 
 ## 数据归属
 

@@ -1,10 +1,91 @@
-# 查询设备状态与下发命令
+# 修改状态与发送命令
 
-读取 reported 查看设备实际上报值，修改 desired 设置持续期望值，提交 command 执行一次性动作。先按[设备接入教程](/tutorials/iot-device-access)登记并连接设备，再保存下行 `messageId` 查询状态和业务 ACK；连接成功或消息发出都不能证明设备已执行。
+场景：温控器（Thermostat）已经接入并上报。现在需要把电源持续设置为关闭，并发送一次把模式切换为 `fan` 的命令，再确认设备真正执行。
 
-## 操作教程中的温控器
+三类数据各有用途：
 
-使用上一教程的已启用设备，携带具有 `iot:devices:operate` 权限的 Bearer Token，通过 Gateway 发送以下请求。先设置持续期望的电源值：
+| 数据 | 含义 | 入口 |
+|---|---|---|
+| reported | 设备实际上报的值 | 设备上行，Server 只读取 |
+| desired | 持续期望值 | `PUT /iot/devices/{deviceId}/desired` |
+| command | 一次性动作 | `POST /iot/devices/{deviceId}/commands/{commandCode}` |
+
+前置条件：已完成[接入第一台设备](/tutorials/iot-device-access)，Device 已启用并能上报。当前账号拥有 `iot:devices:operate` 和 `iot:devices:read` 权限。
+
+消息发出和连接成功都不能证明设备已执行。每次提交都保存返回的下行 `messageId`，用它查询状态和业务 ACK。
+每条 desired 或 command 先在业务事务中登记为下行消息，再由消息 Consumer 获取锁后发送。发布成功只代表消息到达 Broker，设备执行由 ACK 或 reported 值达到 desired 后确认。
+
+## 实现步骤
+
+### 1. 在协议中追加下行与 ACK 路由
+
+物模型已经包含 `power` 属性和 `set-mode` 命令。协议需要补充三条路由：desired 编码、command 编码和 ACK 解码。
+
+以下代码在[接入第一台设备](/tutorials/iot-device-access)的 `thermostatProtocol()` 中，接在 `.reported(...)` 之后。类型由具体应用定义。
+
+需要追加导入 `java.util.Map`，以及 `com.sca4d.iot.emqx.protocol` 包中的 `DecodedMqttAcknowledgement`、`MqttDownlinkFrame` 和 `MqttDownlinkRoute`。
+
+```java
+Pipeline<MqttDownlinkFrame, byte[]> encodePower = Pipeline.of(PipelineStage.of(
+        "encode-power",
+        MqttDownlinkFrame.class,
+        byte[].class,
+        frame -> DataOps.obj()
+                .put("messageId", String.valueOf(frame.message().messageId()))
+                .put("power", frame.values().get(POWER))
+                .bytes()));
+
+Pipeline<MqttDownlinkFrame, byte[]> encodeMode = Pipeline.of(PipelineStage.of(
+        "encode-set-mode",
+        MqttDownlinkFrame.class,
+        byte[].class,
+        frame -> DataOps.obj()
+                .put("messageId", String.valueOf(frame.message().messageId()))
+                .put("mode", frame.values().get(MODE))
+                .bytes()));
+
+Pipeline<byte[], DecodedMqttAcknowledgement> decodeAck = Pipeline
+        .of(PipelineStage.of(
+                "parse-ack-json",
+                byte[].class,
+                DataOps.JsonPipe.class,
+                payload -> DataOps.json(payload)))
+        .then(PipelineStage.of(
+                "map-ack",
+                DataOps.JsonPipe.class,
+                DecodedMqttAcknowledgement.class,
+                json -> new DecodedMqttAcknowledgement(
+                        Long.parseLong(json.requiredText("messageId")),
+                        json.requiredText("result"),
+                        Map.of(),
+                        null,
+                        null)));
+
+return MqttDeviceProtocol.builder("thermostat-json-v1")
+        .reported(/* 与上一篇相同 */)
+        .downlink(
+                MqttDownlinkRoute.desired("power", "thermostat/{identity}/downlink/power"),
+                encodePower,
+                POWER)
+        .downlink(
+                MqttDownlinkRoute.command("set-mode", "thermostat/{identity}/downlink/set-mode"),
+                encodeMode,
+                MODE)
+        .acknowledgement(MqttUplinkRoute.topic("thermostat/+/ack"), decodeAck)
+        .build();
+```
+
+要点：
+
+- Topic 模板必须包含 `{identity}`，不能包含通配符。生成精确 Topic 时，Client ID 先转换为 Topic 身份，再替换占位符。
+- desired 路由只有一个 `DataKey`，其名称对应属性 code。command 路由的 `DataKey` 名称必须与全部输入 code 一致，`set-mode` 的输入 code 是 `mode`。
+- 不指定模板时，默认 Topic 为 `sca4dj/devices/{identity}/desired/<code>` 和 `sca4dj/devices/{identity}/commands/<code>`。
+- 协议只生成 Topic 和 payload。ACK 判定、reported 与 desired 的一致性判断和重试由 IoT 模块处理。
+- 设备 ACK 的 `ackCode` 由物模型中的策略解释。`IOT/DOWNLINK/ACK/DEVICE/RESULT` 把 `success` 视为成功，把 `failed` 视为失败，其他值继续等待。
+
+### 2. 设置 desired
+
+通过 Gateway 发送请求，把电源持续设置为关闭：
 
 ```http
 PUT /api/iot/devices/{deviceId}/desired
@@ -14,7 +95,11 @@ Content-Type: application/json
 {"set":{"power":false},"clear":[]}
 ```
 
-再提交一次模式切换命令：
+响应返回最新的 `desiredSequence` 和本次实际生成的下行消息。保存消息的 `id`。
+
+`set` 与 `clear` 只修改列出的属性。两者合计不能超过 `sca4dj.iot.max-desired-properties`，默认 100。
+
+### 3. 提交 command
 
 ```http
 POST /api/iot/devices/{deviceId}/commands/set-mode
@@ -24,199 +109,132 @@ Content-Type: application/json
 {"mode":"fan"}
 ```
 
-保存返回的下行消息标识，用具有 `iot:devices:read` 权限的 Token 查询 `/api/iot/devices/{deviceId}/downlinks` 和 `/api/iot/devices/{deviceId}/runtime`。模拟器执行后应上报 `power=false`、`mode=fan`，下行按各自确认策略进入成功状态；重复设置相同 desired 时可能不生成新消息。
+正文是命令输入对象，最多 64 项。`commandCode` 与输入必须符合 Device 当前绑定的物模型。
 
-停用设备会拒绝上述写入。下行超时或失败时先查看消息失败 code 与模拟器日志，不用重复创建 command 代替查询结果；两条 command 是两个独立动作。
+具体应用的 Service 直接调用时，使用 `DeviceCommandService`：
 
-## 从查询到业务确认
-
-应用 Service 先检查当前 Principal 是否可以访问 Device，然后调用 `DeviceRuntimeQueryService.runtime(deviceId)` 读取当前连接、reported 和 desired。列表中的连接使用 `DeviceConnectionQueryService` 批量查询，在线状态交给应用选择的 `DeviceOnlinePolicy` 判断。
-
-提交命令使用 `DeviceCommandService.submit(...)`，输入中的命令编码和参数来自设备当前物模型。保存返回的 messageId，通过 `DeviceHistoryQueryService` 查询下行状态与 ACK；HTTP 路由见[Sca4d Server IoT 接口](/reference/http/sca4d-server)。
-
-发送结果、设备业务 ACK 和最终状态分别检查。连接断开、超时、业务拒绝后，消息按提交时确定的重试策略继续或结束。需要撤销未完成命令时调用 `cancel(messageId)`；已经进入协议发送的命令仍可能到达设备。
-
-`modules/iot/sca4dj-iot` 保存设备台账、当前状态、可靠下行和设备定时规则。它不拥有 Device 的 Account 或 Credential，不解析 MQTT Topic，不调用 EMQX Management API，也不保存遥测与事件历史。Product、Device、reported、desired、command、ACK 和定时的完整顺序见 [IoT 设备生命周期](/home/iot)。
-
-## 公开入口
-
-模块通过 `sca4dj-iot-api` 中的契约与具体应用和协议适配器协作：
-
-- Product、Device、ThingModel 与 DeviceProtocol 分别描述产品约束、设备实例、业务能力和设备消息语义；Product 的动态展示字段与 ThingModel 的路径翻译和技术定义分开保存；
-- DeviceConnectionBinding 保存 Device 可选的直接连接协议、身份类型和值。网关中继等间接 Device 不登记直接连接，也不登记认证接入方式；
-- [DeviceConnectionAdmission](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/connection/DeviceConnectionAdmission.html)、DeviceConnectionReceiver 与 DeviceConnectionTerminator 分别处理连接准入、当前连接信息和协议断连；
-- DeviceUplinkDispatcher 按 Device 当前的 `protocolCode` 选择 DeviceUplinkProtocol，解码 DeviceProtocolMessage 后交给 DeviceUplinkReceiver；具体应用可以替换 Receiver，在同一业务事务中更新 IoT 当前事实和应用业务表；
-- DeviceTransport 接收完整 Device，由设备协议适配器选择直接连接或应用业务路由并发送标准下行；
-- [DeviceDispatchAdmission](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/message/DeviceDispatchAdmission.html) 可由具体应用提供，在发送前的短事务中判断共享传输资源是否允许当前下行；没有实现时默认允许发送；
-- [ReportedStateStore](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/state/ReportedStateStore.html) 保存 latest reported，可以由 PostgreSQL、Redis 或具体应用的其他实现提供；
-- [DeviceHistoryStore](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/history/DeviceHistoryStore.html) 读取遥测、事件、ACK 和设备定时执行历史；IoT base 只依赖契约，不拥有历史数据库；
-- [DeviceRuntimeQueryService](/tutorials/iot-state-and-commands)、[DeviceHistoryQueryService](/tutorials/iot-state-and-commands)、[DeviceScheduleService](/tutorials/iot-state-and-commands) 和 [DeviceScheduleQueryService](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/schedule/DeviceScheduleQueryService.html) 分别管理当前状态、历史查询和设备定时；
-- [DeviceChangePublisher](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/change/DeviceChangePublisher.html) 接收事务提交后的数据区域失效通知，具体应用可以把它转换成浏览器 Realtime 事件。
-
-`sca4dj-iot` 公开 ProductService、ThingModelService、DeviceService、DesiredStateService 和 DeviceCommandService 等 Java Service，供具体应用组合业务流程。自动配置不创建 HTTP 路由。
-
-代码物模型可以在 `ThingCommand` 中使用 `DataKey<T>` 声明命令输入，并通过 `DeviceCommandService` 的 `ThingCommand + DataValues` 入口提交。命令 code、字段 code 和 Java 类型由同一份物模型声明负责；服务仍读取 Device 当前绑定的物模型，重新校验完整字段、范围、字符串 `pattern`、ACK 和重试策略。数据库物模型、设备定时和 HTTP 调试等运行时场景继续使用 `String + Map` 入口。
-
-`DeviceHistoryQueryService.downlinks(Collection<Long>)` 批量读取主库仍保留的下行消息。实现先去重，再按公共 SQL 批次条目和绑定参数限制执行查询；空集合不访问数据库，不存在或已经按保留策略删除的标识不出现在结果中。应用在列表中组合下行状态时应使用这个入口，不按记录逐条查询。
-
-DeviceService 只保存 Product、物模型、设备协议、可选 DeviceConnectionBinding 和 [DeviceAccessMethod](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/DeviceAccessMethod.html)。DeviceProtocol 不声明 MQTT、TCP 或连接身份；同一种设备消息协议可以由不同传输带入。DeviceService 不依赖 IAM 或 Auth，不创建 Subject、Account、Credential 或 Session。匿名使用 `ANONYMOUS`，通用 Session 使用 `SESSION`，直接 Account 认证使用 `ACCOUNT:<AuthenticationMethod.code()>`。具体应用实现 DeviceConnectionAdmission，把协议输入转换为 AuthenticationSubmission 或 Session Token，再组合 Device、Account、Auth 和 Session。
-
-## 模块拥有的数据
-
-主 PostgreSQL 保存业务判断与失败恢复需要的当前事实：
-
-- Product、Product 来源、动态多语言展示字段、允许的认证接入方式和设备协议 code；Product 不保存连接协议白名单；
-- 连续发布且不可修改的物模型技术版本，以及可以独立完整替换的路径翻译；
-- Device、当前物模型版本、设备协议、`bindingGeneration`、可选直接连接绑定和认证接入方式；
-- 默认 PostgreSQL 实现使用的 latest reported 字段组；
-- current desired 与可靠下行消息；每条下行只保存最新业务 ACK，不另建 ACK 历史表；
-- 设备定时规则、下一次触发时间和最新执行结果；完整执行历史通过事件存储，不另建设备定时执行历史表。
-
-`iot_downlink_message` 是需要跨事务恢复的业务状态，不是临时投递表。它保存 command 或 desired 下行从 `PENDING`、`SENDING`、`WAITING_ACK` 到终态的状态、attempt、ACK 截止时间、最新 ACK 和稳定失败 code，不保存面向某种语言的失败文本。发送、ACK 和超时处理使用同一个 `iot:downlink:<messageId>` Redis 分布式锁；进程在协议发布后、结果事务前退出时，重复派发可以从 `SENDING` 继续。终态记录按保留期分批删除，`SUCCEEDED`、`FAILED`、`EXPIRED` 与 `SUPERSEDED` 都必须进入清理范围。
-
-具体应用需要协调网关或其他共享传输资源时，注册一个 `DeviceDispatchAdmission` Bean。`admit(message, attempt, now)` 返回 `DeviceDispatchDecision.allow()` 后才开始本次发送；返回 `deferUntil(at)` 会在晚于 `now` 的时间重新检查，不进入 `SENDING`，也不消耗发送次数或启动 ACK 等待；返回 `reject(failure)` 会以该失败码结束下行。准入在发送前事务内执行，资源占用可以与下行状态一起提交；协议发布仍在事务外执行。准入实现必须自行协调多个实例对共享资源的竞争。
-
-Redis 保存可重建的当前连接投影，以及应用选择 RedisReportedStateStore 时的 latest reported。没有设备顺序的 reported 使用 IdGenerator 分配固定宽度的平台顺序值，不创建 Redis 递增 key。连接在线结果由 DeviceOnlinePolicy 在查询时计算，不写 PostgreSQL。Redis 丢失不会删除 Product、Device、desired、下行或定时规则。
-
-Device 的 Credential 由通用 Auth 方法模块按 `account_id` 保存。Shared Secret、HMAC 和 X.509 分别属于 `sca4dj-auth-shared-secret`、`sca4dj-auth-hmac` 和 `sca4dj-auth-x509`；IoT 主库没有 Secret 或 Certificate 表。
-
-具体应用自己的 Product/Device 启停 Profile、HTTP 幂等记录、权限和额外展示字段不属于该模块。
-
-## 消息与历史边界
-
-IoT 使用通用 `MessageBus`，不创建 IoT 专用 Outbox：
-
-- Telemetry 在 reported 主事务中调用 `MessageBus.dispatch(message, DispatchPolicy.afterCommit())`，登记提交后发布。它不写 Outbox；代理发布失败可能丢失这一批历史样本，但不会回滚 latest reported。
-- 物模型事件按 ThingEvent 的 delivery 声明发布。`RELIABLE` 在主事务写通用 `messaging_outbox`，其他事件在提交后直接发布。
-- 下行发送、ACK 超时、断连、每个首次接受的 ACK 阶段和设备定时执行结果必须可靠发布，统一使用 `messaging_outbox`。
-
-安装 `sca4dj-iot-timescale` 后，消息 Consumer 直接把 Telemetry 写入 `iot_telemetry_sample`，把物模型事件、ACK 和设备定时执行结果写入 `iot_event`。TimescaleDB 不参与 IoT 主事务，也没有高频 outbox、通信日志、ACK 历史或定时执行专表。
-
-## 允许依赖
-
-`sca4dj-iot` 直接依赖 `sca4dj-iot-api` 和 Core Spring，不依赖 IAM、Auth、EMQX 或 TimescaleDB 模块。传输适配器只依赖 IoT API：它从 Topic、端口、信道或报文头定位 Device，提交 DeviceProtocolMessage，并报告直接连接。实际设备协议由 IoT 分发器从 Device 台账选择，传输适配器不读取 IoT base 的 Repository 或 Mapper。
-
-具体应用可以同时依赖 IoT、IAM、Auth 及认证方法模块，在 App Service 中建立 Device Subject、固定 Realm Account、Credential、Session 和 Connection。把这些组合写在 App 中是业务选择，不应把认证方法分支重新塞进 DeviceService。
-
-## 安装条件
-
-加入 `sca4dj-iot` 后，自动配置安装 MyBatis Repository、领域 Service、Redis 连接投影和上行入口。运行应用还必须提供：
-
-- Core Spring、主 PostgreSQL、Redis、IdGenerator 和统一 JSON ObjectMapper；
-- 通用 Messaging 的 MessageBus，用于提交后消息和可靠消息；
-- 至少一个符合 Product 声明的 DeviceProtocol；
-- 发送下行与处理 ACK 超时的 MessageHandler 运行环境；
-- 需要历史查询时安装一个 DeviceHistoryStore，例如独立的 `sca4dj-iot-timescale`。
-
-模块结构片段由应用的 Flyway 初始迁移收集，已生成的迁移由应用继续维护。Timescale 模块使用自己的 DataSource 和 Flyway，不拼入应用主库 V1。
-
-## 失败时哪些数据不会改变
-
-- 物模型只有在全部声明协议、属性策略和命令策略通过校验后才发布。
-- Device 重新绑定要求具体应用先停用设备，并且旧 binding generation 没有活动下行消息。
-- reported、desired、ACK 与下行状态在主事务内改变；协议传输、消息代理和 TimescaleDB 不加入该事务。
-- Telemetry 提交后发布失败不会回滚 latest reported，也没有主库重试副本。
-- 可靠事件、下行、ACK 超时和断连的代理发布失败会留在通用 Messaging Outbox 重试。
-- 下行发送、ACK 和超时 Consumer 在数据库事务前取得同一消息的 Redis 分布式锁，并在锁内短事务中重新检查状态和 attempt。协议 publish 在两个数据库事务之间执行，不占用数据库事务；传输失败、ACK 超时与业务拒绝由消息快照中的 RetryPolicy 决定重试或进入终态。
-- 设备定时按 PostgreSQL `next_fire_at` 查询普通候选，取得 `iot:schedule:<scheduleId>` Redis 分布式锁后，在独立事务中重新检查 version、状态和计划时间；不使用显式行锁，也不为每条规则创建线程或 Redis 定时项。到期时只生成可靠 command 下行，实际发送由下行消息 Consumer 完成。
-- 模块使用无记录 `JobSchedule` 声明设备定时扫描和终态下行清理。具体应用只配置触发间隔，不创建 Job Run。
-- Session 终止、Redis 连接投影和 Broker 断连不构成跨存储事务。App 可靠发布带明确连接代次的断连消息；Consumer 先终止协议会话，再删除 DeviceConnection 和可选公共 ConnectionRegistry 投影，重复处理时不能断开后来建立的新连接。
-- 模块不判断谁能创建 Product、启用 Device、修改 desired 或提交 command。具体应用必须在公开入口外层完成权限和状态检查。
-
-EMQX 接入见[设备教程](/tutorials/iot-device-access)，历史数据库的连接与安装配置见[TimescaleDB 配置](/reference/runtime/sca4d-server)。
-
-## 命令下发
-
-`DeviceCommandService.submit` 校验 Device 当前物模型并登记可靠下行，返回的 `messageId` 用于查询下行结果。协议发布成功与设备业务确认是不同结果。
-
-应用不再需要某条 command 时调用 `cancel(messageId)`，并与自己的业务状态修改使用同一事务。首次取消未完成命令返回 `true`；已经进入终态返回 `false`。消息不存在或不是 command 时报告无效输入。
-
-取消提交后，后续发送、发布结果写回、ACK 超时和重试不能恢复这条消息。已经进入协议发布的命令仍可能送达，应用需要按自身业务决定是否发送补偿命令。取消定时规则不会自动取消已经生成的 command。
-
-## 设备连接
-
-`DeviceConnectionQueryService` 批量读取 Device 当前连接信息，并为没有连接的 Device 返回空列表。该接口不判断业务在线状态；具体应用把连接集合交给自己选择的 `DeviceOnlinePolicy`。
-
-单个 Device 查询也使用同一个批量入口。默认 Redis 实现把较大的输入分成内部 pipeline 批次，每个 Device 的 Lua 查询同时删除过期索引和已经失去主记录的索引；内部批次大小不限制调用方可以查询的 Device 数量。
-
-## DeviceScheduleService
-
-DeviceScheduleService 管理只用于设备消息下发的高精度定时规则。单次绝对时间和带时区六字段 Cron 都会在到期时生成可靠 command 下行；半年后执行业务计划等低精度预约使用普通 Job 或 Quartz，不进入该接口。
-
-### 规则修改
-
-- `create` 要求 Device 存在、触发时间在未来且 `validFor` 为正数，创建 `ACTIVE` 规则并登记下一次触发时间。
-- `replace` 使用 `expectedVersion` 完整替换 command、触发规则和有效期，并把规则恢复为 `ACTIVE`。
-- `changeStatus` 只接受 `ACTIVE` 或 `PAUSED`。恢复单次规则时保留原计划时间，恢复 Cron 时从当前时间计算下一次触发。
-- `cancel` 永久取消规则。取消不会撤销已经生成的下行消息，下行继续遵守自己的状态机和最晚发送时间。
-
-替换、状态修改和取消都使用从查询结果取得的非负乐观版本，新建规则的初始版本是 `0`。规则不存在、版本变化或当前状态不允许修改时返回状态冲突，不覆盖并发修改。
-
-### 到期执行
-
-```mermaid
-sequenceDiagram
-    participant Timer as DeviceScheduleTask
-    participant Service as DeviceScheduleService 默认实现
-    participant DB as PostgreSQL
-    participant Downlink as DeviceCommandService
-    participant Sender as DeviceDownlinkDispatchConsumer
-
-    Timer->>Service: 触发到期 scheduleId + version
-    Service->>Service: 取得 iot:schedule:scheduleId Redis 锁
-    Service->>DB: 在事务中重查 version、状态和计划时间
-    alt 已超过 plannedAt + validFor
-        Service->>DB: 记录 EXPIRED 并推进规则
-    else 仍在有效期
-        Service->>Downlink: 创建 PENDING command 下行
-        Service->>DB: 记录 ENQUEUED 并推进规则
-        Sender->>Downlink: 领取并通过 Transport 发送
-    end
+```java
+// 由具体应用定义：在同一事务中修改业务数据并提交命令。
+DeviceDownlink message = deviceCommandService.submit(
+        deviceId,
+        "set-mode",
+        Map.of("mode", "fan"),
+        null,                      // 首次发布的最晚时间，即时命令为空
+        Duration.ofSeconds(30));   // 发送成功后等待设备 ACK 的时间
+long messageId = message.messageId();
 ```
 
-DeviceScheduleTask 不直接调用 Connection 或协议 Transport。它先普通查询一条到期候选，再取得规则级 Redis 分布式锁并开启独立事务；事务内重新读取当前规则，只有 version、状态和计划时间仍匹配才生成下行并按 version 条件推进。业务校验失败时默认实现记录 `FAILED`、稳定错误 code 并暂停规则，不把异常文本写入业务表；具体应用读取结果时再按请求 Locale 生成消息。数据库暂时失败时本次集群任务停止，下一次触发继续按 PostgreSQL 当前版本扫描。PostgreSQL 是规则、下一次触发时间和最新执行结果的权威存储，不建立 Redis 到期索引或处理租约。
+### 4. 让设备执行并回执
 
-查询规则与执行结果见 [DeviceScheduleQueryService](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/schedule/DeviceScheduleQueryService.html)，模块整体边界见 [IoT 基础模块](/tutorials/iot-state-and-commands)。
+设备订阅自己的精确下行 Topic，执行后上报。
 
-## DeviceRuntimeQueryService
-
-DeviceRuntimeQueryService 一次读取指定 Device 的当前运行态，供具体应用转换成 HTTP、管理端或其他展示结果。它不判断应用权限，也不返回历史数据。
-
-### 查询行为
-
-`runtime(deviceId)` 先确认 Device 存在并读取当前 `bindingGeneration`，随后读取属于这一代绑定的连接信息、reported 字段组和 desired 属性，返回 [DeviceRuntimeSnapshot](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/query/DeviceRuntimeSnapshot.html)。Device 不存在时抛出 IoT 的 Device 不存在错误。
-
-```mermaid
-sequenceDiagram
-    participant App as 具体应用
-    participant Query as DeviceRuntimeQueryService
-    participant PostgreSQL
-    participant Redis
-
-    App->>Query: runtime(deviceId)
-    Query->>PostgreSQL: 读取 Device 与 bindingGeneration
-    Query->>Redis: 读取当前连接信息
-    Query->>PostgreSQL: 读取 reported 与 desired
-    Query-->>App: DeviceRuntimeSnapshot
-```
-
-连接信息来自可恢复的 Redis 投影，reported 和 desired 来自主 PostgreSQL。该方法只保证三类数据属于同一个 Device 和当前读取到的 `bindingGeneration`，不把 Redis 与 PostgreSQL 组成跨存储事务快照；并发连接或状态上报可能在查询期间发生。
-
-IoT 模块的数据归属与相邻接口见 [IoT 基础模块](/tutorials/iot-state-and-commands)。
-
-## DeviceHistoryQueryService
-
-DeviceHistoryQueryService 读取指定 Device 的下行状态、ACK、事件和 Telemetry 历史。具体应用负责权限、HTTP 参数绑定和响应格式；接口只返回模块公开类型。
-
-### 数据来源
-
-| 方法 | 数据与顺序 | 存储要求 |
+| 步骤 | Topic | 报文 |
 |---|---|---|
-| `downlinks` | 下行消息，按创建时间倒序分页 | 主 PostgreSQL |
-| `acknowledgements` | 业务 ACK，按接收时间倒序分页 | 安装 DeviceHistoryStore 时读取完整 ACK 阶段；未安装时读取主 PostgreSQL 保存的每条下行最新 ACK |
-| `events` | 离散 Device 事件，按发生时间倒序分页 | 具体应用安装的 DeviceHistoryStore |
-| `telemetry` | 半开时间范围 `[from, to)` 内的属性样本，按观测时间升序 | 具体应用安装的 DeviceHistoryStore |
+| 收到 desired | `thermostat/climate-1/downlink/power` | `{"messageId":"<id>","power":false}` |
+| 上报新状态 | `thermostat/climate-1/reported` | `{"power":false,"temperature":23.5,"mode":"cool"}` |
+| 收到 command | `thermostat/climate-1/downlink/set-mode` | `{"messageId":"<id>","mode":"fan"}` |
+| 回执 command | `thermostat/climate-1/ack` | `{"messageId":"<id>","result":"success"}` |
+| 上报新模式 | `thermostat/climate-1/reported` | `{"power":false,"temperature":23.5,"mode":"fan"}` |
 
-分页页码从 1 开始，页大小为 1 到 100。Telemetry 查询的 `limit` 不能超过历史存储配置上限；内置 TimescaleDB 实现使用 `sca4dj.iot.timescale.max-query-results`，默认 1000，可配置范围为 1 到 10000。`to` 必须晚于 `from`。所有方法先确认 Device 存在；DeviceHistoryStore 未安装时，`events` 和 `telemetry` 抛出依赖不可用错误，不返回空集合伪装成没有历史。
+desired 使用 `IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED`，不需要单独回执。reported 中的 `power` 等于 desired 时，消息成功。
 
-主库与高频历史的边界见 [IoT 基础模块](/tutorials/iot-state-and-commands)。
+command 使用 `IOT/DOWNLINK/ACK/DEVICE/RESULT`，设备必须发送 `success` 或 `failed`。
+
+### 5. 查询结果
+
+使用具有 `iot:devices:read` 权限的 Token 查询：
+
+```bash
+curl --fail-with-body --silent --show-error \
+  -H "$AUTH_HEADER" \
+  "$BASE_URL/iot/devices/$DEVICE_ID/downlinks"
+
+curl --fail-with-body --silent --show-error \
+  -H "$AUTH_HEADER" \
+  "$BASE_URL/iot/devices/$DEVICE_ID/acknowledgements"
+
+curl --fail-with-body --silent --show-error \
+  -H "$AUTH_HEADER" \
+  "$BASE_URL/iot/devices/$DEVICE_ID/runtime"
+```
+
+具体应用的 Service 使用以下接口：
+
+| 需要 | 调用 |
+|---|---|
+| 当前连接、reported、desired | `DeviceRuntimeQueryService.runtime(deviceId)` |
+| 单条下行 | `DeviceHistoryQueryService.downlink(messageId)` |
+| 一批下行 | `DeviceHistoryQueryService.downlinks(Collection<Long>)` |
+| 某条下行的 ACK | `DeviceHistoryQueryService.acknowledgementsByMessageId(messageId, page)` |
+| 多个 Device 的连接 | `DeviceConnectionQueryService.connections(Collection<Long>)` |
+
+列表页展示下行状态时，使用批量的 `downlinks(Collection<Long>)`，不逐条查询。空集合不访问数据库。不存在或已按保留期删除的标识，不出现在结果中。
+
+在线状态不由 `DeviceConnectionQueryService` 判断，而由具体应用选择的 `DeviceOnlinePolicy.isOnline(connections)` 计算。
+
+## 验证
+
+`downlinks` 中两条消息的状态依次变化如下：
+
+```text
+PENDING -> SENDING -> WAITING_ACK -> SUCCEEDED
+```
+
+`runtime` 的 reported 中，`power` 为 `false`，`mode` 为 `fan`。
+
+`acknowledgements` 中出现 command 消息的 `success` 回执。
+
+两条 command 是两个独立动作。需要再次切换模式时，提交新的 command，不要重复使用旧消息。
+
+重复设置与当前相同的 desired 时，可能不生成新消息，响应中的消息数组为空。
+
+## 失败结果与限制
+
+| 现象 | 原因与处理 |
+|---|---|
+| desired 或 command 返回状态冲突 | Device 已停用。启用后再提交。 |
+| 提交返回 `2908` | 输入键不完整，或值不符合当前物模型的范围、`pattern` 与枚举。按物模型修正输入。 |
+| 提交返回 `2901` | Device 不存在。 |
+| 消息状态为 `FAILED`，失败 code 为 `ACK_TIMEOUT` | 超过 ACK 等待时间。默认值由 `SCA4DJ_IOT_ACKNOWLEDGEMENT_TIMEOUT` 配置，示例为 `PT30S`。先查看设备日志，不要重复创建 command。 |
+| 失败 code 为 `DEVICE_REPORTED_FAILURE` | 设备回执了 `failed`。 |
+| 失败 code 为 `TRANSPORT_FAILED` | 协议发布失败。核对 EMQX 连接和 Server 的 MQTT runtime。 |
+| 失败 code 为 `COMMAND_RETRY_EXHAUSTED` | command 按重试策略重试后仍未成功。 |
+| 状态为 `SUPERSEDED` | 同一 desired 属性产生了更新的 `desiredSequence`，旧消息不再发送。 |
+| 状态为 `EXPIRED` | 消息在首次成功发布前超过最晚发送时间。 |
+| 编码失败，提示没有 MQTT Pipeline 或缺少声明字段 | 协议没有登记该 kind 与 target code 的下行路由，或数据缺少 `DataKey` 声明的字段。 |
+| `events` 或 `telemetry` 抛出依赖不可用错误 | 没有登记 `DeviceHistoryStore`。历史查询不会以空集合表示没有历史。 |
+| `telemetry` 的 `limit` 被拒绝 | 超过 `sca4dj.iot.timescale.max-query-results`，默认 1000，范围 1 到 10000。`to` 必须晚于 `from`。 |
+
+取消未完成的 command：
+
+```java
+// 与自身的业务状态修改放在同一事务中。
+boolean cancelled = deviceCommandService.cancel(messageId);
+```
+
+- 首次取消返回 `true`。消息已经进入终态时返回 `false`。
+- 消息不存在或不是 command 时，抛出 `2908`。
+- 取消后，发送、发布结果写回、ACK 超时和重试都不能恢复这条消息。
+- 已经进入协议发布的命令仍可能送达设备，补偿命令由具体应用决定。
+- 取消设备定时规则不会取消已经生成的 command。
+
+状态的范围：
+
+- `runtime(deviceId)` 保证三类数据属于同一个 Device 和同一个 `bindingGeneration`，不保证 Redis 连接信息与 PostgreSQL 状态属于同一时刻。
+- 发送、ACK 和超时使用同一个 `iot:downlink:<messageId>` Redis 分布式锁。进程在协议发布后、结果事务前退出时，重复派发从 `SENDING` 继续。
+- Telemetry 在提交后发布，失败不会回滚 latest reported。下行发送、ACK 超时、断连和设备定时结果使用 `messaging_outbox` 重试。
+- 下行表的终态记录按保留期分批删除。`SUCCEEDED`、`FAILED`、`EXPIRED` 与 `SUPERSEDED` 都在清理范围内。
+- `DeviceService`、`DesiredStateService` 和 `DeviceCommandService` 不判断谁能修改。权限和 Device 状态检查由具体应用在公开入口外层完成。
+
+需要在固定时间或按 Cron 发送命令时，使用设备定时规则，不在业务代码中自行轮询。规则的创建、版本冲突和到期执行见[设备定时](/capabilities/iot/device-scheduling)。
+
+## 相关页面
+
+- [接入第一台设备](/tutorials/iot-device-access)
+- [IoT 设备生命周期](/home/iot)
+- [设备生命周期](/capabilities/iot/device-lifecycle)
+- [设备运行态查询](/capabilities/iot/device-runtime-query)
+- [设备历史查询](/capabilities/iot/device-history-query)
+- [设备定时](/capabilities/iot/device-scheduling)
+- [TimescaleDB 配置](/capabilities/iot/timescale-configuration)
+- [Sca4d Server 接口参考](/reference/http/sca4d-server)

@@ -1,5 +1,7 @@
 # IoT 对象模型
 
+本页说明 IoT 模块中产品、物模型、设备、连接、下行状态和确认之间的关系，适用于接入设备和设计设备指令的开发者。
+
 Product 定义一类产品，ThingModel 规定它能上报哪些属性、产生哪些事件、执行哪些命令，Device 登记一台具体设备。接入时先定义产品和物模型，再登记设备及协议绑定；运行时读取 reported 查看实际值，修改 desired 设置持续期望值，发送 command 执行一次性动作。
 
 设备接入从[产品定义与设备登记](#从产品定义到设备实例)开始；判断设备是否在线，查看 [Connection](#device、account、session-与-connection)；确认指令执行结果，查看 [ACK](#ack)。实际接入步骤见[接入第一台设备](/tutorials/iot-device-access)。
@@ -13,7 +15,7 @@ Product 定义一类产品，ThingModel 规定它能上报哪些属性、产生�
 | 执行一次重启 | command | 查询这条下行消息的业务 ACK 和最终状态 |
 | 查询过去的温度 | Telemetry 历史 | 配置历史存储后按时间范围查询 |
 
-设备有连接、Broker 接受消息、设备完成动作是三个不同结果。只有对应确认策略完成，才能把下行视为成功。
+设备连接、Broker 接受消息和设备完成动作是三个不同结果。只有对应的确认策略完成，才能把下行视为成功。
 
 ## 从产品定义到设备实例
 
@@ -24,7 +26,7 @@ Product 定义一类设备允许使用的认证接入方式和设备协议 code�
 Device 显式绑定一个已发布物模型版本、一个 DeviceProtocol code 和 `bindingGeneration`。直接连接的 Device 还保存 DeviceConnectionBinding 和认证接入方式，例如 MQTT Client ID 绑定；网关中继等间接 Device 的这两项都为空。Device 不保存 Account、Secret、HMAC Key 或证书。
 
 ```mermaid
-flowchart LR
+flowchart TB
     Product[Product]
     Model[ThingModel]
     Protocol[DeviceProtocol]
@@ -96,13 +98,13 @@ DeviceCredentialService 管理 Credential，DeviceSessionService 使用 HMAC Aut
 
 设备状态有三个方向：
 
-- **reported**：设备实际报告的当前值。ReportedStateStore 按 Device、`bindingGeneration` 和字段组保存 latest 投影，并按协议顺序拒绝旧报文、识别重复报文和同序不同内容冲突。默认实现保存到 PostgreSQL；应用也可以选择 Redis 实现。
+- **reported**：设备实际报告的当前值。ReportedStateStore 按 Device、`bindingGeneration` 和字段组保存每个字段组的最新值，并按协议顺序拒绝旧报文、识别重复报文和同序不同内容冲突。默认实现保存到 PostgreSQL；应用也可以选择 Redis 实现。
 - **desired**：平台持续期望的属性值。一次修改原子处理 set 与 clear；服务使用一次批量查询读取请求涉及的全部当前属性，只有实际变化的可写属性才生成可靠下行。
 - **command**：要求设备执行的一次性动作。输入必须与当前物模型命令定义一致，然后创建独立可靠下行。
 
 代码物模型通过同一个 `ThingCommand` 和 `DataKey<T>` 同时完成模型登记与 Java 调用。调用方使用 `DataValues` 提供完整输入，字段遗漏、额外字段和 Java 类型错误在写入下行前失败；范围、字符串长度和完整匹配 `pattern` 仍以 Device 当前绑定的物模型版本为准。只有 command code 来自数据库、HTTP 输入或设备定时规则时才使用动态字符串入口。
 
-单条 reported 覆盖属性、单次 desired 修改属性和单条上行携带事件都有独立数量上限，默认都是 100，可配置范围为 1 到 1000。服务在读取物模型和状态前拒绝超限输入，避免一个报文放大成无界数据库、Redis 或消息写入。reported 只用轻量绑定代次查询确认传输路由读取的 Device 快照仍然有效；desired 收敛由一条批量 SQL 返回全部匹配属性和下行消息，不按属性逐条查询。
+单条 reported 覆盖属性、单次 desired 修改属性和单条上行携带事件都有独立数量上限，默认都是 100，可配置范围为 1 到 1000。服务在读取物模型和状态前拒绝超限输入，避免一个报文放大成无界数据库、Redis 或消息写入。reported 只用轻量绑定代次查询确认传输路由读取的 Device 快照仍然有效；desired 同步检查由一条批量 SQL 返回全部匹配属性和下行消息，不按属性逐条查询。
 
 `iot_downlink_message` 统一保存 desired 与 command 的可靠状态，但不合并两者的业务含义。消息保存创建时的 `bindingGeneration`、确认策略、ACK 等待时间和重试策略快照。发送 Consumer 取得消息级 Redis 分布式锁，在短事务中把 `PENDING` 推进为 `SENDING`，事务提交后通过当前协议发送，再用新事务保存 PUBACK 后的状态。重复派发可以在同一锁内继续处理进程中断留下的 `SENDING`。业务 ACK 和超时也使用同一消息锁推进状态。
 
@@ -116,7 +118,7 @@ PUBACK 只说明 Broker 接受 MQTT publish，不等于设备执行业务动作�
 4. 确认策略决定继续等待、成功或交给重试策略。
 5. 下行行内保存最新 ACK，完整 ACK 阶段可靠发布为 IoT 事件。
 
-当前业务判断读取 `iot_downlink_message` 中的最新 ACK，历史查询从事件存储还原 ACK 事件。传输失败、ACK 超时、设备拒绝和重试停止都保存稳定失败 code，具体应用在 HTTP 或页面边界按请求 Locale 生成消息。
+当前业务判断读取 `iot_downlink_message` 中的最新 ACK，历史查询从事件存储还原 ACK 事件。传输失败、ACK 超时、设备拒绝和重试停止都保存稳定失败 code，具体应用在 HTTP 或页面层按请求 Locale 生成消息。
 
 ## 设备定时
 

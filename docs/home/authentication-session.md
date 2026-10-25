@@ -1,5 +1,7 @@
 # 认证与会话
 
+本页说明认证、Session 和 Token 的分工，以及账号级会话控制，适用于接入登录、敏感操作认证和账号控制的开发者。
+
 认证验证调用者能否使用某个 Account，Session 保存登录结果，Token 用于后续请求恢复这份结果。接入登录时，用 `AuthenticationAttempts` 完成所需验证，再用 `SessionLifecycle` 建立 Session；业务请求仍须选择 Principal 并检查权限。
 
 修改密码等敏感操作可以再次要求认证。认证通过只证明满足验证要求，目标业务动作仍由应用执行；实际请求顺序见[认证与 Session 教程](/tutorials/authentication-and-session)。
@@ -9,7 +11,7 @@
 应用通过 AuthenticationPolicy 决定需要哪些认证因素；`sca4dj-auth` 组织认证尝试并管理 Session；Password、TOTP、Passkey、验证码和联邦登录等模块验证各自的认证材料。
 
 ```mermaid
-flowchart LR
+flowchart TB
     App[应用登录入口] --> Attempts[AuthenticationAttempts]
     Policy[AuthenticationPolicy] --> Attempts
     Attempts --> Methods[AuthenticationMethods]
@@ -26,7 +28,7 @@ AuthenticationMethod 校验一种认证材料，Credential 保存 Account 对应
 
 ## 认证尝试
 
-[AuthenticationMethods](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/engine/AuthenticationMethods.html) 索引应用安装的 AuthenticationMethod Bean。调用方已知 Account 时调用 `authenticate(account, submission)`，需要方法从 Proof 识别 Account 时调用 `authenticate(submission)`。两条入口都检查 Proof 精确类型、方法是否能从 Proof 识别 Account、方法是否可用，以及返回的编码和因素是否符合声明。应用组合根只在签发、轮换或撤销 Credential 时按公开方法类型取得已安装实例；Proof 验证不绕过 AuthenticationMethods。
+[AuthenticationMethods](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/engine/AuthenticationMethods.html) 索引应用安装的 AuthenticationMethod Bean。调用方已知 Account 时调用 `authenticate(account, submission)`，需要方法从 Proof 识别 Account 时调用 `authenticate(submission)`。两条入口都检查以下内容：Proof 的精确类型、方法能否从 Proof 识别 Account、方法是否可用，以及返回的编码和因素是否符合声明。应用组合根只在签发、轮换或撤销 Credential 时按公开方法类型取得已安装实例；Proof 验证不绕过 AuthenticationMethods。
 
 [RedisAuthenticationAttempts](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/engine/RedisAuthenticationAttempts.html) 实现 AuthenticationAttempts。它按 AuthenticationFactorKind 去重，执行零到三因素要求，并在每次开始、提交或消费时重新读取当前策略和时间。开始登录时，首个认证方法先验证材料并识别 Account，然后仍要通过应用策略检查；不能识别账号的方法只能用于已知 Account。
 
@@ -47,7 +49,7 @@ Session 保存登录时完成的 Authentication。动作策略可以按最大年
 Session 保存在 Sa-Token 的 Redis Token-Session 中。SESSION 模式的请求在线读取它；JWT 模式通过 [JwtSessionProjection](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/jwt/JwtSessionProjection.html) 将同一份 Session 数据签名为短效 JWS，普通请求验签后读取其中的登录信息。JWT 载荷没有加密。
 
 ```mermaid
-flowchart LR
+flowchart TB
     Login[登录完成] --> Backing[(Redis Session)]
     Login --> Jwt[短效 JWT]
     Ordinary[普通 JWT 请求] --> Verify[验签并读取 JWT]
@@ -73,7 +75,7 @@ Session 变化后，Auth 调用 [SessionInvalidationListener](/javadoc/core/sca4
 
 [SessionCodec](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/session/codec/SessionCodec.html) 保存 V1 格式版本、Session 标识、Subject、Account、Authentication、时间和每个完整 Principal/Resource 的 type、payload version 与 Base64 payload。紧凑 Principal ID 按 Principal Codec type 和 version 保存，数字 Resource ID 按 Resource type 和 version 保存；两者都使用 V1 的 Base64 包装 Roaring64 portable payload。未来结构变化由版本 Codec 和手工迁移链处理，正常读取不会改写旧数据。开放类型字段由各模块 Codec 或业务 Resource 类型负责，Auth 不依赖 IAM 或 IoT 实现类。
 
-解码失败时不返回部分 Session。HTTP View、前端字段或本地化不能直接改变 Session wire。
+解码失败时不返回部分 Session。HTTP View、前端字段或本地化文本不能直接改变 Session 的序列化格式（即 Session JSON 的结构）。
 
 ## 源码位置
 

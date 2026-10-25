@@ -4,26 +4,27 @@
 
 ## 工程原则
 
-- [01 工程设计原则](./01_principles)：说明稳定操作、抽象、封装、完整流程和可预测的代码结构。
-- [02 功能归属与调用关系](./02_architecture)：说明模块负责什么、其他功能怎样调用，以及数据由谁维护。
-- [03 代码结构](./03_code-structure)：说明命名、类型、包结构、私有方法、`Util` 和 `Helper`。
-- [04 Java 与 Spring](./04_java-and-spring)：说明 Java 类型、Spring 装配、事务和失败处理。
+- [01 工程设计原则](/standards/01_principles)：说明稳定操作、抽象、封装、完整流程和可预测的代码结构。
+- [02 功能归属与调用关系](/standards/02_architecture)：说明模块负责什么、其他功能怎样调用，以及数据由谁维护。
+- [03 代码结构](/standards/03_code-structure)：说明命名、类型、包结构、私有方法、`Util` 和 `Helper`。
+- [04 Java 与 Spring](/standards/04_java-and-spring)：说明 Java 类型、Spring 装配和事务。
+- [13 异常与失败](/standards/13_exceptions)：说明失败分类、异常命名与放置、错误码、捕获边界和 HTTP 映射。
 
 ## 技术实现
 
-- [05 SQL 与持久化](./05_persistence)：说明持久化职责、查询、写入、并发、缓存和批处理。
-- [06 数据库](./06_database)：说明 PostgreSQL 表结构、约束、索引和 Flyway。
-- [07 Vue、TypeScript 与交互](./07_frontend)：说明管理端契约、状态、权限、布局和交互。
-- [08 注释、文档注释与日志](./08_comments-and-logging)：说明源码注释、TSDoc 和运行日志。
+- [05 SQL 与持久化](/standards/05_persistence)：说明持久化职责、查询、写入、并发、缓存和批处理。
+- [06 数据库](/standards/06_database)：说明 PostgreSQL 表结构、约束、索引和 Flyway。
+- [07 Vue、TypeScript 与交互](/standards/07_frontend)：说明管理端契约、状态、权限、布局和交互。
+- [08 注释、文档注释与日志](/standards/08_comments-and-logging)：说明源码注释、TSDoc 和运行日志。
 
 ## 验证与评审
 
-- [09 格式化与构建](./09_build)：说明如何按修改风险选择检查和生成产物。
-- [10 测试与验证](./10_testing)：说明怎样选择能够发现问题的检查。
-- [11 代码评审](./11_review)：说明文件覆盖、职责审查和验收证据。
+- [09 格式化与构建](/standards/09_build)：说明如何按修改风险选择检查和生成产物。
+- [10 测试与验证](/standards/10_testing)：说明怎样选择能够发现问题的检查。
+- [11 代码评审](/standards/11_review)：说明文件覆盖、职责审查和验收证据。
 
 ## 文档
 
-- [12 文档规范](./12_documentation)：说明页面职责、事实核对、正文表达和链接。
+- [12 文档规范](/standards/12_documentation)：说明页面职责、事实核对、正文表达和链接。
 
 规范之间可以互相引用，但一项规则只在一个页面完整说明。页面标题和链接名称使用开发者查找对象时会使用的名称，不为形式完整增加重复页面。

@@ -144,7 +144,7 @@ effective = stricter(-Pquality.level, sca4djBuild.minimumLevel)
 
 阶段是否有实际工作取决于项目登记的任务。例如 Java 插件把 Checkstyle 和 SpotBugs 登记为 `fullAudit`，没有把它们登记为 `audit`；前端项目则可以把 ESLint 报告登记为 `audit`。
 
-子项目先按自己的有效级别确定每条结果的严重程度，父项目导入时保留这个结果。父项目是 `OBSESSIVE` 不会把一个 `ELEGANT` 子项目已经确定的 `WARNING` 再提升为 `ERROR`。这样，最终报告不会改变子项目明确声明的最低质量策略。
+子项目先按自己的有效级别确定每条结果的严重程度，父项目导入时保留这个结果。父项目为 `OBSESSIVE` 时，也不会把 `ELEGANT` 子项目已经确定的 `WARNING` 再提升为 `ERROR`。这样，最终报告不会改变子项目明确声明的最低质量策略。
 
 ## 质量报告与最终失败
 
@@ -332,7 +332,7 @@ Root 配置所有主构建项目的 `group=com.sca4dj` 与 `version=0.0.1-alpha`
 - `audit` 只执行审计和报告，不隐式执行测试；`format` 会修改文件，`formatCheck` 才是只读检查。
 - `-Pquality.level` 不能降低项目最低级别。非法值会在执行任务前失败。
 - 项目 JSON、Checkstyle XML 或 SpotBugs XML 无法读取时，QualityGateTask 失败，不把损坏报告当成零问题。
-- OBSESSIVE 只提升当前 Gradle 项目的原始审计结果；从子项目导入的结果保留子项目已经确定的严重程度。
+- `OBSESSIVE` 只提升当前 Gradle 项目的原始审计结果；从子项目导入的结果保留子项目已经确定的严重程度。
 - 当前插件不注册 Qodana 或依赖漏洞审计任务。需要这类检查时，项目必须显式创建任务和报告，再通过 `fullAudit(...)`、`projectReports` 或 `importedReports` 接入。
 
 ## App Gradle 插件
@@ -363,7 +363,7 @@ sca4djApp {
 模块把当前数据库结构放在自己的 `META-INF/sca4dj/schema/<name>.sql`。`initFlyway` 可以从依赖 JAR 或类目录读取片段，并按提供片段的 Gradle 组件之间的传递依赖关系排序。
 
 ```mermaid
-flowchart LR
+flowchart TB
     Runtime[App runtimeClasspath] --> Resolve[解析组件与传递依赖]
     Resolve --> Read[读取 META-INF/sca4dj/schema/*.sql]
     Read --> Validate{片段是否唯一、非空且无环}
