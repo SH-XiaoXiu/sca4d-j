@@ -23,9 +23,9 @@ class GatewayPropertiesTest {
     @DisplayName("注册后端 service ID 去除首尾空白")
     void normalizesBackendServiceId() {
         GatewayProperties properties = baseProperties();
-        properties.setBackendServiceId(" emergency-light-server ");
+        properties.setBackendServiceId(" sca4d-server ");
 
-        assertThat(properties.validatedBackendServiceId()).isEqualTo("emergency-light-server");
+        assertThat(properties.validatedBackendServiceId()).isEqualTo("sca4d-server");
     }
 
     @Test

@@ -67,7 +67,7 @@ public class GatewayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
         return code.indexOf('/') < 0 ? Optional.of(new GatewayCallbackCode(code)) : Optional.empty();
     }
 
-    /** 从负载均衡上下文读取服务器路径，供入口能力筛选使用。 */
+    /** 从负载均衡上下文读取服务器路径，供按路径筛选可用实例时使用。 */
     private static @NotNull String requestPath(@NotNull Request<?> request) {
         Object context = request.getContext();
         return context instanceof RequestDataContext requestContext

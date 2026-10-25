@@ -50,7 +50,7 @@ public class GatewayProperties {
         return backendServiceId;
     }
 
-    /** @param backendServiceId Gateway 内部注册后端使用的稳定 service ID */
+    /** @param backendServiceId Gateway 内部注册后端使用的 service ID */
     public void setBackendServiceId(@NotNull String backendServiceId) {
         this.backendServiceId = backendServiceId;
     }

@@ -171,7 +171,7 @@ public class RegisteredServerGatewayFilterFactory
         });
     }
 
-    /** 返回规范化的可选绝对路径前缀。 */
+    /** 返回去除首尾空白后的可选绝对路径前缀；值为空或只有 `/` 时返回 null。 */
     private static @Nullable String normalizePrefix(@Nullable String value) {
         if (value == null || value.isBlank()) {
             return null;

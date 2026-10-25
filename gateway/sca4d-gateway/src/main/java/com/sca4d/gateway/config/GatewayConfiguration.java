@@ -13,7 +13,7 @@ import java.time.Clock;
 public class GatewayConfiguration {
 
     /**
-     * 校验 Gateway 配置并保存规范化的 Secret。
+     * 校验 Gateway 配置，并把通过校验的 Secret 保存到配置对象中。
      *
      * @param properties Gateway 运行配置
      * @throws IllegalStateException Secret 或时长配置不合法时抛出

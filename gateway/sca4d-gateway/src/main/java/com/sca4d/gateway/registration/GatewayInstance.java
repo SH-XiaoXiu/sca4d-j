@@ -80,9 +80,9 @@ public class GatewayInstance {
     }
 
     /**
-     * 当前实例实际启用的能力。
+     * 当前实例实际启用的 capability 集合。
      *
-     * @return 当前实例实际启用的能力
+     * @return 当前实例实际启用的 capability 集合
      */
     public @NotNull @Unmodifiable Set<TreeCode> capabilities() {
         return capabilities;

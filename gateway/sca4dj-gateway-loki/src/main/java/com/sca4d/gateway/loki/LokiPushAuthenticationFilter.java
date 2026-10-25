@@ -37,7 +37,7 @@ public class LokiPushAuthenticationFilter implements GatewayFilter {
             @NotNull GatewayFilterChain chain) {
         List<String> authorization = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION);
         if (authorization == null || authorization.size() != 1 || !matches(authorization.getFirst())) {
-            LOGGER.trace(
+            LOGGER.warn(
                     "Loki 日志写入认证失败，当前请求已拒绝，使用正确凭据后可重试 | path={}",
                     exchange.getRequest().getPath().value());
             exchange.getResponse().getHeaders().set(HttpHeaders.WWW_AUTHENTICATE, "Basic realm=\"Loki push\"");

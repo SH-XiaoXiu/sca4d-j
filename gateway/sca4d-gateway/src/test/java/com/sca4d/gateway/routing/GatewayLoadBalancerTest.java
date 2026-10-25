@@ -36,7 +36,7 @@ class GatewayLoadBalancerTest {
     void doesNotFallbackCallbackToApiInstance() {
         GatewayInstanceRegistry registry = mock(GatewayInstanceRegistry.class);
         when(registry.selectCallback(new GatewayCallbackCode("iot.emqx.connections"))).thenReturn(null);
-        GatewayLoadBalancer loadBalancer = new GatewayLoadBalancer(registry, "emergency-light-server");
+        GatewayLoadBalancer loadBalancer = new GatewayLoadBalancer(registry, "sca4d-server");
         RequestData data = new RequestData(
                 HttpMethod.POST,
                 URI.create("http://localhost/callbacks/iot.emqx.connections"),

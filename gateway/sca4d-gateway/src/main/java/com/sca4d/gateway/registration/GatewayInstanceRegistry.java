@@ -101,7 +101,7 @@ public class GatewayInstanceRegistry {
                             .map(GatewayInstanceRegistry::capabilityCode)
                             .collect(Collectors.toUnmodifiableSet());
                 }));
-        // 路径声明在租约过期后仍然保留，避免最后一个 IoT 实例退出后流量落到普通实例。
+        // 路径声明在租约过期后仍然保留，避免最后一个声明该路径能力的实例退出后，请求落到不具备该能力的实例。
         requirements.forEach((path, codes) -> {
             Set<TreeCode> previous = apiRequirements.get(path);
             if (previous != null && !previous.equals(codes)) {
@@ -169,7 +169,7 @@ public class GatewayInstanceRegistry {
         return removed.get();
     }
 
-    /** @return 当前所有未过期租约的稳定快照 */
+    /** @return 当前所有未过期租约的快照 */
     @CheckReturnValue
     public @NotNull List<GatewayInstance> leasedInstances() {
         removeExpired();
@@ -209,7 +209,7 @@ public class GatewayInstanceRegistry {
         return selected;
     }
 
-    /** 校验固定能力编码，不允许通配符或斜杠编码。 */
+    /** 校验 capability 编码，不允许通配符或斜杠。 */
     private static @NotNull TreeCode capabilityCode(@NotNull String value) {
         TreeCode code = value.indexOf(':') < 0 ? TreeCode.ofSegment(value) : TreeCode.ofColon(value);
         if (code.hasNode(TreeCode.ofSegment("*"))) {
@@ -285,7 +285,7 @@ public class GatewayInstanceRegistry {
     }
 
     /**
-     * 使用无溢出取模从稳定排序候选中轮询选择。
+     * 对已按名称排序的候选实例做无溢出取模轮询选择。
      *
      * @param candidates 至少包含一个实例的候选列表
      * @param sequence 当前路由的轮询序号

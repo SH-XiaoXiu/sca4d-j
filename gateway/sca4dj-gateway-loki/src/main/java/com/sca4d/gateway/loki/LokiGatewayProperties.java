@@ -1,5 +1,6 @@
 package com.sca4d.gateway.loki;
 
+import com.sca4d.gateway.loki.exception.GatewayLokiException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -86,7 +87,7 @@ public class LokiGatewayProperties {
         this.password = password;
     }
 
-    /** 校验并规范化启用状态下的全部配置。 */
+    /** 启用时校验 Loki 配置，并把校验后的 origin、路径、账号和密码写回当前对象。 */
     public void validate(@NotNull Environment environment) {
         lokiOrigin = validatedLokiOrigin().toString();
         pushPath = validatedPath(pushPath, "sca4dj.gateway.logging.push-path");
@@ -110,7 +111,7 @@ public class LokiGatewayProperties {
         try {
             uri = URI.create(value);
         } catch (IllegalArgumentException failure) {
-            throw new IllegalStateException("sca4dj.gateway.logging.loki-origin 必须是有效 URI", failure);
+            throw new GatewayLokiException("sca4dj.gateway.logging.loki-origin 必须是有效 URI", failure);
         }
         String path = uri.getRawPath();
         if (!("http".equalsIgnoreCase(uri.getScheme()) || "https".equalsIgnoreCase(uri.getScheme()))

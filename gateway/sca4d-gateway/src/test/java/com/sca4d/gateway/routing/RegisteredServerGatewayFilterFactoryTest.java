@@ -32,7 +32,7 @@ class RegisteredServerGatewayFilterFactoryTest {
         RegisteredServerGatewayFilterFactory factory = new RegisteredServerGatewayFilterFactory(properties());
         RegisteredServerGatewayFilterFactory.Config config = new RegisteredServerGatewayFilterFactory.Config();
         config.setExternalPrefix("/api");
-        MockServerWebExchange exchange = exchange("/api/resource", "lb://emergency-light-server");
+        MockServerWebExchange exchange = exchange("/api/resource", "lb://sca4d-server");
 
         factory.apply(config).filter(exchange, forwarded -> {
             assertThat(forwarded.getRequest().getPath().value()).isEqualTo("/resource");
@@ -67,7 +67,7 @@ class RegisteredServerGatewayFilterFactoryTest {
     @DisplayName("注册 Server WebSocket 路由使用相同可信边界")
     void acceptsRegisteredWebSocketTarget() {
         RegisteredServerGatewayFilterFactory factory = new RegisteredServerGatewayFilterFactory(properties());
-        MockServerWebExchange exchange = exchange("/events/ws", "lb:ws://emergency-light-server");
+        MockServerWebExchange exchange = exchange("/events/ws", "lb:ws://sca4d-server");
 
         factory.apply(new RegisteredServerGatewayFilterFactory.Config())
                 .filter(exchange, forwarded -> {
@@ -101,7 +101,7 @@ class RegisteredServerGatewayFilterFactoryTest {
     private static GatewayProperties properties() {
         GatewayProperties properties = new GatewayProperties();
         properties.setSecret("trusted-secret");
-        properties.setBackendServiceId("emergency-light-server");
+        properties.setBackendServiceId("sca4d-server");
         return properties;
     }
 }

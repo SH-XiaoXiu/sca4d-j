@@ -16,7 +16,7 @@ import java.time.Duration;
 /** 验证标准 Spring Cloud Gateway YAML 能够装载默认注册 Server 路由。 */
 @SpringBootTest(classes = Sca4dGatewayApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
         "sca4dj.gateway.secret=test-secret",
-        "sca4dj.gateway.backend-service-id=emergency-light-server",
+        "sca4dj.gateway.backend-service-id=sca4d-server",
         "spring.profiles.active=test"
 })
 class GatewayRouteConfigurationTest {
@@ -44,10 +44,10 @@ class GatewayRouteConfigurationTest {
                 .filteredOn(route -> route.getId().startsWith("sca4d-"))
                 .allSatisfy(
                         route -> assertThat(route.getUri().toString())
-                                .contains("emergency-light-server"));
+                                .contains("sca4d-server"));
         assertThat(
                 loadBalancerClientFactory.getInstance(
-                        "emergency-light-server",
+                        "sca4d-server",
                         ReactorServiceInstanceLoadBalancer.class))
                 .isInstanceOf(GatewayLoadBalancer.class);
     }
