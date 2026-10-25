@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-/** 当前在线且具备执行能力的进程实例和本次启动代次。 */
+/** 当前在线且启用所需 capability 的进程实例及其本次启动代次。 */
 public class JobInstance {
 
     private final @NotNull InstanceId instanceId;

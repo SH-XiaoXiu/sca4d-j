@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.concurrent.OptimisticLockException;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.identity.SystemPrincipals;
@@ -16,16 +16,16 @@ import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.job.JobRunFailedException;
 import com.sca4d.core.api.job.JobRunRecording;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobSubmission;
 import com.sca4d.core.api.job.JobTarget;
-import com.sca4d.core.api.job.JobWaitTimeoutException;
 import com.sca4d.core.api.job.JobWorkKey;
 import com.sca4d.core.api.job.ParallelResults;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
+import com.sca4d.core.api.job.exception.JobRunFailedException;
+import com.sca4d.core.api.job.exception.JobWaitTimeoutException;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -595,7 +595,7 @@ class JobRuntimeIntegrationTest {
         assertThat(runtime.runs.completeDelivery(delivery, a, true, null)).isTrue();
     }
 
-    /** 同一稳定 Job key 的两个定义版本各用自己的代码领取已有 Run。 */
+    /** 同一 Job key 的两个定义版本各用自己的代码领取已有 Run。 */
     @Test
     void restoresRunsUsingTheirSubmittedDefinitionVersion() {
         DirectJob<Long, Void> previous = workJob(
@@ -1142,7 +1142,7 @@ class JobRuntimeIntegrationTest {
                 runId,
                 new JobKey("TEST"),
                 1,
-                "DIRECT",
+                JobKind.DIRECT,
                 "direct",
                 null,
                 1,
@@ -1152,7 +1152,7 @@ class JobRuntimeIntegrationTest {
                 runId,
                 new JobKey("TEST"),
                 1,
-                "DIRECT",
+                JobKind.DIRECT,
                 "direct",
                 null,
                 2,
@@ -1219,7 +1219,7 @@ class JobRuntimeIntegrationTest {
                     runId,
                     new JobKey("TEST/HISTORY"),
                     1,
-                    "DIRECT",
+                    JobKind.DIRECT,
                     "direct",
                     null,
                     2,

@@ -3,6 +3,7 @@ package com.sca4d.job.persistence;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.job.JobAttemptStatus;
+import com.sca4d.job.JobKind;
 import com.sca4d.job.JobNodeStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,11 +15,11 @@ import java.util.Objects;
 public class NodeClaim {
     private final @NotNull JobKey jobKey;
 
+    private final @NotNull JobKind jobKind;
+
     private final @NotNull RetryRule retryRule;
 
     private final @Nullable String inputJson;
-
-    private final @NotNull String jobKind;
 
     private final @NotNull String nodeKey;
 
@@ -49,8 +50,8 @@ public class NodeClaim {
      * @param runId 根运行数据库主键
      * @param jobKey 提交时保存的 Job key
      * @param jobDefinitionVersion 提交时保存的 Job 定义版本
-     * @param jobKind DIRECT 或 PIPELINE
-     * @param nodeKey 节点在 Job 内的稳定名称
+     * @param jobKind 根运行的 Job 类型，DIRECT 或 PIPELINE
+     * @param nodeKey 节点在 Job 内的名称
      * @param inputJson 已准备的输入 JSON；Void 或合并节点为空
      * @param attempt 当前从 1 开始的尝试次数
      * @param retryRule 节点创建时冻结的重试规则
@@ -60,7 +61,7 @@ public class NodeClaim {
             long runId,
             @NotNull JobKey jobKey,
             int jobDefinitionVersion,
-            @NotNull String jobKind,
+            @NotNull JobKind jobKind,
             @NotNull String nodeKey,
             @Nullable String inputJson,
             long attempt,
@@ -95,7 +96,7 @@ public class NodeClaim {
         return result;
     }
 
-    /** 保存失败事实及业务层确定的下次可执行时间，本次尝试结束但节点继续等待。 */
+    /** 记录本次尝试失败，并保存下次可执行时间；本次尝试结束，节点回到等待状态。 */
     public @NotNull NodeClaim retry(@NotNull String failure, @NotNull Instant nextAttemptAt, @NotNull Instant at) {
         NodeClaim result = copy();
         result.resultStatus = JobNodeStatus.READY;
@@ -162,7 +163,7 @@ public class NodeClaim {
     /**
      * 恢复 Job 定义使用的 Job key。
      *
-     * @return Job key 文本
+     * @return 提交根运行时保存的 JobKey 对象
      */
     public @NotNull JobKey jobKey() {
         return jobKey;
@@ -182,14 +183,14 @@ public class NodeClaim {
      *
      * @return DIRECT 或 PIPELINE
      */
-    public @NotNull String jobKind() {
+    public @NotNull JobKind jobKind() {
         return jobKind;
     }
 
     /**
-     * 当前节点在 Job 定义内的稳定名称。
+     * 当前节点在 Job 定义内的名称。
      *
-     * @return 节点在 Job 内的稳定名称
+     * @return 节点在 Job 内的名称
      */
     public @NotNull String nodeKey() {
         return nodeKey;

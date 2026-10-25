@@ -12,6 +12,7 @@ import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobDispatch;
+import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRunStatus;
@@ -68,7 +69,7 @@ import java.util.function.Supplier;
 
 import javax.sql.DataSource;
 
-/** 使用真实 PostgreSQL 验证统一 JobSchedule 的两种运行记录策略。 */
+/** 使用真实 PostgreSQL 验证 JobSchedule 的两种运行记录策略。 */
 @Testcontainers(disabledWithoutDocker = true)
 class QuartzSchedulingIntegrationTest {
 
@@ -196,6 +197,7 @@ class QuartzSchedulingIntegrationTest {
         });
     }
 
+    /** 注册 PostgreSQL、事务、锁和计划定义所需的测试 Bean，执行器按 test.executor.enabled 决定是否存在。 */
     @Configuration(proxyBeanMethods = false)
     static class TestConfiguration {
 
@@ -282,7 +284,7 @@ class QuartzSchedulingIntegrationTest {
 
                 @Override
                 protected @Nullable Void execute(
-                        @NotNull com.sca4d.core.api.job.JobExecution execution,
+                        @NotNull JobExecution execution,
                         @Nullable Void input) {
                     return null;
                 }
@@ -328,6 +330,7 @@ class QuartzSchedulingIntegrationTest {
         }
     }
 
+    /** 记录无记录扫描 Job 是否已经被 Quartz 执行的测试替身。 */
     static class CountingScan {
         private final CountDownLatch execution = new CountDownLatch(1);
 
@@ -336,6 +339,7 @@ class QuartzSchedulingIntegrationTest {
         }
     }
 
+    /** 记录计划是否进入持久化提交或无记录触发路径的测试 JobExecutor。 */
     static class CountingJobExecutor implements JobExecutor {
 
         private final CountDownLatch persisted = new CountDownLatch(1);

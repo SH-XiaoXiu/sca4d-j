@@ -13,6 +13,7 @@ import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobSubmission;
 import com.sca4d.core.api.job.JobTarget;
 import com.sca4d.core.api.job.JobWorkKey;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.retry.RetryContext;
 import com.sca4d.core.api.retry.RetryDecision;
@@ -22,6 +23,7 @@ import com.sca4d.core.api.runtime.InstanceId;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.job.exception.JobException;
 import com.sca4d.job.persistence.ExpiredJobAttempt;
 import com.sca4d.job.persistence.JobDelivery;
 import com.sca4d.job.persistence.JobInstance;
@@ -36,6 +38,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -44,7 +47,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-/** 编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。 */
+/** 创建 Job run、广播和无记录份额，领取与续租节点，保存节点和根运行结果；每个动作在独立事务中完成。 */
 public class JobRunService {
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
@@ -59,7 +62,7 @@ public class JobRunService {
 
     private final @NotNull TransactionTemplate transactions;
 
-    /** 创建带脚手架统一 JSON 映射器的 Job 运行服务。 */
+    /** 创建使用脚手架 JSON 映射器的 JobRunService。 */
     public JobRunService(
             @NotNull JobRepository repository,
             @NotNull PlatformTransactionManager transactionManager,
@@ -168,7 +171,7 @@ public class JobRunService {
                 })));
     }
 
-    /** 登记当前实例正在提供的能力。 */
+    /** 登记当前实例启用的 capability。 */
     public void registerInstance(
             @NotNull InstanceId instanceId,
             @NotNull UUID generationId,
@@ -182,7 +185,7 @@ public class JobRunService {
                         clock.instant().plus(leaseDuration)));
     }
 
-    /** 查询具备目标能力的在线实例。 */
+    /** 查询在线且启用目标 capability 的实例。 */
     public @NotNull List<JobInstance> eligibleInstances(@NotNull String capabilityCode) {
         return Objects.requireNonNull(
                 transactions.execute(
@@ -223,10 +226,10 @@ public class JobRunService {
                                     new JobInstance(
                                             Objects.requireNonNull(target.instanceId())
                                                     .format(
-                                                            com.sca4d.core.api.name.NameFormat.COLON),
+                                                            NameFormat.COLON),
                                             null))
                             : repository.eligibleInstances(
-                                    job.requiredCapability().format(com.sca4d.core.api.name.NameFormat.COLON),
+                                    job.requiredCapability().format(NameFormat.COLON),
                                     clock.instant());
                     if (targets.isEmpty()) {
                         throw new IllegalStateException("广播没有在线且具备 Job 能力的目标实例: " + job.key());
@@ -234,7 +237,7 @@ public class JobRunService {
                     Map<String, UUID> snapshot = new LinkedHashMap<>();
                     targets.forEach(
                             instance -> snapshot.put(
-                                    instance.instanceId().format(com.sca4d.core.api.name.NameFormat.COLON),
+                                    instance.instanceId().format(NameFormat.COLON),
                                     instance.generationId()));
                     Id dispatchId = repository.createDispatch(job.key(), scheduleKey, scheduledAt, json(snapshot));
                     Instant now = clock.instant();
@@ -243,6 +246,7 @@ public class JobRunService {
                             "固定或广播目标缺少等待时间");
                     Instant expiresAt = now.plus(waitForInstance);
                     Map<InstanceId, Id> runs = new LinkedHashMap<>();
+                    List<JobInstance> deliveryTargets = new ArrayList<>();
                     for (JobInstance instance : targets) {
                         InstanceId instanceId = instance.instanceId();
                         if (overlapPolicy == OverlapPolicy.SKIP_IF_RUNNING
@@ -267,17 +271,18 @@ public class JobRunService {
                                     dispatchId.value());
                             runs.put(instanceId, runId);
                         } else {
-                            repository.createDelivery(
-                                    dispatchId,
-                                    job,
-                                    systemIdentity,
-                                    workKey,
-                                    overlapPolicy.name(),
-                                    inputJson,
-                                    instance,
-                                    expiresAt);
+                            deliveryTargets.add(instance);
                         }
                     }
+                    repository.createDeliveries(
+                            dispatchId,
+                            job,
+                            systemIdentity,
+                            workKey,
+                            overlapPolicy,
+                            inputJson,
+                            deliveryTargets,
+                            expiresAt);
                     return new JobDispatch(
                             dispatchId,
                             new LinkedHashSet<>(
@@ -289,13 +294,14 @@ public class JobRunService {
                 })));
     }
 
+    /** 从已保存的广播目标快照和各目标运行记录还原 JobDispatch；快照无法解析时抛出 IllegalStateException。 */
     private @NotNull JobDispatch dispatchResult(long dispatchId, @NotNull String targetsJson) {
         Map<String, UUID> snapshot;
         try {
             snapshot = objectMapper.readValue(targetsJson, new TypeReference<>() {
             });
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("广播目标快照无法恢复: " + dispatchId, exception);
+            throw new JobException("广播目标快照无法恢复: " + dispatchId, exception);
         }
         Id id = Id.of(dispatchId);
         Map<InstanceId, Id> runs = new LinkedHashMap<>();
@@ -306,6 +312,7 @@ public class JobRunService {
                 runs);
     }
 
+    /** 把广播目标快照序列化为 JSON 文本；序列化失败时抛出 IllegalArgumentException。 */
     private @NotNull String json(@NotNull Object value) {
         try {
             return objectMapper.writeValueAsString(value);
@@ -381,8 +388,8 @@ public class JobRunService {
             @NotNull JobWorkKey workKey) {
         return new LockKey(
                 TreeCode.ofColon("JOB:WORK"),
-                systemIdentity.format(com.sca4d.core.api.name.NameFormat.COLON),
-                job.key().format(com.sca4d.core.api.name.NameFormat.COLON),
+                systemIdentity.format(NameFormat.COLON),
+                job.key().format(NameFormat.COLON),
                 workKey.value());
     }
 

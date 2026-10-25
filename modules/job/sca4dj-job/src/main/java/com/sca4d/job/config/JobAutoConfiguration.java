@@ -86,7 +86,7 @@ public class JobAutoConfiguration {
         return new JobRepository(mapper, sqlBatches);
     }
 
-    /** 创建编排 Job 状态变化并持有事务边界的运行服务。 */
+    /** 创建 JobRunService，由它在各自事务中修改 Job run、节点、依赖和投递记录。 */
     @Bean
     JobRunService jobRunService(
             @NotNull JobRepository repository,
@@ -153,7 +153,7 @@ public class JobAutoConfiguration {
      *
      * @param catalog 当前应用 Job 定义目录
      * @param runs 当前 App 隔离名称的 Job 运行服务
-     * @param objectMapper 脚手架统一 JSON 映射器
+     * @param objectMapper 脚手架 JSON 映射器
      * @return 默认持久化 JobExecutor；应用声明自己的 JobExecutor 时不创建
      */
     @Bean
@@ -183,10 +183,10 @@ public class JobAutoConfiguration {
      *
      * @param catalog 当前应用 Job 定义目录
      * @param runs 当前 App 隔离名称的 Job 运行服务
-     * @param objectMapper 脚手架统一 JSON 映射器
+     * @param objectMapper 脚手架 JSON 映射器
      * @param properties worker、轮询和租约配置
-     * @param clock 节点执行事实使用的时钟
-     * @return 随 Spring 生命周期启动和停止的集群 worker
+     * @param clock 记录节点执行时间使用的时钟
+     * @return 随 Spring 容器启动和停止的集群 worker
      * @throws IllegalArgumentException worker、轮询或租约配置无效时抛出
      */
     @Bean

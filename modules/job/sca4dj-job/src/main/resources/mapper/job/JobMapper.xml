@@ -45,7 +45,7 @@
             schedule_key, scheduled_fire_time)
         VALUES (#{appName}, #{jobKey}, #{definitionVersion}, #{kind},
                 #{capability}, #{systemIdentity}, #{workKey.value}, #{overlapPolicy},
-                #{targetInstanceId}, #{targetGenerationId}, #{targetExpiresAt}, #{dispatchId},
+                #{targetInstanceId}, #{targetGenerationId,typeHandler=org.apache.ibatis.type.ObjectTypeHandler,jdbcType=OTHER}, #{targetExpiresAt}, #{dispatchId},
                 CAST(#{inputJson} AS jsonb), 'QUEUED', #{scheduleKey}, #{scheduledAt})
         RETURNING id
     </select>
@@ -119,14 +119,17 @@
           AND status IN ('READY', 'RUNNING')
         ORDER BY id LIMIT 1
     </select>
-    <insert id="insertDelivery">
+    <insert id="insertDeliveries">
         INSERT INTO job.job_delivery (
             app_name, dispatch_id, job_key, job_definition_version,
             capability_code, system_identity, work_key, overlap_policy,
             input_json, target_instance_id, target_generation_id, expires_at)
-        VALUES (#{appName}, #{dispatchId}, #{jobKey}, #{definitionVersion},
-                #{capability}, #{systemIdentity}, #{workKey.value}, #{overlapPolicy},
-                CAST(#{inputJson} AS jsonb), #{targetInstanceId}, #{targetGenerationId}, #{expiresAt})
+        VALUES
+        <foreach collection="deliveries" item="row" separator=",">
+            (#{appName}, #{row.dispatchId}, #{row.jobKey}, #{row.definitionVersion},
+             #{row.capability}, #{row.systemIdentity}, #{row.workKey.value}, #{row.overlapPolicy},
+             CAST(#{row.inputJson} AS jsonb), #{row.targetInstanceId}, #{row.targetGenerationId,typeHandler=org.apache.ibatis.type.ObjectTypeHandler,jdbcType=OTHER}, #{row.expiresAt})
+        </foreach>
     </insert>
     <select id="updateClaimableDelivery" resultType="com.sca4d.job.persistence.JobDelivery">
         WITH candidate AS MATERIALIZED (
@@ -206,6 +209,18 @@
           AND scheduled_fire_time = #{scheduledAt}
           AND target_instance_id IS NOT DISTINCT FROM #{targetInstanceId}
         ORDER BY id LIMIT 1
+    </select>
+    <select id="insertNodes" resultType="long">
+        INSERT INTO job.job_run_node (
+            run_id, node_key, node_kind, input_json, status, parallel_merge,
+            retry_rule, available_at)
+        VALUES
+        <foreach collection="nodes" item="row" separator=",">
+            (#{row.runId}, #{row.nodeKey}, #{row.kind}, CAST(#{row.inputJson} AS jsonb), #{row.status},
+             CASE WHEN #{row.parallelMerge} THEN 1 ELSE 0 END,
+             CAST(#{row.retryRule} AS jsonb), #{row.availableAt})
+        </foreach>
+        RETURNING id
     </select>
     <select id="insertNode" resultType="long">
         INSERT INTO job.job_run_node (

@@ -5,8 +5,8 @@ import static com.sca4d.core.api.name.NameFormat.COLON;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.job.DirectJob;
@@ -23,6 +23,7 @@ import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.core.spring.config.InstanceProperties;
+import com.sca4d.scheduling.quartz.exception.SchedulingQuartzException;
 import org.jetbrains.annotations.NotNull;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -43,15 +44,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /** 把一次 Quartz fire 转换成有记录提交或无记录系统执行。 */
 public class QuartzDispatchJob implements Job {
 
+    /** Quartz SchedulerContext 中保存 InstanceCapabilities 的键。 */
     public static final String CAPABILITIES_CONTEXT_KEY = "sca4djInstanceCapabilities";
 
+    /** Quartz SchedulerContext 中保存 Clock 的键。 */
     public static final String CLOCK_CONTEXT_KEY = "sca4djClock";
 
     /** Quartz SchedulerContext 中保存 JobExecutor 的键。 */
     public static final String EXECUTOR_CONTEXT_KEY = "sca4djJobExecutor";
 
+    /** Quartz SchedulerContext 中保存 InstanceProperties 的键。 */
     public static final String INSTANCE_CONTEXT_KEY = "sca4djInstanceProperties";
 
+    /** Quartz SchedulerContext 中保存 DistributedLock 的键。 */
     public static final String LOCK_CONTEXT_KEY = "sca4djDistributedLock";
 
     /** Quartz SchedulerContext 中保存计划目录的键。 */
@@ -60,7 +65,7 @@ public class QuartzDispatchJob implements Job {
     /** JobDataMap 中保存计划定义版本的键。 */
     public static final String SCHEDULE_DEFINITION_VERSION = "scheduleDefinitionVersion";
 
-    /** JobDataMap 中保存稳定计划 key 的键。 */
+    /** JobDataMap 中保存计划 key 的键名。 */
     public static final String SCHEDULE_KEY = "scheduleKey";
 
     private static final Logger log = LoggerFactory.getLogger(QuartzDispatchJob.class);
@@ -71,7 +76,7 @@ public class QuartzDispatchJob implements Job {
     @Override
     public void execute(@NotNull JobExecutionContext context) throws JobExecutionException {
         try {
-            // JobDataMap 只保存稳定定位信息，实际计划从本实例完成对账后的目录恢复。
+            // JobDataMap 只保存定位计划所需的标识，实际计划从本实例完成对账后的目录恢复。
             JobDataMap data = context.getMergedJobDataMap();
             ScheduleKey key = new ScheduleKey(data.getString(SCHEDULE_KEY));
             int definitionVersion = Integer.parseInt(data.getString(SCHEDULE_DEFINITION_VERSION));
@@ -171,7 +176,10 @@ public class QuartzDispatchJob implements Job {
         return schedule.job().target(schedule.input()).kind() == JobTarget.Kind.ALL;
     }
 
-    private static <I, O> boolean quartzCanRunDirectly(@NotNull JobSchedule<I, O> schedule) {
+    /**
+     * 判断计划是否可以由任一实例直接执行：无记录且目标为任一实例时返回 true，不需要持久化 JobExecutor。
+     */
+    static <I, O> boolean quartzCanRunDirectly(@NotNull JobSchedule<I, O> schedule) {
         return schedule.job().runRecording() == JobRunRecording.NONE
                 && schedule.job().target(schedule.input()).kind() == JobTarget.Kind.ANY;
     }
@@ -226,7 +234,7 @@ public class QuartzDispatchJob implements Job {
             } catch (RuntimeException exception) {
                 throw exception;
             } catch (Exception exception) {
-                throw new IllegalStateException("Quartz 无记录 Job 执行失败: " + schedule.key(), exception);
+                throw new SchedulingQuartzException("Quartz 无记录 Job 执行失败: " + schedule.key(), exception);
             }
         };
         if (schedule.overlapPolicy() == OverlapPolicy.ALLOW) {

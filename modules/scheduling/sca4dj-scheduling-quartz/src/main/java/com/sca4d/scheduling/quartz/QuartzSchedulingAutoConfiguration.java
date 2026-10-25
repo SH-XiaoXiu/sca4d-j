@@ -124,7 +124,7 @@ public class QuartzSchedulingAutoConfiguration {
      * @param registry 对账成功后供 fire 查询的计划目录
      * @param distributedLock Quartz 计划对账使用的 Redis 分布式锁
      * @param transactionManager 主 PostgreSQL 事务管理器
-     * @param objectMapper 脚手架统一 JSON 映射器
+     * @param objectMapper 脚手架提供的 JSON 映射器
      * @param clock 固定间隔计划计算首次触发时间的时钟
      * @param schedules 当前应用声明的全部 JobSchedule Bean
      * @return 对账全部 Job 计划后启动 Quartz 的调度器

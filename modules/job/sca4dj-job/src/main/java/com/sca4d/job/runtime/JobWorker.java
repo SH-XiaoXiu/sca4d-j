@@ -14,13 +14,16 @@ import com.sca4d.core.api.job.ParallelResults;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
 import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.runtime.InstanceCapabilities;
 import com.sca4d.core.api.runtime.InstanceId;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.job.JobKind;
 import com.sca4d.job.config.JobProperties;
+import com.sca4d.job.exception.JobException;
 import com.sca4d.job.persistence.JobDelivery;
 import com.sca4d.job.persistence.NodeClaim;
 import org.jetbrains.annotations.NotNull;
@@ -85,11 +88,11 @@ public class JobWorker implements SmartLifecycle {
      *
      * @param catalog 当前应用登记的 Job 定义
      * @param runs Job 运行事务服务
-     * @param objectMapper 脚手架统一 JSON 映射器
+     * @param objectMapper 脚手架 JSON 映射器
      * @param properties worker、轮询和租约配置
-     * @param clock 执行事实使用的时钟
+     * @param clock 记录节点开始时间和耗时使用的时钟
      * @param instanceProperties 当前进程的实例标识配置
-     * @param instanceCapabilities 当前实例启用的能力
+     * @param instanceCapabilities 当前实例启用的 capability
      */
     public JobWorker(
             @NotNull JobCatalog catalog,
@@ -249,6 +252,7 @@ public class JobWorker implements SmartLifecycle {
                     properties.getLeaseRenewInterval().toMillis(),
                     properties.getLeaseRenewInterval().toMillis(),
                     TimeUnit.MILLISECONDS);
+            // 只能按投递记录中的 Job 版本执行无记录 DirectJob；定义类型或 runRecording 不符时抛出异常，并在下面按失败结束投递。
             Job<?, ?> job = catalog.loadByKeyAndVersion(delivery.jobKey(), delivery.jobDefinitionVersion());
             if (!(job instanceof DirectJob<?, ?> directJob)
                     || job.runRecording() != JobRunRecording.NONE) {
@@ -273,6 +277,7 @@ public class JobWorker implements SmartLifecycle {
                     || output != null && !directJob.outputType().isInstance(output)) {
                 throw new IllegalStateException("无记录 Job 输出类型不一致: " + job.key());
             }
+            // 成功结果只更新投递记录，不生成 Job Run；返回 false 表示投递的执行所有权已转移，业务动作已经执行但结果不被当前实例写回。
             if (!runs.completeDelivery(delivery, generationId, true, null)) {
                 log.warn("无记录 Job 已执行，但投递所有权已失效 | deliveryId={}", delivery.id());
             }
@@ -286,8 +291,8 @@ public class JobWorker implements SmartLifecycle {
             } catch (RuntimeException persistenceFailure) {
                 log.warn("无记录 Job 失败结果未写回 | deliveryId={}", delivery.id(), persistenceFailure);
             }
-            log.warn(
-                    "无记录 Job 执行失败 | jobKey={} deliveryId={} instanceId={}",
+            log.error(
+                    "无记录 Job 执行失败且不再重试 | jobKey={} deliveryId={} instanceId={}",
                     delivery.jobKey(),
                     delivery.id(),
                     instanceId,
@@ -300,6 +305,7 @@ public class JobWorker implements SmartLifecycle {
         }
     }
 
+    /** 续租无记录份额；租约已转移或续租异常时只记录警告，不中断正在执行的 DirectJob。 */
     private void renewDeliverySafely(@NotNull JobDelivery delivery) {
         try {
             if (!runs.renewDelivery(delivery, generationId, properties.getLeaseDuration())) {
@@ -314,7 +320,7 @@ public class JobWorker implements SmartLifecycle {
         }
     }
 
-    /** 定期发布当前进程代次和启用能力，供固定目标和广播选择。 */
+    /** 定期登记当前进程代次和启用的 capability，供固定目标和广播选择实例。 */
     private void registerInstanceSafely() {
         if (!running.get()) {
             return;
@@ -323,7 +329,7 @@ public class JobWorker implements SmartLifecycle {
             String capabilitiesJson = objectMapper.writeValueAsString(
                     instanceCapabilities.enabledCodes()
                             .stream()
-                            .map(code -> code.format(com.sca4d.core.api.name.NameFormat.COLON))
+                            .map(code -> code.format(NameFormat.COLON))
                             .sorted()
                             .toList());
             runs.registerInstance(
@@ -331,16 +337,23 @@ public class JobWorker implements SmartLifecycle {
                     generationId,
                     capabilitiesJson,
                     properties.getLeaseDuration());
-        } catch (Exception exception) {
+        } catch (JsonProcessingException | RuntimeException exception) {
             log.warn("Job 实例登记失败，下次续期将重试 | instanceId={}", instanceProperties.getId(), exception);
         }
     }
 
-    /** 执行一个已经领取的节点，并在结束后写回成功或失败。 */
+    /**
+     * 执行一个已经领取的节点，并在结束后写回成功或失败。
+     * 调用前节点已由当前实例领取；成功时写回输出 JSON，失败时交给 JobRunService 决定重试或结束根运行。
+     * 写回失败也进入失败分支，线程不向外抛出异常，worker 容量在 finally 中释放。
+     *
+     * @param claim 当前实例领取的节点，包含 Job key、Run ID、节点 key 和本次尝试次数
+     */
     private void executeClaim(@NotNull NodeClaim claim) {
         ScheduledFuture<?> heartbeat = null;
         Instant startedAt = clock.instant();
-        log.info(
+        // 节点开始只记录 DEBUG，成功或失败结果由下面的 INFO、WARN 或 ERROR 记录，避免每个节点产生重复 INFO。
+        log.debug(
                 "Job 节点开始执行 | applicationId={} jobKey={} runId={} nodeKey={} attempt={} workerId={}",
                 applicationId,
                 claim.jobKey(),
@@ -356,6 +369,7 @@ public class JobWorker implements SmartLifecycle {
                     properties.getLeaseRenewInterval().toMillis(),
                     TimeUnit.MILLISECONDS);
             // 根据持久化 key 和定义版本恢复定义，执行完整 DirectJob 或 Pipeline 节点后写回结果。
+            // 业务动作返回后才序列化输出并写回成功；序列化或写回抛出的异常会进入下面的失败分支。
             Object output = executeWithSystemCall(claim, startedAt);
             String outputJson = serializeOutput(output);
             runs.succeed(claim, workerId.toString(), outputJson);
@@ -371,7 +385,7 @@ public class JobWorker implements SmartLifecycle {
         } catch (RuntimeException exception) {
             String error = errorSummary(exception);
             try {
-                // Job runtime 根据节点策略重新排队或结束根运行；业务异常只在最终处理位置记录一次。
+                // JobRunService 根据节点重试策略决定重新排队或结束根运行；异常堆栈只在此处记录一次。
                 var decision = runs.fail(claim, workerId.toString(), error);
                 if (decision.retrying()) {
                     var maximumAttempts = claim.retryRule().maximumAttempts();
@@ -417,13 +431,13 @@ public class JobWorker implements SmartLifecycle {
     }
 
     /** 执行 DirectJob 或 PipelineJob 中的一个 Pipeline 节点。 */
-    private @Nullable Object execute(
+    private @Nullable Object runNode(
             @NotNull NodeClaim claim,
             @NotNull Instant startedAt,
             @NotNull UUID executionId) {
         Job<?, ?> job = catalog.loadByKeyAndVersion(claim.jobKey(), claim.jobDefinitionVersion());
         if (job instanceof DirectJob<?, ?> directJob) {
-            if (!"DIRECT".equals(claim.jobKind())) {
+            if (claim.jobKind() != JobKind.DIRECT) {
                 throw new IllegalStateException("Job run kind 与 DirectJob 不一致: " + job.key());
             }
             Object input = deserialize(claim.inputJson(), directJob.inputType());
@@ -447,7 +461,7 @@ public class JobWorker implements SmartLifecycle {
             return output;
         }
         if (job instanceof PipelineJob<?, ?> pipelineJob) {
-            if (!"PIPELINE".equals(claim.jobKind())) {
+            if (claim.jobKind() != JobKind.PIPELINE) {
                 throw new IllegalStateException("Job run kind 与 PipelineJob 不一致: " + job.key());
             }
             PipelineJobPlan.Node node = node(pipelineJob.definition(), claim.nodeKey());
@@ -461,7 +475,7 @@ public class JobWorker implements SmartLifecycle {
         throw new IllegalStateException("不支持的 Job 子类: " + job.getClass().getName());
     }
 
-    /** 在由 Job 能力选择的系统身份中执行一次节点。 */
+    /** 以 Job 所需 capability 对应的系统身份执行一次节点。 */
     private @Nullable Object executeWithSystemCall(
             @NotNull NodeClaim claim,
             @NotNull Instant startedAt) {
@@ -469,15 +483,15 @@ public class JobWorker implements SmartLifecycle {
         UUID executionId = UUID.randomUUID();
         Call call = Call.system(executionId.toString(), startedAt, systemPrincipal(job));
         try {
-            return CallHolder.run(call, () -> execute(claim, startedAt, executionId));
+            return CallHolder.run(call, () -> runNode(claim, startedAt, executionId));
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Exception exception) {
-            throw new IllegalStateException("Job 系统调用执行失败: " + job.key(), exception);
+            throw new JobException("Job 系统调用执行失败: " + job.key(), exception);
         }
     }
 
-    /** 从当前实例能力目录解析 Job 使用的稳定系统身份。 */
+    /** 从当前实例的 capability 目录解析 Job 使用的系统身份；capability 未启用时抛出 IllegalStateException。 */
     private @NotNull SystemPrincipal systemPrincipal(@NotNull Job<?, ?> job) {
         var capability = instanceCapabilities.definitions().get(job.requiredCapability());
         if (capability == null || !instanceCapabilities.enabled(job.requiredCapability())) {
@@ -506,7 +520,7 @@ public class JobWorker implements SmartLifecycle {
         return new ParallelResults<>(left, right);
     }
 
-    /** 返回计划中稳定名称匹配的节点。 */
+    /** 返回计划中名称与 nodeKey 相同的节点；找不到时抛出 IllegalStateException。 */
     private static @NotNull PipelineJobPlan.Node node(
             @NotNull PipelineJobPlan<?, ?> plan,
             @NotNull String nodeKey) {
@@ -531,7 +545,7 @@ public class JobWorker implements SmartLifecycle {
         try {
             return objectMapper.readValue(json, type);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Job 节点输入无法恢复: " + type.getName(), exception);
+            throw new JobException("Job 节点输入无法恢复: " + type.getName(), exception);
         }
     }
 
@@ -543,7 +557,7 @@ public class JobWorker implements SmartLifecycle {
         try {
             return objectMapper.writeValueAsString(output);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Job 节点输出无法序列化: " + output.getClass().getName(), exception);
+            throw new JobException("Job 节点输出无法序列化: " + output.getClass().getName(), exception);
         }
     }
 

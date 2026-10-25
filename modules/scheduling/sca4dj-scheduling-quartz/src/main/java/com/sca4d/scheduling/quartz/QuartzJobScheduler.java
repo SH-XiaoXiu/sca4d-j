@@ -9,8 +9,6 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.job.JobRunRecording;
-import com.sca4d.core.api.job.JobTarget;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.CronSchedule;
@@ -21,6 +19,7 @@ import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.api.scheduling.ScheduleTiming;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.scheduling.quartz.exception.SchedulingQuartzException;
 import org.jetbrains.annotations.NotNull;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -91,13 +90,13 @@ public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
     private final @NotNull AtomicBoolean running = new AtomicBoolean();
 
     /**
-     * 创建对账当前代码计划并管理 Quartz 生命周期的调度器。
+     * 对账代码声明的 Quartz 计划，对账成功后把计划定义交给 registry 供 fire 恢复使用。
      *
      * @param scheduler Spring Boot 创建的 JDBC Quartz Scheduler
      * @param registry 对账成功后供 fire 恢复定义的目录
      * @param distributedLock Quartz 计划对账使用的 Redis 分布式锁
      * @param transactionManager 主 PostgreSQL 事务管理器
-     * @param objectMapper 脚手架统一 JSON 映射器
+     * @param objectMapper 脚手架提供的 JSON 映射器
      * @param clock 固定间隔首次 fire 使用的时钟
      * @param initialSchedules 延迟读取 Spring 登记的全部代码计划
      * @param schedulerName Quartz 集群共享名称
@@ -141,7 +140,7 @@ public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
                     try {
                         return reconcileQuartz(definitions, contracts, fingerprints);
                     } catch (SchedulerException exception) {
-                        throw new IllegalStateException("Quartz 代码计划对账失败", exception);
+                        throw new SchedulingQuartzException("Quartz 代码计划对账失败", exception);
                     }
                 }));
         // 只有数据库对账全部成功后才替换 fire 可见的定义，避免执行一半新、一半旧的计划。
@@ -161,7 +160,7 @@ public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
         try {
             List<JobSchedule<?, ?>> jobSchedules = initialSchedules.orderedStream().toList();
             if (!scheduler.getContext().containsKey(EXECUTOR_CONTEXT_KEY)
-                    && jobSchedules.stream().anyMatch(schedule -> !quartzCanRunDirectly(schedule))) {
+                    && jobSchedules.stream().anyMatch(schedule -> !QuartzDispatchJob.quartzCanRunDirectly(schedule))) {
                 throw new IllegalStateException("持久化或定向 JobSchedule 需要 JobExecutor");
             }
             reconcile(jobSchedules);
@@ -169,13 +168,8 @@ public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
             log.info("Quartz 集群调度器已启动 | schedulerName={}", schedulerName);
         } catch (SchedulerException | RuntimeException exception) {
             running.set(false);
-            throw new IllegalStateException("Quartz 对账或启动失败", exception);
+            throw new SchedulingQuartzException("Quartz 对账或启动失败", exception);
         }
-    }
-
-    private static <I, O> boolean quartzCanRunDirectly(@NotNull JobSchedule<I, O> schedule) {
-        return schedule.job().runRecording() == JobRunRecording.NONE
-                && schedule.job().target(schedule.input()).kind() == JobTarget.Kind.ANY;
     }
 
     @Override
@@ -187,7 +181,7 @@ public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
             scheduler.standby();
             log.info("Quartz 集群调度器已停止接收触发 | schedulerName={}", schedulerName);
         } catch (SchedulerException exception) {
-            throw new IllegalStateException("Quartz 进入 standby 失败", exception);
+            throw new SchedulingQuartzException("Quartz 进入 standby 失败", exception);
         }
     }
 
@@ -330,7 +324,7 @@ public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
         };
     }
 
-    /** 校验完整计划集合中的 key 唯一且定义版本为正数。 */
+    /** 校验完整计划集合中的计划非空且 key 唯一，重复 key 时拒绝对账。 */
     private static @NotNull Map<ScheduleKey, JobSchedule<?, ?>> definitions(
             @NotNull Collection<@NotNull JobSchedule<?, ?>> schedules) {
         Map<ScheduleKey, JobSchedule<?, ?>> definitions = new LinkedHashMap<>();
@@ -344,7 +338,7 @@ public class QuartzJobScheduler implements JobScheduler, SmartLifecycle {
         return Map.copyOf(definitions);
     }
 
-    /** 计算同定义版本不可静默变化的稳定摘要。 */
+    /** 计算计划定义的摘要；同一定义版本的摘要变化时拒绝静默覆盖。 */
     private @NotNull String scheduleContract(@NotNull JobSchedule<?, ?> schedule) {
         String timing = switch (schedule.timing()) {
             case CronSchedule cron -> "cron|" + cron.expression() + "|" + cron.zone().getId();

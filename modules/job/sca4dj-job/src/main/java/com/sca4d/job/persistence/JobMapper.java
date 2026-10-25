@@ -9,8 +9,11 @@ import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.runtime.InstanceCapability;
+import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.job.JobAttemptStatus;
+import com.sca4d.job.JobDeliveryStatus;
+import com.sca4d.job.JobKind;
 import com.sca4d.job.JobNodeStatus;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
@@ -46,11 +49,11 @@ public interface JobMapper {
             @Param("appName") @NotNull Name appName,
             @Param("jobKey") @NotNull JobKey jobKey,
             @Param("definitionVersion") int definitionVersion,
-            @Param("kind") @NotNull String kind,
+            @Param("kind") @NotNull JobKind kind,
             @Param("capability") @NotNull TreeCode capability,
             @Param("systemIdentity") @NotNull TreeCode systemIdentity,
             @Param("workKey") @NotNull JobWorkKey workKey,
-            @Param("overlapPolicy") @NotNull String overlapPolicy,
+            @Param("overlapPolicy") @NotNull OverlapPolicy overlapPolicy,
             @Param("targetInstanceId") @Nullable String targetInstanceId,
             @Param("targetGenerationId") @Nullable UUID targetGenerationId,
             @Param("targetExpiresAt") @Nullable Instant targetExpiresAt,
@@ -76,7 +79,7 @@ public interface JobMapper {
             @Param("workKey") @NotNull JobWorkKey workKey,
             @Param("targetInstanceId") @Nullable String targetInstanceId);
 
-    /** 登记或续约当前执行实例和启用能力。 */
+    /** 登记或续约当前进程实例及其启用的 capability。 */
     int upsertInstance(
             @Param("appName") @NotNull Name appName,
             @Param("instanceId") @NotNull String instanceId,
@@ -84,7 +87,7 @@ public interface JobMapper {
             @Param("capabilitiesJson") @NotNull String capabilitiesJson,
             @Param("expiresAt") @NotNull Instant expiresAt);
 
-    /** 查找提交时在线且启用目标能力的实例。 */
+    /** 查找提交时在线且启用目标 capability 的实例。 */
     @NotNull
     List<JobInstance> selectEligibleInstances(
             @Param("appName") @NotNull Name appName,
@@ -132,20 +135,10 @@ public interface JobMapper {
             @Param("workKey") @NotNull JobWorkKey workKey,
             @Param("targetInstanceId") @NotNull String targetInstanceId);
 
-    /** 为无记录广播或固定目标创建短期投递份额。 */
-    int insertDelivery(
+    /** 批量为无记录广播或固定目标创建短期投递份额，每个份额的全部列值由对应行提供。 */
+    int insertDeliveries(
             @Param("appName") @NotNull Name appName,
-            @Param("dispatchId") long dispatchId,
-            @Param("jobKey") @NotNull JobKey jobKey,
-            @Param("definitionVersion") int definitionVersion,
-            @Param("capability") @NotNull TreeCode capability,
-            @Param("systemIdentity") @NotNull TreeCode systemIdentity,
-            @Param("workKey") @NotNull JobWorkKey workKey,
-            @Param("overlapPolicy") @NotNull String overlapPolicy,
-            @Param("inputJson") @Nullable String inputJson,
-            @Param("targetInstanceId") @NotNull String targetInstanceId,
-            @Param("targetGenerationId") @Nullable UUID targetGenerationId,
-            @Param("expiresAt") @NotNull Instant expiresAt);
+            @Param("deliveries") @NotNull List<JobDeliveryInsert> deliveries);
 
     /** 按实例代次领取一份无记录工作。 */
     @Nullable
@@ -170,7 +163,7 @@ public interface JobMapper {
             @Param("deliveryId") long deliveryId,
             @Param("instanceId") @NotNull String instanceId,
             @Param("generationId") @NotNull UUID generationId,
-            @Param("status") @NotNull String status,
+            @Param("status") @NotNull JobDeliveryStatus status,
             @Param("error") @Nullable String error,
             @Param("completedAt") @NotNull Instant completedAt);
 
@@ -189,11 +182,15 @@ public interface JobMapper {
             @Param("appName") @NotNull Name appName,
             @Param("createdBefore") @NotNull Instant createdBefore);
 
+    /** 批量插入同一根运行的节点，返回与输入顺序一致的数据库主键。 */
+    @NotNull
+    List<Long> insertNodes(@Param("nodes") @NotNull List<JobRunNodeInsert> nodes);
+
     /** 插入运行节点并返回数据库主键。 */
     long insertNode(
             @Param("runId") long runId,
             @Param("nodeKey") @NotNull String nodeKey,
-            @Param("kind") @NotNull String kind,
+            @Param("kind") @NotNull JobKind kind,
             @Param("inputJson") @Nullable String inputJson,
             @Param("status") @NotNull JobNodeStatus status,
             @Param("parallelMerge") boolean parallelMerge,

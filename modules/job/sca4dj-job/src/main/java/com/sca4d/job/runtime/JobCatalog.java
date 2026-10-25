@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -73,7 +74,7 @@ public class JobCatalog {
     /**
      * 按提交时保存的 key 和定义版本恢复 Job。
      *
-     * @param key 稳定 Job 标识
+     * @param key Job 标识
      * @param definitionVersion 提交时的定义版本
      * @return 完全匹配的当前代码定义
      * @throws IllegalStateException Job 缺失或定义版本已不兼容时抛出
@@ -92,7 +93,7 @@ public class JobCatalog {
         return job;
     }
 
-    /** 返回当前实例能力允许执行的全部 Job key 和定义版本。 */
+    /** 返回当前实例启用的 capability 允许执行的全部 Job key 和定义版本。 */
     public @NotNull Map<JobKey, Map<Integer, InstanceCapability>> availableVersions(
             @NotNull InstanceCapabilities capabilities) {
         InstanceCapabilities checked = Objects.requireNonNull(capabilities, "实例能力不能为空");
@@ -101,7 +102,7 @@ public class JobCatalog {
             Map<Integer, InstanceCapability> enabled = new LinkedHashMap<>();
             versions.values()
                     .stream()
-                    .sorted(java.util.Comparator.comparingInt(Job::definitionVersion))
+                    .sorted(Comparator.comparingInt(Job::definitionVersion))
                     .forEach(job -> {
                         if (checked.enabled(job.requiredCapability())) {
                             InstanceCapability capability = checked.definitions().get(job.requiredCapability());

@@ -3,21 +3,23 @@ package com.sca4d.job.runtime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.concurrent.DistributedLock;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobDispatch;
 import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobExecutor;
-import com.sca4d.core.api.job.JobRunFailedException;
 import com.sca4d.core.api.job.JobRunRecording;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobSubmission;
 import com.sca4d.core.api.job.JobTarget;
-import com.sca4d.core.api.job.JobWaitTimeoutException;
+import com.sca4d.core.api.job.exception.JobRunFailedException;
+import com.sca4d.core.api.job.exception.JobWaitTimeoutException;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.runtime.InstanceCapabilities;
 import com.sca4d.core.api.runtime.InstanceId;
@@ -27,6 +29,7 @@ import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.job.config.JobProperties;
+import com.sca4d.job.exception.JobException;
 import com.sca4d.job.persistence.RunRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,7 +43,9 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
-/** 使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。 */
+/**
+ * 通过 JobRunService 把持久化 Job 写入数据库并查询其运行结果；无记录 DirectJob 在本实例直接执行，或投递到目标实例的短期份额。
+ */
 public class DefaultJobExecutor implements JobExecutor {
 
     private static final long RESULT_POLL_NANOS = Duration.ofMillis(50).toNanos();
@@ -181,6 +186,12 @@ public class DefaultJobExecutor implements JobExecutor {
         return trigger(job, input, scheduleKey, scheduledAt, overlapPolicy);
     }
 
+    /**
+     * 直接触发无记录 DirectJob：按目标分支广播或投递，ANY 目标在本实例或在线的启用实例上执行。
+     * 只有 ALLOW 或 SKIP_IF_RUNNING 策略可用；SKIP_IF_RUNNING 在同键仍有工作时返回 false，不执行。
+     *
+     * @return 已提交或已执行返回 true；被同键执行跳过返回 false
+     */
     private <I, O> boolean trigger(
             @NotNull Job<I, O> job,
             @Nullable I input,
@@ -217,7 +228,7 @@ public class DefaultJobExecutor implements JobExecutor {
         }
         if (!capabilities.enabled(registered.requiredCapability())) {
             var eligible = runs.eligibleInstances(
-                    registered.requiredCapability().format(com.sca4d.core.api.name.NameFormat.COLON));
+                    registered.requiredCapability().format(NameFormat.COLON));
             if (eligible.isEmpty()) {
                 throw new IllegalStateException("没有在线实例启用 Job 所需能力: " + registered.requiredCapability());
             }
@@ -254,11 +265,12 @@ public class DefaultJobExecutor implements JobExecutor {
         }
     }
 
+    /** 在当前线程以系统身份执行一次无记录 DirectJob，不写入 Job run；执行异常原样抛出或包装为 IllegalStateException。 */
     @SuppressWarnings("unchecked")
     private <I, O> void runUnrecorded(
             @NotNull DirectJob<?, ?> job,
             @Nullable I input,
-            @NotNull com.sca4d.core.api.identity.SystemPrincipal principal,
+            @NotNull SystemPrincipal principal,
             @NotNull TreeCode capability) {
         UUID executionId = UUID.randomUUID();
         Instant startedAt = clock.instant();
@@ -277,17 +289,18 @@ public class DefaultJobExecutor implements JobExecutor {
         } catch (RuntimeException exception) {
             throw exception;
         } catch (Exception exception) {
-            throw new IllegalStateException("无记录 Job 执行失败: " + job.key(), exception);
+            throw new JobException("无记录 Job 执行失败: " + job.key(), exception);
         }
     }
 
+    /** 拒绝对无记录 Job 调用持久化提交入口，否则抛出 IllegalArgumentException。 */
     private static void requirePersisted(@NotNull Job<?, ?> job) {
         if (job.runRecording() != JobRunRecording.PERSISTED) {
             throw new IllegalArgumentException("无记录 Job 不支持持久化提交: " + job.key());
         }
     }
 
-    /** 从已声明实例能力解析稳定系统身份；提交方不必启用执行能力。 */
+    /** 从已声明的实例 capability 解析系统身份；提交方不必启用该 capability。 */
     private @NotNull TreeCode systemIdentity(@NotNull Job<?, ?> job) {
         var capability = instanceCapabilities.definitions().get(job.requiredCapability());
         if (capability == null) {
@@ -407,7 +420,7 @@ public class DefaultJobExecutor implements JobExecutor {
         try {
             return objectMapper.readValue(json, type);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Job 输出无法恢复: " + type.getName(), exception);
+            throw new JobException("Job 输出无法恢复: " + type.getName(), exception);
         }
     }
 

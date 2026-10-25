@@ -9,6 +9,7 @@ import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.job.exception.JobException;
 import com.sca4d.job.persistence.JobRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +62,7 @@ public class DefaultJobHistory implements JobHistory {
         try {
             return objectMapper.readValue(json, outputType);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Job 节点输出无法恢复: " + outputType.getName(), exception);
+            throw new JobException("Job 节点输出无法恢复: " + outputType.getName(), exception);
         }
     }
 }

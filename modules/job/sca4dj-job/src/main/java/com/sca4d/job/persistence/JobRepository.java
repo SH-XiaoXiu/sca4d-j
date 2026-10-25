@@ -23,6 +23,8 @@ import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.job.JobAttemptStatus;
+import com.sca4d.job.JobDeliveryStatus;
+import com.sca4d.job.JobKind;
 import com.sca4d.job.JobNodeStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,9 +38,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/** 隐藏 Job Mapper 和 App 隔离名称，提供稳定的持久化语义。 */
+/** 按当前 App 隔离名称读写 Job 实例、广播、无记录投递、运行根记录、节点、依赖和尝试记录，隐藏 JobMapper 的 SQL 细节。 */
 public class JobRepository {
+    /** 批量插入无记录份额时每行绑定与 12 个数据库列对应的值各一次。 */
+    private static final int DELIVERY_PARAMETERS_PER_ITEM = 12;
+
     private static final String DIRECT_NODE_KEY = "direct";
+
+    /** 批量插入节点时每行绑定 runId、nodeKey、kind、inputJson、status、parallelMerge、retryRule 和 availableAt 各一次。 */
+    private static final int NODE_PARAMETERS_PER_ITEM = 8;
 
     private final @NotNull JobMapper mapper;
 
@@ -109,7 +117,7 @@ public class JobRepository {
                 targetInstanceId == null ? null : targetInstanceId.format(NameFormat.COLON));
     }
 
-    /** 登记本次进程代次及可执行的能力。 */
+    /** 登记本次进程代次及其可执行的 capability。 */
     public void registerInstance(
             @NotNull InstanceId instanceId,
             @NotNull UUID generationId,
@@ -118,7 +126,7 @@ public class JobRepository {
         mapper.upsertInstance(appName, instanceId.format(NameFormat.COLON), generationId, capabilitiesJson, expiresAt);
     }
 
-    /** 返回仍在线且启用指定能力的实例快照。 */
+    /** 返回仍在线且启用指定 capability 的实例快照。 */
     public @NotNull List<JobInstance> eligibleInstances(@NotNull String capabilityCode, @NotNull Instant now) {
         return mapper.selectEligibleInstances(appName, capabilityCode, now);
     }
@@ -163,29 +171,40 @@ public class JobRepository {
                 target.format(NameFormat.COLON)) != null;
     }
 
-    /** 保存一份无需 Run 的指定实例工作。 */
-    public void createDelivery(
+    /**
+     * 批量保存无需 Run 的指定实例工作；目标为空时不执行 SQL。
+     *
+     * @param targets 已确定的目标实例快照，顺序与写入顺序一致
+     */
+    public void createDeliveries(
             @NotNull Id dispatchId,
             @NotNull Job<?, ?> job,
             @NotNull TreeCode systemIdentity,
             @NotNull JobWorkKey workKey,
-            @NotNull String overlapPolicy,
+            @NotNull OverlapPolicy overlapPolicy,
             @Nullable String inputJson,
-            @NotNull JobInstance target,
+            @NotNull List<JobInstance> targets,
             @NotNull Instant expiresAt) {
-        mapper.insertDelivery(
-                appName,
-                dispatchId.value(),
-                job.key(),
-                job.definitionVersion(),
-                job.requiredCapability(),
-                systemIdentity,
-                workKey,
-                overlapPolicy,
-                inputJson,
-                target.instanceId().format(NameFormat.COLON),
-                target.generationId(),
-                expiresAt);
+        List<JobDeliveryInsert> rows = targets.stream()
+                .map(
+                        target -> new JobDeliveryInsert(
+                                dispatchId.value(),
+                                job.key(),
+                                job.definitionVersion(),
+                                job.requiredCapability(),
+                                systemIdentity,
+                                workKey,
+                                overlapPolicy,
+                                inputJson,
+                                target.instanceId().format(NameFormat.COLON),
+                                target.generationId(),
+                                expiresAt))
+                .toList();
+        sqlBatches.forEach(
+                rows,
+                DELIVERY_PARAMETERS_PER_ITEM,
+                0,
+                batch -> mapper.insertDeliveries(appName, batch));
     }
 
     /** 领取当前进程启动代次的一份无记录工作。 */
@@ -235,7 +254,7 @@ public class JobRepository {
                         delivery.id(),
                         delivery.targetInstanceId().format(NameFormat.COLON),
                         generationId,
-                        succeeded ? "SUCCEEDED" : "FAILED",
+                        succeeded ? JobDeliveryStatus.SUCCEEDED : JobDeliveryStatus.FAILED,
                         error,
                         at),
                 "Job 无记录工作结果");
@@ -373,7 +392,7 @@ public class JobRepository {
         return mapper.selectExpiredAttempts(appName, now);
     }
 
-    /** 保存过期尝试的放弃事实和业务层计算的下次领取时间。 */
+    /** 把过期尝试标记为放弃，并保存调用方计算出的下次可领取时间。 */
     public void rescheduleExpired(
             @NotNull ExpiredJobAttempt attempt,
             @NotNull Instant availableAt,
@@ -433,11 +452,11 @@ public class JobRepository {
             @Nullable Instant targetExpiresAt,
             @Nullable Long dispatchId) {
         Job<?, ?> checked = Objects.requireNonNull(job, "Job 不能为空");
-        String kind;
+        JobKind kind;
         if (checked instanceof DirectJob<?, ?>) {
-            kind = "DIRECT";
+            kind = JobKind.DIRECT;
         } else if (checked instanceof PipelineJob<?, ?>) {
-            kind = "PIPELINE";
+            kind = JobKind.PIPELINE;
         } else {
             throw new IllegalArgumentException("不支持的 Job 子类: " + checked.getClass().getName());
         }
@@ -449,7 +468,7 @@ public class JobRepository {
                 checked.requiredCapability(),
                 systemIdentity,
                 workKey,
-                overlapPolicy.name(),
+                overlapPolicy,
                 targetInstanceId == null ? null : targetInstanceId.format(NameFormat.COLON),
                 targetGenerationId,
                 targetExpiresAt,
@@ -461,7 +480,7 @@ public class JobRepository {
             mapper.insertNode(
                     runId,
                     DIRECT_NODE_KEY,
-                    "DIRECT",
+                    JobKind.DIRECT,
                     inputJson,
                     JobNodeStatus.READY,
                     false,
@@ -470,23 +489,35 @@ public class JobRepository {
             return Id.of(runId);
         }
         PipelineJobPlan<?, ?> plan = ((PipelineJob<?, ?>) checked).definition();
+        List<PipelineJobPlan.Node> nodes = List.copyOf(plan.nodes());
+        List<JobRunNodeInsert> nodeRows = nodes.stream()
+                .map(
+                        node -> new JobRunNodeInsert(
+                                runId,
+                                node.key(),
+                                JobKind.PIPELINE,
+                                node.dependencies().isEmpty() ? inputJson : null,
+                                node.dependencies().isEmpty() ? JobNodeStatus.READY : JobNodeStatus.WAITING,
+                                node.parallelMerge(),
+                                node.retryRule(),
+                                now))
+                .toList();
+        List<Long> generatedNodeIds = sqlBatches.query(
+                nodeRows,
+                NODE_PARAMETERS_PER_ITEM,
+                0,
+                mapper::insertNodes);
+        if (generatedNodeIds.size() != nodes.size()) {
+            throw new IllegalStateException("Job 节点写入数量与返回主键数量不一致");
+        }
         Map<String, Long> nodeIds = new HashMap<>();
-        for (PipelineJobPlan.Node node : plan.nodes()) {
-            long nodeId = mapper.insertNode(
-                    runId,
-                    node.key(),
-                    "PIPELINE",
-                    node.dependencies().isEmpty() ? inputJson : null,
-                    node.dependencies().isEmpty() ? JobNodeStatus.READY : JobNodeStatus.WAITING,
-                    node.parallelMerge(),
-                    node.retryRule(),
-                    now);
-            nodeIds.put(node.key(), nodeId);
+        for (int index = 0; index < nodes.size(); index++) {
+            nodeIds.put(nodes.get(index).key(), generatedNodeIds.get(index));
         }
         // 所有节点标识已属于本次根运行，依赖写入直接使用已知关系，不再逐边联表确认。
         Map<Long, Map<Integer, Long>> dependencies = new LinkedHashMap<>();
         int edgeCount = 0;
-        for (PipelineJobPlan.Node node : plan.nodes()) {
+        for (PipelineJobPlan.Node node : nodes) {
             long nodeId = nodeId(nodeIds, node.key());
             for (int order = 0; order < node.dependencies().size(); order++) {
                 dependencies.computeIfAbsent(nodeId, ignored -> new LinkedHashMap<>())
