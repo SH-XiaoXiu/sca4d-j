@@ -74,6 +74,7 @@ public class DeviceConnectionService {
                     deviceId,
                     connection.id().value(),
                     disconnectMessageId);
+            // 通用连接登记在事务提交前执行；若事务随后回滚，这些 Session 投影已被终止，不会自动恢复。
             if (registry != null) {
                 connection.sessionId().ifPresent(sessionId -> registry.terminateBySession(sessionId, checkedReason));
             }

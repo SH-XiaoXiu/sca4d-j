@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-/** 验证应用安装协议的稳定索引和管理查询结果。 */
+/** 验证应用安装协议的索引顺序和管理查询结果。 */
 class DeviceProtocolCatalogTest {
 
     @Test

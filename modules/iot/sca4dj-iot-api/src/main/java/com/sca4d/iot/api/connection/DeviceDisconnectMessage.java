@@ -12,8 +12,10 @@ import java.util.Objects;
 /** 请求一种设备接入实现终止一个明确连接代次。 */
 public class DeviceDisconnectMessage extends Message {
 
+    /** 断连消息的协议版本，与 `protocolVersion()` 返回值一致。 */
     public static final int PROTOCOL_VERSION = 1;
 
+    /** 断连消息的稳定类型编码，用于通用 Messaging 路由。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DEVICE/DISCONNECT");
 
     private final @NotNull DeviceConnectionId connectionId;

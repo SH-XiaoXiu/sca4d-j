@@ -16,8 +16,8 @@ import com.sca4d.iot.api.model.ThingValueType;
 import com.sca4d.iot.api.protocol.DeviceProtocolMessage;
 import com.sca4d.iot.api.state.ReportedMergeMode;
 import com.sca4d.iot.emqx.connection.MqttDeviceConnection;
-import com.sca4d.iot.emqx.transport.MqttMessageRejectedException;
 import com.sca4d.iot.emqx.transport.MqttMessageRejectionReason;
+import com.sca4d.iot.emqx.transport.exception.MqttMessageRejectedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

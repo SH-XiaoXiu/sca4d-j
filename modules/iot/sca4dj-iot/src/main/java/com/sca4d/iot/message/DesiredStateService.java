@@ -1,6 +1,6 @@
 package com.sca4d.iot.message;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.retry.Backoff;
 import com.sca4d.core.api.retry.RetryContext;
@@ -102,6 +102,12 @@ public class DesiredStateService {
     }
 
     /**
+     * 原子修改 Device 的 desired property，并只为实际变化的 set 创建新的可靠下行消息。
+     *
+     * <p>必须在调用方事务中执行。任一值校验失败、属性不存在或不可写时抛出 {@link BusinessException}，
+     * 且不修改数据库。没有实际变化时不推进 desiredSequence。并发修改冲突时最多重试 8 次，仍失败则抛出
+     * {@link IllegalStateException}。
+     *
      * @param deviceId Device 标识
      * @param change 本次明确 set 与 clear 的属性
      * @param acknowledgementTimeout 本次生成消息发送成功后等待 Device 业务 ACK 的时间
@@ -131,7 +137,7 @@ public class DesiredStateService {
                 .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
 
-        // 按 ThingModel 规范校验并规范化全部 set/clear；任一值失败时不修改数据库。
+        // 按 ThingModel 的类型定义校验并转换全部 set/clear；任一值失败时不修改数据库。
         LinkedHashMap<String, Object> normalized = new LinkedHashMap<>();
         try {
             input.setValues().forEach((code, value) -> {
@@ -161,7 +167,7 @@ public class DesiredStateService {
         for (long attempt = 1;; attempt++) {
             Long currentDesiredSequence = downlinks.findDesiredSequence(device.id());
             if (currentDesiredSequence == null) {
-                throw new IllegalStateException("修改 desired state 时 Device 不存在");
+                throw new BusinessException(IotErrorCode.DEVICE_NOT_FOUND);
             }
             Map<String, Optional<DesiredPropertyState>> existing = downlinks.findDesiredProperties(
                     device.id(),
@@ -248,8 +254,8 @@ public class DesiredStateService {
                 deviceId,
                 List.of(DeviceChangeArea.DESIRED, DeviceChangeArea.DOWNLINK),
                 clock.instant());
-        LOG.info(
-                "Device desired 已修改 | deviceId={} desiredSequence={} setCount={} clearCount={}",
+        LOG.debug(
+                "Device desired 已写入事务 | deviceId={} desiredSequence={} setCount={} clearCount={}",
                 deviceId,
                 result.desiredSequence(),
                 result.messages().size(),

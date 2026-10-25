@@ -12,6 +12,7 @@ import java.time.Instant;
 /** 只在 reported state 已经与当前 desired sequence 相等时完成状态同步。 */
 public class ReportedEqualsDesiredAcknowledgementPolicy implements AcknowledgementPolicy {
 
+    /** reported 等于 desired 回执策略的稳定编码，`DevicePolicyCatalog` 用它查找该策略实例。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED");
 
     public ReportedEqualsDesiredAcknowledgementPolicy() {

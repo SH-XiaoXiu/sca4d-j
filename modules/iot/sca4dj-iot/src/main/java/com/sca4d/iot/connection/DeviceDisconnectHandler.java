@@ -85,11 +85,14 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
     public @NotNull HandlingDecision handle(@NotNull IncomingMessage<DeviceDisconnectMessage> delivery) {
         DeviceDisconnectMessage disconnect = Objects.requireNonNull(delivery, "断连消息投递不能为空")
                 .message();
+        String stage = "protocolTerminate";
         try {
             // 先终止真实会话，再删除各层在线投影，避免会话仍存在时提前显示离线。
             terminators.disconnect(disconnect.protocol(), disconnect.connectionId(), disconnect.reason());
+            stage = "deviceProjection";
             boolean changed = connections.disconnected(disconnect.protocol(), disconnect.connectionId());
             if (commonConnections != null) {
+                stage = "commonProjection";
                 commonConnections.remove(new ConnectionId(disconnect.connectionId().value()));
             }
             LOG.debug(
@@ -101,6 +104,14 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
                     disconnect.attempt());
         } catch (RuntimeException exception) {
             // 任一投影删除失败都重新执行协议终止和两类投影删除，直到成功或进入 DLQ。
+            LOG.warn(
+                    "Device 断连处理失败，等待重试 | deviceId={} protocol={} connectionId={} stage={} attempt={} errorType={}",
+                    disconnect.deviceId(),
+                    disconnect.protocol().code(),
+                    disconnect.connectionId().value(),
+                    stage,
+                    disconnect.attempt(),
+                    exception.getClass().getSimpleName());
             return HandlingDecision.retry(
                     exception.getClass().getSimpleName(),
                     Math.max(disconnect.attempt(), delivery.attempt()));

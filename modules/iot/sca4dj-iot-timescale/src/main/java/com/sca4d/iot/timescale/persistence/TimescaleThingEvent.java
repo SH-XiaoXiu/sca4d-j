@@ -54,7 +54,7 @@ public class TimescaleThingEvent {
         return deviceId;
     }
 
-    /** @return 物模型事件 code */
+    /** @return 属性事件或 IoT 状态机事件的 code */
     public @NotNull String eventCode() {
         return eventCode;
     }

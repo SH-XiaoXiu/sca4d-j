@@ -3,7 +3,7 @@ package com.sca4d.iot.state;
 import static com.sca4d.core.api.name.NameFormat.COLON;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
@@ -78,7 +78,7 @@ public class ReportedStateService {
 
     private final int maxReportedProperties;
 
-    /** 创建 reported 主事务服务。 */
+    /** 创建 reported 处理服务；`maxReportedProperties` 和 `maxEventsPerMessage` 必须为正数，否则构造失败。 */
     @SuppressWarnings("ParameterNumber")
     public ReportedStateService(
             @NotNull DeviceRepository devices,
@@ -111,6 +111,12 @@ public class ReportedStateService {
     }
 
     /**
+     * 校验并写入一次 reported 更新，按写入结果收敛 desired、发布 Telemetry 和离散事件。
+     *
+     * <p>属性或事件数量超过上限、物模型未知属性、值不合规时抛出 `BusinessException(INVALID_INPUT)`；
+     * Device 绑定已经切换时抛出 `BusinessException(STATE_CONFLICT)`。两种失败都发生在任何状态写入之前。
+     * 结果为 OLDER 时不收敛 desired，也不发布 Telemetry；ACK、Telemetry 和事件消息都登记在本方法的事务内。
+     *
      * @param device 连接路由已经读取的完整 Device
      * @param update 一个字段组的 reported 更新
      * @param events 同一协议报文解析出的离散事件

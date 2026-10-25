@@ -9,8 +9,10 @@ import org.jetbrains.annotations.NotNull;
 /** 请求发送一个标准 Device 下行消息的指定尝试。 */
 public class DeviceDispatchMessage extends Message {
 
+    /** 下行发送消息的协议版本，与 `protocolVersion()` 返回值一致。 */
     public static final int PROTOCOL_VERSION = 1;
 
+    /** 下行发送消息的稳定类型编码，用于通用 Messaging 路由。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/DISPATCH");
 
     private final int attempt;

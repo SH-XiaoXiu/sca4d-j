@@ -39,7 +39,7 @@ public class TimescaleTelemetryConsumer implements EventHandler<TelemetryBatch> 
         return IotMessageTypes.TELEMETRY_REPORTED;
     }
 
-    /** 同一 Id 的 RabbitMQ 重复投递不会产生重复样本。 */
+    /** 同一 Id 的消息被重复投递时不会写入重复样本。 */
     @Override
     @DS(IotTimescale.DATASOURCE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -49,7 +49,7 @@ public class TimescaleTelemetryConsumer implements EventHandler<TelemetryBatch> 
         repository.addTelemetry(checked.messageId().value(), checked.message().payload());
     }
 
-    /** RabbitMQ 调用的入口先选择历史库，再开启事务；提交后才能确认消息。 */
+    /** 消息投递入口先选择历史库，再开启事务；事务提交后才能确认消息。 */
     @Override
     @DS(IotTimescale.DATASOURCE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)

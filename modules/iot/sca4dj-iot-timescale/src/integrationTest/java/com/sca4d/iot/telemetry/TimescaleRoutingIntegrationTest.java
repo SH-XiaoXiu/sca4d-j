@@ -186,7 +186,7 @@ class TimescaleRoutingIntegrationTest {
             return new TransactionTemplate(transactionManager);
         }
 
-        /** 替换物模型 SQL 细节，但实际写入与失败仍发生在生产 Consumer 开启的 JDBC 事务内。 */
+        /** 替换属性 SQL 细节，但实际写入与失败仍发生在生产 Consumer 开启的 JDBC 事务内。 */
         @Bean
         TimescaleRepository repository(JdbcTemplate jdbc) {
             TimescaleRepository repository = mock(TimescaleRepository.class);

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.model.ThingCommand;
 import com.sca4d.iot.api.model.ThingEvent;
@@ -22,7 +22,7 @@ import com.sca4d.iot.message.policy.ReportedEqualsDesiredAcknowledgementPolicy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/** 验证静态 Builder 与严格 JSON 使用同一种物模型对象和稳定规范内容。 */
+/** 验证静态 Builder 与严格 JSON 使用同一种属性定义对象，并输出一致的规范内容。 */
 class ThingModelJsonCodecTest {
 
     private final ThingModelJsonCodec codec = new ThingModelJsonCodec(

@@ -20,7 +20,12 @@ public class DeviceConnectionTerminatorRouter {
 
     private final @NotNull Map<DeviceConnectionProtocol, DeviceConnectionTerminator> terminators;
 
-    /** @param terminators 具体设备接入模块登记的全部连接终止实现 */
+    /**
+     * 创建协议到终止实现的只读路由。
+     *
+     * @param terminators 具体设备接入模块登记的全部连接终止实现；集合或任一元素为空时抛出 {@link NullPointerException}
+     * @throws IllegalArgumentException 两个实现声明了同一 {@link DeviceConnectionProtocol} 时抛出
+     */
     public DeviceConnectionTerminatorRouter(
             @NotNull Collection<DeviceConnectionTerminator> terminators) {
         try {
@@ -37,6 +42,8 @@ public class DeviceConnectionTerminatorRouter {
     }
 
     /**
+     * 按协议选择终止实现，并让该实现断开指定连接代次。
+     *
      * @param protocol 待终止连接使用的协议
      * @param connectionId 待终止的明确连接代次
      * @param reason 不包含凭据和隐私数据的稳定终止原因

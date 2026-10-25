@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sca4d.iot.schedule.exception.DeviceScheduleTriggerException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,7 +29,7 @@ class DeviceScheduleTaskTest {
     @Test
     @DisplayName("业务失败在独立调用中暂停同版本规则")
     void pausesBusinessFailure() {
-        DeviceScheduleTriggerFailure failure = new DeviceScheduleTriggerFailure(
+        DeviceScheduleTriggerException failure = new DeviceScheduleTriggerException(
                 10,
                 3,
                 Instant.parse("2026-08-05T10:00:00Z"),

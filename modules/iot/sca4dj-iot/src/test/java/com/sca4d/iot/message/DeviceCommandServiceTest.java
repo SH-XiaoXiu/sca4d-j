@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.data.DataValues;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.MessageText;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证 Device command 类型化入口复用当前物模型校验和可靠下行事务。 */
+/** 验证 Device command 类型化入口复用当前属性校验和可靠下行事务。 */
 class DeviceCommandServiceTest {
 
     private static final Instant NOW = Instant.parse("2026-08-23T08:00:00Z");

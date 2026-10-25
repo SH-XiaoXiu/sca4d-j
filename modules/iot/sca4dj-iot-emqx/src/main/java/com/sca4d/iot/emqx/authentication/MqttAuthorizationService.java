@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 统一解析应用授权策略或协议 ACL，并为连接失效判断生成稳定指纹。 */
+/** 解析应用授权策略或协议 ACL，并为连接失效判断生成指纹。 */
 public class MqttAuthorizationService {
 
     /** EMQX `client_attrs` 中保存的当前 MQTT ACL 指纹。 */
@@ -40,9 +40,6 @@ public class MqttAuthorizationService {
         this.protocols = Objects.requireNonNull(protocols, "MQTT 协议目录不能为空");
         this.policies = List.copyOf(Objects.requireNonNull(policies, "MQTT 授权策略不能为空"));
         this.fingerprintSchema = Key.of(TreeCode.ofColon("IOT:EMQX:AUTHORIZATION:V1"));
-        if (this.policies.stream().anyMatch(Objects::isNull)) {
-            throw new IllegalArgumentException("MQTT 授权策略不能包含空值");
-        }
     }
 
     /**
@@ -123,7 +120,7 @@ public class MqttAuthorizationService {
         return checked;
     }
 
-    /** 按有序规则和规范化 QoS 计算跨进程稳定的 SHA-256。 */
+    /** 按规则顺序和规范化后的 QoS 计算 SHA-256，相同 ACL 在不同进程中得到相同指纹。 */
     private @NotNull String fingerprint(List<EmqxAclRule> rules) {
         ByteArrayOutputStream canonical = new ByteArrayOutputStream();
         appendFingerprintField(canonical, fingerprintSchema.format(COLON));

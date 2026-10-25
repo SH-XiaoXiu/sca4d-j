@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.iot.api.model.ThingArrayValue;
 import com.sca4d.iot.api.model.ThingObjectValue;
+import com.sca4d.iot.exception.IotException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,12 +25,22 @@ public class ThingDataJsonCodec {
 
     private final @NotNull ObjectMapper objectMapper;
 
-    /** @param objectMapper 具体应用统一 JSON 映射器 */
+    /**
+     * 创建物模型数据 Codec，之后所有编码和解析都使用该 ObjectMapper。
+     *
+     * @param objectMapper 具体应用统一 JSON 映射器，为 null 时抛出 {@link NullPointerException}
+     */
     public ThingDataJsonCodec(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper, "Thing data ObjectMapper 不能为空");
     }
 
-    /** @param values 已校验 code 到值 @return 规范 JSON object */
+    /**
+     * 按 code 升序把已校验的字段值编码为 JSON object，值中的 {@code ThingObjectValue}、{@code ThingArrayValue} 与 Instant 会先展开。
+     *
+     * @param values 已通过物模型校验的 code 到值映射，不能包含 null 值
+     * @return 规范 JSON object 文本
+     * @throws IllegalStateException 值无法编码为 JSON 时抛出
+     */
     @CheckReturnValue
     public @NotNull String encodeMap(@NotNull Map<String, ?> values) {
         LinkedHashMap<String, Object> normalized = new LinkedHashMap<>();
@@ -40,29 +51,47 @@ public class ThingDataJsonCodec {
         return encode(normalized);
     }
 
-    /** @param value 单个已校验值 @return 规范 JSON */
+    /**
+     * 把单个已通过物模型校验的值编码为 JSON 文本，专用 object、array 和 Instant 会先展开。
+     *
+     * @param value 已校验的物模型值，不能为 null
+     * @return 规范 JSON 文本
+     * @throws IllegalStateException 值无法编码为 JSON 时抛出
+     */
     @CheckReturnValue
     public @NotNull String encodeValue(@NotNull Object value) {
         return encode(normalize(Objects.requireNonNull(value, "Thing value 不能为空")));
     }
 
-    /** @param json JSON object @return 普通不可修改 Map */
+    /**
+     * 把 JSON object 解析为不可修改的普通 Java Map，嵌套值保持 Jackson 默认的 Java 类型。
+     *
+     * @param json JSON object 文本
+     * @return 不可修改的顶层字段 Map
+     * @throws IllegalStateException JSON 语法不合法或不是 object 时抛出
+     */
     @CheckReturnValue
     public @NotNull Map<String, Object> decodeMap(@NotNull String json) {
         try {
             return Map.copyOf(objectMapper.readValue(json, MAP_TYPE));
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Thing data JSON 无法解析", exception);
+            throw new IotException("Thing data JSON 无法解析", exception);
         }
     }
 
-    /** @param json 单个 JSON 值 @return 普通 Java JSON 值 */
+    /**
+     * 把单个 JSON 值解析为普通 Java 值，JSON null 不被接受。
+     *
+     * @param json 单个 JSON 值文本
+     * @return 普通 Java 值，不会为 null
+     * @throws IllegalStateException JSON 语法不合法或结果为 null 时抛出
+     */
     @CheckReturnValue
     public @NotNull Object decodeValue(@NotNull String json) {
         try {
             return Objects.requireNonNull(objectMapper.readValue(json, Object.class), "Thing value JSON 不能是 null");
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Thing value JSON 无法解析", exception);
+            throw new IotException("Thing value JSON 无法解析", exception);
         }
     }
 
@@ -89,7 +118,7 @@ public class ThingDataJsonCodec {
         try {
             return objectMapper.writeValueAsString(value);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Thing data 无法编码", exception);
+            throw new IotException("Thing data 无法编码", exception);
         }
     }
 }

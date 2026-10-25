@@ -1,6 +1,6 @@
 package com.sca4d.iot.product;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
@@ -195,13 +195,23 @@ public class ProductDefinitionCatalog {
         return new Page<>(merged.subList(from, to), checked, total);
     }
 
-    /** @return 指定 code 的代码 Product 定义 */
+    /**
+     * 查询应用代码提供的 Product 定义，不访问数据库。
+     *
+     * @param code Product code，不能为空
+     * @return 代码 Product 定义；code 不属于代码目录时为空，数据库同名 Product 不影响结果
+     */
     @CheckReturnValue
     public @NotNull Optional<ProductDefinition> findCodeDefinition(@NotNull String code) {
         return Optional.ofNullable(codeDefinitions.get(Objects.requireNonNull(code, "Product code 不能为空")));
     }
 
-    /** 拒绝数据库 Product 使用代码目录已经占用的 code。 */
+    /**
+     * 检查数据库 Product 可以使用指定 code，代码目录已占用时抛出异常。
+     *
+     * @param code 准备写入数据库的 Product code
+     * @throws BusinessException code 已被代码 Product 占用，错误码为 IDENTITY_CONFLICT 时抛出
+     */
     public void validateDatabaseCodeAvailable(@NotNull String code) {
         ensureCodeDefinitionAbsent(Objects.requireNonNull(code, "Product code 不能为空"));
     }

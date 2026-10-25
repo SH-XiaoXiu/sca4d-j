@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 
-/** 验证内置 ACK 与 retry code 对稳定业务输入给出确定状态判断。 */
+/** 验证内置 ACK 与 retry code 对相同业务输入给出确定的状态判断。 */
 class BuiltInDevicePoliciesTest {
 
     private static final Instant NOW = Instant.parse("2026-08-02T10:00:00Z");

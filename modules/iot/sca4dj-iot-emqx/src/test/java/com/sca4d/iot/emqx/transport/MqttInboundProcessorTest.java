@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
 import com.sca4d.core.spring.retry.SpringRetryExecutor;
+import com.sca4d.iot.emqx.transport.exception.MqttMessageRejectedException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.MessageText;
 import com.sca4d.core.api.query.Page;
@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证数据库和代码 Product 解析、稳定绑定及 code 冲突规则。 */
+/** 验证数据库和代码 Product 解析、绑定结果及 code 冲突规则。 */
 class ProductDefinitionCatalogTest {
 
     private static final ProductDefinition CODE_PRODUCT = new ProductDefinition(

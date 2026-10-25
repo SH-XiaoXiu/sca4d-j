@@ -2,7 +2,7 @@ package com.sca4d.iot.device;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.iot.IotErrorCode;
@@ -36,7 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/** 保存和修改 Device、Product、物模型、协议及接入方式等 IoT 技术状态。 */
+/** 创建、查询和修改 Device 台账，包括展示资料、物模型与协议绑定、直接连接绑定和接入方式。 */
 public class DeviceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceService.class);
@@ -111,7 +111,19 @@ public class DeviceService {
     /** 在 Product 与 Device 聚合锁内重新解析 Product 并保存 Device。 */
     private @NotNull Device createLocked(long deviceId, @NotNull DeviceRegistration input) {
         ProductResolution product = products.resolve(input.product());
-        validateRegistration(product.definition(), input);
+        // 校验 Device 是 Product 允许的确定子集，并且物模型和协议存在。
+        if (input.connection().isPresent() == input.accessMethods().isEmpty()
+                || !product.definition().accessMethods().containsAll(input.accessMethods())) {
+            throw new BusinessException(IotErrorCode.INVALID_INPUT);
+        }
+        if (!product.definition().protocolCodes().contains(input.protocolCode())) {
+            throw new BusinessException(IotErrorCode.PROTOCOL_CONFLICT);
+        }
+        ThingModel model = models.find(product.definition().code(), input.thingModelVersion())
+                .map(ThingModelPresentation::model)
+                .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
+        DeviceProtocol protocol = protocols.loadByCode(input.protocolCode());
+        protocol.validate(model);
         Device device;
         try {
             device = new Device(
@@ -135,8 +147,8 @@ public class DeviceService {
             throw new BusinessException(IotErrorCode.IDENTITY_CONFLICT, exception);
         }
         changes.changed(device.id(), DeviceChangeArea.DEVICE, clock.instant());
-        LOG.info(
-                "Device 已创建 | deviceId={} productCode={} productSource={} methodCount={}",
+        LOG.debug(
+                "Device 创建已写入事务 | deviceId={} productCode={} productSource={} methodCount={}",
                 device.id(),
                 device.product().code(),
                 device.product().source(),
@@ -144,7 +156,13 @@ public class DeviceService {
         return device;
     }
 
-    /** @param deviceId Device 标识 @return 必须存在的 Device */
+    /**
+     * 读取必须存在的 Device，用于调用方已经依赖该 Device 存在的业务动作。
+     *
+     * @param deviceId Device 标识
+     * @return 完整 Device
+     * @throws BusinessException Device 不存在时抛出 {@link IotErrorCode#DEVICE_NOT_FOUND}
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull Device loadById(long deviceId) {
@@ -169,7 +187,12 @@ public class DeviceService {
         return result;
     }
 
-    /** @param connection 完整直接连接绑定 @return 匹配的 Device；不存在时为空 */
+    /**
+     * 按完整直接连接绑定查找 Device，只读取主库中的当前绑定。
+     *
+     * @param connection 完整直接连接绑定
+     * @return 匹配的 Device；不存在时为空
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull Optional<Device> findByConnection(@NotNull DeviceConnectionBinding connection) {
@@ -204,7 +227,15 @@ public class DeviceService {
         }
     }
 
-    /** 修改 Device 的展示名称和备注。 */
+    /**
+     * 修改 Device 的展示名称和备注，在 Device 聚合锁和事务内执行。
+     *
+     * <p>展示资料不参与身份、凭据、协议和连接判断，修改后发布 {@link DeviceChangeArea#DEVICE} 失效通知。
+     *
+     * @param deviceId Device 标识
+     * @param change 新展示名称和备注；备注为 {@code null} 时清除原备注
+     * @throws BusinessException Device 不存在时抛出 {@link IotErrorCode#DEVICE_NOT_FOUND}
+     */
     public void updateDetails(long deviceId, @NotNull DeviceDetailsChange change) {
         DeviceDetailsChange input = Objects.requireNonNull(change, "Device 展示资料不能为空");
         writeDevice(deviceId, () -> updateDetailsLocked(deviceId, input));
@@ -281,8 +312,8 @@ public class DeviceService {
         Device updated = devices.find(deviceId)
                 .orElseThrow(() -> new IllegalStateException("切换绑定后 Device 不存在"));
         changes.changed(deviceId, DeviceChangeArea.DEVICE, now);
-        LOG.info(
-                "Device 物模型绑定已切换 | deviceId={} modelVersion={} protocol={} bindingGeneration={} removedDesired={}",
+        LOG.debug(
+                "Device 物模型绑定已写入事务 | deviceId={} modelVersion={} protocol={} bindingGeneration={} removedDesired={}",
                 deviceId,
                 updated.thingModelVersion(),
                 updated.protocolCode(),
@@ -346,8 +377,8 @@ public class DeviceService {
         Device updated = devices.find(deviceId)
                 .orElseThrow(() -> new IllegalStateException("修改接入方式后 Device 不存在"));
         changes.changed(deviceId, DeviceChangeArea.DEVICE, clock.instant());
-        LOG.info(
-                "Device 连接绑定已修改 | deviceId={} direct={} methodCount={}",
+        LOG.debug(
+                "Device 连接绑定已写入事务 | deviceId={} direct={} methodCount={}",
                 deviceId,
                 updated.connection().isPresent(),
                 updated.accessMethods().size());
@@ -396,21 +427,5 @@ public class DeviceService {
                             transactions.executeWithoutResult(status -> operation.run());
                             return null;
                         }));
-    }
-
-    /** 校验 Device 是 Product 允许的确定子集并且物模型和协议存在。 */
-    private void validateRegistration(ProductDefinition product, DeviceRegistration input) {
-        if (input.connection().isPresent() == input.accessMethods().isEmpty()
-                || !product.accessMethods().containsAll(input.accessMethods())) {
-            throw new BusinessException(IotErrorCode.INVALID_INPUT);
-        }
-        if (!product.protocolCodes().contains(input.protocolCode())) {
-            throw new BusinessException(IotErrorCode.PROTOCOL_CONFLICT);
-        }
-        ThingModel model = models.find(product.code(), input.thingModelVersion())
-                .map(ThingModelPresentation::model)
-                .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
-        DeviceProtocol protocol = protocols.loadByCode(input.protocolCode());
-        protocol.validate(model);
     }
 }

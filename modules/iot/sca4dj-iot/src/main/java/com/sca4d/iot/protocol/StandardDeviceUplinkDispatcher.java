@@ -22,6 +22,12 @@ public class StandardDeviceUplinkDispatcher implements DeviceUplinkDispatcher {
 
     private final @NotNull DeviceUplinkReceiver receiver;
 
+    /**
+     * 创建上行分发器。
+     *
+     * @param protocols 按 code 查找已安装协议的目录
+     * @param receiver 接收解码后状态和 ACK 的 Device 上行处理入口
+     */
     public StandardDeviceUplinkDispatcher(
             @NotNull DeviceProtocolCatalog protocols,
             @NotNull DeviceUplinkReceiver receiver) {

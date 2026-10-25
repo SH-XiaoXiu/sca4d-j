@@ -9,8 +9,10 @@ import org.jetbrains.annotations.NotNull;
 /** 请求检查一个标准 Device 下行消息的指定发送尝试是否等待 ACK 超时。 */
 public class DeviceAcknowledgementCheck extends Message {
 
+    /** ACK 超时检查消息的协议版本，与 `protocolVersion()` 返回值一致。 */
     public static final int PROTOCOL_VERSION = 1;
 
+    /** ACK 超时检查消息的稳定类型编码，用于通用 Messaging 路由。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/CHECK");
 
     private final int attempt;

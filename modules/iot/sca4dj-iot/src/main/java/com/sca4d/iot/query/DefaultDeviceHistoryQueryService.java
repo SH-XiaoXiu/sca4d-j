@@ -1,6 +1,6 @@
 package com.sca4d.iot.query;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
@@ -88,7 +88,12 @@ public class DefaultDeviceHistoryQueryService implements DeviceHistoryQueryServi
         return Map.copyOf(result);
     }
 
-    /** 批量确认设备存在，避免为每台设备单独装载台账。 */
+    /**
+     * 校验设备标识为去重后的正数列表，并确认全部 Device 存在。
+     *
+     * @throws IllegalArgumentException 设备标识为空或不是正数时抛出
+     * @throws BusinessException 任一 Device 不存在时以 DEVICE_NOT_FOUND 抛出
+     */
     private @NotNull List<Long> validateDeviceIds(@NotNull Collection<@NotNull Long> deviceIds) {
         List<Long> ids = Objects.requireNonNull(deviceIds, "设备标识不能为空")
                 .stream()

@@ -20,8 +20,9 @@ public class DeviceBindingChange {
             @NotNull String protocolCode) {
         this.thingModelVersion = thingModelVersion;
         this.protocolCode = Objects.requireNonNull(protocolCode, "Device 协议 code 不能为空");
-        if (thingModelVersion <= 0)
+        if (thingModelVersion <= 0) {
             throw new IllegalArgumentException("物模型版本必须为正数");
+        }
     }
 
     /** @return 目标物模型版本 */

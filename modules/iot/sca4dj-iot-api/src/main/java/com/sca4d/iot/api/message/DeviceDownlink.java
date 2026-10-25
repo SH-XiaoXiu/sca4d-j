@@ -147,7 +147,7 @@ public class DeviceDownlink {
         return data;
     }
 
-    /** @return ACK 策略 code */
+    /** @return 创建消息时绑定的 ACK 策略 */
     public @NotNull AcknowledgementPolicy acknowledgementPolicy() {
         return acknowledgementPolicy;
     }
@@ -157,7 +157,7 @@ public class DeviceDownlink {
         return acknowledgementTimeout;
     }
 
-    /** @return retry 策略 code */
+    /** @return 创建消息时绑定的 retry 策略 */
     public @NotNull RetryPolicy retryPolicy() {
         return retryPolicy;
     }

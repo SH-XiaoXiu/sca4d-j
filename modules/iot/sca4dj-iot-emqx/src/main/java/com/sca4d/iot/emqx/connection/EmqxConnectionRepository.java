@@ -5,6 +5,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
+import com.sca4d.iot.emqx.exception.IotEmqxException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
@@ -25,7 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/** 使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点事实。 */
+/** 使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点名称。 */
 public class EmqxConnectionRepository {
 
     private static final DefaultRedisScript<Long> PROJECT = script("project.lua");
@@ -161,7 +162,7 @@ public class EmqxConnectionRepository {
     }
 
     /**
-     * 使用一次 Redis pipeline 读取一批 Client ID 当前映射的连接代次。
+     * 按 Redis 批次分批使用 pipeline 读取 Client ID 当前映射的连接代次。
      *
      * @param clientIds MQTT Client ID 集合
      * @return 仍有在线连接映射的 Client ID 和连接代次
@@ -212,7 +213,7 @@ public class EmqxConnectionRepository {
         List<EmqxClientConnection> current = List.copyOf(
                 Objects.requireNonNull(connections, "EMQX 对账连接不能为空"));
         Instant cutoff = Objects.requireNonNull(observedAt, "EMQX 对账观察时间不能为空");
-        // 把 Broker 快照中的全部当前连接脚本放入一个 pipeline，并记录不能被清理的连接代次。
+        // 把 Broker 快照中的全部当前连接脚本分批放入 pipeline，并记录不能被清理的连接代次。
         Set<DeviceConnectionId> retained = new HashSet<>();
         for (EmqxClientConnection connection : current) {
             retained.add(connection.connectionId());
@@ -245,7 +246,7 @@ public class EmqxConnectionRepository {
         }
     }
 
-    /** 使用一个 pipeline 执行快照中全部连接投影脚本。 */
+    /** 按 Redis 批次分批使用 pipeline 执行快照中全部连接投影脚本。 */
     private void projectAll(@NotNull List<EmqxClientConnection> connections, @NotNull Instant observedAt) {
         redisBatches.forEach(connections, 1, batch -> {
             redis.executePipelined(new SessionCallback<>() {
@@ -273,7 +274,7 @@ public class EmqxConnectionRepository {
         });
     }
 
-    /** 使用一个 pipeline 读取候选连接 Hash，并保持输入顺序。 */
+    /** 按 Redis 批次分批使用 pipeline 读取候选连接 Hash，并保持输入顺序。 */
     private @NotNull List<Map<Object, Object>> connectionHashes(
             @NotNull List<DeviceConnectionId> connectionIds) {
         return redisBatches.query(connectionIds, 1, batch -> {
@@ -291,7 +292,7 @@ public class EmqxConnectionRepository {
         });
     }
 
-    /** 使用一个 pipeline 删除已经确认过期的连接代次。 */
+    /** 按 Redis 批次分批使用 pipeline 删除已经确认过期的连接代次。 */
     private void removeAll(@NotNull List<DeviceConnectionId> connectionIds) {
         redisBatches.forEach(connectionIds, 1, batch -> {
             redis.executePipelined(new SessionCallback<>() {
@@ -311,7 +312,7 @@ public class EmqxConnectionRepository {
         });
     }
 
-    /** 使用一个 pipeline 清理全部 Client 反向索引中的旧观察结果。 */
+    /** 按 Redis 批次分批使用 pipeline 清理全部 Client 反向索引中的旧观察结果。 */
     private void cleanupClients(@NotNull Set<String> clientIds, @NotNull Instant cutoff) {
         redisBatches.forEach(clientIds, 1, batch -> {
             redis.executePipelined(new SessionCallback<>() {
@@ -335,7 +336,7 @@ public class EmqxConnectionRepository {
     @SuppressWarnings("unchecked")
     private static @NotNull Map<Object, Object> redisHash(@NotNull Object value) {
         if (!(value instanceof Map<?, ?> fields)) {
-            throw new IllegalStateException("EMQX Connection pipeline 返回了无法识别的 Hash");
+            throw new IotEmqxException("EMQX Connection pipeline 返回了无法识别的 Hash");
         }
         return (Map<Object, Object>) fields;
     }

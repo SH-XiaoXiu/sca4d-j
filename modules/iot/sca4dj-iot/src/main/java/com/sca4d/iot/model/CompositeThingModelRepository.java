@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 按 Product code 把只读代码物模型和数据库物模型组合为唯一读写入口。 */
+/**
+ * 按 Product code 选择物模型来源：代码 Product 从 {@link StaticThingModelRepository} 只读读取，
+ * 其他 Product 从数据库读写。代码 Product 的发布和翻译替换会抛出 {@link UnsupportedOperationException}。
+ */
 public class CompositeThingModelRepository implements ThingModelRepository {
 
     private final @NotNull DatabaseThingModelRepository databaseModels;
@@ -24,6 +27,13 @@ public class CompositeThingModelRepository implements ThingModelRepository {
 
     private final @NotNull ProductDefinitionCatalog products;
 
+    /**
+     * 创建按 Product code 分派物模型读写的组合 Repository。
+     *
+     * @param products 判断 Product code 是否属于代码 Product 的目录
+     * @param codeModels 代码 Product 的只读静态物模型来源
+     * @param databaseModels 其他 Product 的数据库物模型来源
+     */
     public CompositeThingModelRepository(
             @NotNull ProductDefinitionCatalog products,
             @NotNull StaticThingModelRepository codeModels,

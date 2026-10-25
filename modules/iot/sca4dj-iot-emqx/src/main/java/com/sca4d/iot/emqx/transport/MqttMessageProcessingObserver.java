@@ -1,5 +1,6 @@
 package com.sca4d.iot.emqx.transport;
 
+import com.sca4d.iot.emqx.transport.exception.MqttMessageRejectedException;
 import org.jetbrains.annotations.NotNull;
 
 /** 观察 MQTT 上行的拒绝、再次处理和最终失败，不参与消息确认决定。 */

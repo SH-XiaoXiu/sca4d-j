@@ -1,7 +1,7 @@
 package com.sca4d.iot.state;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import com.sca4d.core.api.retry.Backoff;
@@ -44,6 +44,8 @@ public class PostgresqlReportedStateStore implements ReportedStateStore {
     private final @NotNull ThingDataJsonCodec json;
 
     /**
+     * 创建使用 PostgreSQL 保存 reported 投影的存储。
+     *
      * @param mapper reported state SQL Mapper
      * @param json 物模型数据 JSON 编解码器
      * @param sqlBatches SQL 批处理器

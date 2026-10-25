@@ -17,6 +17,7 @@ import java.time.Instant;
 /** 按预设退避序列持续发送当前 desired sequence，直到新 desired sequence 取代或 reported 收敛。 */
 public class DefaultStateSyncRetryPolicy implements RetryPolicy {
 
+    /** 状态同步重试策略的稳定编码，`DevicePolicyCatalog` 用它查找该策略实例。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT");
 
     private static final com.sca4d.core.api.retry.RetryPolicy<IotFailureCode> RETRY = com.sca4d.core.api.retry.RetryPolicy

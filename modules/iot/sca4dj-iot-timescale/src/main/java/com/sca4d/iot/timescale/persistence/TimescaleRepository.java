@@ -16,6 +16,7 @@ import com.sca4d.iot.api.schedule.DeviceScheduleExecution;
 import com.sca4d.iot.api.schedule.DeviceScheduleExecutionStatus;
 import com.sca4d.iot.api.telemetry.TelemetryBatch;
 import com.sca4d.iot.api.telemetry.TelemetrySample;
+import com.sca4d.iot.exception.IotTimescaleException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -187,7 +188,7 @@ public class TimescaleRepository {
                 .toList();
     }
 
-    /** 分页读取 Device 的全部物模型和 IoT 状态机事件。 */
+    /** 分页读取 Device 的全部属性事件和 IoT 状态机事件。 */
     public @NotNull Page<DeviceEvent> findEvents(long deviceId, @NotNull PageRequest page) {
         if (deviceId <= 0) {
             throw new IllegalArgumentException("Device 标识必须为正数");
@@ -309,7 +310,7 @@ public class TimescaleRepository {
         try {
             return json.writeValueAsString(Objects.requireNonNull(value, "Timescale JSON 值不能为空"));
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Timescale JSON 无法编码", exception);
+            throw new IotTimescaleException("Timescale JSON 无法编码", exception);
         }
     }
 
@@ -318,7 +319,7 @@ public class TimescaleRepository {
         try {
             return json.readValue(value, Object.class);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Timescale JSON 无法解析", exception);
+            throw new IotTimescaleException("Timescale JSON 无法解析", exception);
         }
     }
 
@@ -327,7 +328,7 @@ public class TimescaleRepository {
         try {
             return new LinkedHashMap<>(json.readValue(value, MAP_TYPE));
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Timescale JSON 对象无法解析", exception);
+            throw new IotTimescaleException("Timescale JSON 对象无法解析", exception);
         }
     }
 
@@ -335,7 +336,7 @@ public class TimescaleRepository {
     private static @NotNull String text(@NotNull Map<String, Object> data, @NotNull String name) {
         Object value = data.get(name);
         if (!(value instanceof String result) || result.isBlank()) {
-            throw new IllegalStateException("IoT 事件缺少文本字段: " + name);
+            throw new IotTimescaleException("IoT 事件缺少文本字段: " + name);
         }
         return result;
     }
@@ -344,7 +345,7 @@ public class TimescaleRepository {
     private static long number(@NotNull Map<String, Object> data, @NotNull String name) {
         Object value = data.get(name);
         if (!(value instanceof Number result)) {
-            throw new IllegalStateException("IoT 事件缺少整数: " + name);
+            throw new IotTimescaleException("IoT 事件缺少整数: " + name);
         }
         return result.longValue();
     }
@@ -354,7 +355,7 @@ public class TimescaleRepository {
     private static @NotNull Map<String, Object> objectMap(@NotNull Map<String, Object> data) {
         Object value = data.get("data");
         if (!(value instanceof Map<?, ?> result)) {
-            throw new IllegalStateException("IoT 事件缺少对象: data");
+            throw new IotTimescaleException("IoT 事件缺少对象: data");
         }
         return Map.copyOf((Map<String, Object>) result);
     }

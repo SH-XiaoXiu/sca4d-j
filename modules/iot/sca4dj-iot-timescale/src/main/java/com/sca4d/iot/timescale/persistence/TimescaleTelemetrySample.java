@@ -25,7 +25,7 @@ public class TimescaleTelemetrySample {
 
     private final long messageId;
 
-    /** 创建已经完成物模型值编码的 Telemetry 持久化字段。 */
+    /** 创建已经完成属性值编码的 Telemetry 持久化字段。 */
     public TimescaleTelemetrySample(
             long messageId,
             int sampleIndex,
@@ -48,12 +48,12 @@ public class TimescaleTelemetrySample {
         this.receivedAt = Objects.requireNonNull(receivedAt, "Telemetry receivedAt 不能为空");
     }
 
-    /** @return 通用 Messaging 分配的稳定消息标识 */
+    /** @return Messaging 分配的消息标识 */
     public long messageId() {
         return messageId;
     }
 
-    /** @return 样本在消息内的稳定序号 */
+    /** @return 样本在消息内的序号，从 0 开始 */
     public int sampleIndex() {
         return sampleIndex;
     }
@@ -63,7 +63,7 @@ public class TimescaleTelemetrySample {
         return deviceId;
     }
 
-    /** @return Device 物模型绑定代数 */
+    /** @return Device 属性绑定代数 */
     public long bindingGeneration() {
         return bindingGeneration;
     }
@@ -73,7 +73,7 @@ public class TimescaleTelemetrySample {
         return propertyCode;
     }
 
-    /** @return 已规范化的物模型值 JSON */
+    /** @return 按属性定义编码后的值 JSON */
     public @NotNull String valueJson() {
         return valueJson;
     }

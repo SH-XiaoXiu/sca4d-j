@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.core.api.data.DataOps;
 import com.sca4d.iot.emqx.config.EmqxProperties;
 import com.sca4d.iot.emqx.connection.EmqxClientConnection;
+import com.sca4d.iot.emqx.exception.IotEmqxException;
+import com.sca4d.iot.emqx.management.exception.EmqxPublishResultUnknownException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.client.ResourceAccessException;
@@ -80,7 +82,7 @@ public class HttpEmqxManagementClient implements EmqxManagementClient {
                     .body(JsonNode.class);
             JsonNode data = root == null ? null : root.get("data");
             if (data == null || !data.isArray()) {
-                throw new IllegalStateException("EMQX clients 响应缺少 data 数组");
+                throw new IotEmqxException("EMQX clients 响应缺少 data 数组");
             }
             for (JsonNode value : data)
                 result.add(client(value));

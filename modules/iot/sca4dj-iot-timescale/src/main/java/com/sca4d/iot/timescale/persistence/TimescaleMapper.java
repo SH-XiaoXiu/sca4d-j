@@ -60,7 +60,7 @@ public interface TimescaleMapper {
     /** 一次 SQL 幂等写入同一消息的全部 Telemetry 样本。 */
     int insertTelemetrySamples(@Param("samples") @NotNull List<TimescaleTelemetrySample> samples);
 
-    /** 按发生时间和 Id 写入事件；同一发生时间内也约束来源事实键唯一。 */
+    /** 按发生时间和 Id 写入事件；同一发生时间内 source_event_id 不能重复。 */
     int insertEvent(
             @Param("messageId") long messageId,
             @Param("event") @NotNull DeviceEventMessage event,

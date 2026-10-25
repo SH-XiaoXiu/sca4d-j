@@ -1,4 +1,4 @@
-package com.sca4d.iot.schedule;
+package com.sca4d.iot.schedule.exception;
 
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 标识一个到期规则生成 command 时发生的业务失败，供新事务保存 FAILED 结果。 */
-public class DeviceScheduleTriggerFailure extends RuntimeException {
+public class DeviceScheduleTriggerException extends RuntimeException {
 
     private final @NotNull Instant plannedAt;
 
@@ -18,7 +18,7 @@ public class DeviceScheduleTriggerFailure extends RuntimeException {
     private final long scheduleVersion;
 
     /** 创建能够重新定位同版本到期规则的业务失败。 */
-    public DeviceScheduleTriggerFailure(
+    public DeviceScheduleTriggerException(
             long scheduleId,
             long scheduleVersion,
             @NotNull Instant plannedAt,

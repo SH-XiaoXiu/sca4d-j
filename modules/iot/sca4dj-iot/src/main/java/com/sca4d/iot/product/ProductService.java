@@ -2,7 +2,7 @@ package com.sca4d.iot.product;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.LocalizedFieldsSchema;
@@ -79,7 +79,13 @@ public class ProductService {
         this.transactions = Objects.requireNonNull(transactions, "事务模板不能为空");
     }
 
-    /** @param registration 完整 Product 创建数据 @return 新建 Product */
+    /**
+     * 在 Product 分布式锁和事务内新增数据库 Product。
+     *
+     * @param registration 完整 Product 创建数据，code 不能与代码 Product 冲突
+     * @return 已保存的新 Product
+     * @throws BusinessException code 与代码 Product 或已有 Product 冲突时抛出 IDENTITY_CONFLICT；协议未登记时抛出 IllegalArgumentException
+     */
     @CheckReturnValue
     public @NotNull Product create(@NotNull ProductRegistration registration) {
         ProductRegistration input = Objects.requireNonNull(registration, "Product 创建数据不能为空");
@@ -168,21 +174,36 @@ public class ProductService {
         });
     }
 
-    /** @return 全部 Product */
+    /**
+     * 只读查询全部数据库 Product，不包含代码 Product。
+     *
+     * @return 全部数据库 Product，没有记录时为空列表
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull List<Product> findAll() {
         return products.findAll();
     }
 
-    /** @param page 从一开始且页大小不超过 100 的分页要求 @return Product 分页结果 */
+    /**
+     * 只读分页查询数据库 Product，不包含代码 Product。
+     *
+     * @param page 从一开始且页大小不超过 100 的分页要求
+     * @return 当前页数据库 Product 和总数
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull Page<Product> findPage(@NotNull PageRequest page) {
         return products.findPage(page);
     }
 
-    /** @param productId Product 标识 @return 必须存在的 Product */
+    /**
+     * 只读查询数据库 Product。
+     *
+     * @param productId Product 标识
+     * @return 找到的 Product
+     * @throws BusinessException 标识对应的 Product 不存在时抛出 PRODUCT_NOT_FOUND
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull Product loadById(long productId) {

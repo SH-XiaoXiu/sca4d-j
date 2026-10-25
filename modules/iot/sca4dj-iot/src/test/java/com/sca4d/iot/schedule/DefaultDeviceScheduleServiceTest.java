@@ -206,7 +206,7 @@ class DefaultDeviceScheduleServiceTest {
                 any(Supplier.class));
     }
 
-    /** @return 触发时用于记录绑定代数 的 Device */
+    /** @return 绑定代数为 4 的测试 Device，供执行结果事件读取绑定代数 */
     private static Device device() {
         return new Device(
                 20,

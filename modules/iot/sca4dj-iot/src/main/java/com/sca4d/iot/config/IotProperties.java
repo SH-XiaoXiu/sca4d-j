@@ -157,7 +157,14 @@ public class IotProperties {
         this.downlinkCleanupBatchSize = downlinkCleanupBatchSize;
     }
 
-    /** 校验公共模块运行必需且不能由公共模块猜测的配置。 */
+    /**
+     * 校验公共模块运行必需且不能由公共模块猜测的配置。
+     *
+     * <p>任一时长未显式配置为正数、存储类型为空或数量与批次超出保护范围时，抛出 {@link IllegalStateException}，
+     * 启动阶段由调用方（自动配置 Bean 方法）直接失败，不回退到默认值。
+     *
+     * @throws IllegalStateException 配置缺失或超出保护范围时抛出，异常消息包含配置键名
+     */
     public void validate() {
         requirePositive(connectionTtl, "sca4dj.iot.connection-ttl");
         requirePositive(scheduleTick, "sca4dj.iot.schedule-tick");

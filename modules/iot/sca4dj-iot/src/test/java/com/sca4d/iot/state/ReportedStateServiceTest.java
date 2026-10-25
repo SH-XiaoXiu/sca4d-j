@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
@@ -50,7 +50,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证 reported 输入保护和 desired 收敛 ACK 的可靠消息边界。 */
+/** 验证 reported 输入超限保护，以及 desired 收敛 ACK 的可靠消息处理。 */
 class ReportedStateServiceTest {
 
     private static final Instant NOW = Instant.parse("2026-08-18T08:00:00Z");

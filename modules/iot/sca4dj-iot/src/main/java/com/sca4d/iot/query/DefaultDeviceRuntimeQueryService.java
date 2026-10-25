@@ -1,6 +1,6 @@
 package com.sca4d.iot.query;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.connection.DeviceConnectionQueryService;
@@ -42,7 +42,8 @@ public class DefaultDeviceRuntimeQueryService implements DeviceRuntimeQueryServi
 
     @Override
     public @NotNull DeviceRuntimeSnapshot runtime(long deviceId) {
-        Device device = loadDeviceById(deviceId);
+        Device device = devices.find(deviceId)
+                .orElseThrow(() -> new BusinessException(IotErrorCode.DEVICE_NOT_FOUND));
         return new DeviceRuntimeSnapshot(
                 connections.connections(deviceId),
                 reported.find(deviceId, device.bindingGeneration()),
@@ -59,11 +60,5 @@ public class DefaultDeviceRuntimeQueryService implements DeviceRuntimeQueryServi
             generations.put(device.id(), device.bindingGeneration());
         }
         return reported.find(generations, Objects.requireNonNull(groupCode, "reported 字段组不能为空"));
-    }
-
-    /** 要求查询目标 Device 存在。 */
-    private @NotNull Device loadDeviceById(long deviceId) {
-        return devices.find(deviceId)
-                .orElseThrow(() -> new BusinessException(IotErrorCode.DEVICE_NOT_FOUND));
     }
 }

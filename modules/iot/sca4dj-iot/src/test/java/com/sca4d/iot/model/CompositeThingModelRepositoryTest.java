@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证静态物模型和数据库物模型按 Product code 进入唯一 Repository。 */
+/** 验证静态定义和数据库中的属性定义按 Product code 进入唯一 Repository。 */
 class CompositeThingModelRepositoryTest {
 
     @Test
@@ -78,7 +78,7 @@ class CompositeThingModelRepositoryTest {
         verify(databaseModels).find("gateway", 1);
     }
 
-    /** 创建只包含物模型名称的简体中文动态翻译。 */
+    /** 创建只包含属性名称的简体中文动态翻译。 */
     private static LocalizedFields i18n(String displayName) {
         return LocalizedFields.of(
                 Map.of(

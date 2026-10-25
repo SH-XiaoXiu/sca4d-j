@@ -88,10 +88,11 @@ public class DownlinkRepository {
     }
 
     /**
-     * 批量读取最近记录；每个标识对应有序且不可修改的列表，无记录时为空列表。
+     * 批量读取指定下行消息的最新 Device 回执；每个消息标识对应一个不可修改列表，没有回执时为空列表。
      *
-     * @param messageIds 正数标识集合，重复标识合并，空集合不查询数据库
-     * @return 按标识分组的不可修改结果
+     * @param messageIds 正数消息标识集合，重复标识合并，空集合不查询数据库
+     * @return 按消息标识分组的不可修改结果
+     * @throws IllegalArgumentException 任一消息标识不是正数时抛出
      */
     public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceAcknowledgement>> findLatestAcknowledgements(
             @NotNull Collection<@NotNull Long> messageIds) {
@@ -118,6 +119,8 @@ public class DownlinkRepository {
     }
 
     /**
+     * 创建下行消息 Repository，并在构造时检查全部依赖非空。
+     *
      * @param messages 下行消息 SQL Mapper
      * @param desired desired property SQL Mapper
      * @param json 物模型数据 JSON 编解码器
@@ -173,7 +176,7 @@ public class DownlinkRepository {
         return Collections.unmodifiableMap(result);
     }
 
-    /** 当 desired sequence 仍等于预期值时更新它。 */
+    /** 当 Device 当前 desired sequence 仍等于 expectedDesiredSequence 时更新为 desiredSequence；条件不满足时返回 false 且不修改数据。 */
     public boolean advanceDesiredSequence(
             long deviceId,
             long expectedDesiredSequence,
@@ -453,7 +456,7 @@ public class DownlinkRepository {
         return true;
     }
 
-    /** 把仍未结束的消息转换成最终状态。 */
+    /** 把仍处于 PENDING、SENDING 或 WAITING_ACK 的消息转换成给定最终状态；消息已经结束或不存在时返回 false。 */
     public boolean complete(
             long messageId,
             @NotNull DeviceDownlinkStatus status,

@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.sca4d.iot.api.model.ThingValueType;
 import org.junit.jupiter.api.Test;
 
-/** 验证物模型值校验器执行字符串长度和完整匹配约束。 */
+/** 验证属性值校验器执行字符串长度和完整匹配约束。 */
 class ThingValueValidatorTest {
 
     private final ThingValueValidator validator = new ThingValueValidator();

@@ -106,7 +106,7 @@ public class TimescaleIotAutoConfiguration {
         return new TimescaleTelemetryConsumer(repository);
     }
 
-    /** @return 消费物模型和 IoT 状态机事件并直接写入 TimescaleDB 的 Consumer */
+    /** @return 消费 Device 事件和 IoT 状态机事件并直接写入 TimescaleDB 的 Consumer */
     @Bean
     @ConditionalOnCapability(IotCapabilities.TRANSPORT)
     TimescaleEventConsumer timescaleEventConsumer(@NotNull TimescaleRepository repository) {
@@ -149,6 +149,7 @@ public class TimescaleIotAutoConfiguration {
                 OverlapPolicy.SKIP_IF_RUNNING);
     }
 
+    /** @return 由 timescaleRetentionSchedule 引用的直接任务，不记录任务执行历史，清理动作由 TimescaleRetentionTask 负责 */
     @Bean
     DirectJob<Void, Void> timescaleRetentionJob(@NotNull TimescaleRetentionTask task) {
         return DirectJob.unrecorded(

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/** 验证传输路由不选择设备协议，统一分发器只按 Device 台账选择实际协议。 */
+/** 验证传输路由不选择设备协议，上行分发器只按 Device 台账选择实际协议。 */
 class StandardDeviceUplinkDispatcherTest {
 
     @Test

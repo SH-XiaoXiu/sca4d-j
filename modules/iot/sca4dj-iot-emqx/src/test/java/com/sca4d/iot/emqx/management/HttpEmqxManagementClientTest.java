@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.iot.emqx.config.EmqxProperties;
 import com.sca4d.iot.emqx.connection.EmqxClientConnection;
+import com.sca4d.iot.emqx.management.exception.EmqxPublishResultUnknownException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.AfterEach;

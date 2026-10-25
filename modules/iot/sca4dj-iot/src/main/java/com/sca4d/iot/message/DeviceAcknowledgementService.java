@@ -2,7 +2,7 @@ package com.sca4d.iot.message;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.messaging.DispatchPolicy;
@@ -20,6 +20,7 @@ import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.message.RetryDecision;
 import com.sca4d.iot.change.DeviceChangeNotifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -77,7 +78,7 @@ public class DeviceAcknowledgementService {
     public void acknowledge(@NotNull DeviceAcknowledgement acknowledgement) {
         DeviceAcknowledgement checked = Objects.requireNonNull(acknowledgement, "Device ACK 不能为空");
         distributedLock.execute(
-                downlinkLock(checked.messageId()),
+                downlinkLockKey(checked.messageId()),
                 LOCK_WAIT,
                 () -> {
                     transactions.executeWithoutResult(status -> acknowledgeExpected(null, checked));
@@ -100,7 +101,7 @@ public class DeviceAcknowledgementService {
         }
         DeviceAcknowledgement checked = Objects.requireNonNull(acknowledgement, "Device ACK 不能为空");
         return distributedLock.execute(
-                downlinkLock(checked.messageId()),
+                downlinkLockKey(checked.messageId()),
                 LOCK_WAIT,
                 () -> Objects.requireNonNull(
                         transactions.execute(status -> acknowledgeExpected(deviceId, checked)),
@@ -109,7 +110,7 @@ public class DeviceAcknowledgementService {
 
     /** 在同一事务内校验可选 Device 归属并执行 ACK 状态转换。 */
     private @NotNull DeviceDownlink acknowledgeExpected(
-            Long expectedDeviceId,
+            @Nullable Long expectedDeviceId,
             @NotNull DeviceAcknowledgement acknowledgement) {
         DeviceAcknowledgement checked = Objects.requireNonNull(acknowledgement, "Device ACK 不能为空");
         DeviceDownlink message = downlinks.find(checked.messageId())
@@ -169,7 +170,7 @@ public class DeviceAcknowledgementService {
         }
     }
 
-    /** 把每个首次接受的 ACK 阶段可靠发布成统一 IoT 事件。 */
+    /** 把每个首次接受的 ACK 阶段可靠发布为 IoT 事件。 */
     private void publishAcknowledgementEvent(
             @NotNull DeviceDownlink message,
             @NotNull DeviceAcknowledgement acknowledgement,
@@ -206,7 +207,7 @@ public class DeviceAcknowledgementService {
     }
 
     /** @return 指定下行消息在全部应用实例间共用的锁键 */
-    private static @NotNull LockKey downlinkLock(long messageId) {
+    private static @NotNull LockKey downlinkLockKey(long messageId) {
         return new LockKey(TreeCode.of("IOT:DOWNLINK"), messageId);
     }
 }

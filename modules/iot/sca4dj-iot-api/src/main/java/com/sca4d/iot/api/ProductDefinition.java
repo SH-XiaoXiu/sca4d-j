@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** 定义数据库或代码 Product 共同使用的只读技术能力。 */
+/** 定义数据库或代码 Product 共同使用的只读技术属性。 */
 public class ProductDefinition {
 
     private final @NotNull LocalizableText displayName;
@@ -36,9 +36,6 @@ public class ProductDefinition {
         this.displayName = Objects.requireNonNull(displayName, "ProductDefinition 展示名称不能为空");
         this.accessMethods = Set.copyOf(
                 Objects.requireNonNull(accessMethods, "ProductDefinition 接入方式不能为空"));
-        if (this.accessMethods.stream().anyMatch(Objects::isNull)) {
-            throw new IllegalArgumentException("ProductDefinition 接入方式不能包含空值");
-        }
         LinkedHashSet<String> protocols = new LinkedHashSet<>();
         for (String protocol : Objects.requireNonNull(protocolCodes, "ProductDefinition 协议不能为空")) {
             protocols.add(TextUtils.requireText(protocol, "ProductDefinition 协议"));

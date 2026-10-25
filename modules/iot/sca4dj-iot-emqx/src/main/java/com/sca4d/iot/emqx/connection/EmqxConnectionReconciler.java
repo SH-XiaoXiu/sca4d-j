@@ -8,7 +8,7 @@ import com.sca4d.core.api.connection.Connection;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionProtocol;
 import com.sca4d.core.api.connection.ConnectionRegistry;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
@@ -182,8 +182,10 @@ public class EmqxConnectionReconciler {
         if (device == null && emqxConnections.findConnectionId(checkedClientId).isEmpty()) {
             return;
         }
+        // 查询时间早于其他事件时，后续写入会按 observedAt 与当前连接代次比较，旧结果不会覆盖新连接。
         Instant observedAt = clock.instant();
         Optional<EmqxClientConnection> current = management.findClient(checkedClientId);
+        // Broker 上已没有该 Client 时，删除 EMQX 投影和通用投影中的当前连接代次，按离线处理。
         if (current.isEmpty()) {
             disconnectCurrent(checkedClientId, observedAt);
             return;
@@ -194,6 +196,7 @@ public class EmqxConnectionReconciler {
             disconnectCurrent(checkedClientId, observedAt);
             return;
         }
+        // 先写入通用连接投影和公共 Registry，再写 EMQX 专用投影；写入后若反向索引已指向更新的连接代次，则删除本次写入的通用投影。
         connections.connected(connection);
         registerCommon(connection, managed.brokerNode());
         emqxConnections.connected(managed, observedAt);
@@ -209,11 +212,13 @@ public class EmqxConnectionReconciler {
     }
 
     /** 把带有 Sca4d-J 认证属性的 Management API 连接转换为通用连接信息。 */
-    private DeviceConnection deviceConnection(EmqxClientConnection managed, @Nullable Device device) {
+    private @Nullable DeviceConnection deviceConnection(EmqxClientConnection managed, @Nullable Device device) {
         Map<String, String> attributes = managed.clientAttributes();
+        // 没有 device_id 属性且未登记 Device 的 Client 不属于设备连接，直接忽略，不断开 Broker 连接。
         if (!attributes.containsKey("device_id") && device == null) {
             return null;
         }
+        // 连接属性与登记 Device 不一致时断开 Broker 连接并返回 null，使该 Client 不进入任何连接投影。
         if (device == null
                 || !Long.toString(device.id()).equals(attributes.get("device_id"))
                 || !device.product().code().equals(attributes.get("product_code"))
@@ -226,6 +231,7 @@ public class EmqxConnectionReconciler {
                     managed.brokerNode());
             return null;
         }
+        // 授权验证异常时无法确认连接是否仍被允许，按不安全处理：断开连接并记录 ERROR，不把该连接写入投影。
         boolean currentAuthorization;
         try {
             currentAuthorization = authorization.isCurrent(device, managed.clientId(), attributes);

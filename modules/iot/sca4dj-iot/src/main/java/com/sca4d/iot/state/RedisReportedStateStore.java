@@ -1,6 +1,6 @@
 package com.sca4d.iot.state;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.redis.RedisBatches;
@@ -9,6 +9,7 @@ import com.sca4d.iot.api.query.ReportedStateSnapshot;
 import com.sca4d.iot.api.state.ReportedStateStore;
 import com.sca4d.iot.api.state.ReportedStateUpdate;
 import com.sca4d.iot.api.state.ReportedStateWriteResult;
+import com.sca4d.iot.exception.IotException;
 import com.sca4d.iot.model.ThingDataJsonCodec;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
@@ -112,7 +113,7 @@ public class RedisReportedStateStore implements ReportedStateStore {
         // 把 Lua 返回的 outcome:version 恢复成调用方使用的写入结果。
         int separator = result.indexOf(':');
         if (separator < 1) {
-            throw new IllegalStateException("Reported Redis Lua 返回了无法识别的结果");
+            throw new IotException("Reported Redis Lua 返回了无法识别的结果");
         }
         ReportedStateWriteResult.Outcome outcome = ReportedStateWriteResult.Outcome.valueOf(
                 result.substring(0, separator));
@@ -120,7 +121,7 @@ public class RedisReportedStateStore implements ReportedStateStore {
         return new ReportedStateWriteResult(outcome, version);
     }
 
-    /** 读取索引列出的全部字段组，并忽略已经不存在的 Hash。 */
+    /** 读取 Device 绑定下全部字段组快照；索引中 Hash 已不存在的字段组被跳过，并从索引中移除。 */
     @Override
     public @NotNull List<ReportedStateSnapshot> find(long deviceId, long bindingGeneration) {
         Set<String> groups = redis.opsForSet().members(indexKey(deviceId, bindingGeneration));
@@ -166,7 +167,7 @@ public class RedisReportedStateStore implements ReportedStateStore {
         return List.copyOf(result);
     }
 
-    /** 按指定绑定代数构造 Redis key，各批使用一次 pipeline 读取同一字段组。 */
+    /** 按 Device 绑定代数批量读取同一字段组；Hash 不存在的 Device 不出现在结果中，返回的 Map 不可修改。 */
     @Override
     public @NotNull Map<Long, ReportedStateSnapshot> find(
             @NotNull Map<Long, Long> bindingGenerations,
@@ -261,7 +262,7 @@ public class RedisReportedStateStore implements ReportedStateStore {
     @SuppressWarnings("unchecked")
     private static @NotNull Map<Object, Object> redisHash(@NotNull Object value) {
         if (!(value instanceof Map<?, ?> fields)) {
-            throw new IllegalStateException("Reported Redis pipeline 返回了无法识别的 Hash");
+            throw new IotException("Reported Redis pipeline 返回了无法识别的 Hash");
         }
         return (Map<Object, Object>) fields;
     }
@@ -270,7 +271,7 @@ public class RedisReportedStateStore implements ReportedStateStore {
     private static long longField(@NotNull Map<Object, Object> fields, @NotNull String name) {
         Object value = fields.get(name);
         if (value == null) {
-            throw new IllegalStateException("Reported Redis 数据缺少字段: " + name);
+            throw new IotException("Reported Redis 数据缺少字段: " + name);
         }
         return Long.parseLong(value.toString());
     }

@@ -33,7 +33,7 @@ public class DeviceConnectionChange {
         return Optional.ofNullable(connection);
     }
 
-    /** @return 新认证接入方式；间接 Device 为空 */
+    /** @return 新认证接入方式；间接 Device 为空集合 */
     public @NotNull @Unmodifiable Set<DeviceAccessMethod> accessMethods() {
         return accessMethods;
     }

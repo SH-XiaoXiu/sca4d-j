@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.codec.VersionedCodec;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
@@ -19,6 +19,7 @@ import com.sca4d.iot.api.model.ThingProperty;
 import com.sca4d.iot.api.model.ThingPropertyAccess;
 import com.sca4d.iot.api.model.ThingValueKind;
 import com.sca4d.iot.api.model.ThingValueType;
+import com.sca4d.iot.exception.IotException;
 import com.sca4d.iot.message.DevicePolicyCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -82,7 +83,12 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
 
     private final @NotNull DevicePolicyCatalog policies;
 
-    /** @param objectMapper App 统一 JSON 映射器 @param policies App 已登记的策略对象目录 */
+    /**
+     * 创建物模型 Codec。解析时 acknowledgementPolicy 与 retryPolicy 的 code 都从 policies 查找，未登记的 code 在 decode 中转换为 BusinessException。
+     *
+     * @param objectMapper App 统一 JSON 映射器，为 null 时抛出 {@link NullPointerException}
+     * @param policies App 已登记的策略对象目录，为 null 时抛出 {@link NullPointerException}
+     */
     public ThingModelJsonCodec(
             @NotNull ObjectMapper objectMapper,
             @NotNull DevicePolicyCatalog policies) {
@@ -176,7 +182,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
         try {
             return objectMapper.writeValueAsString(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("物模型无法编码", exception);
+            throw new IotException("物模型无法编码", exception);
         }
     }
 
@@ -193,7 +199,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
         }
         boolean telemetry = false;
         if (node.has("telemetry")) {
-            JsonNode value = required(node, "telemetry", path);
+            JsonNode value = requiredNode(node, "telemetry", path);
             if (!value.isBoolean()) {
                 throw invalidField(path(path, "telemetry"), null);
             }
@@ -203,7 +209,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
                 .builder(
                         requiredText(node, "code", path),
                         valueType(
-                                required(node, "valueType", path),
+                                requiredNode(node, "valueType", path),
                                 path(path, "valueType")))
                 .access(access)
                 .telemetry(telemetry);
@@ -267,7 +273,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
         }
     }
 
-    /** 解析事件输出或命令输入的 code 和递归值类型。 */
+    /** 解析事件输出或命令输入的 code 和递归值类型，同名字段重复时由 consumer 抛出 IllegalArgumentException。 */
     private void field(JsonNode node, FieldConsumer consumer, String path) {
         requireObject(node, path);
         rejectUnknown(node, FIELD_FIELDS, path);
@@ -275,13 +281,21 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
         try {
             consumer.accept(
                     requiredText(node, "code", path),
-                    valueType(required(node, "valueType", path), path(path, "valueType")));
+                    valueType(requiredNode(node, "valueType", path), path(path, "valueType")));
         } catch (IllegalArgumentException exception) {
             throw invalidField(path, exception);
         }
     }
 
-    /** 递归解析一个值类型。 */
+    /**
+     * 递归解析 ThingModel 中的一个值类型，ARRAY 的 elementType 会继续递归解析。
+     * 节点必须是只包含允许字段的 JSON object，kind 无法识别时抛出带路径的非法字段异常；只读取并校验，不修改输入节点。
+     *
+     * @param node 值类型 JSON 节点
+     * @param path 节点在 ThingModel JSON 中的字段路径，用于异常信息
+     * @return 解析后的值类型
+     * @throws IllegalArgumentException 节点结构、字段或 kind 不合法时抛出，异常信息包含出错字段路径
+     */
     private ThingValueType valueType(JsonNode node, String path) {
         requireObject(node, path);
         rejectUnknown(node, TYPE_FIELDS, path);
@@ -292,6 +306,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
         } catch (IllegalArgumentException exception) {
             throw invalidField(path(path, "kind"), exception);
         }
+        // 布尔和时间类型没有数值或长度约束，只允许 kind 字段，其余字段直接拒绝。
         if (kind == ThingValueKind.BOOLEAN) {
             rejectUnknown(node, Set.of("kind"), path);
             return ThingValueType.booleanType();
@@ -300,6 +315,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
             rejectUnknown(node, Set.of("kind"), path);
             return ThingValueType.timestampType();
         }
+        // 数组先递归解析元素类型，元素类型缺失或非法时整个数组类型解析失败；其余类型只创建对应 builder，约束在下面按 JSON 中出现的字段补充。
         ThingValueType.Builder builder = switch (kind) {
             case INTEGER -> ThingValueType.integerType();
             case DECIMAL -> ThingValueType.decimalType();
@@ -308,7 +324,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
             case OBJECT -> ThingValueType.objectType();
             case ARRAY -> ThingValueType.arrayType(
                     valueType(
-                            required(node, "elementType", path),
+                            requiredNode(node, "elementType", path),
                             path(path, "elementType")));
             default -> throw invalidField(path(path, "kind"), null);
         };
@@ -372,7 +388,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
             rejectNull(field, fieldPath);
             String code = requiredText(field, "code", fieldPath);
             ThingValueType fieldType = valueType(
-                    required(field, "valueType", fieldPath),
+                    requiredNode(field, "valueType", fieldPath),
                     path(fieldPath, "valueType"));
             if (required) {
                 try {
@@ -492,8 +508,8 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
         }
     }
 
-    /** 返回必需字段并拒绝缺失。 */
-    private static JsonNode required(JsonNode node, String field, String path) {
+    /** 返回必需字段的节点，字段缺失或为 null 时抛出携带字段路径的 BusinessException。 */
+    private static JsonNode requiredNode(JsonNode node, String field, String path) {
         JsonNode value = node.get(field);
         if (value == null || value.isNull()) {
             throw invalidField(path(path, field), null);
@@ -503,7 +519,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
 
     /** 返回必需文本字段。 */
     private static String requiredText(JsonNode node, String field, String path) {
-        JsonNode value = required(node, field, path);
+        JsonNode value = requiredNode(node, field, path);
         if (!value.isTextual() || value.textValue().isBlank()) {
             throw invalidField(path(path, field), null);
         }
@@ -512,7 +528,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
 
     /** 返回必需整数字段。 */
     private static int requiredInt(JsonNode node, String field, String path) {
-        JsonNode value = required(node, field, path);
+        JsonNode value = requiredNode(node, field, path);
         if (!value.canConvertToInt() || !value.isIntegralNumber()) {
             throw invalidField(path(path, field), null);
         }
@@ -521,7 +537,7 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
 
     /** 返回必需数组字段的快照。 */
     private static List<JsonNode> requiredArray(JsonNode node, String field, String path) {
-        JsonNode value = required(node, field, path);
+        JsonNode value = requiredNode(node, field, path);
         if (!value.isArray()) {
             throw invalidField(path(path, field), null);
         }
@@ -570,10 +586,16 @@ public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
                 path);
     }
 
-    /** 接收一个 code 和 ThingValueType。 */
+    /** 接收解析完成的字段 code 和值类型，通常把字段登记到 Builder 中。 */
     @FunctionalInterface
     private interface FieldConsumer {
-        /** @param code 字段 code @param type 字段类型 */
+        /**
+         * 登记一个字段。
+         *
+         * @param code 字段 code，已确认非空
+         * @param type 字段值类型
+         * @throws IllegalArgumentException 字段 code 重复或不符合物模型约束时抛出
+         */
         void accept(String code, ThingValueType type);
     }
 }

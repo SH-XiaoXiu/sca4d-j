@@ -4,7 +4,7 @@ import com.sca4d.iot.api.connection.DeviceConnectionRequest;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-/** 把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的统一 Device 连接请求。 */
+/** 把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的 Device 连接请求。 */
 public interface EmqxDeviceConnectionRequestFactory {
 
     /**

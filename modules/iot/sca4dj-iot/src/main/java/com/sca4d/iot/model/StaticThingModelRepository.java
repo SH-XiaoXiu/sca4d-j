@@ -19,7 +19,11 @@ public class StaticThingModelRepository implements ThingModelRepository {
 
     private final @NotNull Map<String, Map<Integer, ThingModelPresentation>> models;
 
-    /** @param models App 固定提供的全部物模型 */
+    /**
+     * 创建只读 Repository，所有模型都只使用 code 作为回退展示，不提供静态消息展示。
+     *
+     * @param models App 固定提供的全部物模型；集合或任一元素为 null 时抛出 {@link NullPointerException}，同一 Product 与版本重复时抛出 {@link IllegalArgumentException}
+     */
     public StaticThingModelRepository(@NotNull Collection<ThingModel> models) {
         this(models, List.of());
     }
@@ -27,8 +31,9 @@ public class StaticThingModelRepository implements ThingModelRepository {
     /**
      * 创建同时接受纯技术回退模型和带静态消息展示模型的只读 Repository。
      *
-     * @param models 没有静态消息时仅使用 code 展示的模型
-     * @param presentations 使用 `MessageText` 声明完整展示字段的模型
+     * @param models 没有静态消息时仅使用 code 展示的模型；集合或任一元素为 null 时抛出 {@link NullPointerException}
+     * @param presentations 使用 `MessageText` 声明完整展示字段的模型；集合或任一元素为 null 时抛出 {@link NullPointerException}
+     * @throws IllegalArgumentException 同一 Product 与版本在 models 和 presentations 中重复出现时抛出
      */
     public StaticThingModelRepository(
             @NotNull Collection<ThingModel> models,

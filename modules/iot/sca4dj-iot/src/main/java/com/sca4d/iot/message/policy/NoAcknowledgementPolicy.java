@@ -12,6 +12,7 @@ import java.time.Instant;
 /** 在 MQTT publish 成功后直接完成下行消息，不等待设备业务回执。 */
 public class NoAcknowledgementPolicy implements AcknowledgementPolicy {
 
+    /** 无业务回执策略的稳定编码，`DevicePolicyCatalog` 用它查找该策略实例。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/NONE");
 
     public NoAcknowledgementPolicy() {

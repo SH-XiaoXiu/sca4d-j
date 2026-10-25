@@ -101,7 +101,7 @@ public class ThingProperty {
             return this;
         }
 
-        /** @param acknowledgementPolicy ACK 策略 code @param retryPolicy retry 策略 code @return 当前 Builder */
+        /** @param acknowledgementPolicy ACK 策略 @param retryPolicy retry 策略 @return 当前 Builder */
         public @NotNull Builder desiredState(
                 @NotNull AcknowledgementPolicy acknowledgementPolicy,
                 @NotNull RetryPolicy retryPolicy) {

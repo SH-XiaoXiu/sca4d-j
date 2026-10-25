@@ -2,6 +2,7 @@ package com.sca4d.iot.schedule;
 
 import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.iot.api.IotCapabilities;
+import com.sca4d.iot.schedule.exception.DeviceScheduleTriggerException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class DeviceScheduleTask {
                     break;
                 }
                 handled++;
-            } catch (DeviceScheduleTriggerFailure failure) {
+            } catch (DeviceScheduleTriggerException failure) {
                 try {
                     schedules.pauseFailedSchedule(failure);
                     handled++;

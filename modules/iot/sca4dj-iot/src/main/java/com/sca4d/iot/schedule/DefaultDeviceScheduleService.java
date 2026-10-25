@@ -2,7 +2,7 @@ package com.sca4d.iot.schedule;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
@@ -30,6 +30,7 @@ import com.sca4d.iot.change.DeviceChangeNotifier;
 import com.sca4d.iot.config.IotProperties;
 import com.sca4d.iot.device.DeviceRepository;
 import com.sca4d.iot.message.DeviceCommandService;
+import com.sca4d.iot.schedule.exception.DeviceScheduleTriggerException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -236,7 +237,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
     /**
      * 读取一条到期候选，取得候选规则的 Redis 锁后在事务内重新确认并生成 command；没有到期候选时返回 `false`。
      *
-     * @throws DeviceScheduleTriggerFailure command 业务校验失败时抛出，调用方必须在新事务中暂停候选规则
+     * @throws DeviceScheduleTriggerException command 业务校验失败时抛出，调用方必须在新事务中暂停候选规则
      */
     public boolean triggerNextDueSchedule() {
         Instant scannedAt = clock.instant();
@@ -287,7 +288,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 executionStatus = DeviceScheduleExecutionStatus.ENQUEUED;
                 messageId = message.messageId();
             } catch (BusinessException exception) {
-                throw new DeviceScheduleTriggerFailure(
+                throw new DeviceScheduleTriggerException(
                         schedule.scheduleId(),
                         schedule.version(),
                         plannedAt,
@@ -313,8 +314,8 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
     }
 
     /** 在触发事务回滚后，取得同一规则的 Redis 锁，并在新事务中保存同版本 FAILED 结果。 */
-    public void pauseFailedSchedule(@NotNull DeviceScheduleTriggerFailure failure) {
-        DeviceScheduleTriggerFailure checked = Objects.requireNonNull(failure, "设备定时触发失败不能为空");
+    public void pauseFailedSchedule(@NotNull DeviceScheduleTriggerException failure) {
+        DeviceScheduleTriggerException checked = Objects.requireNonNull(failure, "设备定时触发失败不能为空");
         distributedLock.execute(
                 scheduleLock(checked.scheduleId()),
                 LOCK_WAIT,
@@ -325,7 +326,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
     }
 
     /** 在规则锁内确认失败对应的版本和计划时间仍未变化。 */
-    private void pauseFailedScheduleInTransaction(@NotNull DeviceScheduleTriggerFailure failure) {
+    private void pauseFailedScheduleInTransaction(@NotNull DeviceScheduleTriggerException failure) {
         DeviceSchedule schedule = schedules.find(failure.scheduleId()).orElse(null);
         if (schedule == null
                 || schedule.version() != failure.scheduleVersion()
@@ -411,7 +412,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 eventMessageId);
     }
 
-    /** 校验 Device 存在。 */
+    /** 校验 Device 存在；不存在时抛出 `IotErrorCode.DEVICE_NOT_FOUND`，不读取或修改定时规则。 */
     private void validateDeviceId(long deviceId) {
         if (devices.find(deviceId).isEmpty()) {
             throw new BusinessException(IotErrorCode.DEVICE_NOT_FOUND);

@@ -16,8 +16,10 @@ import java.util.Objects;
 /** 保存显式回执或 reported 推导结果共用的业务确认事实。 */
 public class DeviceAcknowledgement extends Message {
 
+    /** 业务确认消息的协议版本，与 `protocolVersion()` 返回值一致。 */
     public static final int PROTOCOL_VERSION = 1;
 
+    /** 业务确认消息的稳定类型编码，用于通用 Messaging 路由。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/PROCESS");
 
     private final @NotNull Instant acknowledgedAt;

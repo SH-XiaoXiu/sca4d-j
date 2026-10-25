@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class ThingValueValidator {
             case BOOLEAN -> requireType(checkedValue, Boolean.class);
             case INTEGER -> integer(checkedType, checkedValue);
             case DECIMAL -> decimal(checkedType, checkedValue);
-            case STRING -> string(checkedType, checkedValue, false);
+            case STRING -> string(checkedType, checkedValue);
             case NUM -> enumeration(checkedType, checkedValue);
             case TIMESTAMP -> timestamp(checkedValue);
             case OBJECT -> object(checkedType, checkedValue);
@@ -78,7 +79,7 @@ public class ThingValueValidator {
         return result;
     }
 
-    private static String string(ThingValueType type, Object value, boolean enumeration) {
+    private static String string(ThingValueType type, Object value) {
         String result = requireType(value, String.class);
         type.maximumLength().ifPresent(maximum -> {
             if (result.length() > maximum) {
@@ -88,14 +89,11 @@ public class ThingValueValidator {
         if (!type.matchesPattern(result)) {
             throw new IllegalArgumentException("string 值不匹配物模型 pattern");
         }
-        if (!enumeration && result.isEmpty()) {
-            return result;
-        }
         return result;
     }
 
     private static String enumeration(ThingValueType type, Object value) {
-        String result = string(type, value, true);
+        String result = string(type, value);
         if (!type.enumValues().contains(result)) {
             throw new IllegalArgumentException("enum 值不在物模型允许集合中: " + result);
         }
@@ -109,7 +107,7 @@ public class ThingValueValidator {
         if (value instanceof String text) {
             try {
                 return Instant.parse(text);
-            } catch (RuntimeException exception) {
+            } catch (DateTimeParseException exception) {
                 throw new IllegalArgumentException("timestamp 必须是 ISO-8601 UTC 时间", exception);
             }
         }

@@ -1,6 +1,6 @@
 package com.sca4d.iot.api.schedule;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ public interface DeviceScheduleService {
      * @param command 到期时提交的 command 和输入
      * @param trigger 未来的单次时间或带时区六字段 Cron
      * @param validFor 从计划时间开始计算的正数下行有效期
-     * @return PostgreSQL 已保存的 ACTIVE 规则
+     * @return 已保存的 ACTIVE 规则
      * @throws BusinessException Device 不存在或触发规则非法时抛出
      * @throws IllegalArgumentException command 或有效期为空、有效期不是正数或毫秒数溢出时抛出
      */

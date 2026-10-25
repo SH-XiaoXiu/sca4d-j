@@ -17,7 +17,7 @@ public class ProductRegistration {
 
     private final @NotNull String code;
 
-    /** @param code Product code @param i18n 完整多语言展示字段 @param accessMethods 允许接入方式 @param protocolCodes 兼容协议 */
+    /** 保存创建 Product 所需的 code、展示字段、接入方式和协议，集合在构造时复制为不可修改集合。 */
     public ProductRegistration(
             @NotNull String code,
             @NotNull LocalizedFields i18n,

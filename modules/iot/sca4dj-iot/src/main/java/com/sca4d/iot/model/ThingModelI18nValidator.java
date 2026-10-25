@@ -59,7 +59,7 @@ public class ThingModelI18nValidator {
             }
             if (text.length() > MAXIMUM_TEXT_LENGTH) {
                 throw new IllegalArgumentException(
-                        "物模型翻译超过最大长度: " + locale.toLanguageTag() + path);
+                        "物模型翻译超过最大长度: " + locale.toLanguageTag() + " " + path);
             }
         }));
         return checked;

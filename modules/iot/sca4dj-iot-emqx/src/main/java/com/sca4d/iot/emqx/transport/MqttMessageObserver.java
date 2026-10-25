@@ -2,7 +2,7 @@ package com.sca4d.iot.emqx.transport;
 
 import org.jetbrains.annotations.NotNull;
 
-/** 接收当前应用 MQTT Runtime 实际收到的消息，用于应用记录自身可见的通信事实。 */
+/** 接收当前应用 MQTT Runtime 实际收到的消息，用于记录应用自身可见的接收结果。 */
 @FunctionalInterface
 public interface MqttMessageObserver {
 

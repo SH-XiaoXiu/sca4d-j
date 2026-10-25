@@ -1,5 +1,6 @@
 package com.sca4d.iot.emqx.transport;
 
+import com.sca4d.iot.emqx.transport.exception.MqttMessageRejectedException;
 import org.jetbrains.annotations.NotNull;
 
 /** 声明一条 MQTT Topic Filter 到目标消息流的路由。 */

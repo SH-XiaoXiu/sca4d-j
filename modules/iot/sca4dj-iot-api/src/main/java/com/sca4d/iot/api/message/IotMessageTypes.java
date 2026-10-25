@@ -5,7 +5,7 @@ import com.sca4d.iot.api.history.DeviceEventMessage;
 import com.sca4d.iot.api.telemetry.TelemetryBatch;
 import org.jetbrains.annotations.NotNull;
 
-/** 声明 IoT 模块发布和消费的稳定消息类型。 */
+/** 声明 IoT 模块发布和消费的消息类型。 */
 public class IotMessageTypes {
 
     /** reported 中标记为 Telemetry 的属性样本批次。 */

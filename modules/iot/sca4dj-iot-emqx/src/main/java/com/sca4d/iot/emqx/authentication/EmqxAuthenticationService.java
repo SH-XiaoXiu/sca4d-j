@@ -2,7 +2,7 @@ package com.sca4d.iot.emqx.authentication;
 
 import static com.sca4d.core.api.name.NameFormat.COLON;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.iot.api.connection.DeviceConnectionAccess;
 import com.sca4d.iot.api.connection.DeviceConnectionAdmission;
 import org.jetbrains.annotations.CheckReturnValue;

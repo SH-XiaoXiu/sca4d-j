@@ -58,12 +58,12 @@ public class ThingCommand {
         return inputKeys;
     }
 
-    /** @return ACK 策略 code */
+    /** @return 命令采用的 ACK 策略 */
     public @NotNull AcknowledgementPolicy acknowledgementPolicy() {
         return acknowledgementPolicy;
     }
 
-    /** @return retry 策略 code */
+    /** @return 命令采用的 retry 策略 */
     public @NotNull RetryPolicy retryPolicy() {
         return retryPolicy;
     }

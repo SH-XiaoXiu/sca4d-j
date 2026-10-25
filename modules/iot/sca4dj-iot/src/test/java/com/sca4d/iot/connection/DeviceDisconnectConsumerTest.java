@@ -30,7 +30,7 @@ import org.mockito.Mockito;
 import java.time.Instant;
 
 /** 验证可靠断连同时终止协议连接和全部通用连接投影。 */
-class DeviceDisconnectHandlerTest {
+class DeviceDisconnectConsumerTest {
 
     private static final Instant NOW = Instant.parse("2026-08-24T11:00:00Z");
 

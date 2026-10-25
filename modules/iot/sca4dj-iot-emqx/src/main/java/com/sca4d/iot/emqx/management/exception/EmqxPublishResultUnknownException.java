@@ -1,4 +1,4 @@
-package com.sca4d.iot.emqx.management;
+package com.sca4d.iot.emqx.management.exception;
 
 import org.jetbrains.annotations.NotNull;
 

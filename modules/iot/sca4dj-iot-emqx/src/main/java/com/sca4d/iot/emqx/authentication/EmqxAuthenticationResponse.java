@@ -2,6 +2,7 @@ package com.sca4d.iot.emqx.authentication;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +15,7 @@ import java.util.Objects;
 /** 表示 EMQX `5.8.9` HTTP Authenticator 必须以 HTTP 200 返回的认证结果。 */
 public class EmqxAuthenticationResponse {
 
-    private final @NotNull String result;
+    private final @NotNull Result result;
 
     private final boolean superuser;
 
@@ -25,7 +26,7 @@ public class EmqxAuthenticationResponse {
     private final @NotNull Map<String, String> clientAttributes;
 
     private EmqxAuthenticationResponse(
-            @NotNull String result,
+            @NotNull Result result,
             @NotNull Map<String, String> clientAttributes,
             @NotNull List<EmqxAclRule> acl,
             @Nullable Long expireAt) {
@@ -39,7 +40,7 @@ public class EmqxAuthenticationResponse {
     /** @return 明确拒绝且不能由之后的 Authenticator 放宽的响应 */
     @CheckReturnValue
     public static @NotNull EmqxAuthenticationResponse deny() {
-        return new EmqxAuthenticationResponse("deny", Map.of(), List.of(), null);
+        return new EmqxAuthenticationResponse(Result.DENY, Map.of(), List.of(), null);
     }
 
     /** @return 包含连接属性、ACL 和可选认证失效时间的允许响应 */
@@ -49,15 +50,15 @@ public class EmqxAuthenticationResponse {
             @NotNull List<EmqxAclRule> acl,
             @Nullable Instant expiresAt) {
         return new EmqxAuthenticationResponse(
-                "allow",
+                Result.ALLOW,
                 Objects.requireNonNull(clientAttributes, "EMQX client attrs 不能为空"),
                 Objects.requireNonNull(acl, "EMQX ACL 不能为空"),
                 expiresAt == null ? null : expiresAt.getEpochSecond());
     }
 
-    /** @return `allow` 或 `deny` */
+    /** @return `ALLOW` 或 `DENY`，序列化为 EMQX 要求的 `allow` 或 `deny` */
     @JsonProperty("result")
-    public @NotNull String result() {
+    public @NotNull Result result() {
         return result;
     }
 
@@ -84,5 +85,27 @@ public class EmqxAuthenticationResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public @Nullable Long expireAt() {
         return expireAt;
+    }
+
+    /** EMQX HTTP Authenticator 的认证结论，只有 `allow` 和 `deny` 两个协议值。 */
+    public enum Result {
+
+        /** 允许连接，并使用响应中的 client_attrs、ACL 和 expire_at。 */
+        ALLOW("allow"),
+
+        /** 明确拒绝连接，之后的 Authenticator 不能放宽该结果。 */
+        DENY("deny");
+
+        private final @NotNull String protocolValue;
+
+        Result(@NotNull String protocolValue) {
+            this.protocolValue = protocolValue;
+        }
+
+        /** @return 写入 EMQX HTTP Authenticator 响应的小写协议值 */
+        @JsonValue
+        public @NotNull String protocolValue() {
+            return protocolValue;
+        }
     }
 }

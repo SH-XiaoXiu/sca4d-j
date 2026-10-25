@@ -23,6 +23,18 @@ public class MqttInboundStatus {
 
     private final long unacknowledged;
 
+    /**
+     * 创建一次 MQTT 上行状态快照，各计数由 {@link MqttInboundProcessor} 在读取时汇总。
+     *
+     * @param pending 尚在分片队列、处理中或等待再次处理的消息数量
+     * @param retrying 当前等待下一次处理的消息数量
+     * @param processed 进程启动后处理完成并 ACK 的累计数量
+     * @param rejected 进程启动后明确拒绝并 ACK 的累计数量
+     * @param quarantined 进程启动后可靠保存失败并 ACK 的累计数量
+     * @param unacknowledged 因最终失败未能可靠保存而保持未确认的累计数量
+     * @param overloaded 因本地分片队列已满而未进入处理的累计数量
+     * @param acknowledgementFailures 业务处理结束后 ACK 失败的累计数量
+     */
     public MqttInboundStatus(
             int pending,
             int retrying,

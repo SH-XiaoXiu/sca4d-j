@@ -15,7 +15,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.time.Instant;
 import java.util.List;
 
-/** 验证 Device 通知在数据库提交后发布，非事务事实立即发布。 */
+/** 验证 Device 通知在数据库提交后发布，不在事务中的变更立即发布。 */
 class DeviceChangeNotifierTest {
 
     private final DeviceChangePublisher publisher = mock(DeviceChangePublisher.class);

@@ -71,7 +71,7 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
             @NotNull EmqxConnectionReconciler connectionReconciler,
             @NotNull RetryExecutor retries) {
         this.properties = Objects.requireNonNull(properties, "EMQX 配置不能为空");
-        this.retries = Objects.requireNonNull(retries);
+        this.retries = Objects.requireNonNull(retries, "MQTT 重试执行器不能为空");
         this.properties.validate();
         this.router = Objects.requireNonNull(router, "MQTT 消息路由器不能为空");
         this.clock = Objects.requireNonNull(clock, "MQTT 时钟不能为空");
@@ -291,7 +291,7 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
         }
     }
 
-    /** 使用应用配置的统一 MQTT 操作超时等待异步结果。 */
+    /** 使用应用配置的 MQTT 操作超时等待异步结果。 */
     private void await(CompletableFuture<?> future) {
         try {
             future.orTimeout(properties.getOperationTimeout().toMillis(), TimeUnit.MILLISECONDS).join();

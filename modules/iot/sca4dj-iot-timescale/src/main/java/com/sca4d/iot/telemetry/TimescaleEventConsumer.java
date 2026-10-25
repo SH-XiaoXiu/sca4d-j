@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-/** 消费物模型和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。 */
+/** 消费 Device 事件和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。 */
 public class TimescaleEventConsumer implements EventHandler<DeviceEventMessage> {
 
     private final @NotNull TimescaleRepository repository;
@@ -50,7 +50,7 @@ public class TimescaleEventConsumer implements EventHandler<DeviceEventMessage> 
         repository.addEvent(checked.messageId().value(), checked.message().payload());
     }
 
-    /** RabbitMQ 调用的入口先选择历史库，再开启事务；提交后才能确认消息。 */
+    /** 消息投递入口先选择历史库，再开启事务；事务提交后才能确认消息。 */
     @Override
     @DS(IotTimescale.DATASOURCE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)

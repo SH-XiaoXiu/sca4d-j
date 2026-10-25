@@ -1,6 +1,6 @@
 package com.sca4d.iot.api.state;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.iot.api.query.ReportedStateSnapshot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

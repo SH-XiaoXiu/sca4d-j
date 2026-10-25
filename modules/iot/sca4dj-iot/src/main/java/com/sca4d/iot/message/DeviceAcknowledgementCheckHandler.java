@@ -82,7 +82,7 @@ public class DeviceAcknowledgementCheckHandler implements MessageHandler<DeviceA
         DeviceAcknowledgementCheck timeout = Objects.requireNonNull(delivery, "ACK 超时投递不能为空")
                 .message();
         distributedLock.execute(
-                downlinkLock(timeout.messageId()),
+                downlinkLockKey(timeout.messageId()),
                 LOCK_WAIT,
                 () -> {
                     transactions.executeWithoutResult(status -> handleTimeout(timeout));
@@ -112,7 +112,7 @@ public class DeviceAcknowledgementCheckHandler implements MessageHandler<DeviceA
                 return;
             }
             messages.publishDispatch(message.messageId(), Math.incrementExact(message.attemptCount()), retryAt);
-            LOG.debug(
+            LOG.warn(
                     "Device 下行 ACK 超时后等待重试 | messageId={} attempt={} retryAt={}",
                     message.messageId(),
                     message.attemptCount(),
@@ -133,7 +133,7 @@ public class DeviceAcknowledgementCheckHandler implements MessageHandler<DeviceA
     }
 
     /** @return 指定下行消息在全部应用实例间共用的锁键 */
-    private static @NotNull LockKey downlinkLock(long messageId) {
+    private static @NotNull LockKey downlinkLockKey(long messageId) {
         return new LockKey(TreeCode.of("IOT:DOWNLINK"), messageId);
     }
 }

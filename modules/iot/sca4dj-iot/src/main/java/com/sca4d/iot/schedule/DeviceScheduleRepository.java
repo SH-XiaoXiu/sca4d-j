@@ -78,7 +78,11 @@ public class DeviceScheduleRepository {
                 .map(this::toSchedule);
     }
 
-    /** 按乐观锁版本完整替换规则，并保存业务层已确定的目标状态。 */
+    /**
+     * 按乐观锁版本完整替换规则，并保存业务层已确定的目标状态。
+     *
+     * @return 规则被修改返回 true；版本不匹配或规则不存在时不修改数据并返回 false
+     */
     public boolean replace(
             long scheduleId,
             long expectedVersion,
@@ -105,7 +109,11 @@ public class DeviceScheduleRepository {
                 "替换设备定时规则");
     }
 
-    /** 按乐观锁版本修改状态和下一次触发时间。 */
+    /**
+     * 按乐观锁版本修改状态和下一次触发时间。
+     *
+     * @return 规则被修改返回 true；版本不匹配或规则不存在时不修改数据并返回 false
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean changeStatus(
             long scheduleId,
@@ -127,7 +135,13 @@ public class DeviceScheduleRepository {
                 "修改设备定时状态");
     }
 
-    /** 保存最新执行结果，并在同一写入中推进状态和下一次触发时间。 */
+    /**
+     * 保存最新执行结果，并在同一写入中推进状态和下一次触发时间。
+     *
+     * <p>只匹配 ACTIVE 且版本等于 expectedVersion 的规则。
+     *
+     * @return 规则被推进返回 true；版本不匹配或规则已非 ACTIVE 时不修改数据并返回 false
+     */
     public boolean recordExecutionAndAdvance(
             long scheduleId,
             long expectedVersion,

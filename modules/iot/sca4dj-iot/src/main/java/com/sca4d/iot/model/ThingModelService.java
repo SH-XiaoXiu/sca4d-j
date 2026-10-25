@@ -3,7 +3,7 @@ package com.sca4d.iot.model;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.IotErrorCode;
@@ -67,7 +67,16 @@ public class ThingModelService {
         this.transactions = Objects.requireNonNull(transactions, "事务模板不能为空");
     }
 
-    /** @param model 待发布物模型 @return 发布或幂等恢复的物模型 */
+    /**
+     * 在 Product 分布式锁和事务内校验并发布物模型。
+     *
+     * <p>版本必须是当前最新版本加一且技术内容变化；与最新版本内容相同时直接返回已发布结果，不写入新记录。
+     *
+     * @param model 待发布的技术物模型
+     * @param i18n 完整动态翻译，默认 Locale 必须覆盖全部展示路径
+     * @return 新发布的物模型，或内容相同的已发布物模型
+     * @throws BusinessException 翻译不合法、Product 不存在、策略或协议校验失败、版本冲突，或获取锁超时时抛出
+     */
     @CheckReturnValue
     public @NotNull ThingModelPresentation publish(
             @NotNull ThingModel model,
@@ -116,7 +125,14 @@ public class ThingModelService {
         });
     }
 
-    /** @param productCode Product code @param version 物模型版本 @return 必须存在的物模型展示结果 */
+    /**
+     * 读取指定 Product 版本的物模型展示结果。
+     *
+     * @param productCode Product code
+     * @param version 物模型版本
+     * @return 找到的物模型展示结果
+     * @throws BusinessException 该版本不存在时抛出 THING_MODEL_NOT_FOUND
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull ThingModelPresentation loadByProductVersion(@NotNull String productCode, int version) {

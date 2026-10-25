@@ -13,6 +13,12 @@ public class MqttDownlinkFrame {
 
     private final @NotNull DeviceDownlink message;
 
+    /**
+     * 创建协议 Pipeline 的输入帧。
+     *
+     * @param message 标准下行消息，保留 messageId、目标 code 和发送尝试次数
+     * @param values 已经按 `DataKey` 校验并整理的下行值
+     */
     public MqttDownlinkFrame(
             @NotNull DeviceDownlink message,
             @NotNull DataValues values) {

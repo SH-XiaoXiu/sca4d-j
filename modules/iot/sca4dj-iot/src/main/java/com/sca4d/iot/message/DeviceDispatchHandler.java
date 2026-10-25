@@ -19,6 +19,7 @@ import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.iot.api.message.RetryDecision;
 import com.sca4d.iot.change.DeviceChangeNotifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -92,7 +93,7 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
         DeviceDispatchMessage dispatch = Objects.requireNonNull(delivery, "下行消息投递不能为空")
                 .message();
         distributedLock.execute(
-                downlinkLock(dispatch.messageId()),
+                downlinkLockKey(dispatch.messageId()),
                 LOCK_WAIT,
                 () -> {
                     dispatchLocked(dispatch);
@@ -119,7 +120,7 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
     }
 
     /** 在短事务中确认发送消息仍有效，并把当前尝试推进到 SENDING。 */
-    private DeviceDownlink beginDispatch(@NotNull DeviceDispatchMessage dispatch) {
+    private @Nullable DeviceDownlink beginDispatch(@NotNull DeviceDispatchMessage dispatch) {
         DeviceDownlink current = downlinks.find(dispatch.messageId()).orElse(null);
         if (current == null
                 || current.status().terminal()
@@ -235,7 +236,7 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
     }
 
     /** @return 指定下行消息在全部应用实例间共用的锁键 */
-    private static @NotNull LockKey downlinkLock(long messageId) {
+    private static @NotNull LockKey downlinkLockKey(long messageId) {
         return new LockKey(TreeCode.of("IOT:DOWNLINK"), messageId);
     }
 }

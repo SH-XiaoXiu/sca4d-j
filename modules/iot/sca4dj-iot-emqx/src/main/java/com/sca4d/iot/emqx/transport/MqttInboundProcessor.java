@@ -5,10 +5,11 @@ import com.sca4d.core.api.retry.Backoff;
 import com.sca4d.core.api.retry.RetryContext;
 import com.sca4d.core.api.retry.RetryDecision;
 import com.sca4d.core.api.retry.RetryExecutor;
-import com.sca4d.core.api.retry.RetryInterruptedException;
 import com.sca4d.core.api.retry.RetryListener;
 import com.sca4d.core.api.retry.RetryPolicy;
 import com.sca4d.core.api.retry.RetryRule;
+import com.sca4d.core.api.retry.exception.RetryInterruptedException;
+import com.sca4d.iot.emqx.transport.exception.MqttMessageRejectedException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -245,8 +246,10 @@ final class MqttInboundProcessor implements AutoCloseable {
             } catch (RetryInterruptedException failure) {
                 LOG.debug("MQTT 上行等待已中断，消息保持未确认 | topic={}", message.topic());
             } catch (RuntimeException failure) {
-                if (Thread.currentThread().isInterrupted())
+                if (Thread.currentThread().isInterrupted()) {
+                    LOG.debug("MQTT 上行处理线程已中断，消息保持未确认 | topic={}", message.topic());
                     return;
+                }
                 storeFailure(publish, new MqttInboundFailure(deliveryId, message, attempts.get(), failure));
             }
         } finally {

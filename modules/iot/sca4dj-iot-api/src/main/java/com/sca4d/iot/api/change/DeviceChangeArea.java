@@ -1,6 +1,6 @@
 package com.sca4d.iot.api.change;
 
-/** 表示 Device 发生变化后需要重新读取的稳定数据区域。 */
+/** 表示 Device 发生变化后需要重新读取的数据区域。 */
 public enum DeviceChangeArea {
     /** Device 基础资料、绑定、接入方式或具体应用合并展示的 Device Profile。 */
     DEVICE,

@@ -2,7 +2,7 @@ package com.sca4d.iot.message;
 
 import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.data.DataValues;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
@@ -80,6 +80,8 @@ public class DeviceCommandService {
     }
 
     /**
+     * 按 command code 和原始输入创建即时下行消息；输入键与当前物模型 command 不一致或值不合法时抛出 {@link BusinessException}，且不写入数据库。
+     *
      * @param deviceId Device 标识
      * @param commandCode command code
      * @param inputs 完整输入
@@ -248,8 +250,8 @@ public class DeviceCommandService {
         downlinks.add(message);
         messagePublisher.publishDispatch(message.messageId(), 1, null);
         changes.changed(deviceId, DeviceChangeArea.DOWNLINK, now);
-        LOG.info(
-                "Device command 已提交 | deviceId={} messageId={} commandCode={}",
+        LOG.debug(
+                "Device command 已写入事务 | deviceId={} messageId={} commandCode={}",
                 deviceId,
                 message.messageId(),
                 commandCode);

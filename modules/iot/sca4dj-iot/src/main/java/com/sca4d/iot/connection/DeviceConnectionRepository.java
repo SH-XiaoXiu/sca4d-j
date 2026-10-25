@@ -15,6 +15,7 @@ import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
 import com.sca4d.iot.api.connection.DeviceConnectionQueryService;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.change.DeviceChangeNotifier;
+import com.sca4d.iot.exception.IotException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -316,7 +317,7 @@ public class DeviceConnectionRepository implements DeviceConnectionReceiver, Dev
     private static @NotNull String requiredText(@Nullable Object value, @NotNull String name) {
         String result = text(value);
         if (result.isEmpty()) {
-            throw new IllegalStateException("Connection Redis 数据缺少字段: " + name);
+            throw new IotException("Connection Redis 数据缺少字段: " + name);
         }
         return result;
     }
@@ -325,7 +326,7 @@ public class DeviceConnectionRepository implements DeviceConnectionReceiver, Dev
     private static @NotNull String string(@NotNull Map<Object, Object> fields, @NotNull String name) {
         Object result = fields.get(name);
         if (result == null) {
-            throw new IllegalStateException("Connection Redis 数据缺少字段: " + name);
+            throw new IotException("Connection Redis 数据缺少字段: " + name);
         }
         return result.toString();
     }

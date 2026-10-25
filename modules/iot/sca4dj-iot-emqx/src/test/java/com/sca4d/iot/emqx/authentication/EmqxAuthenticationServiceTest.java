@@ -76,7 +76,7 @@ class EmqxAuthenticationServiceTest {
         EmqxAuthenticationResponse response = service.authenticate(
                 new EmqxAuthenticationRequest("dbg-71", "ACCOUNT:AUTHENTICATION/SHARED_SECRET", "secret", null));
 
-        assertThat(response.result()).isEqualTo("allow");
+        assertThat(response.result()).isEqualTo(EmqxAuthenticationResponse.Result.ALLOW);
         assertThat(response.superuser()).isFalse();
         assertThat(response.clientAttributes())
                 .containsEntry("product_code", "mqtt-debug")

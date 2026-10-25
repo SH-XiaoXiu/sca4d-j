@@ -1,5 +1,6 @@
-package com.sca4d.iot.emqx.transport;
+package com.sca4d.iot.emqx.transport.exception;
 
+import com.sca4d.iot.emqx.transport.MqttMessageRejectionReason;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

@@ -18,8 +18,8 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.util.Map;
 
-/** 验证可靠 ACK 请求 Consumer 使用稳定事件类型并委托现有 ACK 服务。 */
-class DeviceAcknowledgementHandlerTest {
+/** 验证可靠 ACK 请求 Consumer 使用固定事件类型并委托现有 ACK 服务。 */
+class DeviceAcknowledgementConsumerTest {
 
     private static final Instant NOW = Instant.parse("2026-08-18T08:00:00Z");
 

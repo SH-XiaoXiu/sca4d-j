@@ -9,6 +9,7 @@ import com.sca4d.iot.emqx.connection.MqttDeviceConnection;
 import com.sca4d.iot.emqx.protocol.MqttDeviceProtocol;
 import com.sca4d.iot.emqx.protocol.MqttProtocolCatalog;
 import com.sca4d.iot.emqx.protocol.MqttUplinkRoute;
+import com.sca4d.iot.emqx.transport.exception.MqttMessageRejectedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 

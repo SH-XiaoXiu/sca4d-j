@@ -3,7 +3,7 @@ package com.sca4d.iot.api.message;
 import com.sca4d.core.api.enums.BaseEnum;
 import org.jetbrains.annotations.NotNull;
 
-/** 表示标准设备下行消息的持久化生命周期。 */
+/** 表示标准设备下行消息在数据库中依次经过的状态。 */
 public enum DeviceDownlinkStatus implements BaseEnum {
     /** 已创建并等待 Device 可发送。 */
     PENDING("等待发送"),

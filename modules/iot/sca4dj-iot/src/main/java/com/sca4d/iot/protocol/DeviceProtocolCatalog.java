@@ -18,7 +18,12 @@ public class DeviceProtocolCatalog {
 
     private final @NotNull Map<String, DeviceProtocol> protocols;
 
-    /** @param protocols App 安装的全部设备协议 */
+    /**
+     * 创建协议目录，同一 code 登记多次时抛出异常。
+     *
+     * @param protocols App 安装的全部设备协议，不能包含 null
+     * @throws IllegalArgumentException 协议 code 重复时抛出
+     */
     public DeviceProtocolCatalog(@NotNull Collection<DeviceProtocol> protocols) {
         try {
             this.protocols = Objects.requireNonNull(protocols, "设备协议集合不能为空")
@@ -30,11 +35,18 @@ public class DeviceProtocolCatalog {
         }
     }
 
-    /** @param code 协议 code @return 匹配协议 @throws IllegalArgumentException 没有登记时抛出 */
+    /**
+     * 按 code 取得已安装协议。
+     *
+     * @param code 协议 code，不能为空
+     * @return 匹配的协议实现
+     * @throws IllegalArgumentException code 没有对应已安装协议时抛出
+     */
     public @NotNull DeviceProtocol loadByCode(@NotNull String code) {
         DeviceProtocol protocol = protocols.get(Objects.requireNonNull(code, "设备协议 code 不能为空"));
-        if (protocol == null)
+        if (protocol == null) {
             throw new IllegalArgumentException("设备协议未登记: " + code);
+        }
         return protocol;
     }
 

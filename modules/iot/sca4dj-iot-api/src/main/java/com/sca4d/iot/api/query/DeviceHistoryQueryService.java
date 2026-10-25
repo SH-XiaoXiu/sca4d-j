@@ -1,6 +1,6 @@
 package com.sca4d.iot.api.query;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;

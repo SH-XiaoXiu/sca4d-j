@@ -3,9 +3,9 @@ package com.sca4d.iot.device;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
-import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
+import com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iot.api.Device;
@@ -138,7 +138,13 @@ public class DeviceRepository implements DeviceConnectionResolver {
         return new Page<>(hydrate(rows), checked.request().getPage(), total);
     }
 
-    /** @return Device 当前仍存在且 binding generation 未变化时为 {@code true} */
+    /**
+     * 检查 Device 是否仍处于调用方持有的绑定版本。
+     *
+     * @param deviceId Device 标识
+     * @param bindingGeneration 调用方读取到的 binding generation
+     * @return Device 当前仍存在且 binding generation 未变化时为 {@code true}
+     */
     @CheckReturnValue
     public boolean isCurrentBinding(long deviceId, long bindingGeneration) {
         return mapper.existsCurrentBinding(deviceId, bindingGeneration);

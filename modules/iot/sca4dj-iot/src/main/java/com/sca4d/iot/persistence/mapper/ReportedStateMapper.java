@@ -34,7 +34,7 @@ public interface ReportedStateMapper {
             @Param("groupCode") @NotNull String groupCode);
 
     /**
-     * 新增 reported 字段组的 current projection。
+     * 新增 reported 字段组的当前投影。
      *
      * @param deviceId Device 标识
      * @param bindingGeneration 物模型绑定版本
@@ -59,7 +59,7 @@ public interface ReportedStateMapper {
             @Param("receivedAt") @NotNull Instant receivedAt);
 
     /**
-     * 按 current version 替换 reported 字段组投影。
+     * 按当前投影版本替换 reported 字段组投影。
      *
      * @param deviceId Device 标识
      * @param bindingGeneration 物模型绑定版本

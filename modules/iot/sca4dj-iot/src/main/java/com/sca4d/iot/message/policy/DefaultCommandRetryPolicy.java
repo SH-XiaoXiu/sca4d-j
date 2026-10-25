@@ -16,6 +16,7 @@ import java.time.Instant;
 /** 使用预设退避序列并在第五次发送仍失败后停止的默认命令重试策略。 */
 public class DefaultCommandRetryPolicy implements RetryPolicy {
 
+    /** 默认命令重试策略的稳定编码，`DevicePolicyCatalog` 用它查找该策略实例。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/COMMAND/DEFAULT");
 
     private static final com.sca4d.core.api.retry.RetryPolicy<IotFailureCode> RETRY = com.sca4d.core.api.retry.RetryPolicy

@@ -23,7 +23,7 @@ public class ReportedGroupState {
 
     private final long version;
 
-    /** 创建完整 current projection。 */
+    /** 创建字段组当前投影；所有引用参数都不能为空，values 会被复制为不可修改的 Map。 */
     @SuppressWarnings("ParameterNumber")
     public ReportedGroupState(
             @NotNull String orderScope,
@@ -57,12 +57,12 @@ public class ReportedGroupState {
         return contentHash;
     }
 
-    /** @return latest values */
+    /** @return 最新字段值的不可修改副本 */
     public @NotNull Map<String, Object> values() {
         return values;
     }
 
-    /** @return latest version */
+    /** @return 当前字段组的 version */
     public long version() {
         return version;
     }

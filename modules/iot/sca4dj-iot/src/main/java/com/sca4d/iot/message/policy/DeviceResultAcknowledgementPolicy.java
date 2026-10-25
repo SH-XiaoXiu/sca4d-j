@@ -13,6 +13,7 @@ import java.time.Instant;
 /** 根据设备显式返回的 `success` 或 `failed` ackCode 判断下行结果。 */
 public class DeviceResultAcknowledgementPolicy implements AcknowledgementPolicy {
 
+    /** 设备结果回执策略的稳定编码，`DevicePolicyCatalog` 用它查找该策略实例。 */
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/DEVICE/RESULT");
 
     public DeviceResultAcknowledgementPolicy() {
