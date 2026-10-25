@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * 使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。
+ * 使用通知类型注册的回调从业务对象生成通知，并同步发布或写入 Outbox。
  */
 public class DefaultNotifications implements Notifications {
 
@@ -75,20 +75,23 @@ public class DefaultNotifications implements Notifications {
 
     @Override
     public <T> void sendNow(@NotNull NotificationType<T> type, @NotNull T value) {
-        Notification notification = resolve(type, value);
+        Notification notification = resolve(type, value, false);
         deliveries.deliver(ids.nextId(), notification);
     }
 
     @Override
     public <T> @NotNull Id enqueue(@NotNull NotificationType<T> type, @NotNull T value) {
-        Notification notification = resolve(type, value);
+        Notification notification = resolve(type, value, true);
         return messages.dispatch(new NotificationMessage(notification), DispatchPolicy.outbox()).messageId();
     }
 
     /**
-     * 执行类型回调并取得一个已经冻结路由事实的标准通知。
+     * 执行类型回调，返回渠道路由已经确定的标准 Notification。
      */
-    private <T> @NotNull Notification resolve(@NotNull NotificationType<T> type, @NotNull T value) {
+    private <T> @NotNull Notification resolve(
+            @NotNull NotificationType<T> type,
+            @NotNull T value,
+            boolean deferAvailability) {
         NotificationType<T> checkedType = types.require(type);
         DefaultNotificationExecution<T> execution = new DefaultNotificationExecution<>(
                 checkedType,
@@ -96,7 +99,8 @@ public class DefaultNotifications implements Notifications {
                 settings,
                 locales,
                 regions,
-                deliveries);
+                deliveries,
+                deferAvailability);
         checkedType.execute(value, execution);
         return execution.result();
     }

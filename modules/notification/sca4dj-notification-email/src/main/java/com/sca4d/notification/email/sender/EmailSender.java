@@ -19,7 +19,7 @@ public class EmailSender {
     public static final @NotNull String RESOURCE_TYPE_VALUE = "NOTIFICATION/EMAIL/SENDERS";
 
     /**
-     * Email Sender 审计使用的稳定资源类型。
+     * Email Sender 写入审计记录时使用的资源类型。
      */
     public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("NOTIFICATION/EMAIL/SENDERS");
 
@@ -59,7 +59,7 @@ public class EmailSender {
      * @param fromName           可选发件显示名
      * @param replyTo            可选回复邮箱
      * @param enabled            是否参与实际投递
-     * @param version            统一版本
+     * @param version            数据库中的记录版本，用于乐观锁比较
      */
     public EmailSender(
             long senderId,
@@ -77,7 +77,7 @@ public class EmailSender {
         if (senderId <= 0 || port < 1 || port > 65_535) {
             throw new IllegalArgumentException("SMTP 配置标识和端口必须有效");
         }
-        if ((username == null) != !passwordConfigured) {
+        if ((username == null) == passwordConfigured) {
             throw new IllegalArgumentException("SMTP 用户名和密码必须同时配置");
         }
         this.senderId = senderId;

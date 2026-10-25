@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 把统一通知变量绑定到一个 Provider 已审核模板，不保存业务模板正文。
+ * 把通知变量绑定到一个 Provider 已审核的短信模板，不保存业务模板正文。
  */
 public class SmsProviderBinding {
 
@@ -79,7 +79,7 @@ public class SmsProviderBinding {
     }
 
     /**
-     * @return 统一通知编码
+     * @return 绑定的通知编码
      */
     @Contract(pure = true)
     public @NotNull TreeCode code() {
@@ -119,7 +119,7 @@ public class SmsProviderBinding {
     }
 
     /**
-     * @return Provider 参数名到统一通知变量名的不可修改映射
+     * @return Provider 参数名到通知变量名的映射，返回不可修改的视图
      */
     @Contract(pure = true)
     public @NotNull Map<@NotNull String, @NotNull String> parameterMapping() {

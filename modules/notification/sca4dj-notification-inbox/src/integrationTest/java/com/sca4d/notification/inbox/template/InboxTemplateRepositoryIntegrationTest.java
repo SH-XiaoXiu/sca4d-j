@@ -41,7 +41,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.List;
 
 /**
- * 使用 PostgreSQL 验证站内信模板分页、统一条件查询、Patch 更新和乐观版本。
+ * 使用 PostgreSQL 验证站内信模板分页、条件查询、Patch 更新和乐观锁版本。
  */
 @Testcontainers
 class InboxTemplateRepositoryIntegrationTest {

@@ -9,6 +9,7 @@ import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.notification.NotificationMessage;
 import com.sca4d.notification.NotificationMessageCodec;
+import com.sca4d.notification.sms.exception.NotificationSmsException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryCheck> {
         try {
             return json.writeValueAsBytes(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("SMS 查询消息无法编码", exception);
+            throw new NotificationSmsException("SMS 查询消息无法编码", exception);
         }
     }
 

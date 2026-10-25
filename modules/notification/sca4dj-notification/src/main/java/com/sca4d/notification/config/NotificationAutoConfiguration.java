@@ -80,13 +80,13 @@ public class NotificationAutoConfiguration {
         return new NotificationDeliveryRouter(deliveries);
     }
 
-    /** @return NotificationMessage 与 RabbitMQ payload 之间的稳定转换 */
+    /** @return 在 NotificationMessage 与 RabbitMQ payload 之间转换的 NotificationMessageCodec */
     @Bean
     NotificationMessageCodec notificationMessageCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new NotificationMessageCodec(objectMapper);
     }
 
-    /** @return 解析领域通知并支持同步或 Outbox 发布的公共入口 */
+    /** @return 按通知类型解析业务对象，并支持同步或 Outbox 发布的 Notifications 入口 */
     @Bean
     Notifications notifications(
             @NotNull NotificationTypeCatalog types,

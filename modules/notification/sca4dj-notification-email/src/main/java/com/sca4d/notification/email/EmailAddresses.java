@@ -13,7 +13,7 @@ public class EmailAddresses {
 
     /**
      * @param value 单个邮箱地址，不允许显示名或地址列表
-     * @return JavaMail 解析后的稳定地址文本
+     * @return JavaMail 解析后的地址文本
      * @throws IllegalArgumentException 地址为空、过长或语法无效时抛出
      */
     @Contract(pure = true)

@@ -19,7 +19,7 @@ public class EmailTemplate {
     public static final @NotNull String RESOURCE_TYPE_VALUE = "NOTIFICATION/EMAIL/TEMPLATES";
 
     /**
-     * Email Template 审计使用的稳定资源类型。
+     * Email Template 写入审计记录时使用的资源类型。
      */
     public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("NOTIFICATION/EMAIL/TEMPLATES");
 
@@ -51,10 +51,11 @@ public class EmailTemplate {
         }
         this.templateId = templateId;
         this.code = Objects.requireNonNull(code, "通知编码不能为空");
+        Objects.requireNonNull(locales, "Email 模板 Locale 不能为空");
         if (locales.isEmpty()) {
             throw new IllegalArgumentException("Email 模板必须包含 Locale");
         }
-        this.locales = Map.copyOf(Objects.requireNonNull(locales, "Email 模板 Locale 不能为空"));
+        this.locales = Map.copyOf(locales);
         this.enabled = enabled;
         this.version = Objects.requireNonNull(version, "Email 模板版本不能为空");
     }
@@ -74,7 +75,12 @@ public class EmailTemplate {
         return locales;
     }
 
-    /** @return 按语言标签选择的模板正文来源 */
+    /**
+     * 按请求 Locale 选择模板正文：先精确匹配语言标签，再匹配语言代码相同的条目，仍找不到时返回第一个 Locale 的正文。
+     *
+     * @param requested 请求使用的 Locale，不能为空
+     * @return 选中的模板正文来源，不会返回 null
+     */
     public @NotNull EmailTemplateSource source(@NotNull Locale requested) {
         Locale checked = Objects.requireNonNull(requested, "Email 模板 Locale 不能为空");
         EmailTemplateSource exact = locales.get(checked.toLanguageTag());

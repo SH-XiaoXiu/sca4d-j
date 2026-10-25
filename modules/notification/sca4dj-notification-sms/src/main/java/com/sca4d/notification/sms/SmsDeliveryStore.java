@@ -16,6 +16,12 @@ public class SmsDeliveryStore {
 
     private final IdGenerator ids;
 
+    /**
+     * 创建 SMS 投递记录存储；mapper 和 ids 为空时抛出 NullPointerException。
+     *
+     * @param mapper 读写 SMS 投递尝试记录的 Mapper
+     * @param ids 生成投递尝试主键的标识生成器
+     */
     public SmsDeliveryStore(@NotNull SmsDeliveryMapper mapper, @NotNull IdGenerator ids) {
         this.mapper = Objects.requireNonNull(mapper, "SmsDeliveryMapper 不能为空");
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");
@@ -44,7 +50,10 @@ public class SmsDeliveryStore {
                 recipientMasked) == 1;
     }
 
-    /** 把 PENDING 尝试写成 Provider API 的最终确定程度。 */
+    /**
+     * 把同一消息在该 Provider 上的 PENDING 尝试更新为 Provider 返回的状态和外部标识。
+     * 尝试不存在或已经不是 PENDING 时抛出 IllegalStateException，调用方不能继续沿用该结果。
+     */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void finish(
             @NotNull Id messageId,

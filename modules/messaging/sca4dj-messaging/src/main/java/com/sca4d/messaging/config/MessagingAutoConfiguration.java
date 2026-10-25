@@ -78,7 +78,7 @@ public class MessagingAutoConfiguration {
         return new RabbitMessageEnvelopeCodec(objectMapper, messageCodecs);
     }
 
-    /** @return Outbox 持久化语义 */
+    /** @return 读写 outbox 表的 MessageOutboxRepository */
     @Bean
     MessageOutboxRepository outboxRepository(@NotNull OutboxMapper mapper) {
         return new MessageOutboxRepository(mapper);
@@ -104,7 +104,7 @@ public class MessagingAutoConfiguration {
         return new RabbitPublisher(rabbitTemplate, topology, properties, retryRules);
     }
 
-    /** @return 支持立即、提交后和 Outbox 发布的公共 MessageBus */
+    /** @return 支持立即发布、事务提交后发布和写入 Outbox 三种方式的 MessageBus */
     @Bean
     MessageBus messageBus(
             @NotNull IdGenerator ids,
@@ -158,9 +158,9 @@ public class MessagingAutoConfiguration {
     }
 
     /**
-     * 创建执行一次到期消息派发的基础设施任务。
+     * 创建执行一次到期消息派发的后台任务。
      *
-     * @param dispatcher 保留消息级租约和退避语义的 Outbox 派发器
+     * @param dispatcher 按消息级租约和退避时间领取到期消息的 Outbox 派发器
      * @return 使用 MessageOutboxDispatcher 逐条派发到期消息的集群任务
      */
     @Bean
@@ -169,7 +169,7 @@ public class MessagingAutoConfiguration {
     }
 
     /**
-     * 创建执行一次过期 SENT 记录清理的基础设施任务。
+     * 创建执行一次过期 SENT 记录清理的后台任务。
      *
      * @param dispatcher 按保留期分批删除 SENT 记录的 Outbox 派发器
      * @return 使用 MessageOutboxDispatcher 分批删除过期 SENT 记录的集群任务

@@ -2,7 +2,7 @@ package com.sca4d.notification.email.sender;
 
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.Patch;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 提供 SMTP 配置查询、加密列读取和版本保护的持久化语义。 */
+/** 查询 SMTP 配置、读取加密密码列，并按版本号更新或删除配置记录。 */
 public class EmailSenderRepository {
 
     private final @NotNull EmailSenderMapper mapper;

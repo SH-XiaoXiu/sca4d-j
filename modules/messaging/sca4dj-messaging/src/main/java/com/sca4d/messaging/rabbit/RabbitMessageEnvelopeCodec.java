@@ -15,6 +15,7 @@ import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.messaging.exception.MessagingException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +78,7 @@ public class RabbitMessageEnvelopeCodec {
         try {
             return json.writeValueAsBytes(envelope);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("业务消息信封无法编码", exception);
+            throw new MessagingException("业务消息信封无法编码", exception);
         }
     }
 

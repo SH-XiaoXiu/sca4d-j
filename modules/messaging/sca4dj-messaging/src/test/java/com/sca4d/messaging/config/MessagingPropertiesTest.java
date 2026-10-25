@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-/** 验证 Messaging 毫秒时长配置在绑定边界拒绝截断和溢出。 */
+/** 验证发布确认超时和租约时长无法保留毫秒精度或超过毫秒范围时被拒绝。 */
 class MessagingPropertiesTest {
 
     @Test

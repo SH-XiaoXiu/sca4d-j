@@ -42,7 +42,7 @@ public class RabbitMessageTopology {
     }
 
     /**
-     * 在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。
+     * 在消息编码前追加 `MESSAGING:ROUTE` 路由前缀；业务消息编码本身保持原值，不做改写。
      *
      * @param messageCode 业务消息编码
      * @return 业务消息路由键

@@ -7,15 +7,18 @@ import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-/** 统一 EventHandler 与普通 MessageHandler 的 RabbitMQ 拓扑字段。 */
+/** 保存 EventHandler 或 MessageHandler 对应的 RabbitMQ 队列、路由和重试规则字段。 */
 class RabbitHandlerDescriptor {
 
-    private final EventHandler<?> eventHandler;
+    /** 事件 Handler；消息 Handler 描述符中为空。 */
+    private final @Nullable EventHandler<?> eventHandler;
 
-    private final MessageHandler<?> messageHandler;
+    /** 消息 Handler；事件 Handler 描述符中为空。 */
+    private final @Nullable MessageHandler<?> messageHandler;
 
     private final @NotNull RetryRule retryRule;
 
@@ -27,8 +30,8 @@ class RabbitHandlerDescriptor {
             @NotNull TreeCode code,
             @NotNull TreeCode messageCode,
             @NotNull RetryRule retryRule,
-            EventHandler<?> eventHandler,
-            MessageHandler<?> messageHandler) {
+            @Nullable EventHandler<?> eventHandler,
+            @Nullable MessageHandler<?> messageHandler) {
         this.code = requireSlash(code, "Handler 编码");
         this.messageCode = requireSlash(messageCode, "消息编码");
         this.retryRule = Objects.requireNonNull(retryRule, "Handler 策略不能为空");
@@ -75,10 +78,12 @@ class RabbitHandlerDescriptor {
         return eventHandler != null;
     }
 
+    @Nullable
     EventHandler<?> eventHandler() {
         return eventHandler;
     }
 
+    @Nullable
     MessageHandler<?> messageHandler() {
         return messageHandler;
     }

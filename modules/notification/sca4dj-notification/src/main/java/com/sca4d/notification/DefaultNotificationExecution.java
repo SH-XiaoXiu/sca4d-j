@@ -13,6 +13,7 @@ import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.region.Region;
 import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.notification.config.NotificationSettings;
+import com.sca4d.notification.exception.NotificationException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,6 +45,8 @@ class DefaultNotificationExecution<T> implements NotificationExecution {
 
     private final @NotNull T value;
 
+    private final boolean deferAvailability;
+
     private @Nullable Locale explicitLocale;
 
     private @Nullable Region explicitRegion;
@@ -61,13 +64,15 @@ class DefaultNotificationExecution<T> implements NotificationExecution {
             @NotNull NotificationSettings settings,
             @NotNull NotificationLocaleResolver locales,
             @NotNull NotificationRegionResolver regions,
-            @NotNull NotificationDeliveryRouter deliveries) {
+            @NotNull NotificationDeliveryRouter deliveries,
+            boolean deferAvailability) {
         this.type = Objects.requireNonNull(type, "通知类型不能为空");
         this.value = Objects.requireNonNull(value, "领域通知不能为空");
         this.settings = Objects.requireNonNull(settings, "Settings 不能为空");
         this.locales = Objects.requireNonNull(locales, "通知语言解析器不能为空");
         this.regions = Objects.requireNonNull(regions, "通知区域解析器不能为空");
         this.deliveries = Objects.requireNonNull(deliveries, "通知渠道路由器不能为空");
+        this.deferAvailability = deferAvailability;
     }
 
     @Override
@@ -130,8 +135,8 @@ class DefaultNotificationExecution<T> implements NotificationExecution {
                 intended,
                 type.definition().requiredChannels());
 
-        // 必发渠道不可用时拒绝发布；当前不可用的可选渠道不进入最终消息。
-        Set<TreeCode> available = availableChannels(candidate, intended);
+        // 同步发送检查渠道可用性；Outbox 入队保留目标渠道，提交后由投递器解析当前配置和收件人。
+        Set<TreeCode> available = deferAvailability ? intended : availableChannels(candidate, intended);
         if (available.isEmpty()) {
             throw new IllegalStateException("通知没有可用渠道: " + type.code());
         }
@@ -157,7 +162,7 @@ class DefaultNotificationExecution<T> implements NotificationExecution {
     }
 
     /**
-     * 按最终 Locale 从领域对象提取模板变量。
+     * 按最终 Locale 从通知对象中取出模板变量。
      */
     private @NotNull Map<String, String> variables(@NotNull Locale locale) {
         Map<String, String> resolved = new LinkedHashMap<>();
@@ -199,7 +204,7 @@ class DefaultNotificationExecution<T> implements NotificationExecution {
             if (deliveries.available(channel, candidate)) {
                 available.add(channel);
             } else if (type.definition().requiredChannels().contains(channel)) {
-                throw new IllegalStateException("通知必发渠道不可用: " + type.code() + '/' + channel);
+                throw new NotificationException("通知必发渠道不可用: " + type.code() + '/' + channel);
             }
         }
         return Set.copyOf(available);

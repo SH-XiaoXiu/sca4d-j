@@ -51,7 +51,7 @@ public class InboxTemplate {
     }
 
     /**
-     * @return 对应的稳定通知编码
+     * @return 模板对应的通知编码
      */
     @Contract(pure = true)
     public @NotNull TreeCode code() {

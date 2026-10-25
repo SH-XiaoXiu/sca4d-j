@@ -8,7 +8,7 @@ import java.util.Map;
 
 /** 使用一个 Provider 实例和平台模板绑定提交短信请求。 */
 public interface SmsProviderClient {
-    /** @return 当前适配器负责的 Provider 类型，例如 `ALIYUN` */
+    /** @return 本客户端处理的 Provider 类型，例如 `ALIYUN` */
     @NotNull
     String providerType();
 

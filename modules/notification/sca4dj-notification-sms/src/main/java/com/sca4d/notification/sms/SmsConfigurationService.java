@@ -8,7 +8,7 @@ import static com.sca4d.notification.sms.SmsNotificationErrorCode.PROVIDER_INVAL
 import static com.sca4d.notification.sms.SmsNotificationErrorCode.PROVIDER_NOT_FOUND;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 管理 SMS Provider 实例和统一通知到供应商模板的传输绑定。
+ * 管理 SMS Provider 实例，以及通知变量到 Provider 模板参数的绑定记录。
  */
 public class SmsConfigurationService {
 
@@ -68,7 +68,7 @@ public class SmsConfigurationService {
     }
 
     /**
-     * @return 指定 Provider；不存在时抛出稳定错误
+     * @return 指定 Provider；不存在时抛出 SmsNotificationErrorCode 对应的错误
      */
     @Transactional(readOnly = true)
     public @NotNull SmsProvider provider(long providerId) {
@@ -86,7 +86,7 @@ public class SmsConfigurationService {
     }
 
     /**
-     * @return 指定绑定；不存在时抛出稳定错误
+     * @return 指定绑定；不存在时抛出 SmsNotificationErrorCode 对应的错误
      */
     @Transactional(readOnly = true)
     public @NotNull SmsProviderBinding binding(long providerId, long bindingId) {

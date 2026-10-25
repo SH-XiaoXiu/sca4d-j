@@ -7,6 +7,7 @@ import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
+import com.sca4d.notification.exception.NotificationException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,7 +73,7 @@ public class NotificationDeliveryRouter {
         }
         NotificationDelivery delivery = deliveries.get(checkedChannel);
         if (delivery == null || !delivery.available(checked)) {
-            throw new IllegalStateException("通知渠道在消费时不可用: " + checkedChannel);
+            throw new NotificationException("通知渠道在消费时不可用: " + checkedChannel);
         }
         return delivery.deliver(Objects.requireNonNull(messageId, "通知消息标识不能为空"), checked);
     }

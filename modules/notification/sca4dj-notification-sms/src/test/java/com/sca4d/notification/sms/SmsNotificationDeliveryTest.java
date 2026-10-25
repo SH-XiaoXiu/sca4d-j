@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * 验证 SMS 公共投递器不内置国家分区，并向应用路由策略提供类型化事实。
+ * 验证 SMS 投递器不内置国家分区，并把通知的类型化字段传给应用路由策略。
  */
 class SmsNotificationDeliveryTest {
 

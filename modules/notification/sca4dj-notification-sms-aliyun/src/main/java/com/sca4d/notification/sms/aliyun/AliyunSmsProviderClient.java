@@ -14,8 +14,11 @@ import com.sca4d.notification.sms.SmsProvider;
 import com.sca4d.notification.sms.SmsProviderBinding;
 import com.sca4d.notification.sms.SmsProviderClient;
 import com.sca4d.notification.sms.SmsProviderResult;
+import com.sca4d.notification.sms.aliyun.exception.NotificationSmsAliyunException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,8 +29,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /** 使用阿里云 V2 Java SDK 提交国内或账号已开通的国际 SMS 模板请求。 */
 public class AliyunSmsProviderClient implements SmsProviderClient {
 
-    /** 数据库 Provider 使用的适配器类型。 */
+    /** 数据库中 Provider 记录的类型值，选中后由本客户端调用阿里云短信 API。 */
     public static final String TYPE = "ALIYUN";
+
+    private static final Logger LOG = LoggerFactory.getLogger(AliyunSmsProviderClient.class);
 
     private static final Region CHINA_MAINLAND = new Region("CN");
 
@@ -37,6 +42,12 @@ public class AliyunSmsProviderClient implements SmsProviderClient {
 
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
 
+    /**
+     * 保存阿里云 SMS 连接配置和 JSON 映射器；两者为空时抛出 NullPointerException。
+     *
+     * @param properties 阿里云 AccessKey、Endpoint 和 RegionId 配置
+     * @param objectMapper 解析阿里云 SMS API 响应使用的 JSON 映射器
+     */
     public AliyunSmsProviderClient(@NotNull AliyunSmsProperties properties, @NotNull ObjectMapper objectMapper) {
         this.properties = Objects.requireNonNull(properties, "阿里云 SMS 配置不能为空");
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
@@ -78,6 +89,11 @@ public class AliyunSmsProviderClient implements SmsProviderClient {
                     body == null ? null : body.getBizId(),
                     status == SmsDeliveryStatus.REJECTED ? code : null);
         } catch (Exception exception) {
+            LOG.warn(
+                    "阿里云 SMS 发送请求异常，投递结果未知，将由查询任务确认 | providerType={} errorType={}",
+                    TYPE,
+                    exception.getClass().getSimpleName(),
+                    exception);
             return new SmsProviderResult(
                     SmsDeliveryStatus.UNKNOWN,
                     null,
@@ -135,6 +151,11 @@ public class AliyunSmsProviderClient implements SmsProviderClient {
             }
             return new SmsProviderResult(SmsDeliveryStatus.PENDING, requestId, bizId, null);
         } catch (Exception exception) {
+            LOG.warn(
+                    "阿里云 SMS 状态查询异常，投递状态保持未知 | providerType={} errorType={}",
+                    TYPE,
+                    exception.getClass().getSimpleName(),
+                    exception);
             return new SmsProviderResult(
                     SmsDeliveryStatus.UNKNOWN,
                     requestId,
@@ -158,7 +179,7 @@ public class AliyunSmsProviderClient implements SmsProviderClient {
                         .setRegionId(required(credential.getRegionId(), "Region ID"));
                 return new Client(config);
             } catch (Exception exception) {
-                throw new IllegalStateException("阿里云 SMS Client 创建失败", exception);
+                throw new NotificationSmsAliyunException("阿里云 SMS Client 创建失败", exception);
             }
         });
     }

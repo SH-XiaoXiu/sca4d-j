@@ -5,12 +5,12 @@ import com.sca4d.core.api.error.ErrorCode;
 import com.sca4d.core.api.error.ErrorCodeRange;
 import org.jetbrains.annotations.NotNull;
 
-/** 统一通知模板和渠道设置使用的稳定错误码。 */
+/** 通知模板和渠道设置失败时返回的错误码。 */
 @ErrorCodeRange(start = 3100, end = 3199)
 public enum NotificationErrorCode implements ErrorCode {
-    /** 统一通知模板不存在。 */
+    /** 通知模板不存在。 */
     TEMPLATE_NOT_FOUND("3100", ErrorCategory.NOT_FOUND, "error.notification.template-not-found"),
-    /** 统一通知模板结构、Locale 或变量无效。 */
+    /** 通知模板结构、Locale 或模板变量无效。 */
     TEMPLATE_INVALID("3101", ErrorCategory.VALIDATION, "error.notification.template-invalid"),
     /** 通知类型已经存在未删除模板。 */
     TEMPLATE_CONFLICT("3102", ErrorCategory.CONFLICT, "error.notification.template-conflict");

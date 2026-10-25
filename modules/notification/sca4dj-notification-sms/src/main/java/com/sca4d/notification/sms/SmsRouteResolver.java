@@ -15,8 +15,8 @@ import java.util.Locale;
 public interface SmsRouteResolver {
 
     /**
-     * @param code        通知稳定编码
-     * @param region      通知发生或面向的业务区域；没有区域语义时为空
+     * @param code        通知编码
+     * @param region      通知发生或面向的业务区域；没有区域信息时为空
      * @param destination 已经确认有效的 E.164 电话目的地
      * @param locale      通知最终选择的 Locale
      * @return 具体应用声明的 SMS 路由

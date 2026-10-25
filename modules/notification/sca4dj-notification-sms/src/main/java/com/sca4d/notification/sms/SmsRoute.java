@@ -16,7 +16,7 @@ public class SmsRoute {
     private final @NotNull String value;
 
     /**
-     * @param value 具体应用内稳定的小写路由编码，例如 `china-mainland` 或 `international`
+     * @param value 具体应用内使用的小写路由编码，例如 `china-mainland` 或 `international`
      */
     public SmsRoute(@NotNull String value) {
         String checked = TextUtils.requireText(value, "SMS 路由编码");
@@ -26,7 +26,7 @@ public class SmsRoute {
         this.value = checked;
     }
 
-    /** @return 具体应用声明的稳定路由编码 */
+    /** @return 具体应用声明的路由编码 */
     @Contract(pure = true)
     public @NotNull String value() {
         return value;

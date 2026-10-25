@@ -38,7 +38,7 @@ public class EmailNotificationAutoConfiguration {
     public EmailNotificationAutoConfiguration() {
     }
 
-    /** @return SMTP 配置持久化语义 */
+    /** @return 读写 SMTP 配置记录的 EmailSenderRepository */
     @Bean
     EmailSenderRepository emailSenderRepository(
             @NotNull EmailSenderMapper mapper,
@@ -46,7 +46,7 @@ public class EmailNotificationAutoConfiguration {
         return new EmailSenderRepository(mapper, versionConditions);
     }
 
-    /** @return Email 模板持久化语义 */
+    /** @return 读写 Email 模板记录的 EmailTemplateRepository */
     @Bean
     EmailTemplateRepository emailTemplateRepository(
             @NotNull EmailTemplateMapper mapper,

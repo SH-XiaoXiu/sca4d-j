@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /** 保存一封同步 Email 要附带的文件名、媒体类型和完整内容。 */
-@SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
+@SuppressWarnings("ClassCanBeRecord") // 项目使用普通 class，不使用 Java record。
 public class EmailAttachment {
     private final @NotNull String contentType;
 

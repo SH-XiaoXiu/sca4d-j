@@ -49,19 +49,22 @@ public class SmsProvider {
         return providerId;
     }
 
-    /** @return Provider 实例稳定编码 */
+    /** @return Provider 实例的编码 */
     @Contract(pure = true)
     public @NotNull String code() {
         return code;
     }
 
-    /** @return 选择 `SmsProviderClient` 使用的 Provider 类型 */
+    /**
+     * @return Provider 类型，与某个已安装 `SmsProviderClient` 的 providerType 相同；
+     *         由 `SmsConfigurationService` 创建和替换时校验，不在本对象内校验
+     */
     @Contract(pure = true)
     public @NotNull String type() {
         return type;
     }
 
-    /** @return 部署配置中凭据集合的稳定引用 */
+    /** @return 部署配置中凭据集合的引用名称 */
     @Contract(pure = true)
     public @NotNull String credentialRef() {
         return credentialRef;

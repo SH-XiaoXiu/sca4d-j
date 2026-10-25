@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 保存 Email Sender Mapper 返回的完整数据库列。 */
-@SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
+@SuppressWarnings("ClassCanBeRecord") // 项目使用普通 class，不使用 Java record。
 public class EmailSenderState {
 
     private final @NotNull SmtpSecurity security;

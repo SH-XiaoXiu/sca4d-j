@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.Patch;
@@ -13,6 +13,7 @@ import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.Sort;
 import com.sca4d.core.api.query.SortOrder;
+import com.sca4d.notification.email.exception.NotificationEmailException;
 import com.sca4d.notification.email.mapper.EmailTemplateMapper;
 import com.sca4d.notification.email.mapper.EmailTemplateState;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -27,7 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Email 模块拥有的模板持久化边界。
+ * 读写 Email 模板记录，隐藏 Mapper 和影响行数，并负责版本校验。
  */
 public class EmailTemplateRepository {
     private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
@@ -121,7 +122,7 @@ public class EmailTemplateRepository {
             long templateId,
             @NotNull TreeCode code,
             @NotNull Map<String, EmailTemplateSource> locales) {
-        EmailTemplate current = require(templateId);
+        EmailTemplate current = loadById(templateId);
         VersionCondition condition = versions.resolve(current.version());
         try {
             AffectedRowCounts.requireSingle(
@@ -142,7 +143,7 @@ public class EmailTemplateRepository {
      * 按当前版本修改 Email 模板的启用状态。
      */
     public void setEnabled(long templateId, boolean enabled) {
-        EmailTemplate current = require(templateId);
+        EmailTemplate current = loadById(templateId);
         VersionCondition condition = versions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.update(templateId, Patch.ignore(), Patch.ignore(), Patch.set(enabled), condition.expected()),
@@ -154,7 +155,7 @@ public class EmailTemplateRepository {
      * 按当前版本逻辑删除 Email 模板。
      */
     public void delete(long templateId) {
-        EmailTemplate current = require(templateId);
+        EmailTemplate current = loadById(templateId);
         VersionCondition condition = versions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.markDeleted(templateId, condition.expected()),
@@ -162,7 +163,7 @@ public class EmailTemplateRepository {
                 "Email Template");
     }
 
-    private @NotNull EmailTemplate require(long templateId) {
+    private @NotNull EmailTemplate loadById(long templateId) {
         return find(templateId).orElseThrow(() -> new BusinessException(EmailNotificationErrorCode.TEMPLATE_NOT_FOUND));
     }
 
@@ -181,7 +182,7 @@ public class EmailTemplateRepository {
             });
             return new EmailTemplate(state.templateId(), state.code(), locales, state.enabled(), state.version());
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("数据库中的 Email 模板 JSON 无法解析", exception);
+            throw new NotificationEmailException("数据库中的 Email 模板 JSON 无法解析", exception);
         }
     }
 

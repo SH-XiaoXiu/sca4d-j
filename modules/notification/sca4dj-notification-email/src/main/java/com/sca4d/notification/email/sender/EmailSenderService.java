@@ -1,6 +1,6 @@
 package com.sca4d.notification.email.sender;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretKeyring;
@@ -32,7 +32,12 @@ public class EmailSenderService {
 
     private final @NotNull SecretKeyring keyring;
 
-    /** @param senders SMTP 配置持久化语义 @param transport SMTP 操作 @param keyring 密码加密密钥环 @param ids 全局标识生成器 */
+    /**
+     * @param senders 读写 SMTP 配置记录的 Repository
+     * @param transport 测试连接和发送邮件使用的 SMTP 网关
+     * @param keyring 加密 SMTP 密码的密钥环
+     * @param ids 生成配置主键的标识生成器
+     */
     public EmailSenderService(
             @NotNull EmailSenderRepository senders,
             @NotNull EmailGateway transport,
@@ -50,7 +55,10 @@ public class EmailSenderService {
         return senders.findAll();
     }
 
-    /** @return 指定 SMTP 配置；不存在时抛出稳定错误 */
+    /**
+     * @return 指定 SMTP 配置，不包含密码密文
+     * @throws BusinessException 配置不存在时抛出 SENDER_NOT_FOUND
+     */
     @CheckReturnValue
     public @NotNull EmailSender loadById(long senderId) {
         return senders.find(senderId)
@@ -224,7 +232,7 @@ public class EmailSenderService {
         }
     }
 
-    /** 保存已经规范化但尚未持久化的 SMTP 文本字段。 */
+    /** 保存已经去除首尾空白并校验过格式、但尚未写入数据库的 SMTP 文本字段。 */
     private static class CheckedSender {
         private final @NotNull String fromAddress;
 
@@ -238,7 +246,14 @@ public class EmailSenderService {
 
         private final @Nullable String username;
 
-        /** @param name 名称 @param host 主机 @param username 用户名 @param fromAddress 发件邮箱 @param fromName 发件名 @param replyTo 回复邮箱 */
+        /**
+         * @param name 通过 TextUtils 校验后的配置名称
+         * @param host 通过 TextUtils 校验后的 SMTP 主机
+         * @param username 校验后的认证用户名，未配置认证时为 null
+         * @param fromAddress 经过 EmailAddresses 规范化的发件邮箱
+         * @param fromName 可选发件显示名
+         * @param replyTo 经过 EmailAddresses 规范化的可选回复邮箱
+         */
         private CheckedSender(
                 @NotNull String name,
                 @NotNull String host,

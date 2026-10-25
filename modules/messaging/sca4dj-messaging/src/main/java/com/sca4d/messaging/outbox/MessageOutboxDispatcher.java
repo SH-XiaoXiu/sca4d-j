@@ -39,7 +39,7 @@ public class MessageOutboxDispatcher {
     private final @NotNull TransactionTemplate transactions;
 
     /**
-     * 创建保留消息级租约、退避和分批清理语义的 Outbox 操作。
+     * 创建按消息级租约和退避时间派发 Outbox 消息、并分批删除过期 SENT 记录的操作对象。
      *
      * @param repository Outbox 持久化入口
      * @param sender 在数据库事务外等待 RabbitMQ 发布结果的发送器
@@ -60,7 +60,11 @@ public class MessageOutboxDispatcher {
         this.clock = Objects.requireNonNull(clock, "Outbox 时钟不能为空");
     }
 
-    /** 领取一批到期记录并逐条尝试发布；单条失败不阻止其他消息。 */
+    /**
+     * 领取一批到期记录并逐条尝试发布。成功后写回 SENT；失败后写回下一次 availableAt 与错误摘要。
+     * 单条失败只影响该记录，不中断本批次其余消息。会修改 Outbox 记录的租约、尝试次数、可用时间和状态，不抛出发布异常。
+     * 结果写回失败时只记录 ERROR 并保留租约，等待租约到期后重新领取。
+     */
     public void dispatch() {
         // 在短事务中领取到期消息并登记租约，RabbitMQ 等待不占用数据库事务。
         Instant now = clock.instant();
@@ -94,7 +98,7 @@ public class MessageOutboxDispatcher {
                 sentCount++;
             } catch (RuntimeException exception) {
                 failedCount++;
-                // 发布或 SENT 写回失败时登记下一次退避；写回也失败则保留租约等待其他实例接管。
+                // 发布或 SENT 写回失败时按尝试次数计算下一次退避时间，并把失败摘要写入记录，供后续派发和排查使用。
                 Instant failedAt = clock.instant();
                 Instant availableAt = failedAt.plus(
                         RetryPolicy.always(
@@ -110,6 +114,7 @@ public class MessageOutboxDispatcher {
                                 .retryDelay()
                                 .orElseThrow());
                 String error = errorSummary(exception);
+                // 失败结果在独立事务中写回；写回失败时保留当前租约，租约到期后由任一实例重新领取该消息。
                 try {
                     transactions.executeWithoutResult(
                             status -> repository.saveProgress(message.failed(availableAt, error)));
@@ -140,7 +145,10 @@ public class MessageOutboxDispatcher {
         }
     }
 
-    /** 分批删除保留期已经结束的 SENT 记录。 */
+    /**
+     * 删除发送时间早于 clock 当前时间减去 sentRetention 的 SENT 记录，每次最多删除 cleanupBatchSize 条。
+     * 只删除已经发送成功的记录，未发送或失败中的记录不受影响；没有可删除记录时不产生日志。
+     */
     public void cleanup() {
         Instant before = clock.instant().minus(properties.getSentRetention());
         int deleted = Objects.requireNonNull(

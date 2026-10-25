@@ -475,7 +475,7 @@ class MessagingInfrastructureIntegrationTest {
         return topology.handlerQueueName(handler.code()).format(NameFormat.COLON);
     }
 
-    /** 在真实提交前后注入一次故障，验证跨数据库与 Broker 的交接边界。 */
+    /** 在真实事务提交前后注入一次故障，验证数据库中的 Outbox 记录与 RabbitMQ 发布结果保持一致。 */
     private static class FaultTransactions extends DataSourceTransactionManager {
         private final AtomicReference<Runnable> beforeCommit = new AtomicReference<>();
 

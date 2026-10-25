@@ -5,7 +5,7 @@ import com.sca4d.core.api.error.ErrorCode;
 import com.sca4d.core.api.error.ErrorCodeRange;
 import org.jetbrains.annotations.NotNull;
 
-/** Email 通知配置、模板和投递使用的稳定错误码。 */
+/** Email 通知配置、模板和投递失败时返回的错误码。 */
 @ErrorCodeRange(start = 3000, end = 3099)
 public enum EmailNotificationErrorCode implements ErrorCode {
     /** SMTP 配置不存在。 */

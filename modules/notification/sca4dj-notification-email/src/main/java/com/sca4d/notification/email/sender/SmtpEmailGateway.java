@@ -1,6 +1,6 @@
 package com.sca4d.notification.email.sender;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;

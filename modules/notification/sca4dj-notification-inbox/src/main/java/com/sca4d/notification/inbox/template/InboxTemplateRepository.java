@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
@@ -15,6 +15,7 @@ import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.Sort;
 import com.sca4d.core.api.query.SortOrder;
 import com.sca4d.notification.NotificationErrorCode;
+import com.sca4d.notification.inbox.exception.NotificationInboxException;
 import com.sca4d.notification.inbox.template.mapper.InboxTemplateMapper;
 import com.sca4d.notification.inbox.template.mapper.InboxTemplateState;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -27,7 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * 隐藏站内信模板的 JSONB、Mapper 和影响行数语义。
+ * 隐藏站内信模板的 JSONB 字段、Mapper 和影响行数。
  */
 public class InboxTemplateRepository {
 
@@ -87,7 +88,7 @@ public class InboxTemplateRepository {
     }
 
     /**
-     * @return 指定通知编码当前启用的统一模板
+     * @return 指定通知编码当前启用的模板；没有启用模板时为空
      */
     @CheckReturnValue
     public @NotNull Optional<InboxTemplate> findEnabled(@NotNull TreeCode code) {
@@ -113,7 +114,7 @@ public class InboxTemplateRepository {
      * 按当前请求版本条件完整替换编码和模板内容。
      */
     public void replace(long templateId, @NotNull TreeCode code, @NotNull JsonNode content) {
-        InboxTemplate current = require(templateId);
+        InboxTemplate current = loadById(templateId);
         VersionCondition condition = versionConditions.resolve(current.version());
         try {
             AffectedRowCounts.requireSingle(
@@ -134,7 +135,7 @@ public class InboxTemplateRepository {
      * 按当前请求版本条件修改模板启用状态。
      */
     public void setEnabled(long templateId, boolean enabled) {
-        InboxTemplate current = require(templateId);
+        InboxTemplate current = loadById(templateId);
         VersionCondition condition = versionConditions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.update(
@@ -151,7 +152,7 @@ public class InboxTemplateRepository {
      * 按当前请求版本条件删除停用模板。
      */
     public void delete(long templateId) {
-        InboxTemplate current = require(templateId);
+        InboxTemplate current = loadById(templateId);
         VersionCondition condition = versionConditions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.markDeleted(templateId, condition.expected()),
@@ -159,7 +160,7 @@ public class InboxTemplateRepository {
                 "Inbox Template");
     }
 
-    private @NotNull InboxTemplate require(long templateId) {
+    private @NotNull InboxTemplate loadById(long templateId) {
         return find(templateId).orElseThrow(() -> new BusinessException(NotificationErrorCode.TEMPLATE_NOT_FOUND));
     }
 
@@ -172,7 +173,7 @@ public class InboxTemplateRepository {
                     state.enabled(),
                     state.version());
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("数据库中的站内信模板 JSON 无法解析", exception);
+            throw new NotificationInboxException("数据库中的站内信模板 JSON 无法解析", exception);
         }
     }
 

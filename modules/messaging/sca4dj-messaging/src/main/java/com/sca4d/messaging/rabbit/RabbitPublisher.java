@@ -8,6 +8,7 @@ import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.messaging.config.MessagingProperties;
+import com.sca4d.messaging.exception.MessagingException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -120,11 +121,11 @@ public class RabbitPublisher {
             }
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
-            throw new IllegalStateException("等待 RabbitMQ 发布确认时被中断", exception);
+            throw new MessagingException("等待 RabbitMQ 发布确认时被中断", exception);
         } catch (ExecutionException exception) {
-            throw new IllegalStateException("RabbitMQ 发布确认失败", exception.getCause());
+            throw new MessagingException("RabbitMQ 发布确认失败", exception.getCause());
         } catch (TimeoutException exception) {
-            throw new IllegalStateException("等待 RabbitMQ 发布确认超时", exception);
+            throw new MessagingException("等待 RabbitMQ 发布确认超时", exception);
         }
     }
 }

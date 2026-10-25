@@ -5,7 +5,7 @@ import com.sca4d.core.api.error.ErrorCode;
 import com.sca4d.core.api.error.ErrorCodeRange;
 import org.jetbrains.annotations.NotNull;
 
-/** SMS Provider 与传输绑定管理使用的稳定错误码。 */
+/** SMS Provider 与模板绑定管理失败时返回的错误码。 */
 @ErrorCodeRange(start = 3200, end = 3299)
 public enum SmsNotificationErrorCode implements ErrorCode {
     /** SMS Provider 不存在。 */

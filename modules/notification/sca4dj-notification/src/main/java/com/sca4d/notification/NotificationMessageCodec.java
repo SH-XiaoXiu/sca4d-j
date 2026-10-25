@@ -15,6 +15,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.region.Region;
+import com.sca4d.notification.exception.NotificationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.util.Set;
 import java.util.stream.StreamSupport;
 
 /**
- * 把 NotificationMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。
+ * 把 NotificationMessage 编解码为 RabbitMQ 消息和 Outbox 记录使用的 JSON payload。
  */
 public class NotificationMessageCodec implements MessageCodec<NotificationMessage> {
 
@@ -85,7 +86,7 @@ public class NotificationMessageCodec implements MessageCodec<NotificationMessag
         try {
             return json.writeValueAsBytes(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("NotificationMessage 无法编码", exception);
+            throw new NotificationException("NotificationMessage 无法编码", exception);
         }
     }
 

@@ -1,7 +1,7 @@
 package com.sca4d.notification.email;
 
 import com.sca4d.core.api.delivery.DeliveryOutcome;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;

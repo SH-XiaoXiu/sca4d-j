@@ -93,7 +93,7 @@ class RabbitMessageTopologyTest {
                 .hasMessageContaining("重复");
     }
 
-    /** 测试使用的稳定 EventHandler 契约。 */
+    /** 测试用的 EventHandler 实现，声明固定的 EventType 与 RetryRule。 */
     private static class TestHandler implements EventHandler<String> {
         private final EventType<String> eventType;
 

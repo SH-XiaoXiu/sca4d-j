@@ -10,9 +10,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
+import com.sca4d.notification.sms.exception.NotificationSmsException;
 import com.sca4d.notification.sms.mapper.SmsBindingState;
 import com.sca4d.notification.sms.mapper.SmsProviderMapper;
 import com.sca4d.notification.sms.mapper.SmsProviderState;
@@ -293,7 +294,7 @@ public class SmsRepository {
                     state.enabled(),
                     state.version());
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("数据库中的 SMS 参数映射无法解析", exception);
+            throw new NotificationSmsException("数据库中的 SMS 参数映射无法解析", exception);
         }
     }
 

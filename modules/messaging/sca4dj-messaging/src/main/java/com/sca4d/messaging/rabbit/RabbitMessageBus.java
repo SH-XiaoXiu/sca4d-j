@@ -18,6 +18,7 @@ import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -26,7 +27,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.Objects;
 
-/** 使用固定 RabbitMQ 基座实现立即、提交后和 Outbox 三种 Message 分发方式。 */
+/** 通过 RabbitPublisher 立即发布消息，或在事务提交后发布，或先写入 Outbox 表再由派发任务发布。 */
 @ApiStatus.Internal
 public class RabbitMessageBus implements MessageBus {
 
@@ -108,7 +109,7 @@ public class RabbitMessageBus implements MessageBus {
 
     private @NotNull DispatchReceipt dispatchThroughOutbox(
             @NotNull Message message,
-            Instant notBefore) {
+            @Nullable Instant notBefore) {
         requireTransaction("Outbox 分发");
         Instant now = clock.instant();
         Instant availableAt = notBefore == null ? now : notBefore;
@@ -118,7 +119,7 @@ public class RabbitMessageBus implements MessageBus {
                 message.code(),
                 codec.encode(messageId, message, now, sourceApplication),
                 availableAt);
-        LOG.trace(
+        LOG.debug(
                 "业务消息已加入当前事务的 Outbox | messageId={} messageCode={} availableAt={}",
                 messageId,
                 message.code(),

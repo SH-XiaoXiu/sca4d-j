@@ -15,6 +15,14 @@ public class SmsProviderResult {
 
     private final @Nullable String requestId;
 
+    /**
+     * 保存一次 Provider 提交的结果；status 为空时抛出 NullPointerException，其余字段原样保存。
+     *
+     * @param status Provider API 对本次提交的确定程度
+     * @param requestId Provider 返回的请求标识，没有返回时为空
+     * @param bizId Provider 返回的业务标识，没有返回时为空
+     * @param failureCode Provider 返回的失败码，成功时为空
+     */
     public SmsProviderResult(
             @NotNull SmsDeliveryStatus status,
             @Nullable String requestId,
