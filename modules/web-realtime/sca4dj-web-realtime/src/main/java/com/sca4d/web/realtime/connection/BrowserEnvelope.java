@@ -22,6 +22,7 @@ public class BrowserEnvelope {
 
     private final int protocolVersion;
 
+    /** 创建发送给浏览器的统一事件信封。 */
     public BrowserEnvelope(
             @NotNull TreeCode eventCode,
             int protocolVersion,

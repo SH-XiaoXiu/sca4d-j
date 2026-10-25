@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Internal
 public class WebRealtimeInfrastructureNames {
 
+    /** 创建无状态的 Web Realtime 运行时名称生成器。 */
     public WebRealtimeInfrastructureNames() {
     }
 

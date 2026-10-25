@@ -44,6 +44,6 @@ public class QueuedAuditRecorder implements AuditRecorder {
         if (receipt.status() != DispatchReceipt.Status.OUTBOX_ENLISTED) {
             throw new IllegalStateException("审计消息没有取得 Outbox 接收结果");
         }
-        LOG.trace("审计已加入独立事务 Outbox | requestId={} messageId={}", record.requestId(), receipt.messageId());
+        LOG.debug("审计已加入独立事务 Outbox | requestId={} messageId={}", record.requestId(), receipt.messageId());
     }
 }

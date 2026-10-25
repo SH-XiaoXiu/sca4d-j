@@ -1,6 +1,7 @@
 package com.sca4d.web.realtime.stomp;
 
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
+import com.sca4d.web.realtime.exception.WebRealtimeException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class StompRelayPortCheck implements SmartInitializingSingleton {
 
     private final @NotNull WebRealtimeProperties properties;
 
+    /** 创建 BROKER_RELAY 启动前的 TCP 可连接性检查。 */
     public StompRelayPortCheck(@NotNull WebRealtimeProperties properties) {
         this.properties = Objects.requireNonNull(properties, "Web Realtime 配置不能为空");
     }
@@ -40,7 +42,7 @@ public class StompRelayPortCheck implements SmartInitializingSingleton {
                     relay.getHost(),
                     relay.getPort());
         } catch (IOException exception) {
-            throw new IllegalStateException(
+            throw new WebRealtimeException(
                     "BROKER_RELAY 模式无法连接 RabbitMQ STOMP relay: "
                             + relay.getHost() + ':' + relay.getPort(),
                     exception);

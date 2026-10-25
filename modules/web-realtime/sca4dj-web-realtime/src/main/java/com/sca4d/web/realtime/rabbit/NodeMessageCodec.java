@@ -9,6 +9,7 @@ import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.web.realtime.connection.BrowserEnvelope;
 import com.sca4d.web.realtime.connection.BrowserWrite;
+import com.sca4d.web.realtime.exception.WebRealtimeException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +38,7 @@ public class NodeMessageCodec {
 
     private final @NotNull ObjectMapper objectMapper;
 
+    /** @param objectMapper 用于读写节点消息 JSON 的 ObjectMapper */
     public NodeMessageCodec(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
     }
@@ -62,7 +64,7 @@ public class NodeMessageCodec {
         try {
             return objectMapper.writeValueAsBytes(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Web Realtime 节点消息无法编码", exception);
+            throw new WebRealtimeException("Web Realtime 节点消息无法编码", exception);
         }
     }
 

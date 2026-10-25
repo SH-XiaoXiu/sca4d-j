@@ -13,7 +13,7 @@ import com.sca4d.auth.hmac.HmacProof;
 import com.sca4d.auth.session.SessionService;
 import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.setting.ConfiguredConstants;

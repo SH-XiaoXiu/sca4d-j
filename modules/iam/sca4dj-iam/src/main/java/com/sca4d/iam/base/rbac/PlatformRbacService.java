@@ -3,7 +3,7 @@ package com.sca4d.iam.base.rbac;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.LocalizedFieldsSchema;

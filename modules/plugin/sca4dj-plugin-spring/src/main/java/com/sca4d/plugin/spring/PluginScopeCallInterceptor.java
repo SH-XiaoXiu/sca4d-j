@@ -6,15 +6,16 @@ import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.plugin.PluginRuntime;
 import com.sca4d.core.api.plugin.PluginScope;
+import com.sca4d.plugin.spring.exception.PluginSpringException;
 import org.jetbrains.annotations.NotNull;
 
-/** 在统一 Call 生命周期中固定插件代次，并把租用延续到外层事务完成。 */
+/** 在 Call 执行期间固定插件代次，并把租用保持到外层事务结束。 */
 public final class PluginScopeCallInterceptor implements CallLifecycle.Around {
 
-    /** 插件作用域生命周期节点。 */
+    /** 插件作用域在 Call 拦截链中的节点。 */
     public static final TreeCode CODE = TreeCode.of("CALL/PLUGIN_SCOPE");
 
-    private final PluginRuntime runtime;
+    private final @NotNull PluginRuntime runtime;
 
     public PluginScopeCallInterceptor(@NotNull PluginRuntime runtime) {
         this.runtime = runtime;
@@ -40,7 +41,7 @@ public final class PluginScopeCallInterceptor implements CallLifecycle.Around {
         } catch (RuntimeException | Error failure) {
             throw failure;
         } catch (Throwable failure) {
-            throw new IllegalStateException("插件作用域调用失败", failure);
+            throw new PluginSpringException("插件作用域调用失败", failure);
         }
     }
 }

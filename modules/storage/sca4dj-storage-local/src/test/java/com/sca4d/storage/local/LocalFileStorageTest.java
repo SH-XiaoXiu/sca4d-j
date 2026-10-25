@@ -19,7 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 
-/** 验证本地目录对象生命周期、精确字节数和路径逃逸防护。 */
+/** 验证本地目录中对象的写入、删除、精确字节数和路径逃逸防护。 */
 class LocalFileStorageTest extends FileStorageContract {
 
     @TempDir

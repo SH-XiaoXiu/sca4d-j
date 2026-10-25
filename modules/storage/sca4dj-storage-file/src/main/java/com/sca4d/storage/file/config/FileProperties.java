@@ -22,6 +22,7 @@ public class FileProperties {
 
     private @NotNull Duration deleteRetryDelay = Duration.ofMinutes(10);
 
+    /** 使用默认保留期、清理间隔和删除租约创建文件配置。 */
     public FileProperties() {
     }
 

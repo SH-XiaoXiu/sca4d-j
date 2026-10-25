@@ -1,5 +1,6 @@
 package com.sca4d.openapi.web;
 
+import com.sca4d.openapi.exception.OpenapiException;
 import com.sca4d.openapi.oauth.OpenApiAuthenticationEndpoint;
 import com.sca4d.openapi.oauth.OpenApiTokenEndpointHandler;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +61,7 @@ public final class OpenApiAuthenticationEndpointRegistrar implements Initializin
         try {
             return OpenApiTokenEndpointHandler.class.getMethod("token", String.class, String.class);
         } catch (NoSuchMethodException exception) {
-            throw new IllegalStateException("OpenAPI Token Handler 方法不存在", exception);
+            throw new OpenapiException("OpenAPI Token Handler 方法不存在", exception);
         }
     }
 }

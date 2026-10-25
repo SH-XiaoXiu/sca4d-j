@@ -1,6 +1,6 @@
 package com.sca4d.iam.base;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.RealmKey;

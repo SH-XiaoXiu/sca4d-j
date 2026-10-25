@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.audit.config.AuditProperties;
+import com.sca4d.audit.exception.AuditException;
 import com.sca4d.core.api.audit.AuditPayload;
 import com.sca4d.core.api.audit.AuditPayloadCodec;
 import org.jetbrains.annotations.ApiStatus;
@@ -96,7 +97,7 @@ public class AuditPayloadJson {
             }
             return new AuditPayloadData(type, version, json, decoded);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("审计 payload JSON 无法读取", exception);
+            throw new AuditException("审计 payload JSON 无法读取", exception);
         }
     }
 
@@ -150,7 +151,7 @@ public class AuditPayloadJson {
         try {
             return objectMapper.writeValueAsString(node);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("审计 payload JSON 无法写入", exception);
+            throw new AuditException("审计 payload JSON 无法写入", exception);
         }
     }
 }

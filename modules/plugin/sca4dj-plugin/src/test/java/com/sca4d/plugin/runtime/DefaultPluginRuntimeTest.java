@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.plugin.*;
+import com.sca4d.core.api.plugin.exception.*;
+import com.sca4d.core.api.plugin.exception.PluginUnavailableException;
+import com.sca4d.plugin.runtime.exception.PluginException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.DisplayName;
@@ -110,17 +113,17 @@ class DefaultPluginRuntimeTest {
             runtime.replace(artifact, Duration.ZERO);
             Query query = QUERY.client(runtime, null);
             provider.failReload = true;
-            assertThrows(IllegalStateException.class, () -> runtime.reload(ID, Duration.ZERO));
+            assertThrows(PluginException.class, () -> runtime.reload(ID, Duration.ZERO));
             assertEquals("1:artifact-a", query.read());
             assertTrue(provider.unloaded.isEmpty());
             provider.failReload = false;
             provider.wrongApi = true;
-            assertThrows(IllegalStateException.class, () -> runtime.reload(ID, Duration.ZERO));
+            assertThrows(PluginException.class, () -> runtime.reload(ID, Duration.ZERO));
             assertEquals(1, loader.entries.size());
             assertEquals(1, provider.unloaded.size());
             provider.wrongApi = false;
             loader.failInitialization = true;
-            assertThrows(IllegalStateException.class, () -> runtime.reload(ID, Duration.ZERO));
+            assertThrows(PluginException.class, () -> runtime.reload(ID, Duration.ZERO));
             assertEquals(2, provider.unloaded.size());
             assertEquals(1, loader.closed.get());
             assertEquals("1:artifact-a", query.read());
@@ -213,7 +216,7 @@ class DefaultPluginRuntimeTest {
         }
     }
 
-    /** 从指定副本读取构件内容，记录配置生命周期并控制测试失败条件。 */
+    /** 从指定副本读取构件内容，记录配置的加载与关闭，并按测试设定触发失败。 */
     private static final class Provider implements PluginConfiguration<String> {
         private final AtomicInteger revision = new AtomicInteger(1);
 
@@ -263,7 +266,7 @@ class DefaultPluginRuntimeTest {
         }
     }
 
-    /** 创建独立入口并记录关闭结果，不实现版本算法或改变运行时生命周期。 */
+    /** 创建独立入口并记录关闭结果，不实现版本算法，也不改变运行时状态。 */
     private static final class FixtureLoader implements PluginLoader {
         private final List<Entry> entries = new CopyOnWriteArrayList<>();
 

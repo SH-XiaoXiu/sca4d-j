@@ -2,8 +2,8 @@ package com.sca4d.iam.base;
 
 import com.sca4d.core.api.authentication.SessionIdentity;
 import com.sca4d.core.api.authentication.SessionIdentityLoader;
-import com.sca4d.core.api.authentication.SessionIdentityUnavailableException;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;

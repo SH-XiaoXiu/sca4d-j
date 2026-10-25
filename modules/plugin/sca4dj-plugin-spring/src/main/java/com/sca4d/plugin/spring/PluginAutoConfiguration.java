@@ -59,7 +59,7 @@ public class PluginAutoConfiguration {
         return host.runtime();
     }
 
-    /** 将插件代次作用域挂载到统一 Call 生命周期。 */
+    /** 把插件代次作用域注册到 Call 拦截链，使每次调用固定一个插件代次。 */
     @Bean
     PluginScopeCallInterceptor pluginScopeCallInterceptor(PluginRuntime runtime) {
         return new PluginScopeCallInterceptor(runtime);

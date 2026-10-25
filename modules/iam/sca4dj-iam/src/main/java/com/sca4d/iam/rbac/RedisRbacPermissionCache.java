@@ -16,7 +16,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -206,6 +205,7 @@ public class RedisRbacPermissionCache implements RbacPermissionCache {
             // 修订号和缓存值在一个 Lua 调用中改变，已经开始的旧读取无法再次写回。
             redis.execute(INVALIDATE_SELECTORS, keys);
         } catch (RuntimeException exception) {
+            // 失效失败时旧权限最多保留到缓存 TTL 到期，期间权限变更不会立即生效；这是有意的降级，依赖此 WARN 日志触发运维处理。
             LOG.warn(
                     "Redis RBAC 缓存批量失效失败，旧值将在 TTL 到期后失效 | errorType={}",
                     exception.getClass().getSimpleName(),
@@ -297,16 +297,6 @@ public class RedisRbacPermissionCache implements RbacPermissionCache {
         return Base64.getUrlEncoder()
                 .withoutPadding()
                 .encodeToString(DigestUtil.sha256(canonical.toString()));
-    }
-
-    /**
-     * @return UTF-8 文本的无填充 Base64URL 编码
-     */
-    private static @NotNull String encoded(@NotNull String value) {
-        return Base64.getUrlEncoder()
-                .withoutPadding()
-                .encodeToString(
-                        Objects.requireNonNull(value, "命名值不能为空").getBytes(StandardCharsets.UTF_8));
     }
 
     /**

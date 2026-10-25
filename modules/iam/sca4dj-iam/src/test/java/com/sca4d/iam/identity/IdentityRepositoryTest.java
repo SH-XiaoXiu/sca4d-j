@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
+import com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iam.identity.mapper.IdentityMapper;

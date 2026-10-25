@@ -3,6 +3,7 @@ package com.sca4d.plugin.spring;
 import com.sca4d.core.api.plugin.ApiBinding;
 import com.sca4d.core.api.plugin.ApiContract;
 import com.sca4d.core.api.plugin.PluginBinding;
+import com.sca4d.plugin.spring.exception.PluginSpringException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.support.AopUtils;
@@ -73,7 +74,7 @@ final class PluginBindingsLifecycle implements SmartLifecycle {
             LOG.info("App 插件已启动 | artifactCount={}", properties.getArtifacts().size());
         } catch (ReflectiveOperationException | RuntimeException failure) {
             host.runtime().close();
-            throw new IllegalStateException("App 必需插件装配失败", failure);
+            throw new PluginSpringException("App 必需插件装配失败", failure);
         }
     }
 

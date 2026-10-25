@@ -3,6 +3,7 @@ package com.sca4d.audit.recording;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.audit.exception.AuditException;
 import com.sca4d.audit.recording.mapper.EncodedAuditEntry;
 import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.messaging.MessageCodec;
@@ -63,7 +64,7 @@ public class AuditMessageCodec implements MessageCodec<AuditMessage> {
         try {
             return json.writeValueAsBytes(wire);
         } catch (IOException failure) {
-            throw new IllegalStateException("审计消息无法编码", failure);
+            throw new AuditException("审计消息无法编码", failure);
         }
     }
 

@@ -2,7 +2,7 @@ package com.sca4d.iam.base;
 
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.iam.acl.AclService;
 import com.sca4d.iam.base.acl.PlatformAclRepository;
@@ -107,6 +107,7 @@ public class PlatformAccountLifecycleService {
         try {
             terminate(deletion.accountId());
         } catch (RuntimeException exception) {
+            // 账号删除已经提交，残留 Session 在下一次鉴权时因身份不可用被拒绝；这里只保留注销失败的运维记录，不回滚删除。
             LOG.error(
                     "Platform Account 删除已提交但二次 Session 注销失败 | accountId={}",
                     deletion.accountId(),

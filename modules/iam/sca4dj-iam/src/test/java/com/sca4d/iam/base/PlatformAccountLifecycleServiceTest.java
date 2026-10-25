@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.iam.acl.AclService;
 import com.sca4d.iam.base.acl.PlatformAclRepository;
 import com.sca4d.iam.base.rbac.PlatformRbacService;

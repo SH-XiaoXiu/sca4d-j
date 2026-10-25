@@ -1,6 +1,6 @@
 package com.sca4d.iam.identity;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

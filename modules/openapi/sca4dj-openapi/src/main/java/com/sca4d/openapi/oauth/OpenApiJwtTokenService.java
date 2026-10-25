@@ -1,6 +1,8 @@
 package com.sca4d.openapi.oauth;
 
+import cn.hutool.core.exceptions.ValidateException;
 import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTException;
 import cn.hutool.jwt.JWTHeader;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTValidator;
@@ -9,8 +11,11 @@ import cn.hutool.jwt.signers.JWTSignerUtil;
 import com.sca4d.auth.session.codec.SessionCodec;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.openapi.config.OpenApiProperties;
+import com.sca4d.openapi.exception.OpenapiException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -24,6 +29,8 @@ import java.util.Optional;
 
 /** 使用独立 HS256 密钥签发和恢复 OpenAPI access JWT，不改变浏览器 Session 的 Token 模式。 */
 public class OpenApiJwtTokenService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(OpenApiJwtTokenService.class);
 
     private static final String JWT_TYPE = "openapi+jwt";
 
@@ -132,7 +139,9 @@ public class OpenApiJwtTokenService {
                 return Optional.empty();
             }
             return Optional.of(session);
-        } catch (RuntimeException exception) {
+        } catch (JWTException | ValidateException | IllegalArgumentException | IllegalStateException exception) {
+            // 令牌格式、签名、时间、受众或 Session 内容不合法时按未认证处理；其他运行时异常说明代码或依赖故障，继续抛出。
+            LOG.debug("OpenAPI JWT 验证失败，按未认证处理 | exceptionType={}", exception.getClass().getName());
             return Optional.empty();
         }
     }
@@ -148,7 +157,7 @@ public class OpenApiJwtTokenService {
             try {
                 key = Base64.getDecoder().decode(entry.getValue().trim());
             } catch (IllegalArgumentException exception) {
-                throw new IllegalStateException("OpenAPI JWT 密钥必须使用 Base64 编码: " + entry.getKey(), exception);
+                throw new OpenapiException("OpenAPI JWT 密钥必须使用 Base64 编码: " + entry.getKey(), exception);
             }
             if (key.length < 32) {
                 throw new IllegalStateException("OpenAPI JWT HS256 密钥解码后不能少于 32 字节: " + entry.getKey());

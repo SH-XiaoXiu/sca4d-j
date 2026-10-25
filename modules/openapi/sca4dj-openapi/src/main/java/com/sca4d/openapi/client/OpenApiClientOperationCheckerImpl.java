@@ -1,8 +1,8 @@
 package com.sca4d.openapi.client;
 
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.openapi.web.OpenApiClientOperationChecker;
@@ -15,6 +15,7 @@ public class OpenApiClientOperationCheckerImpl implements OpenApiClientOperation
 
     private final @NotNull OpenApiClientService clients;
 
+    /** 使用持久化 Client 服务检查 OpenAPI 调用；服务为空时构造失败。 */
     public OpenApiClientOperationCheckerImpl(@NotNull OpenApiClientService clients) {
         this.clients = Objects.requireNonNull(clients, "OpenAPI Client 服务不能为空");
     }

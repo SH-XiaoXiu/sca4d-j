@@ -33,7 +33,7 @@ public class DatabaseAuditRecorder implements AuditRecorder {
     public void record(@NotNull AuditRecord record) {
         AuditRecord checked = Objects.requireNonNull(record, "审计记录不能为空");
         repository.append(checked);
-        LOG.trace(
+        LOG.debug(
                 "审计记录已写入当前事务 | requestId={} principalId={} operation={} result={}",
                 checked.requestId(),
                 checked.actor().principalId(),

@@ -7,7 +7,7 @@ import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.EstablishedSession;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.spring.web.BearerToken;
 import com.sca4d.core.spring.web.HttpCallHandlerInterceptor;
@@ -39,6 +39,7 @@ public class OpenApiAuthenticationInterceptor extends HttpCallHandlerInterceptor
 
     private final @NotNull HmacAuthenticationMethod hmac;
 
+    /** 保存 OpenAPI JWT、Client、MAC 和 Session 服务；任一依赖为空时构造失败。 */
     public OpenApiAuthenticationInterceptor(
             @NotNull OpenApiJwtTokenService jwtTokens,
             @NotNull OpenApiClientService clients,

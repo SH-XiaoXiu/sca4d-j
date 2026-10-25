@@ -3,6 +3,7 @@ package com.sca4d.audit.recording;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.audit.exception.AuditException;
 import com.sca4d.audit.recording.mapper.EncodedAuditEntry;
 import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.messaging.MessageCodec;
@@ -72,10 +73,18 @@ public class AuditMessageV2Codec implements MessageCodec<AuditMessage> {
         try {
             return json.writeValueAsBytes(wire);
         } catch (IOException failure) {
-            throw new IllegalStateException("审计消息无法编码", failure);
+            throw new AuditException("审计消息无法编码", failure);
         }
     }
 
+    /**
+     * 解析 V2 JSON 字节为 AuditMessage。根节点必须是 JSON 对象；可选字段必须成组出现或成组为空，
+     * relatedResources 存在时必须是每项都含 type 和 id 的数组。JSON 语法错误和字段不合法时抛出异常，不返回部分解析结果。
+     *
+     * @param bytes UTF-8 编码的 V2 审计消息 JSON
+     * @return 解析出的审计消息
+     * @throws IllegalArgumentException 根节点不是对象、可选字段组合不完整、关联资源不是数组或枚举值不合法时抛出
+     */
     @Override
     public @NotNull AuditMessage decode(byte @NotNull [] bytes) {
         try {
@@ -83,6 +92,7 @@ public class AuditMessageV2Codec implements MessageCodec<AuditMessage> {
             if (!w.isObject()) {
                 throw new IllegalArgumentException("审计消息必须是 JSON 对象");
             }
+            // accountId 为 null 表示没有账号上下文；非 null 时必须是正数。
             Long account = w.required("accountId").isNull() ? null : positive(w, "accountId");
             Integer payloadVersion = w.required("payloadVersion").isNull()
                     ? null
@@ -94,6 +104,7 @@ public class AuditMessageV2Codec implements MessageCodec<AuditMessage> {
             String httpMethod = text(w, "httpMethod");
             String httpPath = text(w, "httpPath");
             String ip = text(w, "clientIp");
+            // 目标对象、负载和 HTTP 请求上下文各自要么全部存在，要么全部缺失；只存在一部分说明写入端数据不完整，直接拒绝。
             if ((targetType == null) != (targetId == null)
                     || (payloadType == null) != (payloadVersion == null)
                     || (payloadType == null) != (payloadJson == null)
@@ -101,9 +112,11 @@ public class AuditMessageV2Codec implements MessageCodec<AuditMessage> {
                     || (httpMethod == null) != (ip == null)) {
                 throw new IllegalArgumentException("审计消息可选字段组合不完整");
             }
+            // payloadJson 只校验是否为合法 JSON，不转换为业务对象，原文保留在审计记录中。
             if (payloadJson != null) {
                 json.readTree(payloadJson);
             }
+            // 关联资源缺少 type 或 id 时 requireNonNull 抛出 NullPointerException，解析整体失败。
             List<Resource.Ref> resources = new ArrayList<>();
             JsonNode related = w.get("relatedResources");
             if (related != null) {

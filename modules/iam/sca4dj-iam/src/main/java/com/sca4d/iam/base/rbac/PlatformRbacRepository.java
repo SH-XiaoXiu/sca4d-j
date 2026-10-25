@@ -3,7 +3,7 @@ package com.sca4d.iam.base.rbac;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
@@ -14,6 +14,7 @@ import com.sca4d.iam.base.mapper.PlatformPrincipalPermission;
 import com.sca4d.iam.base.mapper.PlatformPrincipalRole;
 import com.sca4d.iam.base.mapper.PlatformRbacMapper;
 import com.sca4d.iam.base.mapper.PlatformRoleState;
+import com.sca4d.iam.identity.IamErrorCode;
 import com.sca4d.iam.identity.PrincipalType;
 import com.sca4d.iam.rbac.PermissionSelector;
 import com.sca4d.iam.rbac.PrincipalRoles;
@@ -312,7 +313,7 @@ public class PlatformRbacRepository implements RbacRepository {
     public void deleteAllPrincipalRoles(@NotNull Long principalId) {
         Long checkedPrincipalId = Objects.requireNonNull(principalId, "PlatformPrincipal 标识不能为空");
         if (mapper.lockPlatformPrincipals(List.of(checkedPrincipalId), principalType).isEmpty()) {
-            throw new IllegalStateException("PlatformPrincipal 不存在或已删除");
+            throw new BusinessException(IamErrorCode.PRINCIPAL_UNAVAILABLE);
         }
         mapper.deletePlatformPrincipalRoles(checkedPrincipalId, null);
     }
@@ -382,7 +383,7 @@ public class PlatformRbacRepository implements RbacRepository {
                 .map(PlatformPrincipalRole::principalId)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         if (!returnedPrincipalIds.equals(unique)) {
-            throw new IllegalStateException("PlatformPrincipal 不存在或已删除");
+            throw new BusinessException(IamErrorCode.PRINCIPAL_UNAVAILABLE);
         }
         LinkedHashSet<Long> roleIds = principalRoles.stream()
                 .map(PlatformPrincipalRole::roleId)

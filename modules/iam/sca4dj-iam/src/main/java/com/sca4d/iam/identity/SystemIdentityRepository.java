@@ -7,6 +7,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
+import com.sca4d.iam.exception.IamException;
 import com.sca4d.iam.identity.mapper.IdentityMapper;
 import com.sca4d.iam.identity.mapper.SystemIdentityMapper;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +71,7 @@ public class SystemIdentityRepository {
                     ZeroRowPolicy.ALLOW,
                     "登记 SYSTEM Subject");
         } catch (DuplicateKeyException exception) {
-            throw new IllegalStateException("已有 SYSTEM Subject 与配置 ID 冲突，请人工迁移后重启", exception);
+            throw new IamException("已有 SYSTEM Subject 与配置 ID 冲突，请人工迁移后重启", exception);
         }
         Subject subject = identities.selectSubject(systemSubjectId, IdentityStatus.ACTIVE);
         if (subject == null || subject.type() != SubjectType.SYSTEM) {

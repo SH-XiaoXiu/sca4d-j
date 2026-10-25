@@ -2,8 +2,8 @@ package com.sca4d.iam.base.user;
 
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.spring.call.CallHolder;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;

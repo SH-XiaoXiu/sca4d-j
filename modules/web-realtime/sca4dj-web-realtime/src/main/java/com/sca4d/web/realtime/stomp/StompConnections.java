@@ -46,6 +46,7 @@ public class StompConnections {
 
     private final Map<String, StompConnection> connections = new ConcurrentHashMap<>();
 
+    /** 创建 Spring STOMP 生命周期与 Web Realtime 本机、共享连接索引之间的桥接。 */
     public StompConnections(
             @NotNull RedisConnectionRegistry shared,
             @NotNull LocalConnectionRegistry local,

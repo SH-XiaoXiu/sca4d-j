@@ -4,6 +4,7 @@ import com.sca4d.core.api.storage.FileStorage;
 import com.sca4d.core.api.storage.StorageObject;
 import com.sca4d.core.api.storage.StorageObjectMetadata;
 import com.sca4d.core.api.storage.StorageUpload;
+import com.sca4d.storage.minio.exception.StorageMinioException;
 import io.minio.BucketExistsArgs;
 import io.minio.CopyObjectArgs;
 import io.minio.GetObjectArgs;
@@ -97,9 +98,9 @@ public class MinioFileStorage implements FileStorage {
                 exists = true;
             }
             if (!exists)
-                throw new IllegalStateException("MinIO Bucket 不存在: " + properties.getBucket());
+                throw new StorageMinioException("MinIO Bucket 不存在: " + properties.getBucket());
         } catch (Exception exception) {
-            throw new IllegalStateException("MinIO Bucket 不可用", exception);
+            throw new StorageMinioException("MinIO Bucket 不可用", exception);
         }
     }
 
@@ -122,7 +123,7 @@ public class MinioFileStorage implements FileStorage {
                             .build());
             return new StorageUpload(URI.create(url), Map.of("Content-Type", contentType));
         } catch (Exception exception) {
-            throw new IllegalStateException("无法生成 MinIO 上传地址", exception);
+            throw new StorageMinioException("无法生成 MinIO 上传地址", exception);
         }
     }
 
@@ -141,9 +142,9 @@ public class MinioFileStorage implements FileStorage {
             if ("NoSuchKey".equals(code) || "NoSuchObject".equals(code)) {
                 return Optional.empty();
             }
-            throw new IllegalStateException("无法读取 MinIO 对象元数据", exception);
+            throw new StorageMinioException("无法读取 MinIO 对象元数据", exception);
         } catch (Exception exception) {
-            throw new IllegalStateException("无法读取 MinIO 对象元数据", exception);
+            throw new StorageMinioException("无法读取 MinIO 对象元数据", exception);
         }
     }
 
@@ -172,7 +173,7 @@ public class MinioFileStorage implements FileStorage {
             }
             if (!sourceExists && targetExists)
                 return;
-            throw new IllegalStateException("无法转正 MinIO 对象", copyFailure);
+            throw new StorageMinioException("无法转正 MinIO 对象", copyFailure);
         }
         try {
             client.removeObject(
@@ -204,7 +205,7 @@ public class MinioFileStorage implements FileStorage {
                             .build());
             return URI.create(url);
         } catch (Exception exception) {
-            throw new IllegalStateException("无法生成 MinIO 读取地址", exception);
+            throw new StorageMinioException("无法生成 MinIO 读取地址", exception);
         }
     }
 
@@ -281,7 +282,7 @@ public class MinioFileStorage implements FileStorage {
                             .object(object.objectKey())
                             .build());
         } catch (Exception exception) {
-            throw new IllegalStateException("无法删除 MinIO 对象", exception);
+            throw new StorageMinioException("无法删除 MinIO 对象", exception);
         }
     }
 

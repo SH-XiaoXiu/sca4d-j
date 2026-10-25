@@ -2,7 +2,7 @@ package com.sca4d.iam.base;
 
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.iam.identity.IamErrorCode;
 import com.sca4d.iam.identity.IdentityStatus;

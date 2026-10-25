@@ -5,6 +5,7 @@ import com.sca4d.core.api.storage.StorageObject;
 import com.sca4d.core.api.storage.StorageObjectMetadata;
 import com.sca4d.core.api.storage.StorageTransferSigner;
 import com.sca4d.core.api.storage.StorageUpload;
+import com.sca4d.storage.local.exception.StorageLocalException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedInputStream;
@@ -58,10 +59,10 @@ public class LocalFileStorage implements FileStorage {
             Files.createDirectories(root);
             root = root.toRealPath(LinkOption.NOFOLLOW_LINKS);
             if (!Files.isDirectory(root, LinkOption.NOFOLLOW_LINKS) || Files.isSymbolicLink(root)) {
-                throw new IllegalStateException("本地存储根目录不可用");
+                throw new StorageLocalException("本地存储根目录不可用");
             }
         } catch (IOException exception) {
-            throw new IllegalStateException("无法初始化本地存储根目录", exception);
+            throw new StorageLocalException("无法初始化本地存储根目录", exception);
         }
     }
 
@@ -84,7 +85,7 @@ public class LocalFileStorage implements FileStorage {
         try {
             return Optional.of(new StorageObjectMetadata(readContentType(path), Files.size(path)));
         } catch (IOException exception) {
-            throw new IllegalStateException("无法读取本地对象元数据", exception);
+            throw new StorageLocalException("无法读取本地对象元数据", exception);
         }
     }
 
@@ -105,7 +106,7 @@ public class LocalFileStorage implements FileStorage {
             }
             moveReplacing(sourcePath, targetPath);
         } catch (IOException exception) {
-            throw new IllegalStateException("无法转正本地对象", exception);
+            throw new StorageLocalException("无法转正本地对象", exception);
         }
     }
 
@@ -160,7 +161,7 @@ public class LocalFileStorage implements FileStorage {
             Files.deleteIfExists(path);
             Files.deleteIfExists(metadataPath(path));
         } catch (IOException exception) {
-            throw new IllegalStateException("无法删除本地对象", exception);
+            throw new StorageLocalException("无法删除本地对象", exception);
         }
     }
 

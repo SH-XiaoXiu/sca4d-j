@@ -8,7 +8,7 @@ import com.sca4d.auth.sharedsecret.SharedSecretProof;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.EstablishedSession;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iam.identity.IdentityService;

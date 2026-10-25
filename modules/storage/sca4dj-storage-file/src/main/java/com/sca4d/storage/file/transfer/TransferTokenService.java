@@ -2,7 +2,7 @@ package com.sca4d.storage.file.transfer;
 
 import static com.sca4d.core.api.name.NameFormat.COLON;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;

@@ -9,6 +9,8 @@ import com.sca4d.plugin.pf4j.Pf4jPluginLoader;
 import com.sca4d.plugin.runtime.DefaultPluginRuntime;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -25,6 +27,8 @@ import java.util.Set;
 
 /** 根据 App 编译生成的描述创建运行对象，不扫描任意业务类。 */
 final class PluginHost {
+    private static final Logger LOG = LoggerFactory.getLogger(PluginHost.class);
+
     private final PluginRuntime runtime;
 
     private final Map<TreeCode, ApiContract<?>> contracts;
@@ -72,7 +76,7 @@ final class PluginHost {
         if (configuration.type() != configurationType || !shared.contains(configurationType.getName())) {
             throw new IllegalStateException("App 插件配置提供者与公开配置类型不一致");
         }
-        // 先登记生成契约，实际宿主 Bean 在单例创建完成后由生命周期回调绑定。
+        // 先登记生成契约，实际宿主 Bean 在单例创建完成后的回调中绑定。
         Class<? extends PluginEntrypoint> entry = Class.forName(selected.getProperty("api.entry"), false, classLoader)
                 .asSubclass(PluginEntrypoint.class);
         runtime = new DefaultPluginRuntime<>(
@@ -92,6 +96,11 @@ final class PluginHost {
             runtime.declare(contract);
         }
         contracts = Map.copyOf(declarations);
+        LOG.info(
+                "插件 App 宿主已装配 | api={} version={} contractCount={}",
+                api,
+                selected.getProperty("api.version"),
+                contracts.size());
     }
 
     /** 由 PluginBindingsLifecycle 管理关闭的共享运行对象。 */

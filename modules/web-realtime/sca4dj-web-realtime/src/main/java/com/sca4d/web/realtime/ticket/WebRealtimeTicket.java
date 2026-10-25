@@ -13,6 +13,7 @@ public class WebRealtimeTicket {
 
     private final @NotNull String value;
 
+    /** 创建返回给浏览器的一次性票据及其到期时间。 */
     public WebRealtimeTicket(@NotNull String value, @NotNull Instant expiresAt) {
         this.value = Objects.requireNonNull(value, "Web Realtime 票据不能为空");
         this.expiresAt = Objects.requireNonNull(expiresAt, "Web Realtime 票据到期时间不能为空");

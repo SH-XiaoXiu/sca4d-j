@@ -16,8 +16,9 @@ import com.sca4d.core.api.plugin.PluginLease;
 import com.sca4d.core.api.plugin.PluginLoader;
 import com.sca4d.core.api.plugin.PluginRuntime;
 import com.sca4d.core.api.plugin.PluginStatus;
-import com.sca4d.core.api.plugin.PluginUnavailableException;
 import com.sca4d.core.api.plugin.PluginUpdate;
+import com.sca4d.core.api.plugin.exception.PluginUnavailableException;
+import com.sca4d.plugin.runtime.exception.PluginException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -268,14 +269,14 @@ public class DefaultPluginRuntime<C> implements PluginRuntime {
                 } else if (candidate == null) {
                     try {
                         Files.deleteIfExists(copy);
-                    } catch (Exception cleanupFailure) {
+                    } catch (IOException cleanupFailure) {
                         failure.addSuppressed(cleanupFailure);
                     }
                 }
-                throw new IllegalStateException("插件候选加载失败: " + failure.getClass().getSimpleName(), failure);
+                throw new PluginException("插件候选加载失败: " + failure.getClass().getSimpleName(), failure);
             }
         } catch (IOException failure) {
-            throw new IllegalStateException("插件交付物读取失败", failure);
+            throw new PluginException("插件交付物读取失败", failure);
         } finally {
             management.unlock();
         }

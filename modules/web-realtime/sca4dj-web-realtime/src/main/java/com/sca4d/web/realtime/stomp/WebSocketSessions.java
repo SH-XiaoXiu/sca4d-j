@@ -23,9 +23,9 @@ public class WebSocketSessions implements WebSocketHandlerDecoratorFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebSocketSessions.class);
 
-    private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
-
     private static final String CLOSED_ATTRIBUTE = WebSocketSessions.class.getName() + ".closed";
+
+    private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
     private final CopyOnWriteArrayList<Consumer<String>> closeListeners = new CopyOnWriteArrayList<>();
 

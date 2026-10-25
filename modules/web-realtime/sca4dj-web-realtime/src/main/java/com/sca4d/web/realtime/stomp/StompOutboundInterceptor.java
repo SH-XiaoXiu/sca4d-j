@@ -19,6 +19,7 @@ public class StompOutboundInterceptor implements ExecutorChannelInterceptor {
 
     private final @NotNull WebSocketSessions sockets;
 
+    /** 创建在出站 STOMP 帧写出后执行定向关闭的拦截器。 */
     public StompOutboundInterceptor(@NotNull WebSocketSessions sockets) {
         this.sockets = Objects.requireNonNull(sockets, "WebSocket 连接句柄不能为空");
     }

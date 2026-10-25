@@ -12,6 +12,7 @@ import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.webrealtime.WebRealtimeMessage;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
+import com.sca4d.web.realtime.exception.WebRealtimeException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class WebRealtimeMessageCodec implements MessageCodec<WebRealtimeMessage>
         try {
             return json.writeValueAsBytes(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("WebRealtimeMessage 无法编码", exception);
+            throw new WebRealtimeException("WebRealtimeMessage 无法编码", exception);
         }
     }
 

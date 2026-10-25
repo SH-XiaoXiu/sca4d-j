@@ -1,6 +1,6 @@
 package com.sca4d.iam.identity;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountIdentifierType;
@@ -9,7 +9,7 @@ import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.identity.SystemPrincipal;
-import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
+import com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;

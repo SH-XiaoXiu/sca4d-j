@@ -42,6 +42,11 @@ public final class PluginProperties {
         return artifacts;
     }
 
+    /**
+     * 复制传入的构件列表并替换当前配置；列表中包含 null 元素时抛出 NullPointerException，原列表保持不变。
+     *
+     * @param artifacts 构件标识列表，之后对原列表的修改不影响本配置
+     */
     public void setArtifacts(@NotNull List<String> artifacts) {
         this.artifacts = List.copyOf(artifacts);
     }

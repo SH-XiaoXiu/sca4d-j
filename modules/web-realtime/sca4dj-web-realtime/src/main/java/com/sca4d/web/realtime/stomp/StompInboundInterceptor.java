@@ -4,6 +4,7 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.connection.ConnectionId;
+import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import com.sca4d.core.spring.call.CallHolder;
@@ -222,7 +223,7 @@ public class StompInboundInterceptor implements ExecutorChannelInterceptor {
                 invoker,
                 UUID.randomUUID().toString(),
                 clock.instant(),
-                com.sca4d.core.api.data.DataValues.builder().build(),
+                DataValues.builder().build(),
                 null);
         call.authenticate(session);
         call.selectPrincipal(principal);

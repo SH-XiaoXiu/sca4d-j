@@ -1,6 +1,7 @@
 package com.sca4d.web.realtime.ticket;
 
 import com.sca4d.core.api.authentication.Session;
+import com.sca4d.core.spring.gateway.TrustedGatewayRequest;
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
@@ -65,8 +67,7 @@ public class TicketHandshakeInterceptor implements HandshakeInterceptor {
             return false;
         }
         attributes.put(SESSION_ATTRIBUTE, session);
-        InetSocketAddress remote = request.getRemoteAddress();
-        attributes.put(IP_ATTRIBUTE, remoteAddress(remote));
+        attributes.put(IP_ATTRIBUTE, clientAddress(request));
         response.getHeaders().set(HttpHeaders.CACHE_CONTROL, "no-store");
         return true;
     }
@@ -80,7 +81,15 @@ public class TicketHandshakeInterceptor implements HandshakeInterceptor {
             @Nullable Exception exception) {
     }
 
-    /** 返回限流使用的远端 IP；地址未解析时保留主机文本。 */
+    /** 可信 Gateway 转发时返回真实客户端地址，否则返回连接地址，供 CONNECT 按 IP 限流使用。 */
+    private static @NotNull String clientAddress(@NotNull ServerHttpRequest request) {
+        if (request instanceof ServletServerHttpRequest servletRequest) {
+            return TrustedGatewayRequest.clientIp(servletRequest.getServletRequest());
+        }
+        return remoteAddress(request.getRemoteAddress());
+    }
+
+    /** 返回远端 IP；地址未解析时保留主机文本。 */
     private static @NotNull String remoteAddress(InetSocketAddress remote) {
         if (remote == null) {
             return "unknown";

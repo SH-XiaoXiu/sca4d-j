@@ -5,7 +5,7 @@ import static java.lang.Boolean.TRUE;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.Key;
@@ -62,9 +62,9 @@ import java.util.UUID;
  * 使用 {@link FileRecord} 协调文件上传、正式对象读取、业务绑定和异步删除登记。
  *
  * <p>本服务保存文件记录并推进 {@link FileStatus}，不判断 App 的业务权限。调用方必须先完成目标 Resource 的授权，
- * 再把已经确认的 {@link FileUse} 传入本服务。对象存储读写失败时，方法返回稳定的 {@link FileErrorCode}，不会把
+ * 再把已经确认的 {@link FileUse} 传入本服务。对象存储读写失败时，方法返回 {@link FileErrorCode}，不会把
  * backend、container、对象键、传输 Token 或访问地址暴露给调用方。存储实现的运行时故障转换为
- * 稳定的 {@link FileErrorCode}；内容流读写失败仍按 {@link FileService} 契约抛出 {@link IOException}。
+ * {@link FileErrorCode}；内容流读写失败仍按 {@link FileService} 契约抛出 {@link IOException}。
  */
 public class DefaultFileService implements FileService {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFileService.class);
@@ -365,7 +365,7 @@ public class DefaultFileService implements FileService {
                 record.backendId(),
                 record.status());
 
-        // 只允许创建文件的 Principal 完成上传；对其他 Principal 隐藏文件是否存在这一事实。
+        // 只允许创建文件的 Principal 完成上传；对其他 Principal 不暴露文件是否存在。
         if (record.uploaderPrincipalId() != uploaderPrincipalId) {
             LOG.trace(
                     "文件上传完成确认 Principal 不匹配 | fileId={} principalId={} status={}",
@@ -583,7 +583,7 @@ public class DefaultFileService implements FileService {
         FileRecord record = find(fileId);
         validateUse(record, expected);
 
-        // 已经进入删除流程时保持幂等；尚未绑定的文件不能由业务释放。
+        // 文件已进入删除登记时重复调用不改变结果；尚未绑定到业务对象的文件不能由业务释放。
         if (record.status() == FileStatus.DELETE_PENDING
                 || record.status() == FileStatus.DELETING
                 || record.status() == FileStatus.DELETE_FAILED
@@ -844,7 +844,7 @@ public class DefaultFileService implements FileService {
     }
 
     /**
-     * 读取必须存在的文件记录，不存在时返回稳定的文件错误。
+     * 读取必须存在的文件记录，不存在时返回文件错误。
      */
     private @NotNull FileRecord find(long id) {
         return repository.find(id).orElseThrow(() -> new BusinessException(FileErrorCode.NOT_FOUND));
@@ -871,7 +871,7 @@ public class DefaultFileService implements FileService {
     }
 
     /**
-     * 返回文件是否已经进入释放后的删除流程。
+     * 返回文件是否已经进入释放后的删除状态。
      */
     private static boolean isDeletionRequested(@NotNull FileStatus status) {
         return status == FileStatus.DELETE_PENDING
@@ -881,7 +881,7 @@ public class DefaultFileService implements FileService {
     }
 
     /**
-     * 返回上传写入和完成确认共同使用的文件锁键。
+     * 返回上传写入、完成确认和丢弃登记共同使用的同一文件锁键。
      */
     private static @NotNull LockKey fileOperationLock(long fileId) {
         return new LockKey(TreeCode.of("STORAGE:FILE"), fileId);

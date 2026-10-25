@@ -133,7 +133,7 @@ public class FileAutoConfiguration {
     }
 
     /**
-     * 创建保留文件级删除租约和重试语义的清理操作。
+     * 创建文件清理服务，按文件级删除租约和重试次数处理待删除文件。
      *
      * @param repository 文件状态持久化入口
      * @param storages 按 backend ID 选择实际存储的注册表
@@ -155,7 +155,7 @@ public class FileAutoConfiguration {
     /**
      * 创建调用 FileCleanupService 执行一次清理扫描的 DirectJob。
      *
-     * @param cleanupService 保留文件级租约和失败恢复语义的清理操作
+     * @param cleanupService 按文件级租约和失败恢复规则清理文件的服务
      * @return 文件清理 Job 定义
      */
     @Bean

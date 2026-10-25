@@ -57,6 +57,7 @@ public class RedisConnectionRegistry implements ConnectionRegistry {
 
     private final @NotNull WebRealtimeInfrastructureNames names;
 
+    /** 创建基于 Redis 共享索引的 Web Realtime 连接注册表。 */
     public RedisConnectionRegistry(
             @NotNull RedisTemplate<Key, String> redis,
             @NotNull WebRealtimeInfrastructureNames names,

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 /** 返回审计 payload 的持久化类型、版本、原始 JSON 和可选强类型结果。 */
 public class AuditPayloadData {
+    /** 由应用 `AuditPayloadCodec.payloadType()` 声明的开放持久化标识，不是有限枚举；`raw` 表示未注册 Codec 的原始 JSON。 */
     private final @NotNull String type;
 
     private final int version;

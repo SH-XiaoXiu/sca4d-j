@@ -3,7 +3,7 @@ package com.sca4d.storage.file.transfer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.spring.security.ConfiguredSecretKeyring;

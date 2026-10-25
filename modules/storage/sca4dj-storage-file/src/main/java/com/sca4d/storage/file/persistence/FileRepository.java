@@ -27,7 +27,7 @@ public class FileRepository {
 
     private final @NotNull SqlBatches sqlBatches;
 
-    /** 创建使用指定 Mapper 的文件持久化边界。 */
+    /** 创建使用指定 Mapper 读写文件记录的 FileRepository。 */
     public FileRepository(@NotNull FileMapper mapper, @NotNull SqlBatches sqlBatches) {
         this.mapper = Objects.requireNonNull(mapper, "文件 Mapper 不能为空");
         this.sqlBatches = Objects.requireNonNull(sqlBatches, "SQL 批处理器不能为空");
@@ -52,7 +52,13 @@ public class FileRepository {
         return sqlBatches.query(ordered, 1, 0, mapper::selectByIds);
     }
 
-    /** 保存上传完成后的正式对象位置和实际元数据。 */
+    /**
+     * 保存上传完成后的正式对象位置和实际元数据。
+     *
+     * <p>只有状态仍为 PENDING 时才改为 READY 并写入对象信息；状态已经推进时返回 false 且不修改记录。
+     *
+     * @throws IllegalArgumentException 对象键、媒体类型、字节数或就绪有效期缺失时抛出
+     */
     public boolean saveCompleted(@NotNull FileRecord completed) {
         String objectKey = completed.objectKey();
         String contentType = completed.contentType();
@@ -95,7 +101,7 @@ public class FileRepository {
                 .requireAtLeast(mapper.updateStatusWhereExpired(FileStatus.DELETE_PENDING, now), 0, "登记过期文件删除");
     }
 
-    /** 读取签名到期后仍需清理临时对象的文件。 */
+    /** 读取签名到期后仍需清理临时对象的文件，每次最多返回 100 条。 */
     @NotNull
     public List<@NotNull FileRecord> findExpiredUploadObjects(@NotNull Instant now) {
         return mapper.selectUploadObjectsBefore(now, 100);
@@ -107,7 +113,7 @@ public class FileRepository {
         mapper.updateUploadObjectCleaned(id);
     }
 
-    /** 按状态、重试时间和租约条件领取一批删除记录。 */
+    /** 按状态、重试时间和租约条件最多领取 50 条删除记录，并以 owner 和 leaseUntil 写入删除租约。 */
     @NotNull
     public List<@NotNull FileRecord> claimDeletion(
             @NotNull Instant now,
