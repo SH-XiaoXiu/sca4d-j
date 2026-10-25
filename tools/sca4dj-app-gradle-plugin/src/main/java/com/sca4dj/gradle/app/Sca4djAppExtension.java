@@ -7,7 +7,7 @@ import org.gradle.api.provider.Property;
 public abstract class Sca4djAppExtension {
 
     /**
-     * 返回 Flyway 初始迁移文件使用的稳定名称。
+     * 返回 Flyway 初始迁移文件使用的名称。
      *
      * @return 不包含版本和扩展名的迁移名称
      */

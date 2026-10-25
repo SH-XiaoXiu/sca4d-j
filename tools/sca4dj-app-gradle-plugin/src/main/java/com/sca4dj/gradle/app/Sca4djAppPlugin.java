@@ -43,7 +43,7 @@ public final class Sca4djAppPlugin implements Plugin<Project> {
     }
 
     /**
-     * 把 Gradle 项目名转换成可以用于迁移文件的稳定名称。
+     * 把 Gradle 项目名转换成迁移文件可用的名称。
      *
      * @param projectName Gradle 项目名
      * @return 小写下划线名称

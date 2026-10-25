@@ -9,6 +9,7 @@ import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.jvm.tasks.Jar;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Scanner;
@@ -18,7 +19,12 @@ import java.util.zip.ZipEntry;
 
 /** 为插件登记 API 编译依赖和包含私有依赖的普通 JAR 交付任务。 */
 public final class PluginArtifactGradlePlugin implements Plugin<Project> {
-    /** API 仅用于编译与测试，插件作者维护的元信息与配置资源原样打包。 */
+    /**
+     * 注册 pluginApi 依赖配置并把它接入 compileOnly 与 testImplementation，同时注册 pluginJar 任务。
+     * 应用后 API 不进入 runtime 依赖；pluginJar 合并 main 输出和 runtimeClasspath 中的私有依赖，遇到重复类或资源时构建失败。
+     *
+     * @param project 应用该插件的 Gradle 项目，必须已经包含 main 源集
+     */
     @Override
     public void apply(Project project) {
         project.getPluginManager().apply("java-library");
@@ -61,7 +67,7 @@ public final class PluginArtifactGradlePlugin implements Plugin<Project> {
                             if (index != null) {
                                 try (Scanner scanner = new Scanner(
                                         jar.getInputStream(index),
-                                        java.nio.charset.StandardCharsets.UTF_8)) {
+                                        StandardCharsets.UTF_8)) {
                                     while (scanner.hasNextLine())
                                         shared.add(scanner.nextLine());
                                 }

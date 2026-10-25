@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * 提供 Sca4d-J 根项目的公开生命周期任务和最终质量门。
+ * 提供 Sca4d-J 根项目的公开 Gradle 任务和最终质量门。
  *
  * <p>子项目只通过 {@code com.sca4dj.build.aggregate} 逐级上传，Root 不递归读取项目树或文件目录。
  */
@@ -82,7 +82,7 @@ public final class Sca4djRootPlugin implements Plugin<Project> {
         project.getExtensions().getExtraProperties().set("sca4dBuildAuthor", buildAuthor);
         project.getExtensions().getExtraProperties().set("sca4dBuildMode", mode);
         project.getExtensions().getExtraProperties().set("sca4dBuildVersion", version);
-        project.getLogger().lifecycle("Building sca4d-j version: {} ({})", version, mode);
+        project.getLogger().lifecycle("正在配置 Sca4d-J 构建 | version={} mode={}", version, mode);
     }
 
     /** 执行三个参数的只读 Git 查询；没有结果时使用默认值。 */

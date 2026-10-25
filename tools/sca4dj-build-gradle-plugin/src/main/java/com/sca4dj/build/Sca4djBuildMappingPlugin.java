@@ -64,7 +64,7 @@ public final class Sca4djBuildMappingPlugin implements Plugin<Project> {
                 QUALITY_REPORT_TASK, QualityGateTask.class, task -> {
                     task.setGroup("verification");
                     task.setDescription("生成当前项目及已聚合子项目的统一质量报告");
-                    task.getQualityLevel().set(mapping.getEffectiveLevel().map(Enum::name));
+                    task.getQualityLevel().set(mapping.getEffectiveLevel());
                     task.getProjectPath().set(project.getPath());
                     task.getFailOnErrors().convention(false);
                     task.getPrintFindings().convention(false);

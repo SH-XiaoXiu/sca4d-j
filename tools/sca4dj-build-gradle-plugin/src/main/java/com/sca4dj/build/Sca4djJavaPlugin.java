@@ -38,7 +38,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 @SuppressWarnings("unused") // Gradle 通过插件描述符反射加载约定插件。
 public final class Sca4djJavaPlugin implements Plugin<Project> {
-    /** 为应用了 Java 插件的项目登记仓库统一约定。 */
+    /** SpotBugs 分析器版本，同时固定 spotbugs-annotations 依赖，两者必须保持一致。 */
+    private static final String SPOTBUGS_VERSION = "4.10.3";
+
+    /** 为应用了 Java 插件的项目登记仓库约定。 */
     @Override
     public void apply(Project project) {
         project.getPluginManager().apply("com.sca4dj.build.mapping");
@@ -130,7 +133,7 @@ public final class Sca4djJavaPlugin implements Plugin<Project> {
 
         project.getPluginManager().apply("com.github.spotbugs");
         project.getExtensions().configure(SpotBugsExtension.class, spotbugs -> {
-            spotbugs.getToolVersion().set("4.10.3");
+            spotbugs.getToolVersion().set(SPOTBUGS_VERSION);
             spotbugs.getIgnoreFailures().set(true);
             spotbugs.getShowProgress().set(true);
             spotbugs.getExcludeFilter().set(resource(project, "spotbugs-exclude.xml").asFile());
@@ -215,7 +218,7 @@ public final class Sca4djJavaPlugin implements Plugin<Project> {
                         .configure(configuration -> configuration.getResolutionStrategy().eachDependency(details -> {
                             if ("com.github.spotbugs".equals(details.getRequested().getGroup())
                                     && "spotbugs-annotations".equals(details.getRequested().getName())) {
-                                details.useVersion("4.10.3");
+                                details.useVersion(SPOTBUGS_VERSION);
                                 details.because("SpotBugs 注解必须与分析器版本一致");
                             }
                         })));

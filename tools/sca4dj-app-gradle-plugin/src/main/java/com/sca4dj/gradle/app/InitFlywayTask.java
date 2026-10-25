@@ -65,7 +65,7 @@ public abstract class InitFlywayTask extends DefaultTask {
     public abstract ConfigurableFileCollection getRuntimeClasspath();
 
     /**
-     * 返回初始迁移文件使用的稳定名称。
+     * 返回初始迁移文件使用的名称。
      *
      * @return 不包含版本和扩展名的迁移名称
      */
@@ -106,6 +106,7 @@ public abstract class InitFlywayTask extends DefaultTask {
         rejectExistingMigrations(migrationDirectory);
 
         Configuration runtimeConfiguration = getRuntimeConfiguration().get();
+        // 建立组件索引，后续按传递依赖确定结构片段的先后顺序。
         Map<ComponentIdentifier, ResolvedComponentResult> components = new HashMap<>();
         runtimeConfiguration.getIncoming().getResolutionResult().getAllComponents()
                 .forEach(component -> components.put(component.getId(), component));
@@ -114,6 +115,7 @@ public abstract class InitFlywayTask extends DefaultTask {
                 runtimeConfiguration.getResolvedConfiguration().getResolvedArtifacts());
         artifacts.sort(Comparator.comparing(artifact -> artifact.getId().getComponentIdentifier().getDisplayName()));
 
+        // 逐个依赖组件读取唯一的结构片段，片段名称在全部组件中不能重复。
         Map<ComponentIdentifier, SchemaFragment> fragments = new LinkedHashMap<>();
         Map<String, String> fragmentOwners = new HashMap<>();
         for (ResolvedArtifact artifact : artifacts) {
@@ -138,15 +140,17 @@ public abstract class InitFlywayTask extends DefaultTask {
             }
             fragments.put(componentId, fragment);
         }
+        // App 自有结构片段排在依赖组件之后；两类片段都为空时没有可生成的结构，直接失败。
         SchemaFragment appFragment = readAppFragment();
         if (fragments.isEmpty() && appFragment == null) {
             throw new GradleException("当前 App 的运行模块和 schemaFragment 都没有提供数据库结构片段");
         }
 
+        // 按传递依赖排序后写入同一个 V1 文件，原子替换前不留下部分内容。
         List<ComponentIdentifier> orderedComponents = orderFragments(components, fragments.keySet());
         Path output = migrationDirectory.resolve("V1__init_" + migrationName + ".sql");
         writeMigration(output, orderedComponents, fragments, appFragment);
-        getLogger().lifecycle("已生成 {}", getProject().relativePath(output.toFile()));
+        getLogger().lifecycle("已生成 Flyway 初始迁移 | path={}", getProject().relativePath(output.toFile()));
     }
 
     /** 读取并校验 App 自己维护的可选结构片段。 */

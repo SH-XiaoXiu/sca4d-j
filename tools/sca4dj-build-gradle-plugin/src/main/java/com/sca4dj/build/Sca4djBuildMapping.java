@@ -107,7 +107,7 @@ public class Sca4djBuildMapping {
         return spotBugsReports;
     }
 
-    /** @return 已经由子项目自身质量级别归一化的统一 JSON 报告 */
+    /** @return 已按子项目自身质量级别处理的 JSON 报告 */
     public ConfigurableFileCollection getImportedReports() {
         return importedReports;
     }

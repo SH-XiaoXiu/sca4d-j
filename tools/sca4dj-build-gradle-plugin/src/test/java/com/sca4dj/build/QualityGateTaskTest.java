@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-/** 验证统一质量门对外部分析报告的路径、消息和重复项处理。 */
+/** 验证质量门对外部分析报告的路径、消息和重复项的处理。 */
 class QualityGateTaskTest {
 
     @TempDir
@@ -49,7 +49,7 @@ class QualityGateTaskTest {
 
         Project project = ProjectBuilder.builder().withProjectDir(projectDirectory.toFile()).build();
         QualityGateTask task = project.getTasks().create("audit", QualityGateTask.class);
-        task.getQualityLevel().set(QualityLevel.ELEGANT.name());
+        task.getQualityLevel().set(QualityLevel.ELEGANT);
         task.getProjectPath().set(":module");
         task.getFailOnErrors().set(false);
         task.getPrintFindings().set(false);
@@ -91,7 +91,7 @@ class QualityGateTaskTest {
 
         Project project = ProjectBuilder.builder().withProjectDir(projectDirectory.toFile()).build();
         QualityGateTask task = project.getTasks().create("parentAudit", QualityGateTask.class);
-        task.getQualityLevel().set(QualityLevel.OBSESSIVE.name());
+        task.getQualityLevel().set(QualityLevel.OBSESSIVE);
         task.getProjectPath().set(":");
         task.getFailOnErrors().set(false);
         task.getPrintFindings().set(false);

@@ -32,6 +32,7 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
         project.getPluginManager().apply("java");
         project.getPluginManager().apply("idea");
         project.getPluginManager().apply("maven-publish");
+        // 扩展对象 appPluginApi 暴露 API 版本，未配置时默认 1.0.0。
         PluginApiExtension extension = project.getExtensions().create("appPluginApi", PluginApiExtension.class);
         extension.getVersion().convention("1.0.0");
         // 共享依赖由 App 显式选择；处理器只参与编译，不进入宿主运行依赖。
@@ -40,6 +41,7 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
         shared.setCanBeConsumed(false);
         Configuration processor = project.getConfigurations().create("pluginProcessor");
         processor.setCanBeConsumed(false);
+        // processor 配置只接入 annotationProcessor，不进入宿主运行时依赖。
         project.getConfigurations().getByName("annotationProcessor").extendsFrom(processor);
         SourceSet main = project.getExtensions().getByType(SourceSetContainer.class).getByName("main");
         var compile = project.getTasks().named(main.getCompileJavaTaskName(), JavaCompile.class);

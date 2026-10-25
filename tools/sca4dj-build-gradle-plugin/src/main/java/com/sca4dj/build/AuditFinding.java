@@ -4,7 +4,8 @@ package com.sca4dj.build;
 public class AuditFinding {
     private final String projectPath;
 
-    private final String qualityLevel;
+    /** 结果所属子项目最终采用的质量级别；合并前的本地原始结果为 null。 */
+    private final QualityLevel qualityLevel;
 
     private final String ruleId;
 
@@ -19,19 +20,19 @@ public class AuditFinding {
     /**
      * 创建审计结果。
      *
-     * @param ruleId 稳定规则编号
+     * @param ruleId 规则编号
      * @param severity `ERROR` 或 `WARNING`
      * @param path 仓库相对路径
      * @param line 起始行号；无法定位时为 {@code 0}
      * @param message 具体问题和修复方向
      */
     public AuditFinding(String ruleId, String severity, String path, int line, String message) {
-        this("", "", ruleId, severity, path, line, message);
+        this("", null, ruleId, severity, path, line, message);
     }
 
     public AuditFinding(
             String projectPath,
-            String qualityLevel,
+            QualityLevel qualityLevel,
             String ruleId,
             String severity,
             String path,
@@ -50,7 +51,7 @@ public class AuditFinding {
         return projectPath;
     }
 
-    public String getQualityLevel() {
+    public QualityLevel getQualityLevel() {
         return qualityLevel;
     }
 
@@ -75,7 +76,7 @@ public class AuditFinding {
     }
 
     /** @return 内容不变但补充当前项目和有效质量级别的结果 */
-    public AuditFinding withContext(String ownerProjectPath, String effectiveQualityLevel) {
+    public AuditFinding withContext(String ownerProjectPath, QualityLevel effectiveQualityLevel) {
         return new AuditFinding(ownerProjectPath, effectiveQualityLevel, ruleId, severity, path, line, message);
     }
 }

@@ -33,9 +33,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /** 汇总各分析器报告，完整输出问题后按质量级别决定构建结果。 */
 public abstract class QualityGateTask extends DefaultTask {
 
-    /** @return 当前项目最终采用的质量级别名称 */
+    /** @return 当前项目最终采用的质量级别 */
     @Input
-    public abstract Property<String> getQualityLevel();
+    public abstract Property<QualityLevel> getQualityLevel();
 
     /** @return 当前报告所属的 Gradle 项目路径 */
     @Input
@@ -64,19 +64,19 @@ public abstract class QualityGateTask extends DefaultTask {
     @PathSensitive(PathSensitivity.RELATIVE)
     public abstract ConfigurableFileCollection getSpotBugsReports();
 
-    /** @return 已经按子项目自身质量级别归一化的统一 JSON 报告 */
+    /** @return 按子项目自身质量级别处理后的 JSON 报告 */
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
     public abstract ConfigurableFileCollection getImportedReports();
 
-    /** @return 当前项目统一报告的输出目录 */
+    /** @return 当前项目报告的输出目录 */
     @OutputDirectory
     public abstract DirectoryProperty getOutputDirectory();
 
     /** 读取全部报告，生成 JSON、SARIF、HTML 和控制台摘要。 */
     @TaskAction
     public void evaluate() {
-        QualityLevel level = QualityLevel.parse(getQualityLevel().get());
+        QualityLevel level = getQualityLevel().get();
         List<AuditFinding> localFindings = new ArrayList<>();
         files(getProjectReports()).forEach(report -> readProjectReport(report, localFindings));
         files(getCheckstyleReports()).forEach(report -> readCheckstyle(report, localFindings));
@@ -84,7 +84,7 @@ public abstract class QualityGateTask extends DefaultTask {
 
         List<AuditFinding> merged = deduplicate(localFindings).stream()
                 .map(finding -> normalize(level, finding))
-                .map(finding -> finding.withContext(getProjectPath().get(), level.name()))
+                .map(finding -> finding.withContext(getProjectPath().get(), level))
                 .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
         files(getImportedReports()).forEach(report -> readImportedReport(report, merged));
         List<AuditFinding> normalized = deduplicate(merged).stream()
@@ -113,7 +113,7 @@ public abstract class QualityGateTask extends DefaultTask {
         return finding;
     }
 
-    /** 返回存在的输入报告，并保持稳定顺序。 */
+    /** 返回存在的输入报告，并保持固定顺序。 */
     private static List<File> files(ConfigurableFileCollection reports) {
         return reports.getFiles().stream()
                 .filter(File::isFile)
@@ -137,13 +137,13 @@ public abstract class QualityGateTask extends DefaultTask {
         }
     }
 
-    /** 读取直接子项目已经按自身最低级别归一化的统一报告。 */
+    /** 读取直接子项目已按自身最低质量级别处理后的 JSON 报告；无法识别的质量级别使构建失败。 */
     private static void readImportedReport(File report, List<AuditFinding> findings) {
         try {
             for (JsonNode item : new ObjectMapper().readTree(report).path("findings")) {
                 findings.add(new AuditFinding(
                         item.path("projectPath").asText(),
-                        item.path("qualityLevel").asText(),
+                        importedLevel(report, item.path("qualityLevel").asText()),
                         item.path("ruleId").asText(),
                         item.path("severity").asText("WARNING"),
                         item.path("path").asText(),
@@ -152,6 +152,15 @@ public abstract class QualityGateTask extends DefaultTask {
             }
         } catch (IOException exception) {
             throw new GradleException("无法读取子项目质量报告: " + report, exception);
+        }
+    }
+
+    /** 解析子项目报告中的质量级别，空白或未知值不会被当作默认级别。 */
+    private static QualityLevel importedLevel(File report, String value) {
+        try {
+            return QualityLevel.valueOf(value);
+        } catch (IllegalArgumentException exception) {
+            throw new GradleException("子项目质量报告的质量级别无效: " + report + " | qualityLevel=" + value, exception);
         }
     }
 
@@ -269,7 +278,7 @@ public abstract class QualityGateTask extends DefaultTask {
         for (AuditFinding finding : findings) {
             String key = String.join("\u0000",
                     finding.getProjectPath(),
-                    finding.getQualityLevel(),
+                    String.valueOf(finding.getQualityLevel()),
                     finding.getRuleId(),
                     finding.getSeverity(),
                     finding.getPath(),
@@ -280,7 +289,7 @@ public abstract class QualityGateTask extends DefaultTask {
         return List.copyOf(unique.values());
     }
 
-    /** 写出统一 JSON、SARIF 和 HTML。 */
+    /** 写出 JSON、SARIF 和 HTML 格式的质量报告。 */
     private void writeReports(QualityLevel level, List<AuditFinding> findings) {
         File directory = getOutputDirectory().get().getAsFile();
         if (!directory.isDirectory() && !directory.mkdirs()) {

@@ -20,7 +20,7 @@ public enum QualityLevel {
      * 解析 Gradle 属性中的质量级别。
      *
      * @param value 属性值；空值使用 {@link #ELEGANT}
-     * @return 规范化后的质量级别
+     * @return 解析后的质量级别
      * @throws IllegalArgumentException 属性值不是已声明的级别
      */
     public static QualityLevel parse(String value) {

@@ -4,7 +4,7 @@ import org.gradle.api.provider.Property;
 
 /** 配置 App 自动生成的插件 API 身份及入口类。 */
 public abstract class PluginApiExtension {
-    /** 返回稳定 App API 编码。 */
+    /** 返回 App API 编码。 */
     public abstract Property<String> getId();
 
     /** 返回独立的 API 版本。 */

@@ -379,12 +379,14 @@ final class JavaMemberOrderStep {
                 && unary.getExpression() instanceof LiteralTree;
     }
 
+    /** 字段在排序中的类别：常量、依赖注入字段或其他字段。 */
     private enum Kind {
         CONSTANT,
         DEPENDENCY,
         OTHER
     }
 
+    /** 可序列化的排序状态，保存结构版本号和分组列表，构造时用分组列表计算后缀并校验。 */
     private static final class State implements Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -399,6 +401,7 @@ final class JavaMemberOrderStep {
         }
     }
 
+    /** 源码中一个字段声明的文本范围，start 和 end 为字符偏移量，用于替换整段字段文本。 */
     private static final class FieldSpan {
         private final String text;
 
@@ -416,6 +419,7 @@ final class JavaMemberOrderStep {
         }
     }
 
+    /** 待写回源码的一段文本替换，start 和 end 为被替换范围的字符偏移量。 */
     private static final class Replacement {
         private final String text;
 

@@ -90,7 +90,7 @@ public final class PluginApiProcessor extends AbstractProcessor {
                 }
             }
         }
-        // 服务和扩展使用同一种契约生成流程，重复轮次不再次生成同名文件。
+        // 服务和扩展使用同一套生成规则，重复的处理轮次不会再次生成同名文件。
         List<Element> declarations = new ArrayList<>(annotated(round, "PluginService"));
         declarations.addAll(annotated(round, "PluginExtension"));
         for (Element element : declarations) {
@@ -128,7 +128,7 @@ public final class PluginApiProcessor extends AbstractProcessor {
         return annotation == null ? Set.of() : round.getElementsAnnotatedWith(annotation);
     }
 
-    /** 构造单一契约并验证稳定操作与签名。 */
+    /** 构造契约并验证操作编码与签名。 */
     private Contract contract(TypeElement type) {
         if (!type.getModifiers().contains(Modifier.PUBLIC) || !type.getTypeParameters().isEmpty()) {
             throw new IllegalArgumentException("契约必须是没有类型参数的 public 类型");
@@ -181,7 +181,7 @@ public final class PluginApiProcessor extends AbstractProcessor {
         return new Contract(type, packageName, simple, code, extension != null, selection, required, methods);
     }
 
-    /** 排除没有具体类型信息和异步资源语义的签名；递归收集 App 的显式数据类型。 */
+    /** 排除没有具体类型信息或异步资源返回值的签名；递归收集 App 中显式声明的数据类型。 */
     private void validateType(TypeMirror type) {
         if (type.getKind().isPrimitive() || type.getKind() == TypeKind.VOID)
             return;
@@ -265,10 +265,16 @@ public final class PluginApiProcessor extends AbstractProcessor {
         return sharedClasses.contains(processingEnv.getElementUtils().getBinaryName(element).toString());
     }
 
-    /** 生成可阅读的客户端和分发器；运行时不通过反射执行方法。 */
+    /**
+     * 为一个公开契约生成服务接口（仅限类声明时）、契约实例和绑定类。生成文件写入编译输出，并把接口登记到 exported 清单。
+     * 生成的分发器直接调用宿主对象的方法，运行时不通过反射执行。
+     *
+     * @param contract 已通过校验的公开契约，包含包名、简单类名和公开操作
+     * @throws IOException 写入生成源文件失败时抛出
+     */
     private void generateContract(Contract contract) throws IOException {
         String type = contract.packageName + "." + contract.simple;
-        // 类声明先生成独立接口，插件 API 构件不包含原有宿主实现类。
+        // 原契约是类时先生成同名接口并登记导出；原契约已经是接口时直接使用，不生成重复接口。插件 API 构件因此不包含宿主实现类。
         if (contract.type.getKind() != ElementKind.INTERFACE) {
             StringBuilder declaration = new StringBuilder("package " + contract.packageName + ";\n");
             declaration.append("/** 由宿主公开方法生成的插件服务接口。 */\npublic interface ")
@@ -339,7 +345,7 @@ public final class PluginApiProcessor extends AbstractProcessor {
                 .append("ApiTarget target = new ApiTarget(DEFINITION.code(), key);\nreturn new ")
                 .append(type)
                 .append("() {\n");
-        // 客户端把 Java 方法转换为稳定编码调用，并保留声明过的异常。
+        // 客户端把 Java 方法转换为操作编码调用，并保留方法声明的异常。
         for (ExecutableElement method : contract.methods) {
             body.append("@Override public ").append(signature(method)).append(" {\ntry {\n");
             String args = method.getParameters()
@@ -419,7 +425,12 @@ public final class PluginApiProcessor extends AbstractProcessor {
         }
     }
 
-    /** 生成这个 App 自己的插件入口和类型安全上下文。 */
+    /**
+     * 生成当前 App 的插件入口类、类型安全上下文和配置访问器，入口类名由 entry 选项决定。
+     * 调用前必须已经提供 package 与 entry 选项，缺失时抛出 NullPointerException。configuration 选项必须指向带 PluginApiType 注解的无类型参数 public 类型，缺失或不满足时抛出 IllegalArgumentException 并中止生成。
+     *
+     * @throws IOException 写入生成源文件失败时抛出
+     */
     private void generateEntry() throws IOException {
         String pkg = Objects.requireNonNull(option("package"));
         String entry = Objects.requireNonNull(option("entry"));
@@ -565,7 +576,7 @@ public final class PluginApiProcessor extends AbstractProcessor {
                                 .equals("org.jetbrains.annotations.Nullable"));
     }
 
-    /** 读取方法的稳定操作编码。 */
+    /** 读取方法的操作编码。 */
     private String operationCode(ExecutableElement method) {
         return code(value(annotation(method, "PluginOperation"), "value").toString());
     }
@@ -592,7 +603,7 @@ public final class PluginApiProcessor extends AbstractProcessor {
                 .getValue();
     }
 
-    /** 校验稳定编码并归一为 TreeCode 的冒号输出。 */
+    /** 校验操作编码，并转换为 TreeCode 的冒号格式。 */
     private String code(String value) {
         long separatorKinds = "/.:".chars().filter(separator -> value.indexOf(separator) >= 0).count();
         if (separatorKinds > 1)
