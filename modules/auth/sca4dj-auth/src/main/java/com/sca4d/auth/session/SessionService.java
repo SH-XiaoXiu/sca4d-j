@@ -16,8 +16,9 @@ import com.sca4d.core.api.authentication.SessionIdentity;
 import com.sca4d.core.api.authentication.SessionLifecycle;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.SessionTokens;
+import com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import org.jetbrains.annotations.ApiStatus;
@@ -101,6 +102,9 @@ public class SessionService implements SessionLifecycle {
      * @param authentications 登录步骤接受的认证记录
      * @return 新 Session 及当前 Token 模式需要返回的 Token
      * @throws IllegalArgumentException 认证列表为空或包含其他账号的记录时抛出
+     * @throws SessionIdentityUnavailableException 身份、Principal 或 Resource 装载期间 Account 失效代次发生变化，
+     *                                             {@code sessions.establish} 拒绝建立 Session 时抛出；此时不签发 Token，
+     *                                             Sa-Token 登录状态已由 {@code SaTokenSessionManager} 清理
      */
     @CheckReturnValue
     public @NotNull EstablishedSession establish(

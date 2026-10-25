@@ -82,6 +82,19 @@ public class SaTokenSessionControl implements SessionControl {
         LOG.info("Account 全部 Session 已终止 | accountId={} reason={}", accountId, checkedReason.code());
     }
 
+    /**
+     * 注销指定 Account 除保留 Session 外的全部 Sa-Token 登录状态，并递增该 Account 的 Session 失效代次。
+     *
+     * <p>保留 Session 的 Token 在调用时立即从 SessionId 索引读取；索引不存在时没有可保留的 Token，
+     * 该 Account 的全部登录状态都会被注销。注销 Token 与递增失效代次在事务提交后执行，事务外调用时立即执行。
+     * 方法不删除 SessionId 索引，之后按这些索引读取时，因 Token 已无登录状态而得到空结果。
+     *
+     * @param accountId Account 标识
+     * @param retainedSessionId 必须保留的当前 Session 标识
+     * @param reason 终止原因，只用于日志
+     * @throws IllegalArgumentException Account 标识不是正数时抛出
+     * @throws NullPointerException 保留 Session 标识或终止原因为空时抛出
+     */
     @Override
     public void terminateOtherSessions(
             long accountId,

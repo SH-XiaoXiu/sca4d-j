@@ -1,5 +1,6 @@
 package com.sca4d.auth.federation;
 
+import com.sca4d.auth.federation.exception.AuthFederationException;
 import com.sca4d.core.api.data.DataOps;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -74,7 +75,7 @@ public class RedisFederatedAuthorizationStore implements FederatedAuthorizationS
                     authorization.purpose());
             return authorization;
         } catch (Exception exception) {
-            throw new IllegalStateException("外部授权 Redis 数据损坏", exception);
+            throw new AuthFederationException("外部授权 Redis 数据损坏", exception);
         }
     }
 
@@ -144,7 +145,7 @@ public class RedisFederatedAuthorizationStore implements FederatedAuthorizationS
                     completed.purpose());
             return completed;
         } catch (Exception exception) {
-            throw new IllegalStateException("外部资料 Redis 数据损坏", exception);
+            throw new AuthFederationException("外部资料 Redis 数据损坏", exception);
         }
     }
 
@@ -185,7 +186,7 @@ public class RedisFederatedAuthorizationStore implements FederatedAuthorizationS
         try {
             return FederatedAuthorizationPurpose.valueOf(value);
         } catch (IllegalArgumentException exception) {
-            throw new IllegalStateException("联邦授权用途无效", exception);
+            throw new AuthFederationException("联邦授权用途无效", exception);
         }
     }
 

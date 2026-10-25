@@ -4,7 +4,8 @@ import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.PasskeyProof;
 import com.sca4d.auth.passkey.credential.PasskeyCredential;
 import com.sca4d.auth.passkey.credential.PasskeyCredentialRepository;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.auth.passkey.exception.AuthPasskeyException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.yubico.webauthn.AssertionRequest;
 import com.yubico.webauthn.AssertionResult;
@@ -76,7 +77,7 @@ public class PasskeyAssertionService {
                     request.toCredentialsGetJson(),
                     stored.expiresAt());
         } catch (IOException exception) {
-            throw new IllegalStateException("Passkey assertion options 编码失败", exception);
+            throw new AuthPasskeyException("Passkey assertion options 编码失败", exception);
         }
     }
 

@@ -1,8 +1,10 @@
 package com.sca4d.auth.engine;
 
+import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -90,7 +92,7 @@ public class AuthenticationMethods {
             throw new IllegalArgumentException("认证材料类型与认证方法不一致");
         }
         if (!method.available(checkedAccount)) {
-            throw new IllegalStateException("认证方法当前不可用");
+            throw new BusinessException(AuthErrorCode.AUTH_METHOD_UNAVAILABLE);
         }
         VerifiedAuthentication verification = authenticate(method, checkedAccount, input.proof());
         if (checkedAccount.accountId() != verification.account().accountId()) {
@@ -119,7 +121,7 @@ public class AuthenticationMethods {
         }
         AuthenticationMethod<?> method = methods.get(checkedVerification.authentication().methodCode());
         if (method == null || !method.available(account)) {
-            throw new IllegalStateException("认证证据对应的方法已经不可用");
+            throw new BusinessException(AuthErrorCode.AUTH_METHOD_UNAVAILABLE);
         }
         method.verifyCurrent(checkedAccount, checkedVerification);
     }
@@ -202,7 +204,11 @@ public class AuthenticationMethods {
     }
 
     /**
-     * 返回指定编码对应的已安装认证方法。
+     * 按编码读取已安装的认证方法，供提交认证时确定要调用的方法实例。
+     *
+     * @param code 认证方法编码，不能为空
+     * @return 编码对应的已安装方法
+     * @throws IllegalArgumentException 没有安装该编码的方法时抛出
      */
     private AuthenticationMethod<?> method(TreeCode code) {
         AuthenticationMethod<?> method = methods.get(Objects.requireNonNull(code, "认证方法编码不能为空"));
@@ -213,7 +219,14 @@ public class AuthenticationMethods {
     }
 
     /**
-     * 在保留认证材料类型约束的情况下调用认证方法。
+     * 把原始 Proof 转换为方法声明的 Proof 类型后调用认证方法。
+     *
+     * <p>调用前已由公开入口检查 Proof 类型与方法一致；若类型不一致，{@code Class#cast} 抛出 ClassCastException。
+     *
+     * @param method  已安装的认证方法
+     * @param account 指定 Account，为 {@code null} 时由方法自行识别 Account
+     * @param proof   调用方提交的原始 Proof 对象
+     * @return 方法返回的验证结果
      */
     private static <P> VerifiedAuthentication authenticate(
             AuthenticationMethod<P> method,

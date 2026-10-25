@@ -1,5 +1,6 @@
 package com.sca4d.auth.federation.provider;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.federation.FederatedErrorCode;
@@ -8,13 +9,14 @@ import com.sca4d.auth.federation.FederatedProviderConfiguration;
 import com.sca4d.auth.federation.FederatedProviderStatus;
 import com.sca4d.auth.federation.FederatedSecretCryptography;
 import com.sca4d.auth.federation.FederatedUnlinkedIdentityAction;
+import com.sca4d.auth.federation.exception.AuthFederationException;
 import com.sca4d.auth.federation.provider.mapper.ProviderMapper;
 import com.sca4d.auth.federation.provider.mapper.ProviderSettingsState;
 import com.sca4d.auth.federation.provider.mapper.ProviderState;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.data.DataOps;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.Patch;
@@ -81,11 +83,11 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
         try {
             mapper.insert(
                     checked.code(),
-                    checked.protocol().name(),
-                    checked.status().name(),
+                    checked.protocol(),
+                    checked.status(),
                     checked.loginPageVisible(),
                     checked.displayOrder(),
-                    checked.unlinkedIdentityAction().name(),
+                    checked.unlinkedIdentityAction(),
                     checked.autoLinkVerifiedEmail(),
                     json(checked.i18n()),
                     checked.iconReference());
@@ -210,7 +212,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                         checked.tokenEndpoint(),
                         checked.userInfoEndpoint(),
                         checked.jwksEndpoint(),
-                        checked.clientAuthentication().name(),
+                        checked.clientAuthentication(),
                         json(checked.scopes()),
                         json(checked.profileMapping()),
                         json(checked.authorizationParameters())),
@@ -266,8 +268,8 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                     readI18n(state.i18n()),
                     state.iconReference(),
                     state.version());
-        } catch (Exception exception) {
-            throw new IllegalStateException("联邦 Provider 多语言字段损坏", exception);
+        } catch (RuntimeException exception) {
+            throw new AuthFederationException("联邦 Provider 多语言字段损坏", exception);
         }
     }
 
@@ -285,8 +287,8 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
         try {
             return objectMapper.readValue(value, new TypeReference<>() {
             });
-        } catch (Exception exception) {
-            throw new IllegalStateException("联邦 Provider 作用域数据损坏", exception);
+        } catch (JsonProcessingException exception) {
+            throw new AuthFederationException("联邦 Provider 作用域数据损坏", exception);
         }
     }
 

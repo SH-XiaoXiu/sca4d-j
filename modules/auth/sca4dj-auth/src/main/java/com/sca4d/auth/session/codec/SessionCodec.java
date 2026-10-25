@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
@@ -162,7 +163,7 @@ public class SessionCodec implements VersionedCodec<Session, String> {
         try {
             return objectMapper.writeValueAsString(data);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("Session 编码失败", exception);
+            throw new AuthException("Session 编码失败", exception);
         }
     }
 
@@ -175,10 +176,12 @@ public class SessionCodec implements VersionedCodec<Session, String> {
      */
     @Override
     public @NotNull Session decode(@NotNull String encoded) {
+        // 所有解析、校验和类型恢复失败都转换为 IllegalStateException，原始异常保留为 cause；不会返回部分恢复的 Session。
         try {
             SessionData data = objectMapper.readValue(
                     Objects.requireNonNull(encoded, "Session wire 不能为空"),
                     SessionData.class);
+            // 只接受当前 FORMAT_VERSION 的 wire，旧版本和未知版本都直接拒绝，不尝试兼容解析。
             if (data.formatVersion != FORMAT_VERSION) {
                 throw new IllegalArgumentException("未知 Session wire 版本: " + data.formatVersion);
             }
@@ -191,6 +194,7 @@ public class SessionCodec implements VersionedCodec<Session, String> {
                     accountData.accountId,
                     accountData.subjectId,
                     new RealmKey(accountData.realmKey));
+            // Principal 列表是资源和 ID 集合的归属依据，缺失时整个 Session 解码失败。
             List<Principal> principals = Objects.requireNonNull(data.principals, "Principal 列表不能为空")
                     .stream()
                     .map(this::decodePrincipal)
@@ -222,6 +226,7 @@ public class SessionCodec implements VersionedCodec<Session, String> {
                 Collection<Resource> mutableValues = (Collection<Resource>) values;
                 mutableValues.add(decodeResource(checkedResource.resource));
             }
+            // 数字资源标识集合按 principalId 分组；wire 中缺少该字段时视为没有数字资源标识，结果为空列表。
             LinkedHashMap<Long, Collection<ResourceIdSet>> resourceIdSets = new LinkedHashMap<>();
             if (data.resourceIdSets != null) {
                 for (ResourceIdSetData resourceIdSet : data.resourceIdSets) {
@@ -247,7 +252,7 @@ public class SessionCodec implements VersionedCodec<Session, String> {
                     Objects.requireNonNull(data.issuedAt, "Session 签发时间不能为空"),
                     Objects.requireNonNull(data.expiresAt, "Session 过期时间不能为空"));
         } catch (JsonProcessingException | RuntimeException exception) {
-            throw new IllegalStateException("Session 解码失败", exception);
+            throw new AuthException("Session 解码失败", exception);
         }
     }
 
@@ -369,7 +374,7 @@ public class SessionCodec implements VersionedCodec<Session, String> {
             output.flush();
             return bytes.toByteArray();
         } catch (IOException exception) {
-            throw new IllegalStateException("Session 标识集合编码失败", exception);
+            throw new AuthException("Session 标识集合编码失败", exception);
         }
     }
 

@@ -9,7 +9,7 @@ import com.sca4d.auth.totp.credential.TotpCredentialRepository;
 import com.sca4d.auth.totp.credential.TotpSecretCryptography;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretKeyring;
 import org.jetbrains.annotations.NotNull;

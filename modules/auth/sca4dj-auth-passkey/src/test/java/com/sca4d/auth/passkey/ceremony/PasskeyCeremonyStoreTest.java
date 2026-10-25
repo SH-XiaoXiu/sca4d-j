@@ -11,7 +11,7 @@ import com.sca4d.auth.passkey.PasskeyCeremonyId;
 import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.config.PasskeySettings;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.access.SettingReader;

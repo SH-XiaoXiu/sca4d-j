@@ -11,9 +11,10 @@ import com.sca4d.auth.passkey.config.PasskeySettings;
 import com.sca4d.auth.passkey.credential.PasskeyCredential;
 import com.sca4d.auth.passkey.credential.PasskeyCredentialRepository;
 import com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation;
-import com.sca4d.core.api.concurrent.OptimisticLockException;
+import com.sca4d.auth.passkey.exception.AuthPasskeyException;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.retry.Backoff;
 import com.sca4d.core.api.retry.RetryContext;
@@ -150,7 +151,7 @@ public class PasskeyRegistrationService {
                     request.toCredentialsCreateJson(),
                     stored.expiresAt());
         } catch (IOException exception) {
-            throw new IllegalStateException("Passkey registration options 编码失败", exception);
+            throw new AuthPasskeyException("Passkey registration options 编码失败", exception);
         }
     }
 
@@ -240,7 +241,7 @@ public class PasskeyRegistrationService {
                     throw new BusinessException(PasskeyErrorCode.CREDENTIAL_LIMIT_REACHED);
                 }
                 if (reservation == ACCOUNT_MISSING) {
-                    throw new IllegalStateException("Passkey 账号锚点不存在");
+                    throw new BusinessException(PasskeyErrorCode.ACCOUNT_ANCHOR_NOT_FOUND);
                 }
                 if (!retry.evaluate(RetryContext.failed(attempt, reservation)).retrying())
                     break;

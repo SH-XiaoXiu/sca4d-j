@@ -3,6 +3,7 @@ package com.sca4d.auth.session.codec;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.core.api.authentication.principalsession.ResourceLoader;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -103,7 +104,7 @@ class ResourceLoadersTest {
         assertThatThrownBy(
                 () -> new ResourceLoaders(List.of(failed), Runnable::run)
                         .load(List.of(PRINCIPAL)))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(AuthException.class)
                 .hasMessage("Session 静态资源装载失败")
                 .hasRootCauseMessage("loader failed");
     }

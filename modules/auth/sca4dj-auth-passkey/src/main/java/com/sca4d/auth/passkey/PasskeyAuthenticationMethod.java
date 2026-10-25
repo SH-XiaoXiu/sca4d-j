@@ -3,11 +3,12 @@ package com.sca4d.auth.passkey;
 import com.sca4d.auth.passkey.ceremony.PasskeyAssertionService;
 import com.sca4d.auth.passkey.credential.PasskeyCredential;
 import com.sca4d.auth.passkey.credential.PasskeyCredentialRepository;
+import com.sca4d.auth.passkey.exception.AuthPasskeyException;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -120,7 +121,7 @@ public class PasskeyAuthenticationMethod implements AuthenticationMethod<Passkey
                 throw new IllegalStateException("Passkey Credential 已变化");
             }
         } catch (Base64UrlException exception) {
-            throw new IllegalStateException("Passkey 验证结果引用无效", exception);
+            throw new AuthPasskeyException("Passkey 验证结果引用无效", exception);
         }
     }
 

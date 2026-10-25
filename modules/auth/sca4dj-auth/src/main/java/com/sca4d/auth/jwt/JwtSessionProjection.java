@@ -8,6 +8,7 @@ import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import com.sca4d.auth.config.AuthProperties;
 import com.sca4d.auth.config.AuthSettings;
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.auth.session.codec.SessionCodec;
 import com.sca4d.core.api.authentication.AuthTokenMode;
 import com.sca4d.core.api.authentication.Session;
@@ -204,6 +205,7 @@ public class JwtSessionProjection {
             }
             return Optional.of(session);
         } catch (RuntimeException exception) {
+            // 外部 Token 解码或校验失败时按未登录处理，返回空结果，调用方拒绝请求，不会得到半有效的 Session。
             return Optional.empty();
         }
     }
@@ -219,7 +221,7 @@ public class JwtSessionProjection {
             try {
                 key = Base64.getDecoder().decode(requireText(entry.getValue(), "JWT key"));
             } catch (IllegalArgumentException exception) {
-                throw new IllegalStateException("JWT key 必须使用 Base64 编码: " + keyId, exception);
+                throw new AuthException("JWT key 必须使用 Base64 编码: " + keyId, exception);
             }
             if (key.length < 32) {
                 throw new IllegalStateException("JWT HS256 key 解码后不能少于 32 字节: " + keyId);

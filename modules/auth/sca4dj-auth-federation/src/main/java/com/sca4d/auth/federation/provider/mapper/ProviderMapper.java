@@ -1,5 +1,7 @@
 package com.sca4d.auth.federation.provider.mapper;
 
+import com.sca4d.auth.federation.FederatedClientAuthentication;
+import com.sca4d.auth.federation.FederatedProviderProtocol;
 import com.sca4d.auth.federation.FederatedProviderStatus;
 import com.sca4d.auth.federation.FederatedUnlinkedIdentityAction;
 import com.sca4d.core.api.concurrent.Version;
@@ -28,11 +30,11 @@ public interface ProviderMapper {
     /** @return 新增行数 */
     int insert(
             @Param("code") @NotNull String code,
-            @Param("protocol") @NotNull String protocol,
-            @Param("status") @NotNull String status,
+            @Param("protocol") @NotNull FederatedProviderProtocol protocol,
+            @Param("status") @NotNull FederatedProviderStatus status,
             @Param("loginPageVisible") boolean loginPageVisible,
             @Param("displayOrder") int displayOrder,
-            @Param("unlinkedIdentityAction") @NotNull String unlinkedIdentityAction,
+            @Param("unlinkedIdentityAction") @NotNull FederatedUnlinkedIdentityAction unlinkedIdentityAction,
             @Param("autoLinkVerifiedEmail") boolean autoLinkVerifiedEmail,
             @Param("i18n") @NotNull String i18n,
             @Param("iconReference") @Nullable String iconReference);
@@ -70,7 +72,7 @@ public interface ProviderMapper {
             @Param("tokenEndpoint") @Nullable String tokenEndpoint,
             @Param("userInfoEndpoint") @Nullable String userInfoEndpoint,
             @Param("jwksEndpoint") @Nullable String jwksEndpoint,
-            @Param("clientAuthentication") @NotNull String clientAuthentication,
+            @Param("clientAuthentication") @NotNull FederatedClientAuthentication clientAuthentication,
             @Param("scopes") @NotNull String scopes,
             @Param("profileMapping") @NotNull String profileMapping,
             @Param("authorizationParameters") @NotNull String authorizationParameters);

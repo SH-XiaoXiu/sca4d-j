@@ -5,7 +5,7 @@ import static java.lang.Boolean.TRUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.totp.TotpErrorCode;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;

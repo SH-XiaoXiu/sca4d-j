@@ -4,7 +4,7 @@ import com.sca4d.auth.totp.TotpErrorCode;
 import com.sca4d.auth.totp.credential.mapper.TotpCredentialMapper;
 import com.sca4d.auth.totp.credential.mapper.TotpCredentialState;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;

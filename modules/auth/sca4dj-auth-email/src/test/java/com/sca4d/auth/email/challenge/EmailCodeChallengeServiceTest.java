@@ -16,7 +16,7 @@ import com.sca4d.auth.email.EmailCodeChallengeId;
 import com.sca4d.auth.email.EmailCodeErrorCode;
 import com.sca4d.auth.email.config.EmailCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
@@ -140,8 +140,9 @@ class EmailCodeChallengeServiceTest {
                 mock(SecureRandom.class));
 
         assertThatThrownBy(() -> service.verifyConsumedChallenge(challengeId, accountId, version))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("Email Code Challenge 已变化或不可用")
+                .isInstanceOfSatisfying(
+                        BusinessException.class,
+                        exception -> assertThat(exception.errorCode()).isEqualTo(EmailCodeErrorCode.CHALLENGE_CHANGED))
                 .hasCauseInstanceOf(BusinessException.class);
         verify(accounts).activeById(accountId);
     }

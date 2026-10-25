@@ -8,14 +8,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.data.DataAssertionException;
 import com.sca4d.core.api.data.DataOps;
+import com.sca4d.core.api.data.exception.DataAssertionException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -75,7 +76,7 @@ class AuthenticationAttemptCodec {
         try {
             return objectMapper.writeValueAsString(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("认证尝试编码失败", exception);
+            throw new AuthException("认证尝试编码失败", exception);
         }
     }
 
@@ -129,7 +130,7 @@ class AuthenticationAttemptCodec {
                 | DataAssertionException
                 | DateTimeParseException
                 | IllegalArgumentException exception) {
-            throw new IllegalStateException("认证尝试内容无效", exception);
+            throw new AuthException("认证尝试内容无效", exception);
         }
     }
 

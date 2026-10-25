@@ -7,8 +7,8 @@ import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import com.sca4d.auth.session.codec.SessionCodec;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
-import com.sca4d.core.api.authentication.SessionIdentityUnavailableException;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
+import com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException;
 import com.sca4d.core.api.permission.OperationCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -80,10 +80,16 @@ public class SaTokenSessionManager {
     /**
      * 创建 Sa-Token 登录状态，并保存完整 Core Session 和当前失效代次。
      *
+     * <p>调用前若 Account 的失效代次已经不等于 {@code expectedGeneration}，直接抛出异常且不写入任何状态。
+     * 登录状态创建后，若编码、写入 Token-Session 或 SessionId 索引失败，或写入后再次检查发现代次已变化，
+     * 方法会注销刚创建的 Sa-Token 登录状态、删除 SessionId 索引，再抛出原异常。
+     *
      * @param session 已经完成身份和 Resource 装载的 Session
      * @param ttl Token 和 Token-Session 有效期
      * @param expectedGeneration 身份和 Resource 装载前读取到的 Account Session 失效代次
      * @return 新建在线 Session 的不透明 Token
+     * @throws SessionIdentityUnavailableException Account 在装载期间被失效，即当前失效代次不等于
+     *                                             {@code expectedGeneration}，此时不返回 Token
      */
     @CheckReturnValue
     public @NotNull String establish(
@@ -208,10 +214,12 @@ public class SaTokenSessionManager {
     }
 
     /**
-     * 终止指定 Session 的权威登录状态。
+     * 按 Session 标识注销对应 Token 登录，并删除 Token 索引。
+     *
+     * <p>索引不存在时（Token 已注销、已过期或从未建立）不执行任何操作，也不抛出异常，只记录 TRACE 日志。
      *
      * @param sessionId Session 标识
-     * @param reason 终止原因
+     * @param reason 终止原因，只用于日志
      */
     public void terminate(@NotNull SessionId sessionId, @NotNull SessionTerminationReason reason) {
         terminateIndexed(
@@ -268,6 +276,7 @@ public class SaTokenSessionManager {
             return Optional.of(session);
         }
 
+        long startedAt = System.nanoTime();
         try {
             Session refreshed = refresh.refresh(session);
             tokenSession.set(SESSION_ATTRIBUTE, codec.encode(refreshed));
@@ -275,12 +284,13 @@ public class SaTokenSessionManager {
             // 指纹最后写入；前面的 Session 或代次保存失败时，下次请求必须继续尝试刷新。
             tokenSession.set(OPERATION_CATALOG_FINGERPRINT_ATTRIBUTE, operationCatalogFingerprint);
             LOG.info(
-                    "Session 刷新完成 | sessionId={} accountId={} generation={} generationChanged={} operationCatalogChanged={}",
+                    "Session 刷新完成 | sessionId={} accountId={} generation={} generationChanged={} operationCatalogChanged={} durationMs={}",
                     refreshed.id().value(),
                     refreshed.account().accountId(),
                     invalidationGeneration,
                     generationChanged,
-                    operationCatalogChanged);
+                    operationCatalogChanged,
+                    (System.nanoTime() - startedAt) / 1_000_000);
             return Optional.of(refreshed);
         } catch (SessionIdentityUnavailableException exception) {
             invalidToken.run();
@@ -294,10 +304,13 @@ public class SaTokenSessionManager {
     }
 
     /**
-     * 注销当前请求的 Token。
+     * 按 SessionId 查找 Token 索引，并注销该索引对应的 Sa-Token 登录状态。
+     *
+     * <p>索引不存在时只记录 TRACE 日志并直接返回，不注销任何 Token。索引存在时先注销该 Token，
+     * 再删除 SessionId 索引，并记录 INFO 日志。
      *
      * @param sessionId Core Session 标识
-     * @param reason 注销原因
+     * @param reason 注销原因，只用于日志
      */
     private void terminateIndexed(SessionId sessionId, SessionTerminationReason reason) {
         Optional<String> tokenValue = tokenIndex.find(sessionId);

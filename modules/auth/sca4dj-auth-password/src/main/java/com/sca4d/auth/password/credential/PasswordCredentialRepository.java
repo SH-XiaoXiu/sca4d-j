@@ -3,7 +3,7 @@ package com.sca4d.auth.password.credential;
 import com.sca4d.auth.password.PasswordErrorCode;
 import com.sca4d.auth.password.credential.mapper.PasswordCredentialMapper;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;

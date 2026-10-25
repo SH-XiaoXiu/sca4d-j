@@ -1,8 +1,8 @@
 package com.sca4d.auth.x509;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.ErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;

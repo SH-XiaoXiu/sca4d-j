@@ -1,12 +1,13 @@
 package com.sca4d.auth.session.codec;
 
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.core.api.authentication.principalsession.ResourceLoader;
 import com.sca4d.core.api.data.DataGraph;
 import com.sca4d.core.api.data.DataGraphExecutor;
 import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.data.DataOperation;
-import com.sca4d.core.api.data.DataOperationExecutionException;
 import com.sca4d.core.api.data.DataValues;
+import com.sca4d.core.api.data.exception.DataOperationExecutionException;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.resource.Resource;
 
@@ -60,7 +61,7 @@ public class ResourceLoaders {
                 if (operation.getCause() instanceof NullPointerException nullFailure) {
                     throw nullFailure;
                 }
-                throw new IllegalStateException("Session 静态资源装载失败", operation.getCause());
+                throw new AuthException("Session 静态资源装载失败", operation.getCause());
             }
             if (cause instanceof DataOperationExecutionException operation) {
                 cause = operation.getCause();

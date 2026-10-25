@@ -1,9 +1,11 @@
 package com.sca4d.auth.engine.attempt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
@@ -55,7 +57,7 @@ public class RedisAuthenticationAttemptStore {
         Duration ttl = remainingTtl(state);
         Boolean created = redis.opsForValue().setIfAbsent(attemptKey(state.id()), codec.encode(state), ttl);
         if (!Boolean.TRUE.equals(created)) {
-            throw new IllegalStateException("认证尝试标识发生冲突");
+            throw new BusinessException(AuthErrorCode.AUTH_ATTEMPT_ID_CONFLICT);
         }
     }
 
@@ -63,12 +65,12 @@ public class RedisAuthenticationAttemptStore {
     public @NotNull AuthenticationAttemptState loadById(@NotNull AuthenticationAttemptId id) {
         String encoded = redis.opsForValue().get(attemptKey(id));
         if (encoded == null) {
-            throw new IllegalStateException("认证尝试不存在或已过期");
+            throw new BusinessException(AuthErrorCode.AUTH_ATTEMPT_EXPIRED);
         }
         AuthenticationAttemptState state = codec.decode(encoded);
         if (!state.id().equals(id) || !clock.instant().isBefore(state.expiresAt())) {
             redis.delete(attemptKey(id));
-            throw new IllegalStateException("认证尝试不存在或已过期");
+            throw new BusinessException(AuthErrorCode.AUTH_ATTEMPT_EXPIRED);
         }
         return state;
     }
@@ -100,7 +102,7 @@ public class RedisAuthenticationAttemptStore {
     private @NotNull Duration remainingTtl(@NotNull AuthenticationAttemptState state) {
         Duration ttl = Duration.between(clock.instant(), state.expiresAt());
         if (ttl.isZero() || ttl.isNegative()) {
-            throw new IllegalStateException("认证尝试已经过期");
+            throw new BusinessException(AuthErrorCode.AUTH_ATTEMPT_EXPIRED);
         }
         return ttl;
     }

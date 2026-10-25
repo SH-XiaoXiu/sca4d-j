@@ -14,7 +14,9 @@ public enum TotpErrorCode implements ErrorCode {
     /** Account 已经存在 TOTP 凭据。 */
     CREDENTIAL_EXISTS("2302", ErrorCategory.CONFLICT, "error.auth-totp.credential-exists"),
     /** Account 尚未设置 TOTP 凭据。 */
-    CREDENTIAL_UNAVAILABLE("2303", ErrorCategory.NOT_FOUND, "error.auth-totp.credential-unavailable");
+    CREDENTIAL_UNAVAILABLE("2303", ErrorCategory.NOT_FOUND, "error.auth-totp.credential-unavailable"),
+    /** TOTP 绑定已经完成，不能重复使用 */
+    ENROLLMENT_CONSUMED("2304", ErrorCategory.CONFLICT, "error.auth-totp.enrollment-consumed");
 
     private final String code;
 

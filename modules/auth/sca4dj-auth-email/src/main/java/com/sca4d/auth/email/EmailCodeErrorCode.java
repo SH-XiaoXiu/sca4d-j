@@ -13,7 +13,13 @@ public enum EmailCodeErrorCode implements ErrorCode {
     /** 验证码格式错误、摘要不匹配或并发消费失败。 */
     CODE_REJECTED("2401", ErrorCategory.AUTHENTICATION, "error.auth-email.code-rejected"),
     /** Challenge 在重发间隔内已经签发。 */
-    RESEND_TOO_SOON("2402", ErrorCategory.CONFLICT, "error.auth-email.resend-too-soon");
+    RESEND_TOO_SOON("2402", ErrorCategory.CONFLICT, "error.auth-email.resend-too-soon"),
+    /** 邮箱验证码挑战标识发生冲突，请重新获取验证码 */
+    CHALLENGE_ID_CONFLICT("2403", ErrorCategory.CONFLICT, "error.auth-email.challenge-id-conflict"),
+    /** 邮箱验证码已经过期，请重新获取 */
+    CHALLENGE_EXPIRED("2404", ErrorCategory.CONFLICT, "error.auth-email.challenge-expired"),
+    /** 邮箱验证码挑战已变化或不可用，请重新获取 */
+    CHALLENGE_CHANGED("2405", ErrorCategory.CONFLICT, "error.auth-email.challenge-changed");
 
     private final @NotNull String code;
 

@@ -2,7 +2,7 @@ package com.sca4d.auth.federation;
 
 import com.sca4d.auth.federation.provider.FederatedProviderRepository;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.LocalizedFieldsSchema;
@@ -317,7 +317,7 @@ public class FederatedProviderService {
             URI uri = URI.create(value);
             if (!"https".equalsIgnoreCase(uri.getScheme()) || uri.getHost() == null)
                 throw new IllegalArgumentException();
-        } catch (RuntimeException exception) {
+        } catch (IllegalArgumentException exception) {
             throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID, exception);
         }
     }

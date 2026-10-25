@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.auth.testing.SessionTestFixture;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
@@ -30,7 +31,7 @@ class SessionCodecTest {
     @DisplayName("Rejects Former Session Wire Version")
     void rejectsFormerSessionWireVersion() {
         assertThatThrownBy(() -> SessionTestFixture.codec().decode(LEGACY_SESSION_WIRE))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(AuthException.class)
                 .hasRootCauseMessage("未知 Session wire 版本: 2");
     }
 
@@ -163,7 +164,7 @@ class SessionCodecTest {
         ((ObjectNode) corrupt.get("account")).put("accountId", 0);
         assertDecodeFails(codec, corrupt);
 
-        assertThatThrownBy(() -> codec.decode("{broken")).isInstanceOf(IllegalStateException.class)
+        assertThatThrownBy(() -> codec.decode("{broken")).isInstanceOf(AuthException.class)
                 .hasMessage("Session 解码失败");
     }
 
@@ -211,7 +212,7 @@ class SessionCodecTest {
 
     private static void assertDecodeFails(SessionCodec codec, ObjectNode wire) throws Exception {
         String encoded = SessionTestFixture.OBJECT_MAPPER.writeValueAsString(wire);
-        assertThatThrownBy(() -> codec.decode(encoded)).isInstanceOf(IllegalStateException.class)
+        assertThatThrownBy(() -> codec.decode(encoded)).isInstanceOf(AuthException.class)
                 .hasMessage("Session 解码失败");
     }
 

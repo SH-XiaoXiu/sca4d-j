@@ -3,7 +3,10 @@ package com.sca4d.auth.sms.challenge;
 import static java.lang.Boolean.TRUE;
 
 import com.sca4d.auth.sms.SmsCodeChallengeId;
+import com.sca4d.auth.sms.SmsCodeErrorCode;
+import com.sca4d.auth.sms.exception.AuthSmsException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -53,12 +56,22 @@ public class RedisSmsCodeChallengeStore {
                                 Objects.requireNonNull(interval, "重发间隔不能为空")));
     }
 
-    /** 使用 Challenge 剩余有效时间新增状态。 */
+    /**
+     * 使用 Challenge 剩余有效时间新增 Redis Hash 状态。
+     *
+     * <p>标识已存在时直接拒绝，不覆盖原状态。方法先整体写入 Hash，再按 {@code expiresAt} 设置 TTL；
+     * 若有效期不晚于当前时间，会删除刚写入的 Hash 并抛出过期错误。存在性检查与写入不在同一个 Redis 原子操作内，
+     * 调用方应使用新生成的 UUID 作为标识。
+     *
+     * @param state 待保存的 Challenge 状态
+     * @throws BusinessException 标识已存在时抛出 {@link SmsCodeErrorCode#CHALLENGE_ID_CONFLICT}；
+     *                           {@code expiresAt} 不晚于当前时间时抛出 {@link SmsCodeErrorCode#CHALLENGE_EXPIRED}
+     */
     public void create(@NotNull SmsCodeChallengeState state) {
         SmsCodeChallengeState checked = Objects.requireNonNull(state, "Challenge 状态不能为空");
         Key key = key(checked.challengeId());
         if (TRUE.equals(redis.hasKey(key)))
-            throw new IllegalStateException("SMS Challenge 标识冲突");
+            throw new BusinessException(SmsCodeErrorCode.CHALLENGE_ID_CONFLICT);
         Map<String, String> fields = new LinkedHashMap<>();
         fields.put("accountId", Long.toString(checked.accountId()));
         fields.put("codeHash", checked.codeHash());
@@ -72,12 +85,18 @@ public class RedisSmsCodeChallengeStore {
         Duration ttl = Duration.between(clock.instant(), checked.expiresAt());
         if (ttl.isZero() || ttl.isNegative()) {
             redis.delete(key);
-            throw new IllegalStateException("SMS Challenge 已经过期");
+            throw new BusinessException(SmsCodeErrorCode.CHALLENGE_EXPIRED);
         }
         redis.expire(key, ttl);
     }
 
-    /** @return 仍存在于 Redis 的 Challenge */
+    /**
+     * 读取仍存在于 Redis 的 Challenge，不修改任何数据。
+     *
+     * @param challengeId Challenge 标识
+     * @return 仍存在于 Redis 的 Challenge；Hash 不存在或已过 TTL 时为空
+     * @throws AuthSmsException Hash 字段缺失、为空或无法解析时抛出，表示 Redis 中的 Challenge 数据已损坏
+     */
     public @Nullable SmsCodeChallengeState find(@NotNull SmsCodeChallengeId challengeId) {
         Map<Object, Object> fields = redis.opsForHash().entries(key(challengeId));
         if (fields.isEmpty())
@@ -94,7 +113,7 @@ public class RedisSmsCodeChallengeStore {
                     SmsCodeChallengeStatus.valueOf(field(fields, "status")),
                     new Version(Long.parseLong(field(fields, "version"))));
         } catch (RuntimeException exception) {
-            throw new IllegalStateException("SMS Challenge Redis 数据损坏", exception);
+            throw new AuthSmsException("SMS Challenge Redis 数据损坏", exception);
         }
     }
 

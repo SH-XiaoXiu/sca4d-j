@@ -1,5 +1,7 @@
 package com.sca4d.auth.totp.enrollment;
 
+import com.sca4d.auth.totp.TotpErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
 
 import java.time.Instant;
@@ -65,7 +67,7 @@ class TotpEnrollmentState {
 
     TotpEnrollmentState consume() {
         if (status != TotpEnrollmentStatus.PENDING) {
-            throw new IllegalStateException("TOTP enrollment 已经消费");
+            throw new BusinessException(TotpErrorCode.ENROLLMENT_CONSUMED);
         }
         return new TotpEnrollmentState(
                 id,

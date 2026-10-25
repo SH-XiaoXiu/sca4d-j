@@ -7,8 +7,8 @@ import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.Cred
 
 import com.sca4d.auth.passkey.credential.mapper.PasskeyAccountState;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
-import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import org.jetbrains.annotations.NotNull;

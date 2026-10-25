@@ -1,5 +1,6 @@
 package com.sca4d.auth.session;
 
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.core.api.authentication.SessionInvalidationListener;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -61,7 +62,7 @@ public class RedisSessionGeneration {
             }
             return generation;
         } catch (NumberFormatException exception) {
-            throw new IllegalStateException("Session 失效代次不是整数", exception);
+            throw new AuthException("Session 失效代次不是整数", exception);
         }
     }
 

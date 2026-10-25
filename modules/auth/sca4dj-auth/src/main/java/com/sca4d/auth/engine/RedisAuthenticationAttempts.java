@@ -3,6 +3,7 @@ package com.sca4d.auth.engine;
 import com.sca4d.auth.config.AuthSettings;
 import com.sca4d.auth.engine.attempt.AuthenticationAttemptState;
 import com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore;
+import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
@@ -14,6 +15,7 @@ import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -149,7 +151,7 @@ public class RedisAuthenticationAttempts implements AuthenticationAttempts {
         return attempts.withLease(checkedId, () -> {
             AuthenticationAttemptState state = attempts.loadById(checkedId);
             if (state.satisfied()) {
-                throw new IllegalStateException("认证尝试已经满足，不能继续提交");
+                throw new BusinessException(AuthErrorCode.AUTH_ATTEMPT_SATISFIED);
             }
 
             Instant now = clock.instant();
@@ -198,7 +200,7 @@ public class RedisAuthenticationAttempts implements AuthenticationAttempts {
             AuthenticationProgress progress = evaluate(state, now);
             if (!progress.satisfied()) {
                 attempts.save(state);
-                throw new IllegalStateException("认证尝试尚未满足当前动作策略");
+                throw new BusinessException(AuthErrorCode.AUTH_ATTEMPT_INCOMPLETE);
             }
             List<Authentication> authentications = currentAuthentications(state, now);
             AuthenticationResult completion = new AuthenticationResult(

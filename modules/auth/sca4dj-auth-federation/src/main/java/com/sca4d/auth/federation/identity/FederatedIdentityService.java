@@ -1,8 +1,10 @@
 package com.sca4d.auth.federation.identity;
 
+import com.sca4d.auth.federation.FederatedErrorCode;
 import com.sca4d.auth.federation.FederatedIdentity;
 import com.sca4d.auth.federation.FederatedProfile;
 import com.sca4d.auth.federation.FederatedProvider;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.logging.LogMark;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -46,7 +48,7 @@ public class FederatedIdentityService {
             @NotNull FederatedProfile profile) {
         FederatedIdentity existing = repository.find(provider, profile);
         if (existing != null && existing.accountId() != accountId) {
-            throw new IllegalStateException("外部身份已经绑定其他账号");
+            throw new BusinessException(FederatedErrorCode.IDENTITY_CONFLICT);
         }
         FederatedIdentity linked = existing == null
                 ? repository.insert(provider, accountId, profile)

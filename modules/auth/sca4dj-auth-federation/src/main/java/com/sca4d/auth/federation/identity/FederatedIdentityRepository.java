@@ -6,7 +6,7 @@ import com.sca4d.auth.federation.FederatedProfile;
 import com.sca4d.auth.federation.FederatedProvider;
 import com.sca4d.auth.federation.identity.mapper.FederatedIdentityMapper;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.Patch;

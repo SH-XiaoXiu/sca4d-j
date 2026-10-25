@@ -9,7 +9,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.auth.passkey.PasskeyCeremonyId;
 import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.config.PasskeySettings;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.auth.passkey.exception.AuthPasskeyException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.retry.Backoff;
@@ -125,7 +126,7 @@ public class PasskeyCeremonyStore {
                 if (!retry.evaluate(RetryContext.failed(attempt, false)).retrying())
                     break;
             } catch (JsonProcessingException exception) {
-                throw new IllegalStateException("Passkey ceremony 编码失败", exception);
+                throw new AuthPasskeyException("Passkey ceremony 编码失败", exception);
             }
         }
         throw new IllegalStateException("Passkey ceremony 标识连续冲突");

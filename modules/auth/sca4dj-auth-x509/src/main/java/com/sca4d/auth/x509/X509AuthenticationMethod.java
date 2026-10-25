@@ -1,5 +1,6 @@
 package com.sca4d.auth.x509;
 
+import com.sca4d.auth.x509.exception.AuthX509Exception;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
@@ -7,7 +8,7 @@ import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
@@ -128,7 +129,7 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
         try {
             credentialId = Long.parseLong(authentication.reference());
         } catch (NumberFormatException exception) {
-            throw new IllegalStateException("X.509 认证证据引用无效", exception);
+            throw new AuthX509Exception("X.509 认证证据引用无效", exception);
         }
         X509Credential credential = credentials.find(credentialId);
         if (credential == null

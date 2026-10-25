@@ -122,7 +122,6 @@ public class AuthAutoConfiguration {
      * 创建 SessionId 到不透明 Token 的索引。
      *
      * @param redis Redis 字符串操作
-     * @param resourceNames 当前 App 隔离名称下的资源名称
      * @return SessionId 到不透明 Token 的索引
      */
     @Bean

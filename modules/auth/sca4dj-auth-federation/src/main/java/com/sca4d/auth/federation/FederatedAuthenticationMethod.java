@@ -1,5 +1,6 @@
 package com.sca4d.auth.federation;
 
+import com.sca4d.auth.federation.exception.AuthFederationException;
 import com.sca4d.auth.federation.identity.FederatedIdentityRepository;
 import com.sca4d.auth.federation.identity.FederatedIdentityService;
 import com.sca4d.core.api.authentication.Authentication;
@@ -7,7 +8,7 @@ import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -128,7 +129,7 @@ public class FederatedAuthenticationMethod implements AuthenticationMethod<Feder
         try {
             identityId = Long.parseLong(authentication.reference());
         } catch (NumberFormatException exception) {
-            throw new IllegalStateException("联邦认证引用不是有效身份标识", exception);
+            throw new AuthFederationException("联邦认证引用不是有效身份标识", exception);
         }
         accounts.verifyCurrentBinding(
                 account,

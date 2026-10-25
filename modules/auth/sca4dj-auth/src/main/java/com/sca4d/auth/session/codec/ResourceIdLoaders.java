@@ -1,13 +1,14 @@
 package com.sca4d.auth.session.codec;
 
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdLoader;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
 import com.sca4d.core.api.data.DataGraph;
 import com.sca4d.core.api.data.DataGraphExecutor;
 import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.data.DataOperation;
-import com.sca4d.core.api.data.DataOperationExecutionException;
 import com.sca4d.core.api.data.DataValues;
+import com.sca4d.core.api.data.exception.DataOperationExecutionException;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -59,7 +60,7 @@ public class ResourceIdLoaders {
             Throwable cause = exception.getCause();
             if (cause instanceof DataOperationExecutionException operation
                     && operation.operationName().startsWith("resource-id-loader-")) {
-                throw new IllegalStateException("Session 数字 Resource 标识装载失败", operation.getCause());
+                throw new AuthException("Session 数字 Resource 标识装载失败", operation.getCause());
             }
             if (cause instanceof DataOperationExecutionException operation) {
                 cause = operation.getCause();

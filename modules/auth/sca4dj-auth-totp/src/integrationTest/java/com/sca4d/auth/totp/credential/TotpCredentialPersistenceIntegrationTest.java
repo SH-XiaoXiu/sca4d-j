@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.auth.totp.credential.mapper.TotpCredentialMapper;
-import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;

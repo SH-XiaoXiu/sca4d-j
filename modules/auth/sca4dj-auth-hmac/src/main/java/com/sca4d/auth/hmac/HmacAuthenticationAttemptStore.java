@@ -2,6 +2,7 @@ package com.sca4d.auth.hmac;
 
 import static java.lang.Boolean.TRUE;
 
+import com.sca4d.auth.hmac.exception.AuthHmacException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +50,7 @@ public class HmacAuthenticationAttemptStore {
             }
             return count;
         } catch (NumberFormatException exception) {
-            throw new IllegalStateException("HMAC 失败计数不是整数", exception);
+            throw new AuthHmacException("HMAC 失败计数不是整数", exception);
         }
     }
 
@@ -58,11 +59,11 @@ public class HmacAuthenticationAttemptStore {
         Key key = failureKey(accountId);
         Long count = redis.opsForValue().increment(key);
         if (count == null || count < 1) {
-            throw new IllegalStateException("Redis 没有返回有效的 HMAC 失败计数");
+            throw new AuthHmacException("Redis 没有返回有效的 HMAC 失败计数");
         }
         if (count == 1 && !TRUE.equals(redis.expire(key, positive(window, "HMAC 失败窗口")))) {
             redis.delete(key);
-            throw new IllegalStateException("Redis 未能设置 HMAC 失败计数有效期");
+            throw new AuthHmacException("Redis 未能设置 HMAC 失败计数有效期");
         }
         return count;
     }

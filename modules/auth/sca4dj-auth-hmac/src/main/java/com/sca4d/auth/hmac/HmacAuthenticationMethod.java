@@ -5,13 +5,14 @@ import static com.sca4d.auth.hmac.HmacCredential.Status.REVOKED;
 import static com.sca4d.auth.hmac.HmacErrorCode.CREDENTIAL_NOT_FOUND;
 import static com.sca4d.auth.hmac.HmacErrorCode.REJECTED;
 
+import com.sca4d.auth.hmac.exception.AuthHmacException;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -273,7 +274,7 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
                 Arrays.fill(expected, (byte) 0);
             }
         } catch (GeneralSecurityException exception) {
-            throw new IllegalStateException("JVM 不支持 HmacSHA256", exception);
+            throw new AuthHmacException("JVM 不支持 HmacSHA256", exception);
         } finally {
             Arrays.fill(key, (byte) 0);
             Arrays.fill(supplied, (byte) 0);

@@ -3,7 +3,10 @@ package com.sca4d.auth.email.challenge;
 import static java.lang.Boolean.TRUE;
 
 import com.sca4d.auth.email.EmailCodeChallengeId;
+import com.sca4d.auth.email.EmailCodeErrorCode;
+import com.sca4d.auth.email.exception.AuthEmailException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -63,12 +66,22 @@ public class RedisEmailCodeChallengeStore {
                                 Objects.requireNonNull(interval, "重发间隔不能为空")));
     }
 
-    /** 使用 Challenge 剩余有效时间新增状态，标识冲突时拒绝覆盖。 */
+    /**
+     * 使用 Challenge 剩余有效时间新增 Redis Hash 状态。
+     *
+     * <p>标识已存在时直接拒绝，不覆盖原状态。方法先整体写入 Hash，再按 {@code expiresAt} 设置 TTL；
+     * 若有效期不晚于当前时间，会删除刚写入的 Hash 并抛出过期错误。存在性检查与写入不在同一个 Redis 原子操作内，
+     * 调用方应使用新生成的 UUID 作为标识。
+     *
+     * @param state 待保存的 Challenge 状态
+     * @throws BusinessException 标识已存在时抛出 {@link EmailCodeErrorCode#CHALLENGE_ID_CONFLICT}；
+     *                           {@code expiresAt} 不晚于当前时间时抛出 {@link EmailCodeErrorCode#CHALLENGE_EXPIRED}
+     */
     public void create(@NotNull EmailCodeChallengeState state) {
         EmailCodeChallengeState checked = Objects.requireNonNull(state, "Challenge 状态不能为空");
         Key key = key(checked.challengeId());
         if (TRUE.equals(redis.hasKey(key))) {
-            throw new IllegalStateException("Email Code Challenge 标识冲突");
+            throw new BusinessException(EmailCodeErrorCode.CHALLENGE_ID_CONFLICT);
         }
         Map<String, String> fields = new LinkedHashMap<>();
         fields.put("accountId", Long.toString(checked.accountId()));
@@ -83,12 +96,18 @@ public class RedisEmailCodeChallengeStore {
         Duration ttl = Duration.between(clock.instant(), checked.expiresAt());
         if (ttl.isZero() || ttl.isNegative()) {
             redis.delete(key);
-            throw new IllegalStateException("Email Code Challenge 已经过期");
+            throw new BusinessException(EmailCodeErrorCode.CHALLENGE_EXPIRED);
         }
         redis.expire(key, ttl);
     }
 
-    /** @return 仍存在于 Redis 的 Challenge；缺失时为空 */
+    /**
+     * 读取仍存在于 Redis 的 Challenge，不修改任何数据。
+     *
+     * @param challengeId Challenge 标识
+     * @return 仍存在于 Redis 的 Challenge；Hash 不存在或已过 TTL 时为空
+     * @throws AuthEmailException Hash 字段缺失、为空或无法解析时抛出，表示 Redis 中的 Challenge 数据已损坏
+     */
     @CheckReturnValue
     public @Nullable EmailCodeChallengeState find(@NotNull EmailCodeChallengeId challengeId) {
         Map<Object, Object> fields = redis.opsForHash().entries(key(challengeId));
@@ -107,17 +126,24 @@ public class RedisEmailCodeChallengeStore {
                     EmailCodeChallengeStatus.valueOf(fieldValue(fields, "status")),
                     new Version(Long.parseLong(fieldValue(fields, "version"))));
         } catch (RuntimeException exception) {
-            throw new IllegalStateException("Email Code Challenge Redis 数据损坏", exception);
+            throw new AuthEmailException("Email Code Challenge Redis 数据损坏", exception);
         }
     }
 
     /**
      * 按读取版本原子记录一次校验结果。
      *
-     * @return 成功消费后的新版本；失败、过期、耗尽或并发变化时为空
+     * <p>Lua 脚本在 Challenge 缺失、状态不是 PENDING、已过期或版本与 {@code state} 不一致时不写入。
+     * 版本一致且仍为 PENDING 时：{@code valid} 为 true 则状态改为 CONSUMED；为 false 则错误次数加一，
+     * 次数达到 {@code maximumAttempts} 时状态改为 EXHAUSTED。写入后版本都会递增，包括计入错误次数的失败。
+     *
+     * @param state consume 读取到的 Challenge 状态，其版本用于比较
+     * @param valid 本次验证码校验是否成功
+     * @param maximumAttempts 允许的最大错误次数
+     * @return 成功消费后的新版本；校验失败（已计入错误次数）、未写入或版本并发变化时为空
      */
     @CheckReturnValue
-    public Version verify(
+    public @Nullable Version verify(
             @NotNull EmailCodeChallengeState state,
             boolean valid,
             int maximumAttempts) {

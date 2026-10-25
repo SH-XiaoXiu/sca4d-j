@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sca4d.auth.totp.exception.AuthTotpException;
 import com.sca4d.core.api.security.EncryptedSecret;
 
 import java.time.Instant;
@@ -34,7 +35,7 @@ class TotpEnrollmentCodec {
         try {
             return objectMapper.writeValueAsString(root);
         } catch (JsonProcessingException exception) {
-            throw new IllegalStateException("TOTP enrollment 编码失败", exception);
+            throw new AuthTotpException("TOTP enrollment 编码失败", exception);
         }
     }
 
@@ -55,7 +56,7 @@ class TotpEnrollmentCodec {
                     TotpEnrollmentStatus.valueOf(requiredText(root, "state")),
                     requiredNonNegativeLong(root, "stateVersion"));
         } catch (JsonProcessingException | IllegalArgumentException exception) {
-            throw new IllegalStateException("TOTP enrollment 内容无效", exception);
+            throw new AuthTotpException("TOTP enrollment 内容无效", exception);
         }
     }
 

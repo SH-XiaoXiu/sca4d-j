@@ -12,7 +12,7 @@ import com.sca4d.auth.email.EmailCodeNotice;
 import com.sca4d.auth.email.EmailCodeProof;
 import com.sca4d.auth.email.config.EmailCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
@@ -127,8 +127,16 @@ public class EmailCodeChallengeService {
     /**
      * 为认证尝试已经确定的 Account 签发附加因素 Challenge。
      *
+     * <p>方法重新读取启用的 Account，并要求它当前可以接收 Email 验证码通知。成功时在 Redis 中保存 PENDING
+     * Challenge，并在当前事务中把验证码通知写入 Outbox；返回值不包含验证码和完整邮箱。
+     * 副作用：先在 Redis 登记重发冷却，再保存 Challenge。Redis 写入直接执行，不随外层事务回滚撤销。
+     *
      * @param account 有效认证尝试绑定的 Account
      * @return 不包含完整邮箱的 Challenge
+     * @throws BusinessException Account 不存在或已停用时抛出当前 IAM 实现的 ACCOUNT_UNAVAILABLE；
+     *                           Email 通知不可用时抛出 {@link EmailCodeErrorCode#CHALLENGE_UNAVAILABLE}；
+     *                           重发间隔内抛出 {@link EmailCodeErrorCode#RESEND_TOO_SOON}；
+     *                           Challenge 标识冲突或有效期不为正数时抛出对应的 Challenge 错误码
      */
     @Transactional
     @CheckReturnValue
@@ -150,8 +158,17 @@ public class EmailCodeChallengeService {
     /**
      * 单次消费 Challenge 并验证验证码。
      *
+     * <p>Challenge 不存在时仍执行一次摘要比较，避免通过响应时间判断 Challenge 是否存在。只有 Challenge 为 PENDING、
+     * 未过期、绑定真实 Account、验证码为六位数字且摘要匹配时才成功。
+     * 副作用：Challenge 为 PENDING 且未过期时，Redis 脚本都会写入一次结果，并递增版本。验证码不匹配或格式错误
+     * 计为一次错误尝试，达到上限后状态变为 EXHAUSTED；成功时状态变为 CONSUMED。Challenge 已消费、已耗尽、
+     * 已过期或版本已被其他请求改变时不写入 Redis。成功写入后，若 Account 已停用或不存在，Challenge 保持
+     * CONSUMED，方法仍抛出 CODE_REJECTED，不会恢复 Challenge。
+     *
      * @param proof Challenge 标识和原始验证码
      * @return 已确认 Account 和消费后版本
+     * @throws BusinessException 验证码不可接受、Challenge 不可用，或成功消费后 Account 不可用时抛出
+     *                           {@link EmailCodeErrorCode#CODE_REJECTED}
      */
     @CheckReturnValue
     public @NotNull ConsumedEmailCodeChallenge consume(@NotNull EmailCodeProof proof) {
@@ -175,12 +192,24 @@ public class EmailCodeChallengeService {
         try {
             Account account = accounts.activeById(state.accountId());
             return new ConsumedEmailCodeChallenge(state.challengeId(), account, consumed);
-        } catch (RuntimeException exception) {
+        } catch (BusinessException exception) {
             throw new BusinessException(EmailCodeErrorCode.CODE_REJECTED, exception);
         }
     }
 
-    /** 最终完成认证前复核 Challenge 仍为相同可用账号、消费状态和版本。 */
+    /**
+     * 最终完成认证前复核 Challenge 仍为相同可用账号、消费状态和版本。
+     *
+     * <p>方法只读取 Redis Challenge 和 Account，不修改任何状态。Challenge 必须仍存在、为 CONSUMED、未过期，
+     * 版本等于 {@code version}，并且绑定的 Account 等于 {@code accountId}；之后 Account 仍须启用。
+     *
+     * @param challengeId 已经消费的 Challenge 标识
+     * @param accountId 消费时确认的 Account 标识
+     * @param version {@link #consume(EmailCodeProof)} 返回的消费后版本
+     * @throws BusinessException Challenge 缺失、已过期、状态或版本不一致、Account 不一致或 Account 已不可用时抛出
+     *                           {@link EmailCodeErrorCode#CHALLENGE_CHANGED}
+     * @throws IllegalStateException {@code AccountDirectory} 返回的 Account 标识与 {@code accountId} 不一致时抛出
+     */
     public void verifyConsumedChallenge(
             @NotNull EmailCodeChallengeId challengeId,
             long accountId,
@@ -191,15 +220,15 @@ public class EmailCodeChallengeService {
                 || state.status() != CONSUMED
                 || !state.version().equals(version)
                 || !clock.instant().isBefore(state.expiresAt())) {
-            throw new IllegalStateException("Email Code Challenge 已变化或不可用");
+            throw new BusinessException(EmailCodeErrorCode.CHALLENGE_CHANGED);
         }
         try {
             Account active = accounts.activeById(accountId);
             if (active.accountId() != accountId) {
                 throw new IllegalStateException("AccountDirectory 返回了其他 Account");
             }
-        } catch (RuntimeException exception) {
-            throw new IllegalStateException("Email Code Challenge 已变化或不可用", exception);
+        } catch (BusinessException exception) {
+            throw new BusinessException(EmailCodeErrorCode.CHALLENGE_CHANGED, exception);
         }
     }
 
