@@ -29,7 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 /** 验证 HttpInputValidationAspect 对 Controller 参数执行 Bean Validation 与类型默认约束，显式约束会替换默认约束，并在循环对象图中停止递归。 */
 @SuppressWarnings("unused") // Controller 方法和请求字段由测试通过反射读取。
@@ -125,7 +131,7 @@ class HttpInputValidationAspectTest {
     }
 
     @Test
-    @DisplayName("RejectsNonPositiveConfiguredLimits")
+    @DisplayName("Rejects Non Positive Configured Limits")
     void rejectsNonPositiveConfiguredLimits() {
         assertThatThrownBy(() -> properties.setMaxStringLength(0))
                 .isInstanceOf(IllegalArgumentException.class);

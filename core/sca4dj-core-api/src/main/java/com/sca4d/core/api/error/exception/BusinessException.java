@@ -49,7 +49,7 @@ public class BusinessException extends RuntimeException {
     /**
      * 返回用于国际化消息解析的参数副本。
      *
-     * @return 用于国际化消息解析的参数副本
+     * @return 参数数组的副本，修改返回值不影响本异常
      */
     public Object[] messageArguments() {
         return messageArguments.clone();

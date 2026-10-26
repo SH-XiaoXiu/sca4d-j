@@ -213,11 +213,11 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
     }
 
     /**
-     * 使用摘要隐藏限流存储键中的原始维度值。
+     * 建立只限定方法范围的内置维度限流键；方法签名以摘要形式写入键。
      *
-     * @param dimension 维度名称
-     * @param value 原始维度值
-     * @return 可用于限流存储的摘要键
+     * @param execution 当前方法执行
+     * @param dimension 内置限流维度
+     * @return 可用于限流存储的方法范围键
      */
     private static @NotNull RateLimitKey methodKey(
             @NotNull CallExecution execution,

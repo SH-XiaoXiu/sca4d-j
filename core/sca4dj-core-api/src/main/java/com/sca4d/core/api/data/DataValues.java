@@ -90,6 +90,7 @@ public class DataValues {
          * @param value 与键类型一致的值
          * @param <T> 值类型
          * @return 当前构建器
+         * @throws IllegalArgumentException 同一键已经登记时抛出
          */
         public <T> @NotNull Builder put(@NotNull DataKey<T> key, @NotNull T value) {
             Objects.requireNonNull(key, "数据键不能为空");

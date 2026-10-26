@@ -31,7 +31,7 @@ public class IdempotencyFingerprints {
      *
      * @param arguments 业务方法实参数组
      * @return 规范化参数 JSON
-     * @throws IllegalStateException 参数不能稳定转换成 JSON 时抛出
+     * @throws CoreApiException 参数不能稳定转换成 JSON 时抛出
      */
     public @NotNull String canonicalArguments(@NotNull Object[] arguments) {
         try {

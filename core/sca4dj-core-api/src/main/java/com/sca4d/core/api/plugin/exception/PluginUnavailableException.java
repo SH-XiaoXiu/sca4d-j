@@ -7,7 +7,7 @@ import com.sca4d.core.api.error.exception.BusinessException;
 public final class PluginUnavailableException extends BusinessException {
     private final String detail;
 
-    /** 创建仅包含目标编码的不可用错误。 */
+    /** 创建不可用错误，异常消息使用调用方提供的目标说明。 */
     public PluginUnavailableException(String message) {
         super(CoreErrorCode.UNAVAILABLE);
         this.detail = message;

@@ -6,15 +6,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.sca4d.core.api.call.*;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.core.api.i18n.TextLocalizer;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.core.api.version.*;
-import com.sca4d.core.api.version.exception.*;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.web.*;
-import com.sca4d.core.spring.web.exception.*;
 import org.junit.jupiter.api.*;
+import org.slf4j.MDC;
 import org.springframework.context.annotation.*;
+import org.springframework.core.env.MapPropertySource;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -36,9 +38,8 @@ class VersionHttpContractTest {
     /** 初始化 HttpConstants 与 GatewayConstants；它们是进程级配置，必须在 setup 创建 MockMvc 上下文前完成。 */
     @BeforeAll
     static void constants() {
-        com.sca4d.core.api.setting.ConfiguredConstants.initialize(HttpConstants.class, ignored -> null);
-        com.sca4d.core.api.setting.ConfiguredConstants
-                .initialize(com.sca4d.core.api.gateway.GatewayConstants.class, ignored -> null);
+        ConfiguredConstants.initialize(HttpConstants.class, ignored -> null);
+        ConfiguredConstants.initialize(GatewayConstants.class, ignored -> null);
     }
 
     @BeforeEach
@@ -48,7 +49,7 @@ class VersionHttpContractTest {
         context.getEnvironment()
                 .getPropertySources()
                 .addFirst(
-                        new org.springframework.core.env.MapPropertySource(
+                        new MapPropertySource(
                                 "version-test",
                                 Map.of("sca4dj.versioning.allow-unspecified", "true")));
         context.register(Config.class);
@@ -77,8 +78,8 @@ class VersionHttpContractTest {
                 .andExpect(jsonPath("data.displayName").value("Example"))
                 .andExpect(header().string("X-Api-Contract", "2"));
         assertThat(context.getBean(Projects.class).calls.get()).isEqualTo(2);
-        assertThat(org.slf4j.MDC.get("clientBuild")).isNull();
-        assertThat(org.slf4j.MDC.get("serverBuild")).isNull();
+        assertThat(MDC.get("clientBuild")).isNull();
+        assertThat(MDC.get("serverBuild")).isNull();
     }
 
     @Test

@@ -412,7 +412,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    /** 带 @Localize 字段的基类，name 的值由子类实现的 nameText() 返回的 LocalizableText 决定。 */
+    /** 带 @Localize 字段的基类，name 的值由本类 nameText() 返回的 LocalizableText 决定。 */
     private abstract static class LocalizedView extends BaseView {
 
         private final String key;

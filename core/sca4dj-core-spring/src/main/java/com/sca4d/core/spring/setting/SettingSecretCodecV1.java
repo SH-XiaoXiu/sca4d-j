@@ -7,7 +7,7 @@ import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 
-/** 使用旧的 Setting key 上下文读取版本一敏感设置密文，供历史数据和显式迁移使用。 */
+/** 使用旧的 Setting key 上下文编码和解码版本一敏感设置密文，供历史数据和显式迁移使用。 */
 public class SettingSecretCodecV1 implements SecretCodec<byte[]> {
 
     private static final @NotNull TreeCode CODE = TreeCode.of("SETTING/SECRET");
@@ -25,7 +25,7 @@ public class SettingSecretCodecV1 implements SecretCodec<byte[]> {
             @NotNull String key) {
         this.cipher = cipher;
         this.owner = owner;
-        this.key = text(key);
+        this.key = requireKey(key);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SettingSecretCodecV1 implements SecretCodec<byte[]> {
         return owner;
     }
 
-    private static @NotNull String text(@NotNull String value) {
+    private static @NotNull String requireKey(@NotNull String value) {
         if (value.isBlank()) {
             throw new IllegalArgumentException("Setting key 不能为空白");
         }

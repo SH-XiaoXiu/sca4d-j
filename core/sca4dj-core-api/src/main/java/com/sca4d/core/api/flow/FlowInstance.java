@@ -122,9 +122,9 @@ public class FlowInstance {
     }
 
     /**
-     * 创建时间。
+     * 开始时间。
      *
-     * @return 创建时间
+     * @return 开始时间
      */
     public Instant startedAt() {
         return startedAt;
@@ -191,6 +191,7 @@ public class FlowInstance {
      * 返回标记为已消费且版本递增的新快照。
      *
      * @return 标记为已消费且版本递增的新快照
+     * @throws BusinessException 结果已经消费时抛出
      */
     @Contract(value = "-> new", pure = true)
     public FlowInstance consume() {

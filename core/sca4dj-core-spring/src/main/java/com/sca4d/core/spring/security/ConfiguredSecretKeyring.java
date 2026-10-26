@@ -25,8 +25,8 @@ public class ConfiguredSecretKeyring implements SecretKeyring {
      *
      * @param properties 当前部署的密钥环配置
      * @throws NullPointerException 配置对象为空时抛出
-     * @throws IllegalStateException active key 缺失，或任一 key 不是有效 Base64 或不是 32 字节时抛出
-     * @throws NullPointerException 配置的 key-id 或密钥为 null 时抛出
+     * @throws IllegalStateException active key 缺失，或任一配置的密钥为 null 时抛出
+     * @throws CoreSpringException 任一 key 不是有效 Base64 或不是 32 字节时抛出
      */
     public ConfiguredSecretKeyring(@NotNull SecretKeyringProperties properties) {
         SecretKeyringProperties checked = Objects.requireNonNull(properties, "Secret keyring 配置不能为空");
@@ -57,7 +57,8 @@ public class ConfiguredSecretKeyring implements SecretKeyring {
      * @param keyId 配置中的 key-id
      * @param encodedKey Base64 编码的 32 字节密钥
      * @return 绑定该 key-id 的加密器
-     * @throws IllegalStateException 密钥为 null 或 Base64 解码、密钥长度验证失败时抛出
+     * @throws IllegalStateException 密钥为 null 时抛出
+     * @throws CoreSpringException Base64 解码或密钥长度验证失败时抛出
      */
     private static SecretCipher cipher(String keyId, String encodedKey) {
         if (encodedKey == null) {

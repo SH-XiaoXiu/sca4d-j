@@ -71,6 +71,7 @@ import com.sca4d.core.api.permission.ResourceScopeRequirement;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -85,6 +86,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -95,6 +97,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"ClassCanBeRecord", "ExtractMethodRecommender"})
@@ -106,7 +109,7 @@ class CallInvokerTest {
         return thread;
     });
 
-    @org.junit.jupiter.api.AfterAll
+    @AfterAll
     static void stopRenewalScheduler() {
         RENEWAL_SCHEDULER.shutdown();
     }
@@ -583,7 +586,7 @@ class CallInvokerTest {
 
     /** 保存测试中的环绕声明和行为，测试断言由实际调用结果表达。 */
     private static class Hook implements CallLifecycle.Around {
-        private final java.util.function.Function<CallLifecycle.Next, CallOutcome> action;
+        private final Function<CallLifecycle.Next, CallOutcome> action;
 
         private final Set<TreeCode> after;
 
@@ -598,7 +601,7 @@ class CallInvokerTest {
                 Set<TreeCode> after,
                 Set<TreeCode> before,
                 int priority,
-                java.util.function.Function<CallLifecycle.Next, CallOutcome> action) {
+                Function<CallLifecycle.Next, CallOutcome> action) {
             this.code = code;
             this.after = after;
             this.before = before;
@@ -1657,7 +1660,7 @@ class CallInvokerTest {
 
     /** 读取限流 Key 的动态维度值，验证调用者传给 IO 适配器的维度而非 App 前缀。 */
     private static String rateValue(Key key) {
-        return key.segments().get(2).toLowerCase(java.util.Locale.ROOT);
+        return key.segments().get(2).toLowerCase(Locale.ROOT);
     }
 
     private static class RateKeyResolver implements CallValueResolver<String> {

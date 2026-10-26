@@ -70,7 +70,8 @@ public class SettingBootstrap {
      * 在一个事务中取得互斥锁并应用全部 Settings ENV；任何标记或值非法时全部回滚。
      * 没有 `_INIT` 或 `_SYNC` 标记且 ENV 值不存在的设置保持数据库现状；ENV 值存在但缺少标记时抛出 IllegalStateException。
      *
-     * @throws IllegalStateException 标记值不是 true 或 false、INIT 与 SYNC 同时声明、INIT 设为 false、标记缺少值、值无法解码或敏感设置缺少密钥环时抛出
+     * @throws IllegalStateException 标记值不是 true 或 false、INIT 与 SYNC 同时声明、INIT 设为 false、标记缺少值或敏感设置缺少密钥环时抛出
+     * @throws CoreSpringException ENV 值无法被设置 Codec 解码时抛出
      */
     @Transactional
     public void initialize() {

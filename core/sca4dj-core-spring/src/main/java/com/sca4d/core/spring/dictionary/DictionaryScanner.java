@@ -36,7 +36,8 @@ public class DictionaryScanner {
      *
      * @param packages 应用基础包与 Sca4d-J 公共包
      * @return 按完整类名排序的枚举类型；没有匹配类型时返回空列表
-     * @throws IllegalStateException 扫描结果缺少类名、类型无法加载或加载的类型不是枚举时抛出
+     * @throws IllegalStateException 扫描结果缺少类名或加载的类型不是枚举时抛出
+     * @throws CoreSpringException 类型无法加载时抛出
      */
     public @NotNull List<@NotNull Class<? extends Enum<?>>> scan(
             @NotNull Collection<@NotNull String> packages) {

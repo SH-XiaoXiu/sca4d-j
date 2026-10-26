@@ -34,7 +34,7 @@ public final class FileSettingReader implements SettingReader<byte[]> {
      * 读取 `owner` 映射到的设置文件内容；文件不存在时返回值为 null 的 SettingValue。
      *
      * @throws IllegalArgumentException 定位路径超出根目录、路径中包含符号链接或文件超过 1 MiB 时抛出
-     * @throws IllegalStateException 文件读取发生 IO 错误时抛出，异常消息只包含设置键
+     * @throws CoreSpringException 文件读取发生 IO 错误时抛出，异常消息只包含设置键
      */
     @Override
     public @NotNull SettingValue<byte[]> read(@NotNull TreeCode setting, @NotNull SettingOwner owner) {

@@ -21,7 +21,15 @@ public class JacksonMessageCodec<M extends Message> implements MessageCodec<M> {
 
     private final int version;
 
-    /** 创建使用指定 JSON 映射器的消息编解码器。 */
+    /**
+     * 创建使用指定 JSON 映射器的消息编解码器。
+     *
+     * @param code 消息类型的稳定编码
+     * @param version 消息协议版本，必须为正数
+     * @param valueType 解码后的消息 Java 类型
+     * @param json 编解码使用的 JSON 映射器
+     * @throws IllegalArgumentException 协议版本不是正数时抛出
+     */
     public JacksonMessageCodec(
             @NotNull TreeCode code,
             int version,

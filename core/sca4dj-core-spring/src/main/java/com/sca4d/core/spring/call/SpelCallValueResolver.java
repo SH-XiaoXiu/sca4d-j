@@ -48,7 +48,8 @@ public class SpelCallValueResolver implements SPICallValueResolver {
      * @param expression 非空白 SpEL
      * @param execution 当前方法执行
      * @return 表达式原始值，包括明确的空值
-     * @throws IllegalStateException 表达式为空白、解析失败、引用未定义变量，或在调用前读取 `result`、`error`、`outcome` 时抛出
+     * @throws IllegalStateException 表达式为空白、引用未定义变量，或在调用前读取 `result`、`error`、`outcome` 时抛出
+     * @throws CoreSpringException 表达式解析或取值失败时抛出
      */
     @Override
     public @Nullable Object resolve(@NotNull String expression, @NotNull CallExecution execution) {

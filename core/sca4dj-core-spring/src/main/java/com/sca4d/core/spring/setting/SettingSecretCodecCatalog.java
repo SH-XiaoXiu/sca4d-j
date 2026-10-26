@@ -29,7 +29,12 @@ public class SettingSecretCodecCatalog {
         return (SettingSecretCodecV2) codecs.current();
     }
 
-    /** @param version 外部保存的加密上下文版本 @return 对应版本 Codec */
+    /**
+     * 按外部保存的加密上下文版本选择解密 Codec。
+     *
+     * @param version 外部保存的加密上下文版本
+     * @return 对应版本 Codec
+     */
     public @NotNull SecretCodec<byte[]> select(int version) {
         return (SecretCodec<byte[]>) codecs.select(version);
     }

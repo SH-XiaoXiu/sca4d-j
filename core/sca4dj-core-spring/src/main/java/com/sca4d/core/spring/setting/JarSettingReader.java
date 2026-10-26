@@ -37,7 +37,7 @@ public final class JarSettingReader implements SettingReader<byte[]> {
      * 每次调用都重新打开 JAR，不缓存读取结果。
      *
      * @throws IllegalArgumentException `owner` 与构造时的所属不一致，或资源超过 1 MiB 时抛出
-     * @throws IllegalStateException JAR 打开或资源读取发生 IO 错误时抛出
+     * @throws CoreSpringException JAR 打开或资源读取发生 IO 错误时抛出
      */
     @Override
     public @NotNull SettingValue<byte[]> read(@NotNull TreeCode setting, @NotNull SettingOwner requested) {

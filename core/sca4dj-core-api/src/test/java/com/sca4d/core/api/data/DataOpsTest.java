@@ -275,7 +275,7 @@ class DataOpsTest {
     }
 
     @Test
-    @DisplayName("Builds Strict Json Objects AndSnapshots Mutable Inputs")
+    @DisplayName("Builds Strict Json Objects And Snapshots Mutable Inputs")
     void buildsStrictJsonObjectsAndSnapshotsMutableInputs() {
         Map<String, Object> mutable = new LinkedHashMap<>();
         mutable.put("count", 1);

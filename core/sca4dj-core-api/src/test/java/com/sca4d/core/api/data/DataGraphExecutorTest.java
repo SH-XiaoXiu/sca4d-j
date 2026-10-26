@@ -11,12 +11,14 @@ import com.sca4d.core.api.data.exception.DataOperationExecutionException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 class DataGraphExecutorTest {
 
@@ -28,7 +30,7 @@ class DataGraphExecutorTest {
         DataKey<Integer> right = DataKey.of("right", Integer.class);
         DataKey<Integer> sum = DataKey.of("sum", Integer.class);
         CountDownLatch entered = new CountDownLatch(2);
-        java.util.function.Function<DataValues, Integer> branch = values -> {
+        Function<DataValues, Integer> branch = values -> {
             entered.countDown();
             try {
                 if (!entered.await(5, TimeUnit.SECONDS)) {
@@ -73,7 +75,7 @@ class DataGraphExecutorTest {
         var failed = DataGraphExecutor.executeAsync(graph, DataValues.builder().build(), Runnable::run);
         assertThrows(CompletionException.class, failed::join);
         assertEquals(0, dependents.get());
-        List<Runnable> queued = new java.util.ArrayList<>();
+        List<Runnable> queued = new ArrayList<>();
         var cancelled = DataGraphExecutor.executeAsync(graph, DataValues.builder().build(), queued::add);
         assertTrue(cancelled.cancel(true));
         List.copyOf(queued).forEach(Runnable::run);

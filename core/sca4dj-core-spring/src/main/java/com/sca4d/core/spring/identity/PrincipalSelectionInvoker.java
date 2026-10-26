@@ -36,7 +36,7 @@ public class PrincipalSelectionInvoker {
      * @param account 当前账号；没有时为空
      * @param input 当前 HTTP 请求和 Controller 参数形成的选择输入
      * @return 选择出的业务身份；选择器无法确定时为空
-     * @throws BusinessException 参数类型是接口或抽象类，或者 JavaBean 实例化、属性绑定失败时抛出，错误码为 BAD_REQUEST
+     * @throws BusinessException 参数类型是接口或抽象类，或属性绑定失败时抛出，错误码为 BAD_REQUEST；JavaBean 实例化失败按选择器配置错误直接向上传播
      */
     @SuppressWarnings("unchecked")
     public @Nullable Principal select(

@@ -47,7 +47,7 @@ public class CallInvoker {
     }
 
     /**
-     * 同步完成方法执行和各环绕处理；返回 Future 只代表本次调度返回，不延伸事务或锁。
+     * 同步完成方法执行和各环绕处理，结束后才返回最终结果。
      *
      * @param execution 当前方法的独立执行范围
      * @param target 实际方法；可返回 null
@@ -346,7 +346,7 @@ public class CallInvoker {
         } catch (Exception | Error failure) {
             throw failure;
         } catch (Throwable throwable) {
-            throw new CoreApiException("调用抛出了非 Exception/ Error 的 Throwable", throwable);
+            throw new CoreApiException("调用抛出了非 Exception/Error 的 Throwable", throwable);
         }
     }
 

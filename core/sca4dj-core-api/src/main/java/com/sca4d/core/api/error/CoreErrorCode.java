@@ -27,13 +27,13 @@ public enum CoreErrorCode implements ErrorCode {
     UNAVAILABLE("1098", ErrorCategory.UNAVAILABLE, "error.core.unavailable"),
     /** Core 无法归类的内部失败。 */
     INTERNAL("1099", ErrorCategory.INTERNAL, "error.core.internal"),
-    /** 流程尚未完成，不能消费 */
+    /** 流程尚未完成，不能消费。 */
     FLOW_NOT_COMPLETED("1010", ErrorCategory.CONFLICT, "error.flow.not-completed"),
-    /** 流程实例已经过期 */
+    /** 流程实例已经过期。 */
     FLOW_EXPIRED("1011", ErrorCategory.CONFLICT, "error.flow.expired"),
-    /** 流程结果已经消费或只能消费一次 */
+    /** 流程结果已经消费或只能消费一次。 */
     FLOW_RESULT_CONSUMED("1012", ErrorCategory.CONFLICT, "error.flow.result-consumed"),
-    /** 流程实例标识已经存在 */
+    /** 流程实例标识已经存在。 */
     FLOW_ID_EXISTS("1013", ErrorCategory.CONFLICT, "error.flow.id-exists");
 
     private final String code;

@@ -68,7 +68,8 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
      * 敏感设置使用元数据中 keyId 对应的密钥解密密文后再由 Codec 解码。
      *
      * @throws IllegalArgumentException 定位路径超出根目录、包含符号链接或文件超过 1 MiB 时抛出
-     * @throws IllegalStateException 元数据不一致或无效、敏感设置缺少密钥环或密钥、内容缺失或读取发生 IO 错误时抛出，异常消息不包含设置值
+     * @throws IllegalStateException 元数据不一致或无效、敏感设置缺少密钥环或密钥、内容缺失时抛出，异常消息不包含设置值
+     * @throws CoreSpringException 读取发生 IO 错误时抛出
      */
     @Override
     public @NotNull SettingValue<JsonNode> read(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
@@ -139,7 +140,7 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
      * 删除 `setting` 与 `owner` 对应的设置文件，文件不存在时不报错。
      * 不比较修订号；删除后 `read` 返回修订为 0 的空值。
      *
-     * @throws IllegalStateException 删除文件失败时抛出
+     * @throws CoreSpringException 删除文件失败时抛出
      */
     @Override
     public void erase(@NotNull TreeCode setting, @NotNull SettingOwner owner) {

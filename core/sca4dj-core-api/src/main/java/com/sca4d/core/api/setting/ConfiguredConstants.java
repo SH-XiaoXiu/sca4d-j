@@ -156,7 +156,7 @@ public final class ConfiguredConstants {
                 .get();
     }
 
-    /** 保存当前线程正在初始化的常量类和解析结果。 */
+    /** 保存当前线程正在初始化的配置来源和已经解析的配置值。 */
     private static final class Initialization {
         private final Function<String, String> source;
 

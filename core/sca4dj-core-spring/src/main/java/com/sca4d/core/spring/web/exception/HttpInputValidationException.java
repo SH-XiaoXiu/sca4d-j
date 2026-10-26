@@ -15,6 +15,7 @@ public class HttpInputValidationException extends RuntimeException {
      * 创建包含全部默认校验失败字段的异常。
      *
      * @param violations 非空的字段失败结果
+     * @throws IllegalArgumentException violations 为空时抛出
      */
     public HttpInputValidationException(@NotNull List<@NotNull FieldViolation> violations) {
         super("HTTP 输入不满足默认校验规则");

@@ -26,7 +26,7 @@ public class FlowEngine {
     private final FlowStore store;
 
     /**
-     * 创建操作实例的引擎。
+     * 创建流程实例的推进引擎。
      *
      * @param catalog 定义目录
      * @param store 实例存储
@@ -91,7 +91,7 @@ public class FlowEngine {
         FlowInstance current = activeInstance(flowId, advancedAt);
         FlowDefinition definition = catalog.loadByNameAndVersion(current.definitionName(), current.definitionVersion());
         if (definition.graph().node(current.currentNodeId()).type() == FlowNodeType.TERMINAL) {
-            throw new IllegalStateException("终态流程不能继续推进: " + flowId);
+            throw new BusinessException(CoreErrorCode.CONFLICT, new IllegalStateException("终态流程不能继续推进: " + flowId));
         }
         // 先选择唯一转换，再以当前版本作为条件写入下一节点，冲突时不返回伪造的成功结果。
         FlowTransition transition = definition.graph().selectTransition(current, event);
@@ -136,7 +136,10 @@ public class FlowEngine {
         Objects.requireNonNull(flowId, "流程实例标识不能为空");
         Objects.requireNonNull(instant, "流程操作时间不能为空");
         FlowInstance instance = store.find(flowId)
-                .orElseThrow(() -> new IllegalArgumentException("流程实例不存在: " + flowId));
+                .orElseThrow(
+                        () -> new BusinessException(
+                                CoreErrorCode.NOT_FOUND,
+                                new IllegalArgumentException("流程实例不存在: " + flowId)));
         if (instance.isExpiredAt(instant)) {
             throw new BusinessException(CoreErrorCode.FLOW_EXPIRED);
         }

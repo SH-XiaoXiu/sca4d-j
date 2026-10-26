@@ -74,7 +74,7 @@ public class AesGcmSecretCipher implements SecretCipher {
      * @param purpose 秘密所属的业务用途，解密时必须传入相同值
      * @param plaintext 秘密明文
      * @return 包含当前 key-id 的密文，内容为 nonce 加 GCM 密文和 tag
-     * @throws IllegalStateException 加密算法不可用时抛出
+     * @throws CoreSpringException 加密算法不可用或加密失败时抛出
      */
     @Override
     public @NotNull EncryptedSecret encrypt(
@@ -107,7 +107,8 @@ public class AesGcmSecretCipher implements SecretCipher {
      * @param secret 待解密的加密秘密
      * @return 解密后的明文字节
      * @throws IllegalArgumentException 密文的 key-id 不是当前密钥时抛出
-     * @throws IllegalStateException 密文长度不足、标签验证失败或解密失败时抛出，不返回部分明文
+     * @throws IllegalStateException 密文长度不足时抛出
+     * @throws CoreSpringException 标签验证失败或解密失败时抛出，不返回部分明文
      */
     @Override
     public byte @NotNull [] decrypt(

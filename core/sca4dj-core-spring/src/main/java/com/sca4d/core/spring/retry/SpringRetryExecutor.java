@@ -83,8 +83,9 @@ public class SpringRetryExecutor implements RetryExecutor {
                 if (throwable instanceof Error
                         || throwable instanceof CancellationException
                         || throwable instanceof RetryInterruptedException
-                        || Thread.currentThread().isInterrupted())
+                        || Thread.currentThread().isInterrupted()) {
                     return;
+                }
                 if (throwable instanceof InterruptedException) {
                     Thread.currentThread().interrupt();
                     return;
