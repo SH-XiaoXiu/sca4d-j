@@ -39,7 +39,7 @@ public class ThingDataJsonCodec {
      *
      * @param values 已通过物模型校验的 code 到值映射，不能包含 null 值
      * @return 规范 JSON object 文本
-     * @throws IllegalStateException 值无法编码为 JSON 时抛出
+     * @throws IotException 值无法编码为 JSON 时抛出
      */
     @CheckReturnValue
     public @NotNull String encodeMap(@NotNull Map<String, ?> values) {
@@ -56,7 +56,7 @@ public class ThingDataJsonCodec {
      *
      * @param value 已校验的物模型值，不能为 null
      * @return 规范 JSON 文本
-     * @throws IllegalStateException 值无法编码为 JSON 时抛出
+     * @throws IotException 值无法编码为 JSON 时抛出
      */
     @CheckReturnValue
     public @NotNull String encodeValue(@NotNull Object value) {
@@ -68,7 +68,7 @@ public class ThingDataJsonCodec {
      *
      * @param json JSON object 文本
      * @return 不可修改的顶层字段 Map
-     * @throws IllegalStateException JSON 语法不合法或不是 object 时抛出
+     * @throws IotException JSON 语法不合法或不是 object 时抛出
      */
     @CheckReturnValue
     public @NotNull Map<String, Object> decodeMap(@NotNull String json) {
@@ -84,7 +84,8 @@ public class ThingDataJsonCodec {
      *
      * @param json 单个 JSON 值文本
      * @return 普通 Java 值，不会为 null
-     * @throws IllegalStateException JSON 语法不合法或结果为 null 时抛出
+     * @throws IotException JSON 语法不合法时抛出
+     * @throws NullPointerException JSON 结果为 null 时抛出
      */
     @CheckReturnValue
     public @NotNull Object decodeValue(@NotNull String json) {

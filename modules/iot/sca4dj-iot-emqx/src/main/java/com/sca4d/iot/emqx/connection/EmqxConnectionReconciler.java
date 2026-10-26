@@ -211,7 +211,9 @@ public class EmqxConnectionReconciler {
                 connection.id().value());
     }
 
-    /** 把带有 Sca4d-J 认证属性的 Management API 连接转换为通用连接信息。 */
+    /**
+     * 把带有 Sca4d-J 认证属性的 Management API 连接转换为通用连接信息；属性不一致、授权过期或无法验证时断开 Broker 连接并返回 null。
+     */
     private @Nullable DeviceConnection deviceConnection(EmqxClientConnection managed, @Nullable Device device) {
         Map<String, String> attributes = managed.clientAttributes();
         // 没有 device_id 属性且未登记 Device 的 Client 不属于设备连接，直接忽略，不断开 Broker 连接。

@@ -106,7 +106,7 @@ public class DesiredStateService {
      *
      * <p>必须在调用方事务中执行。任一值校验失败、属性不存在或不可写时抛出 {@link BusinessException}，
      * 且不修改数据库。没有实际变化时不推进 desiredSequence。并发修改冲突时最多重试 8 次，仍失败则抛出
-     * {@link IllegalStateException}。
+     * {@link BusinessException}（{@link IotErrorCode#STATE_CONFLICT}）。
      *
      * @param deviceId Device 标识
      * @param change 本次明确 set 与 clear 的属性
@@ -246,7 +246,7 @@ public class DesiredStateService {
             break;
         }
         if (result == null) {
-            throw new IllegalStateException("desired state 并发修改持续发生，请重试请求");
+            throw new BusinessException(IotErrorCode.STATE_CONFLICT);
         }
 
         // 在同一事务中登记 Device 变化；事务提交后再由通知器发布可见变化。
@@ -267,7 +267,9 @@ public class DesiredStateService {
     private static ThingProperty writableProperty(ThingModel model, String code) {
         ThingProperty property = model.properties().get(code);
         if (property == null || property.access() != ThingPropertyAccess.READ_WRITE) {
-            throw new IllegalArgumentException("属性不存在或不可写: " + code);
+            throw new BusinessException(
+                    IotErrorCode.INVALID_INPUT,
+                    new IllegalArgumentException("属性不存在或不可写: " + code));
         }
         return property;
     }

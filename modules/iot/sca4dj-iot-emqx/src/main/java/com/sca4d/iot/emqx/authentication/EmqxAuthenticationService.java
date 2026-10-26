@@ -25,6 +25,13 @@ public class EmqxAuthenticationService {
 
     private final @NotNull DeviceConnectionAdmission admission;
 
+    /**
+     * 创建 EMQX 认证服务。
+     *
+     * @param requests 从 EMQX 认证请求生成 Device 连接请求的工厂
+     * @param admission Device 连接准入入口，决定 Device 和接入方式是否可以连接
+     * @param authorization 为通过准入的 Device 生成 MQTT ACL 的授权服务
+     */
     public EmqxAuthenticationService(
             @NotNull EmqxDeviceConnectionRequestFactory requests,
             @NotNull DeviceConnectionAdmission admission,

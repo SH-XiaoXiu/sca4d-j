@@ -158,7 +158,12 @@ public class MqttDeviceProtocol implements DeviceUplinkProtocol {
                 .toList();
     }
 
-    /** @param topicIdentity Topic 中解析出的设备身份 @return 对应 MQTT Client ID */
+    /**
+     * 把 Topic 中解析出的设备身份映射为 MQTT Client ID。
+     *
+     * @param topicIdentity Topic 中解析出的设备身份
+     * @return 对应 MQTT Client ID
+     */
     public @NotNull String clientId(@NotNull String topicIdentity) {
         return topicIdentityMapper.clientId(topicIdentity);
     }
@@ -278,7 +283,7 @@ public class MqttDeviceProtocol implements DeviceUplinkProtocol {
         return values;
     }
 
-    /** 在通配符边界执行 DataKey Java 类型检查。 */
+    /** 把非空下行字段值写入 DataValues；字段的 Java 类型已由 validate 按物模型检查。 */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static void put(DataValues.Builder values, DataKey key, Object value) {
         values.put(key, Objects.requireNonNull(value, "下行消息缺少 DataKey 值: " + key.name()));

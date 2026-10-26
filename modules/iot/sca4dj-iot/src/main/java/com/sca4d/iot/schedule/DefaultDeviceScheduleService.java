@@ -370,7 +370,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 executionStatus,
                 messageId,
                 failureCode)) {
-            throw new IllegalStateException("推进设备定时规则时发生并发修改");
+            throw new BusinessException(IotErrorCode.STATE_CONFLICT);
         }
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
         data.put("scheduleId", schedule.scheduleId());
