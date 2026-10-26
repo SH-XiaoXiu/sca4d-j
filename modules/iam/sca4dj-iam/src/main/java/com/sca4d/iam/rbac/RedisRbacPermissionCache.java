@@ -79,7 +79,7 @@ public class RedisRbacPermissionCache implements RbacPermissionCache {
             return new RbacPermissionCacheLookup(Map.of(), Map.of());
         }
 
-        // 一次 GET 原子读取修订号和值，确保每个命中值都属于同时读取的修订号。
+        // 一次 MGET 同时读取修订号和值，确保每个命中值都与同一次读取得到的修订号配对。
         try {
             List<String> values = redis.opsForValue().multiGet(keys);
             if (values == null || values.size() != keys.size()) {

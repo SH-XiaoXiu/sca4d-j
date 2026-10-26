@@ -116,7 +116,8 @@ public class AuditMessageV2Codec implements MessageCodec<AuditMessage> {
             if (payloadJson != null) {
                 json.readTree(payloadJson);
             }
-            // 关联资源缺少 type 或 id 时 requireNonNull 抛出 NullPointerException，解析整体失败。
+            // 关联资源缺少 type 或 id 时 requireNonNull 抛出 NullPointerException，
+            // 外层统一转换为 IllegalArgumentException，解析整体失败。
             List<Resource.Ref> resources = new ArrayList<>();
             JsonNode related = w.get("relatedResources");
             if (related != null) {

@@ -72,6 +72,7 @@ public class IdentityService {
      *
      * @param type      固定 Subject 类型
      * @return 新建的 Subject
+     * @throws IllegalArgumentException 请求创建 SYSTEM 类型时抛出，SYSTEM Subject 只能由启动登记
      */
     @Transactional
     @CheckReturnValue
@@ -131,6 +132,7 @@ public class IdentityService {
      * @param id        Subject 标识
      * @param status    新状态
      * @throws BusinessException 目标不存在时抛出
+     * @throws IllegalArgumentException 目标为 SYSTEM Subject 时抛出
      */
     @Transactional
     public void changeSubjectStatus(
@@ -293,6 +295,7 @@ public class IdentityService {
      * @param type      Principal 精确 Java 类型
      * @return 新建的 Principal 标识
      * @throws BusinessException Java 类型没有 Principal Codec 时抛出
+     * @throws IllegalArgumentException 类型为 SystemPrincipal 时抛出，系统身份只能由启动登记
      */
     @Transactional
     @CheckReturnValue
@@ -416,6 +419,7 @@ public class IdentityService {
      * @param id        Principal 标识
      * @param status    新状态
      * @throws BusinessException 目标不存在时抛出
+     * @throws IllegalArgumentException 目标为系统身份时抛出，系统身份状态只能人工维护
      */
     @Transactional
     public void changePrincipalStatus(
@@ -444,6 +448,7 @@ public class IdentityService {
      * @param ids Principal 标识集合；重复标识只处理一次
      * @param type Principal 精确 Java 类型
      * @throws BusinessException Java 类型没有 Principal Codec 时抛出
+     * @throws IllegalArgumentException 类型为 SystemPrincipal 时抛出，系统身份只能人工迁移
      * @throws AffectedRowsMismatchException 任一 Principal 不存在、类型不匹配或已经删除时抛出
      */
     @Transactional
@@ -474,6 +479,7 @@ public class IdentityService {
      * @param ids Principal 标识集合；重复标识只处理一次
      * @param type Principal 精确 Java 类型
      * @throws BusinessException Java 类型没有 Principal Codec 时抛出
+     * @throws IllegalArgumentException 类型为 SystemPrincipal 时抛出，系统身份只能人工迁移
      * @throws AffectedRowsMismatchException 任一 Principal 不存在、类型不匹配或未删除时抛出
      */
     @Transactional
@@ -501,6 +507,7 @@ public class IdentityService {
      * @param accountId   Account 标识
      * @param principalId Principal 标识
      * @throws BusinessException Account 或 Principal 不可用时抛出
+     * @throws IllegalArgumentException Principal 为系统身份时抛出，系统身份不能授权给登录 Account
      */
     @Transactional
     public void link(@NotNull Long accountId, @NotNull Long principalId) {

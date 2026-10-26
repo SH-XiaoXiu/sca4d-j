@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.plugin.*;
 import com.sca4d.core.api.plugin.exception.*;
-import com.sca4d.core.api.plugin.exception.PluginUnavailableException;
 import com.sca4d.plugin.runtime.exception.PluginException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

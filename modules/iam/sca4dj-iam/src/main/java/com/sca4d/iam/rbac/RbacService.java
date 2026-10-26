@@ -515,7 +515,7 @@ public class RbacService {
     }
 
     /**
-     * 在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session。
+     * 在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session；事务外调用时立即执行。
      */
     public void invalidatePermissions(
             @NotNull RbacScope scope,

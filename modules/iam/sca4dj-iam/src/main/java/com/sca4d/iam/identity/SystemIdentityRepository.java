@@ -55,7 +55,8 @@ public class SystemIdentityRepository {
      * @param systemSubjectId 已配置的 SYSTEM Subject ID；此处不发布运行期身份
      * @param configured 系统身份编码与固定 Principal ID
      * @return 已从数据库确认的系统身份表
-     * @throws IllegalStateException 不在事务内、保留 Subject 冲突、绑定被改写或状态异常时抛出
+     * @throws IamException 配置 ID 对应的 SYSTEM Subject 已有记录冲突时抛出，需要人工迁移后重启
+     * @throws IllegalStateException 不在事务内、Subject 类型或状态异常、配置 ID 已被占用、绑定被改写或 Principal 状态异常时抛出
      */
     public @NotNull Map<TreeCode, SystemPrincipal> register(
             long systemSubjectId,

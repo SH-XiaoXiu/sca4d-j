@@ -38,6 +38,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
+/** 验证通用 RBAC 服务的领域路由、Operation 校验、授权缓存只回源缺失项，以及权限变化后的缓存失效。 */
 class RbacServiceTest {
 
     private static final long DEFAULT_ID = 11L;

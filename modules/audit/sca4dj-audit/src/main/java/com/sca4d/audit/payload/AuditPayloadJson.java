@@ -44,7 +44,13 @@ public class AuditPayloadJson {
         this.properties = Objects.requireNonNull(properties, "审计配置不能为空");
     }
 
-    /** 把可选强类型载荷转换成可以直接写入数据库的 JSON。 */
+    /**
+     * 把可选强类型载荷转换成可以直接写入数据库的 JSON。
+     *
+     * @param payload 待保存的载荷，为 null 时不生成结果
+     * @return 类型、版本和脱敏后的 JSON；超过 maxPayloadBytes 时保存截断标记而不是原内容，payload 为 null 时返回 null
+     * @throws AuditException 脱敏后的 JSON 无法序列化时抛出
+     */
     @Nullable
     public EncodedAuditPayload encode(@Nullable AuditPayload payload) {
         if (payload == null) {
@@ -76,7 +82,15 @@ public class AuditPayloadJson {
         return new EncodedAuditPayload(type, version, json);
     }
 
-    /** 返回原始 JSON，并在存在对应 Codec 且内容未截断时附加强类型结果。 */
+    /**
+     * 返回原始 JSON，并在存在对应 Codec 且内容未截断时附加强类型结果。
+     *
+     * @param type 持久化的载荷类型，{@code raw} 表示不使用 Codec
+     * @param version 持久化的载荷版本
+     * @param json 数据库中保存的 JSON 文本
+     * @return 原始 JSON 与可选的强类型载荷，没有匹配 Codec 时强类型结果为 null
+     * @throws AuditException JSON 无法读取时抛出
+     */
     @NotNull
     public AuditPayloadData decode(@NotNull String type, int version, @NotNull String json) {
         try {

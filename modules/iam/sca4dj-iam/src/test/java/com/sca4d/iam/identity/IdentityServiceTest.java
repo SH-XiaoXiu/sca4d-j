@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+/** 验证身份服务在访问 Repository 前拒绝非法输入，并保持 Principal 批量删除、恢复和条件查询的类型与顺序约束。 */
 class IdentityServiceTest {
     private static final AccountIdentifierType EMAIL = new AccountIdentifierType("EMAIL");
 
