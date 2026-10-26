@@ -90,7 +90,7 @@ public final class JobDeliveryInsert {
         return workKey;
     }
 
-    /** @return 重叠策略名称 */
+    /** @return 重叠策略 */
     public @NotNull OverlapPolicy getOverlapPolicy() {
         return overlapPolicy;
     }

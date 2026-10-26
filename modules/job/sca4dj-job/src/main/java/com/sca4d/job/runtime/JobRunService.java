@@ -294,7 +294,7 @@ public class JobRunService {
                 })));
     }
 
-    /** 从已保存的广播目标快照和各目标运行记录还原 JobDispatch；快照无法解析时抛出 IllegalStateException。 */
+    /** 从已保存的广播目标快照和各目标运行记录还原 JobDispatch；快照无法解析时抛出 JobException。 */
     private @NotNull JobDispatch dispatchResult(long dispatchId, @NotNull String targetsJson) {
         Map<String, UUID> snapshot;
         try {
