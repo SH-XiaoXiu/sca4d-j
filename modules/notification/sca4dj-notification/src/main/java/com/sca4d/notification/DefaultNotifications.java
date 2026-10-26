@@ -87,6 +87,9 @@ public class DefaultNotifications implements Notifications {
 
     /**
      * 执行类型回调，返回渠道路由已经确定的标准 Notification。
+     *
+     * @param deferAvailability {@code true} 表示 Outbox 入队，保留目标渠道，由投递器在提交后解析可用性；
+     *                          {@code false} 表示同步发送，立即过滤不可用渠道
      */
     private <T> @NotNull Notification resolve(
             @NotNull NotificationType<T> type,
