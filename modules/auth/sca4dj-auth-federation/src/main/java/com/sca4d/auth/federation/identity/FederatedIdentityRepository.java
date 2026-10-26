@@ -99,8 +99,8 @@ public class FederatedIdentityRepository {
 
     /** 按调用方读取的当前版本删除身份绑定。 */
     @AffectedRows(target = "联邦身份绑定", whenZero = ZeroRowPolicy.OPTIMISTIC_LOCK)
-    public void delete(long identityId, long accountId, long fallbackVersion) {
-        Version expected = new Version(fallbackVersion);
+    public void delete(long identityId, long accountId, long version) {
+        Version expected = new Version(version);
         mapper.delete(identityId, accountId, expected.value());
     }
 

@@ -14,6 +14,7 @@ import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.logging.LogMark;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -160,6 +161,9 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
     /**
      * 为 Account 创建、轮换或重新签发 MAC Key。
      *
+     * <p>已有 Credential 时会把旧 Credential 替换为新版本，并结束该 Account 的全部 Session；
+     * Key 明文只出现在返回值中，数据库只保存加密后的 Key。
+     *
      * @param account 已经由管理流程确认存在的 Account；Account 停用时仍允许预置或轮换 Credential
      * @return 新 Credential 和只在本次调用可见的 Key
      */
@@ -180,7 +184,9 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
         if (current != null) {
             sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
         }
-        LOG.info("HMAC Credential 已签发 | accountId={} version={}", accountId, saved.version().value());
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log("HMAC Credential 已签发 | accountId={} version={}", accountId, saved.version().value());
         return new IssuedHmacKey(saved, plaintext);
     }
 
@@ -220,7 +226,9 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
                 Objects.requireNonNull(revokedAt, "撤销时间不能为空"));
         if (revoked) {
             sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
-            LOG.info("HMAC Credential 已撤销 | accountId={}", accountId);
+            LOG.atInfo()
+                    .addMarker(LogMark.AFTER_COMMIT)
+                    .log("HMAC Credential 已撤销 | accountId={}", accountId);
         }
         return revoked;
     }

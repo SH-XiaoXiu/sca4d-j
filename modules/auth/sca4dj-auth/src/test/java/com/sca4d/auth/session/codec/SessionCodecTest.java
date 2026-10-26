@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+/** 验证 Session wire 的格式版本、Codec 选择、紧凑标识集合和损坏数据统一转换为 AuthException。 */
 class SessionCodecTest {
 
     private static final String LEGACY_SESSION_WIRE = """
@@ -210,6 +211,7 @@ class SessionCodecTest {
         return wire;
     }
 
+    /** 断言修改后的 wire 解码失败，并统一以 AuthException 报告。 */
     private static void assertDecodeFails(SessionCodec codec, ObjectNode wire) throws Exception {
         String encoded = SessionTestFixture.OBJECT_MAPPER.writeValueAsString(wire);
         assertThatThrownBy(() -> codec.decode(encoded)).isInstanceOf(AuthException.class)

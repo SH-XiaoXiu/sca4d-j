@@ -12,6 +12,7 @@ import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
+import com.sca4d.core.api.logging.LogMark;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -146,6 +147,8 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
      * @param account      已经由管理流程确认存在的 Account；Account 停用时仍允许预置证书
      * @param registration 只包含 DER 公钥证书的登记数据
      * @return 已保存且不包含 DER 或私钥的 Credential
+     * @throws BusinessException 证书无法解析、已过期或 notAfter 不晚于 notBefore 时抛出 INVALID_CERTIFICATE；
+     *                           同一指纹已经登记时抛出 CREDENTIAL_CONFLICT
      */
     @Transactional
     public @NotNull X509Credential register(
@@ -176,11 +179,13 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
         } catch (DuplicateKeyException exception) {
             throw new BusinessException(X509ErrorCode.CREDENTIAL_CONFLICT, exception);
         }
-        LOG.info(
-                "X.509 Credential 已登记 | accountId={} credentialId={} notAfter={}",
-                checkedAccount.accountId(),
-                credential.id(),
-                credential.notAfter());
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log(
+                        "X.509 Credential 已登记 | accountId={} credentialId={} notAfter={}",
+                        checkedAccount.accountId(),
+                        credential.id(),
+                        credential.notAfter());
         return credential;
     }
 
@@ -226,12 +231,14 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
         }
         credentials.updateStatus(credential, X509Credential.Status.REVOKED, clock.instant());
         sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
-        LOG.info("X.509 Credential 已撤销 | accountId={} credentialId={}", accountId, credentialId);
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log("X.509 Credential 已撤销 | accountId={} credentialId={}", accountId, credentialId);
         return true;
     }
 
     /**
-     * 撤销 Account 的全部有效 X.509 Credential。
+     * 撤销 Account 的全部有效 X.509 Credential；有 Credential 被撤销时终止该 Account 的全部 Session。
      *
      * @param accountId Account 标识
      */
@@ -244,7 +251,9 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
                 clock.instant());
         if (revoked) {
             sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
-            LOG.info("Account 全部 X.509 Credential 已撤销 | accountId={}", accountId);
+            LOG.atInfo()
+                    .addMarker(LogMark.AFTER_COMMIT)
+                    .log("Account 全部 X.509 Credential 已撤销 | accountId={}", accountId);
         }
     }
 

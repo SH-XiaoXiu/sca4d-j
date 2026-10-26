@@ -295,6 +295,10 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
         PasswordCredential current = loadByAccountId(accountId, checkedExpected);
         PasswordCredential changed = credentials.changeStatus(current, checkedStatus);
         sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
+        LOG.debug(
+                "Password Credential 状态变更和旧 Session 终止已写入事务 | accountId={} status={}",
+                accountId,
+                changed.status());
         return changed;
     }
 
@@ -350,6 +354,8 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
             try {
                 candidate = accounts.resolve(accountRealm, type, identifier).orElse(null);
             } catch (BusinessException ignored) {
+                // 某个标识类型解析被业务拒绝时视为该类型未命中，不中断其他类型的歧义检查；
+                // 所有类型都未命中时由下方统一抛出 REJECTED，失败结果不会变成登录成功。
                 continue;
             }
             if (candidate == null) {

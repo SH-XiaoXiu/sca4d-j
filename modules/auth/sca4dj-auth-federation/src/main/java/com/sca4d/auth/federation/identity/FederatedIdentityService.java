@@ -7,6 +7,7 @@ import com.sca4d.auth.federation.FederatedProvider;
 import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.logging.LogMark;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class FederatedIdentityService {
 
     /** @return 外部身份绑定；不存在时为空 */
     @Transactional(readOnly = true)
-    public FederatedIdentity find(@NotNull FederatedProvider provider, @NotNull FederatedProfile profile) {
+    public @Nullable FederatedIdentity find(@NotNull FederatedProvider provider, @NotNull FederatedProfile profile) {
         return repository.find(provider, profile);
     }
 

@@ -30,6 +30,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.Optional;
 
+/** 验证认证拦截器按注解选择 Token 类型、允许匿名访问，并在参数绑定前拒绝未认证的受保护 Handler。 */
 class AuthRequestInterceptorTest {
 
     @AfterEach

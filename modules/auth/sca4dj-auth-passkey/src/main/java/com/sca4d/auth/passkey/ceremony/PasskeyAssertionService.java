@@ -86,7 +86,9 @@ public class PasskeyAssertionService {
      *
      * @param expectedAccount 认证引擎已经确定的账号；允许方法从 discoverable Credential 识别账号时为 {@code null}
      * @param proof           浏览器 assertion 响应
-     * @return assertion 验证并更新后的 Credential
+     * @return assertion 验证并更新后的 Credential，签名计数器已在当前事务中更新
+     * @throws BusinessException ceremony 不存在或已消费时抛出 CEREMONY_UNAVAILABLE；响应无法验证、Credential 不存在、
+     *                           与期望账号不一致或版本推进失败时抛出 ASSERTION_REJECTED
      */
     @Transactional
     public @NotNull PasskeyCredential finish(

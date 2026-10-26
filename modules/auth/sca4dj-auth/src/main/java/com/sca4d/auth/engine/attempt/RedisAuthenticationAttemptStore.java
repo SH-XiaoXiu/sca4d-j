@@ -88,7 +88,8 @@ public class RedisAuthenticationAttemptStore {
     /**
      * 在最多等待两秒取得的自动续租分布式锁内执行操作。
      *
-     * @throws IllegalStateException 等待期间始终由其他实例持有租约时抛出
+     * @throws BusinessException 等待超时（其他实例持有租约）时抛出 CONFLICT，等待线程被中断时抛出 UNAVAILABLE；任务不会执行
+     * @throws IllegalStateException 任务结束时已失去锁所有权时抛出，任务已经执行
      */
     public <T> T withLease(@NotNull AuthenticationAttemptId id, @NotNull Supplier<T> action) {
         AuthenticationAttemptId checkedId = Objects.requireNonNull(id, "认证尝试标识不能为空");

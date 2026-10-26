@@ -31,6 +31,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
+/** 验证 Sa-Token Session 的恢复、按代次与 Operation 目录刷新、注销及建立期间的失效检查。 */
 @ExtendWith(MockitoExtension.class)
 class SaTokenSessionManagerTest {
 

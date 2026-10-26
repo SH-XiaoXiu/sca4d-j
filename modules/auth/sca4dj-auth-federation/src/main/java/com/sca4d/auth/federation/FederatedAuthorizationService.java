@@ -69,7 +69,16 @@ public class FederatedAuthorizationService {
         this.clock = Objects.requireNonNull(clock, "Clock 不能为空");
     }
 
-    /** 创建授权地址；redirectUri 必须是应用固定的 HTTPS callback。 */
+    /**
+     * 创建授权地址并保存等待 callback 的授权状态；redirectUri 必须是应用固定的 HTTPS callback。
+     *
+     * @param providerCode 已启用 Provider 的编码
+     * @param purpose 授权用途，决定 callback 完成后可被哪个认证或绑定流程消费
+     * @param browserBinding 发起授权的浏览器绑定值，callback 必须携带同一值
+     * @param redirectUri 应用固定的 callback 地址，之后 callback 和 Token 交换必须使用同一地址
+     * @return Provider 授权页地址，包含 state、PKCE 和 nonce（OIDC）参数
+     * @throws BusinessException Provider 没有可用的协议配置时抛出 PROVIDER_UNAVAILABLE；读取 Discovery 失败时抛出 UPSTREAM_FAILED
+     */
     public @NotNull String start(
             @NotNull String providerCode,
             @NotNull FederatedAuthorizationPurpose purpose,
@@ -115,7 +124,18 @@ public class FederatedAuthorizationService {
         return builder.build(true).toUriString();
     }
 
-    /** 处理 Provider callback 并保存不包含 Token 的完成资料。 */
+    /**
+     * 处理 Provider callback，消费授权状态并保存不包含 Token 的完成资料。
+     *
+     * @param state 授权请求中生成的 state，只能消费一次
+     * @param code Provider 返回的授权码，error 存在时可为空
+     * @param error Provider 返回的错误码，存在时直接拒绝
+     * @param browserBinding 当前浏览器绑定值，必须与授权开始时一致
+     * @param redirectUri 当前 callback 地址，必须与授权开始时保存的地址一致
+     * @return 完成资料的标识，之后由认证或绑定流程消费一次
+     * @throws BusinessException 授权状态不存在或已消费时抛出 AUTHORIZATION_UNAVAILABLE；Provider 返回错误、缺少授权码或 redirectUri 不一致时抛出 AUTHORIZATION_REJECTED；
+     *                           Token 交换或资料读取失败时抛出 UPSTREAM_FAILED；资料缺少 subject 或校验失败时抛出 PROFILE_INVALID
+     */
     public @NotNull String callback(
             @NotNull String state,
             @Nullable String code,

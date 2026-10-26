@@ -21,8 +21,11 @@ import java.util.Set;
  * 单次消费 SMS Challenge，并向认证引擎返回持有因素证据。
  */
 public class SmsCodeAuthenticationMethod implements AuthenticationMethod<SmsCodeProof> {
+
+    /** SMS Code 认证方法的稳定编码。 */
     public static final @NotNull TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/SMS_CODE");
 
+    /** 手机号登录标识类型，由 auth-sms 模块定义。 */
     public static final @NotNull AccountIdentifierType PHONE_IDENTIFIER_TYPE = new AccountIdentifierType("PHONE");
 
     private static final Set<AuthenticationFactorKind> FACTORS = Set.of(AuthenticationFactorKind.POSSESSION);

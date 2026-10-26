@@ -257,7 +257,12 @@ public class FederatedProviderService {
         return repository.authorizationConfiguration(provider);
     }
 
-    /** 校验协议端点、映射和授权参数。 */
+    /**
+     * 校验协议端点、映射和授权参数，不读写数据库。
+     *
+     * @param configuration 待校验的协议配置
+     * @throws BusinessException 端点不是 HTTPS URL、必填字段为空、映射或授权参数不在允许范围内时抛出 CONFIGURATION_INVALID
+     */
     public void validate(@NotNull FederatedProviderConfiguration configuration) {
         FederatedProviderConfiguration checked = Objects.requireNonNull(configuration, "协议配置不能为空");
         requireUrl(checked.issuer(), checked.protocol() == FederatedProviderProtocol.OIDC);

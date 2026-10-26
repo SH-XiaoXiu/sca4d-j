@@ -178,18 +178,18 @@ public class PasskeyCeremonyStore {
         }
 
         /**
-         * 浏览器完成 ceremony 时必须提交的不透明标识。
+         * 返回 ceremony 在 Redis 中的标识，浏览器完成 ceremony 时必须提交该标识。
          *
-         * @return 浏览器完成 ceremony 时必须提交的不透明标识
+         * @return 保存在 Redis 中的 ceremony 标识，只能用于一次 consume 调用
          */
         public PasskeyCeremonyId id() {
             return id;
         }
 
         /**
-         * ceremony 失效时间。
+         * 返回 ceremony 的失效时间。
          *
-         * @return ceremony 失效时间
+         * @return 保存时的当前时间加上 CEREMONY_TTL 得到的失效时刻
          */
         public Instant expiresAt() {
             return expiresAt;
@@ -210,18 +210,18 @@ public class PasskeyCeremonyStore {
         }
 
         /**
-         * 开始 registration 时绑定的账号标识。
+         * 返回开始 registration 时绑定的账号。
          *
-         * @return 开始 registration 时绑定的账号标识
+         * @return 正数 Account 标识，不会为空
          */
         public long accountId() {
             return accountId;
         }
 
         /**
-         * Yubico 完成 registration 所需的原始 request JSON。
+         * 返回 Yubico 完成 registration 所需的 request JSON。
          *
-         * @return Yubico 完成 registration 所需的原始 request JSON
+         * @return 保存时的原始 request JSON 文本，未经解析或改写
          */
         public String requestJson() {
             return requestJson;

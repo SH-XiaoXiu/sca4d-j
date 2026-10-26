@@ -77,7 +77,7 @@ public interface ProviderMapper {
             @Param("profileMapping") @NotNull String profileMapping,
             @Param("authorizationParameters") @NotNull String authorizationParameters);
 
-    /** 按 Provider 版本原子确认配置仍属于当前状态。 */
+    /** @return 修改行数；按期望版本原子递增 Provider 版本，版本不匹配或 Provider 已删除时为零 */
     int updateConfigurationVersion(
             @Param("providerId") long providerId,
             @Param("expectedVersion") @NotNull Version expectedVersion);

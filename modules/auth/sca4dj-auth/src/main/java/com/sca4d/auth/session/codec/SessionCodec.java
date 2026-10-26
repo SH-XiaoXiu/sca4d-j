@@ -128,7 +128,8 @@ public class SessionCodec implements VersionedCodec<Session, String> {
      *
      * @param session 要持久化或传输的 Session
      * @return 包含身份、成功认证记录、资源和有效期的 JSON wire
-     * @throws IllegalStateException 缺少具体类型的 Codec 或 JSON 编码失败时抛出
+     * @throws IllegalStateException 缺少 Principal 或 Resource 具体类型的 Codec 时抛出
+     * @throws AuthException JSON 编码失败时抛出
      */
     @Override
     public @NotNull String encode(@NotNull Session session) {
@@ -172,11 +173,11 @@ public class SessionCodec implements VersionedCodec<Session, String> {
      *
      * @param encoded Session JSON wire
      * @return 恢复的 Session
-     * @throws IllegalStateException wire 损坏、版本未知、缺少 Codec 或 payload 无法解码时抛出
+     * @throws AuthException wire 损坏、版本未知、缺少 Codec 或 payload 无法解码时抛出，原始异常保留为 cause
      */
     @Override
     public @NotNull Session decode(@NotNull String encoded) {
-        // 所有解析、校验和类型恢复失败都转换为 IllegalStateException，原始异常保留为 cause；不会返回部分恢复的 Session。
+        // 所有解析、校验和类型恢复失败都统一转换为 AuthException，原始异常保留为 cause；不会返回部分恢复的 Session。
         try {
             SessionData data = objectMapper.readValue(
                     Objects.requireNonNull(encoded, "Session wire 不能为空"),
@@ -456,7 +457,7 @@ public class SessionCodec implements VersionedCodec<Session, String> {
     }
 
     /**
-     * 按 Codec 声明的精确 Java 类型建立唯一索引。
+     * 按 Codec 声明的精确 Java 类型建立索引；同一类型保留版本最高的 Codec，版本相同则拒绝。
      */
     private static <C> @NotNull Map<Class<?>, C> codecsByValueType(
             @NotNull List<@NotNull C> codecs,

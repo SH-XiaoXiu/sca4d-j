@@ -54,6 +54,7 @@ public class TotpCredentialRepository {
      * @param secret 加密后的 TOTP 共享密钥
      * @param acceptedStep 激活时接受的验证码时间步
      * @return 新建的 TOTP 凭据
+     * @throws BusinessException 账号已经存在 TOTP 凭据时抛出 CREDENTIAL_EXISTS
      */
     @Transactional
     public @NotNull TotpCredential create(

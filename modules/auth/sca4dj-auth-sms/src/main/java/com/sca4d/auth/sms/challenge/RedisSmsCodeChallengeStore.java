@@ -140,6 +140,7 @@ public class RedisSmsCodeChallengeStore {
         return text;
     }
 
+    /** 加载按版本、状态和到期时间原子消费或累计错误次数的 Lua。 */
     private static DefaultRedisScript<Long> verifyScript() {
         DefaultRedisScript<Long> script = new DefaultRedisScript<>();
         script.setLocation(new ClassPathResource("redis/authentication/sms-code/verify.lua"));

@@ -161,7 +161,7 @@ public class RedisFederatedAuthorizationStore implements FederatedAuthorizationS
     private Duration checkedTtl(Duration ttl) {
         Duration checked = Objects.requireNonNull(ttl, "授权 TTL 不能为空");
         if (checked.isZero() || checked.isNegative() || checked.compareTo(Duration.ofMinutes(15)) > 0) {
-            throw new IllegalArgumentException("外部授权 TTL 必须在 1 秒到 15 分钟之间");
+            throw new IllegalArgumentException("外部授权 TTL 必须大于 0 且不超过 15 分钟");
         }
         return checked;
     }

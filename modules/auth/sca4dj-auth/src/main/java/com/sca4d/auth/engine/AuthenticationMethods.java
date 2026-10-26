@@ -79,7 +79,8 @@ public class AuthenticationMethods {
      * @param submission 包含方法编码、精确 Proof 类型和单次 Proof 的提交材料
      * @return 指定 Account 的认证结果和非秘密 Credential 引用
      * @throws IllegalArgumentException 方法未安装或 Proof 类型不匹配时抛出
-     * @throws IllegalStateException    方法对该 Account 不可用或返回其他 Account 时抛出
+     * @throws BusinessException        方法对该 Account 不可用时抛出 {@link AuthErrorCode#AUTH_METHOD_UNAVAILABLE}
+     * @throws IllegalStateException    方法返回其他 Account，或返回未声明的方法编码或因素类别时抛出
      * @throws RuntimeException         认证材料、Account 或 Credential 无效时抛出对应认证失败
      */
     public @NotNull VerifiedAuthentication authenticate(

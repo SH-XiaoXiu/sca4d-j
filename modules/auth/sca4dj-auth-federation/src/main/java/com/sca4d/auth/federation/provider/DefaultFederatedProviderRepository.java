@@ -187,6 +187,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                 mapper.updateConfigurationVersion(current.id(), condition.expected()),
                 condition.whenZero(),
                 "联邦 Provider");
+        // 未提交新的 Client Secret 时沿用已保存的 Secret，并用当前密钥重新加密；之后删除旧协议配置行，再写入新配置行。
         FederatedProviderConfiguration old = checked.clientSecret() == null
                 ? authorizationConfiguration(current)
                 : null;

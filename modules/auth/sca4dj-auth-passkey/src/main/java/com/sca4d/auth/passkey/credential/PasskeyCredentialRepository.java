@@ -204,6 +204,7 @@ public class PasskeyCredentialRepository {
      * @param credentialId                模块内部 Credential 标识
      * @param expectedVersion             读取 Credential 时得到的乐观版本
      * @param minimumRemainingCredentials 删除完成后至少保留的有效 Credential 数量
+     * @throws IllegalArgumentException 账号或 Credential 标识不是正数，或最小保留数量为负数时抛出
      * @throws OptimisticLockException 账号或 Credential 已并发变化，或删除后数量不足时抛出
      */
     @Transactional

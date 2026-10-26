@@ -39,7 +39,8 @@ public class EmailCodeAuthenticationMethod implements AuthenticationMethod<Email
     private final @NotNull Clock clock;
 
     /**
-     * @param challenges Challenge 签发、消费和复核服务 @param clock 认证时间来源
+     * @param challenges Challenge 签发、消费和复核服务
+     * @param clock 认证时间来源
      */
     public EmailCodeAuthenticationMethod(
             @NotNull EmailCodeChallengeService challenges,

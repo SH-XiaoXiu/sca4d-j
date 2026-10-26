@@ -19,9 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /** 使用 DataGraph 并发装载并合并所有 ResourceLoader 的静态资源贡献。 */
 public class ResourceLoaders {
@@ -50,7 +52,14 @@ public class ResourceLoaders {
         this.graph = graph();
     }
 
-    /** 同步装载并合并静态资源；异步节点由本对象的 Executor 调度。 */
+    /**
+     * 同步装载并合并静态资源；异步节点由本对象的 Executor 调度。
+     *
+     * @param principals 需要装载资源的 Principal，不能包含重复或空元素
+     * @return 每个输入 Principal 对应的静态资源列表，按 Loader 顺序合并
+     * @throws AuthException 某个 ResourceLoader 抛出非 NPE 的异常时抛出，并保留原始异常为 cause
+     * @throws NullPointerException ResourceLoader 抛出空指针或返回 null 时原样抛出
+     */
     public Map<Long, List<Resource>> load(Collection<? extends Principal> principals) {
         try {
             return loadAsync(principals).toCompletableFuture().join();
@@ -96,7 +105,7 @@ public class ResourceLoaders {
                             "resource-loader-" + index,
                             List.of(PRINCIPALS),
                             output,
-                            (values, ignored) -> java.util.concurrent.CompletableFuture.supplyAsync(
+                            (values, ignored) -> CompletableFuture.supplyAsync(
                                     () -> Objects.requireNonNull(
                                             loader.load(values.get(PRINCIPALS)),
                                             "ResourceLoader 不能返回 null"),
@@ -121,12 +130,13 @@ public class ResourceLoaders {
         return checkedPrincipals;
     }
 
+    /** 按 Loader 顺序合并静态资源，拒绝 Loader 返回输入之外的 Principal 或重复的资源标识。 */
     @SuppressWarnings("unchecked")
     private Map<Long, List<Resource>> merge(DataValues values) {
         List<Principal> principals = values.get(PRINCIPALS);
         LinkedHashSet<Long> principalIds = principals.stream()
                 .map(Principal::principalId)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         LinkedHashMap<Long, List<Resource>> merged = new LinkedHashMap<>();
         LinkedHashMap<Long, Set<String>> resourceKeys = new LinkedHashMap<>();
         for (Long principalId : principalIds) {

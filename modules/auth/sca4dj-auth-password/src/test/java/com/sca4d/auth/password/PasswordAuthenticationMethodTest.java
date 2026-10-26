@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/** 验证 Password 认证方法的账号发现、凭据版本校验、状态变更和禁止恢复停用凭据的行为。 */
 class PasswordAuthenticationMethodTest {
 
     private static final Account ACCOUNT = new Account(

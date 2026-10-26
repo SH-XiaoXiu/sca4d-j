@@ -70,6 +70,7 @@ public class SmsCodeChallengeService {
         this(accounts, accountRealm, notifications, store, hasher, settings, clock, new SecureRandom());
     }
 
+    /** 使用可替换随机源创建测试可控的 SMS Challenge 服务。 */
     SmsCodeChallengeService(
             AccountDirectory accounts,
             RealmKey accountRealm,
@@ -205,6 +206,9 @@ public class SmsCodeChallengeService {
         }
     }
 
+    /**
+     * 登记重发冷却、创建 Challenge 并保存验证码摘要；只为真实可投递的 Account 在当前事务中登记短信通知。
+     */
     private SmsCodeChallenge issue(Account account, String maskedRecipient, String targetHash) {
         Duration ttl = settings.CHALLENGE_TTL.get();
         Duration resend = settings.RESEND_INTERVAL.get();

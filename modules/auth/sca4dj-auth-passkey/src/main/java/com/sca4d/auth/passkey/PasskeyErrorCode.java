@@ -17,7 +17,7 @@ public enum PasskeyErrorCode implements ErrorCode {
     CREDENTIAL_UNAVAILABLE("2713", ErrorCategory.NOT_FOUND, "error.auth-passkey.credential-unavailable"),
     /** WebAuthn registration 无法验证或没有满足 discoverable 与 UV 要求。 */
     REGISTRATION_REJECTED("2714", ErrorCategory.VALIDATION, "error.auth-passkey.registration-rejected"),
-    /** Passkey 对应的账号不存在 */
+    /** Passkey 对应的账号不存在。 */
     ACCOUNT_ANCHOR_NOT_FOUND("2715", ErrorCategory.NOT_FOUND, "error.auth-passkey.account-anchor-not-found");
 
     private final String code;

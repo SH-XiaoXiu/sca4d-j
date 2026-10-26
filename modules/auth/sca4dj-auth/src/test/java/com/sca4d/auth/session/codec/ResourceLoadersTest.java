@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/** 验证静态资源 Loader 的合并顺序、重复资源与输入外 Principal 的拒绝，以及 Loader 失败的包装结果。 */
 @SuppressWarnings("ClassCanBeRecord")
 class ResourceLoadersTest {
 

@@ -122,7 +122,7 @@ public class TotpEnrollmentService {
     }
 
     /**
-     * 返回由可以用于生成二维码的 otpauth URI。
+     * 解密 enrollment 中的 Secret，并返回可用于生成二维码的 otpauth URI。
      *
      * <p>调用方不得把 URI 写入响应 JSON、日志或持久化存储。
      *

@@ -163,6 +163,10 @@ public class PasskeyRegistrationService {
      * @param responseJson 浏览器 WebAuthn JSON API 返回的 registration JSON
      * @param name         用户为新 Credential 设置的名称
      * @return 数据库保存后的 Credential
+     * @throws BusinessException ceremony 不存在或已消费时抛出 CEREMONY_UNAVAILABLE；ceremony 绑定的账号不一致、响应无法验证、
+     *                           Credential 标识重复时抛出 REGISTRATION_REJECTED；数量达到上限时抛出 CREDENTIAL_LIMIT_REACHED；
+     *                           账号锚点不存在时抛出 ACCOUNT_ANCHOR_NOT_FOUND
+     * @throws OptimisticLockException 数量上限的并发抢占在重试上限内仍未成功时抛出
      */
     @Transactional
     public @NotNull PasskeyCredential finish(
@@ -279,6 +283,7 @@ public class PasskeyRegistrationService {
      * @param account                     Credential 所属账号
      * @param credentialId                模块内部 Credential 标识
      * @param minimumRemainingCredentials 删除后至少保留的有效 Credential 数量
+     * @throws BusinessException Credential 不属于该账号或已删除时抛出 CREDENTIAL_UNAVAILABLE
      */
     @Transactional
     public void delete(

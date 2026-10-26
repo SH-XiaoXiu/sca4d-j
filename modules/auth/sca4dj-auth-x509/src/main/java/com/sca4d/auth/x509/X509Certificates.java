@@ -19,7 +19,7 @@ class X509Certificates {
     private X509Certificates() {
     }
 
-    /** 解析单张 DER X.509 公钥证书。 */
+    /** 解析单张 DER X.509 公钥证书；证书格式无效时以 errorCode 抛出 BusinessException。 */
     static @NotNull X509Certificate parse(byte @NotNull [] der, @NotNull ErrorCode errorCode) {
         try {
             return (X509Certificate) CertificateFactory.getInstance("X.509")

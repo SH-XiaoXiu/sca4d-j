@@ -23,9 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 /** 使用 DataGraph 并发装载并合并 Principal 的数字 Resource 标识。 */
 public class ResourceIdLoaders {
@@ -96,7 +98,7 @@ public class ResourceIdLoaders {
                             "resource-id-loader-" + index,
                             List.of(PRINCIPALS),
                             output,
-                            (values, ignored) -> java.util.concurrent.CompletableFuture.supplyAsync(
+                            (values, ignored) -> CompletableFuture.supplyAsync(
                                     () -> Objects.requireNonNull(
                                             loader.load(values.get(PRINCIPALS)),
                                             "ResourceIdLoader 不能返回 null"),
@@ -121,12 +123,13 @@ public class ResourceIdLoaders {
         return checkedPrincipals;
     }
 
+    /** 按 Loader 顺序合并数字 Resource 标识并按资源类型分组，拒绝重复标识或输入之外的 Principal。 */
     @SuppressWarnings("unchecked")
     private Map<Long, List<ResourceIdSet>> merge(DataValues values) {
         List<Principal> principals = values.get(PRINCIPALS);
         LinkedHashSet<Long> principalIds = principals.stream()
                 .map(Principal::principalId)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         LinkedHashMap<Long, LinkedHashMap<TreeCode, List<Long>>> merged = new LinkedHashMap<>();
         LinkedHashMap<Long, LinkedHashMap<TreeCode, Set<Long>>> seen = new LinkedHashMap<>();
         for (Long principalId : principalIds) {
