@@ -176,6 +176,7 @@ public class EmailTemplateRepository {
                 locales.put(
                         entry.getKey(),
                         new EmailTemplateSource(
+                                value.path("displayName").asText(""),
                                 value.path("subject").asText(),
                                 value.path("text").asText(),
                                 value.path("html").asText()));
@@ -192,7 +193,15 @@ public class EmailTemplateRepository {
             locales.forEach(
                     (locale, source) -> values.put(
                             locale,
-                            Map.of("subject", source.subject(), "text", source.text(), "html", source.html())));
+                            Map.of(
+                                    "displayName",
+                                    source.displayName(),
+                                    "subject",
+                                    source.subject(),
+                                    "text",
+                                    source.text(),
+                                    "html",
+                                    source.html())));
             return json.writeValueAsString(values);
         } catch (JsonProcessingException exception) {
             throw new IllegalArgumentException("Email 模板无法编码", exception);
