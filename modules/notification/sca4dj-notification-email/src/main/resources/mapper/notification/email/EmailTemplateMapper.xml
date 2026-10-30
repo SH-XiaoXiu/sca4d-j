@@ -7,7 +7,7 @@
     <select id="select" resultType="com.sca4d.notification.email.mapper.EmailTemplateState">
         SELECT <include refid="columns"/> FROM notification_email_template WHERE deleted = 0
         <if test="templateId != null">AND id = #{templateId}</if>
-        <if test="notificationCode != null">AND notification_code = #{notificationCode.value}</if>
+        <if test="notificationCode != null">AND notification_code = #{notificationCode,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler}</if>
         <if test="enabled != null">AND enabled = #{enabled}</if>
         ORDER BY notification_code, id
     </select>
@@ -35,12 +35,12 @@
     </select>
     <insert id="insert">
         INSERT INTO notification_email_template (id, notification_code, locales, enabled)
-        VALUES (#{templateId}, #{notificationCode.value}, CAST(#{localesJson} AS JSONB), FALSE)
+        VALUES (#{templateId}, #{notificationCode,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler}, CAST(#{localesJson} AS JSONB), FALSE)
     </insert>
     <update id="update">
         UPDATE notification_email_template
         <set>
-            <if test="notificationCode.set">notification_code = #{notificationCode.value},</if>
+            <if test="notificationCode.set">notification_code = #{notificationCode.value,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler},</if>
             <if test="localesJson.set">locales = CAST(#{localesJson.value} AS JSONB),</if>
             <if test="enabled.set">enabled = #{enabled.value},</if>
             version = version + 1
