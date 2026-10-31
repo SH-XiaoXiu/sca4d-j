@@ -1,7 +1,7 @@
 package com.sca4d.app.server.platform;
 
 import com.sca4d.auth.email.EmailCodeAuthenticationMethod;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.iam.identity.AccountIdentifierNormalizer;
 import com.sca4d.iam.identity.IamErrorCode;

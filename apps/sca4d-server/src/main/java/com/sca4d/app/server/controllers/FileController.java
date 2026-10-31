@@ -14,7 +14,7 @@ import com.sca4d.app.server.service.PlatformAccountApplicationService;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.storage.FileAccessUrl;
 import com.sca4d.core.api.storage.FileErrorCode;

@@ -35,7 +35,7 @@ import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.IdentityCallInterceptor;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.identity.SystemPrincipals;

@@ -20,7 +20,7 @@ import com.sca4d.core.api.audit.AuditInvocation;
 import com.sca4d.core.api.audit.AuditPayload;
 import com.sca4d.core.api.audit.AuditPayloadFactory;
 import com.sca4d.core.api.audit.AuditResult;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.spring.web.ApiResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

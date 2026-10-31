@@ -22,7 +22,7 @@ import com.sca4d.core.api.audit.NoAuditPayloadFactory;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallOutcome;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.iam.base.PlatformAccountEntry;

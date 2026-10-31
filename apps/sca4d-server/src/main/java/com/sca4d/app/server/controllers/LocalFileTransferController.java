@@ -1,7 +1,7 @@
 package com.sca4d.app.server.controllers;
 
 import com.sca4d.core.api.annotation.AnonymousAccess;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.storage.FileContent;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.api.storage.FileService;

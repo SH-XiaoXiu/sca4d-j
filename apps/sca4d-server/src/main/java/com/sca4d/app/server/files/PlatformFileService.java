@@ -2,7 +2,7 @@ package com.sca4d.app.server.files;
 
 import com.sca4d.app.server.entity.PlatformUserProfile;
 import com.sca4d.app.server.service.PlatformUserProfileService;
-import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.storage.FileAccessUrl;
 import com.sca4d.core.api.storage.FileService;
 import com.sca4d.core.api.storage.FileUpload;
@@ -54,7 +54,7 @@ public class PlatformFileService {
                 new FileUploadIntent(
                         new FileUse(
                                 PlatformUserProfileService.PROFILE_AVATAR,
-                                new ResourceReference(
+                                new Resource.Ref(
                                         PlatformUserProfile.RESOURCE_TYPE,
                                         Long.toString(targetPrincipalId))),
                         filename,

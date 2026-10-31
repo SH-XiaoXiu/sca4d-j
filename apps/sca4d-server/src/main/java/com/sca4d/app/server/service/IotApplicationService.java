@@ -24,7 +24,7 @@ import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.data.DataOps;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Subject;

@@ -13,7 +13,7 @@ import com.sca4d.auth.federation.FederatedUnlinkedIdentityAction;
 import com.sca4d.auth.federation.identity.FederatedIdentityService;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iam.base.PlatformIdentityService;

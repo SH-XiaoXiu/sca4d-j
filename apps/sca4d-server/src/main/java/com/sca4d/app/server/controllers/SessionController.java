@@ -9,7 +9,7 @@ import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.RequireSessionToken;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.spring.validation.NoDefaultValidation;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.BearerToken;

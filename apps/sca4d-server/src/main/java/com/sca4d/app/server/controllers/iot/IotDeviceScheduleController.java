@@ -7,7 +7,7 @@ import com.sca4d.app.server.iot.view.IotDeviceScheduleExecutionView;
 import com.sca4d.app.server.iot.view.IotDeviceScheduleView;
 import com.sca4d.app.server.platform.PlatformPrincipalSelection;
 import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.config.ConditionalOnCapability;

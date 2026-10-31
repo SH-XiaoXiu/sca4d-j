@@ -2,7 +2,7 @@ package com.sca4d.app.server.service;
 
 import com.sca4d.auth.passkey.PasskeyAuthenticationMethod;
 import com.sca4d.auth.passkey.registration.PasskeyRegistrationService;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

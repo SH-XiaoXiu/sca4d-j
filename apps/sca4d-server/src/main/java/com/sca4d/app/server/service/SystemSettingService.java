@@ -2,8 +2,8 @@ package com.sca4d.app.server.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.app.server.system.ManagedSetting;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.api.setting.exception.SettingReadOnlyException;

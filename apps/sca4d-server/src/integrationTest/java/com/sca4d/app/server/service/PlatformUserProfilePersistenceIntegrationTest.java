@@ -11,13 +11,13 @@ import com.sca4d.app.server.repository.PlatformUserProfileRepository;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.api.setting.access.SettingReader;
 import com.sca4d.core.api.setting.access.SettingWriter;
@@ -247,7 +247,7 @@ class PlatformUserProfilePersistenceIntegrationTest {
     private static FileUse avatarUse(long principalId) {
         return new FileUse(
                 PlatformUserProfileService.PROFILE_AVATAR,
-                new ResourceReference(
+                new Resource.Ref(
                         PlatformUserProfile.RESOURCE_TYPE,
                         Long.toString(principalId)));
     }

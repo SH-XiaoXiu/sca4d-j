@@ -7,7 +7,7 @@ import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.EstablishedSession;
 import com.sca4d.core.api.authentication.SessionLifecycle;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;

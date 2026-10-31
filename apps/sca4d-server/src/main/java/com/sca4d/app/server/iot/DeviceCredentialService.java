@@ -7,7 +7,7 @@ import com.sca4d.auth.sharedsecret.IssuedSharedSecret;
 import com.sca4d.auth.sharedsecret.SharedSecretAuthenticationMethod;
 import com.sca4d.auth.x509.X509AuthenticationMethod;
 import com.sca4d.auth.x509.X509CredentialRegistration;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.iam.identity.IdentityService;

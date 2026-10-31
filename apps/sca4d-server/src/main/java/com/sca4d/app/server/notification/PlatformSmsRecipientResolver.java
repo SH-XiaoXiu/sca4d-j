@@ -2,7 +2,7 @@ package com.sca4d.app.server.notification;
 
 import com.sca4d.app.server.entity.PlatformUserProfile;
 import com.sca4d.app.server.service.PlatformUserProfileService;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.iam.base.PlatformAccountDirectory;
 import com.sca4d.iam.identity.IdentityStatus;

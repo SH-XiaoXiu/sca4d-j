@@ -5,7 +5,7 @@ import com.sca4d.app.server.iot.HmacCanonicalRequest;
 import com.sca4d.app.server.iot.IotHttpHeaders;
 import com.sca4d.app.server.iot.view.IotDeviceSessionView;
 import com.sca4d.core.api.annotation.AnonymousAccess;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.gateway.TrustedGatewayRequest;
 import com.sca4d.core.spring.web.ApiResponse;

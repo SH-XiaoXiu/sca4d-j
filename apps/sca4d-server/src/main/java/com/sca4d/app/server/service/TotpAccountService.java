@@ -8,7 +8,7 @@ import com.sca4d.auth.totp.credential.TotpCredential;
 import com.sca4d.auth.totp.credential.TotpCredentialRepository;
 import com.sca4d.auth.totp.enrollment.TotpEnrollment;
 import com.sca4d.auth.totp.enrollment.TotpEnrollmentService;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;

@@ -4,9 +4,9 @@ import com.sca4d.app.server.entity.PlatformUserProfile;
 import com.sca4d.app.server.repository.PlatformUserProfileRepository;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.api.storage.FileService;
 import com.sca4d.core.api.storage.FileStatus;
@@ -317,7 +317,7 @@ public class PlatformUserProfileService {
     private static @NotNull FileUse avatarUse(@NotNull Long principalId) {
         return new FileUse(
                 PROFILE_AVATAR,
-                new ResourceReference(PlatformUserProfile.RESOURCE_TYPE, principalId.toString()));
+                new Resource.Ref(PlatformUserProfile.RESOURCE_TYPE, principalId.toString()));
     }
 
     /** 校验并清理展示名称。 */

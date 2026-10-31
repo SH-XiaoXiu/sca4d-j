@@ -3,7 +3,7 @@ package com.sca4d.app.server.files;
 import com.sca4d.app.server.entity.PlatformUserProfile;
 import com.sca4d.app.server.service.PlatformUserProfileService;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;

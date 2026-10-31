@@ -1,8 +1,8 @@
 package com.sca4d.app.server.iot;
 
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.DispatchPolicy;

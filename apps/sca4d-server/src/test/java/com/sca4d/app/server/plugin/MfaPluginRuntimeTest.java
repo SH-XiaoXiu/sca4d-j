@@ -21,7 +21,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.plugin.ApiTarget;
 import com.sca4d.core.api.plugin.PluginLease;
 import com.sca4d.core.api.plugin.PluginStatus;
-import com.sca4d.core.api.plugin.PluginUnavailableException;
+import com.sca4d.core.api.plugin.exception.PluginUnavailableException;
 import com.sca4d.core.spring.setting.YamlCodec;
 import com.sca4d.plugin.pf4j.Pf4jPluginLoader;
 import com.sca4d.plugin.runtime.DefaultPluginRuntime;

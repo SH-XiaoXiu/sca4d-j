@@ -17,7 +17,7 @@ import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentAccount;

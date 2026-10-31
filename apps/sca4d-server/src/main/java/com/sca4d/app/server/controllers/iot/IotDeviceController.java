@@ -19,7 +19,7 @@ import com.sca4d.app.server.platform.PlatformPrincipalSelection;
 import com.sca4d.app.server.service.IotApplicationService;
 import com.sca4d.auth.x509.X509CredentialRegistration;
 import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.config.ConditionalOnCapability;

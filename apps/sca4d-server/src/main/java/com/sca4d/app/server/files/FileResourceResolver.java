@@ -4,7 +4,6 @@ import com.sca4d.app.server.files.request.CreateFileAccessUrlsRequest;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallValueResolver;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.storage.StoredFile;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -33,7 +32,7 @@ public class FileResourceResolver implements CallValueResolver<Collection<Resour
         }
         if (arguments[0] instanceof Number fileId) {
             return List.of(
-                    new ResourceReference(
+                    new Resource.Ref(
                             StoredFile.RESOURCE_TYPE,
                             Long.toString(fileId.longValue())));
         }
@@ -42,7 +41,7 @@ public class FileResourceResolver implements CallValueResolver<Collection<Resour
                     .stream()
                     .distinct()
                     .<Resource>map(
-                            fileId -> new ResourceReference(
+                            fileId -> new Resource.Ref(
                                     StoredFile.RESOURCE_TYPE,
                                     Long.toString(fileId)))
                     .toList();
