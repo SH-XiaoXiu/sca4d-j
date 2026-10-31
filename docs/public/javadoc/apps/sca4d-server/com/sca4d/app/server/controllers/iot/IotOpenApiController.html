@@ -164,11 +164,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(long)">
 <h3>get</h3>
-<div class="member-signature"><span class="annotations">@OpenApiRoute(method=GET,
-              path="/openapi/iot/devices/{deviceId}",
-              toolGroup="iot",
-              toolName="getDevice",
-              operation="IOT:DEVICES:READ")
+<div class="member-signature"><span class="annotations">@GetMapping(value="/openapi/iot/devices/{deviceId}",
+            produces="application/json")
 @RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../openapi/iot/OpenApiIotDeviceResponse.html" title="class in com.sca4d.app.server.openapi.iot">OpenApiIotDeviceResponse</a>&gt;</span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(@PathVariable

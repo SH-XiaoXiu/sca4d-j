@@ -81,7 +81,9 @@ dependencies {
 | `modules/storage/sca4dj-storage-file` | 文件记录、短期传输授权和清理任务 | `runtimeOnly` |
 | `modules/storage/sca4dj-storage-local` | 本地目录 backend | `runtimeOnly` |
 | `modules/storage/sca4dj-storage-minio` | MinIO backend | `runtimeOnly` |
-| `modules/openapi/sca4dj-openapi` | 开放 API 路由校验、Client 与 Token/HMAC 认证 | `implementation` |
+| `modules/open/sca4dj-open` | 平台开放 Client、Token、Account 绑定和 Operation 授权 | `implementation` |
+| `modules/open/sca4dj-openapi` | OpenAPI 路由校验、Springdoc 和 HTTP HMAC 认证 | `implementation` |
+| `modules/open/sca4dj-open-graphql` | GraphQL Schema 指令、Bearer 认证、Operation 检查和查询限制 | `implementation` |
 | `modules/plugin/sca4dj-plugin-spring` | 插件运行时的 Spring 适配 | `implementation` |
 | `gateway/sca4d-gateway` | 独立 Gateway 进程，不作为 App 依赖 | 独立工程 |
 
@@ -186,6 +188,7 @@ class DocumentController {
 | 订阅授权 | `WebRealtimeSubscriptionPolicy` | Spring Bean | 见[推送浏览器事件](/tutorials/realtime-events) |
 | 外部回调 | `GatewayCallback` | Spring Bean | 见[部署 Gateway 与接入回调](/tutorials/gateway-and-callbacks) |
 | 开放接口 | `@OpenApiRoute` | Controller 方法 | 见[开放 API](/tutorials/external-api) |
+| GraphQL 开放字段 | `@openOperation` | `.graphqls` 字段和 Resolver | 见[GraphQL 外部调用](/capabilities/identity-access/open-graphql) |
 | 插件 | `@PluginService`、`@PluginExtension`、`PluginConfiguration` | 注解与 Spring Bean | 见[为 App 开放插件 API](/tutorials/app-plugins) |
 
 接入一个模块的步骤：

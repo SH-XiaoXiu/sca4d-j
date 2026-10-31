@@ -820,15 +820,15 @@ Upgrade 完成后，STOMP `CONNECT` 只提交协议参数并沿用握手绑定�
 
 | 方法与路由 | 认证与授权 | 成功结果 |
 | --- | --- | --- |
-| `POST /openapi/oauth/token` | 匿名入口；`client_secret_basic` 的 Client Credentials | Bearer Token、过期秒数和 Operation scope |
+| `POST /open/oauth/token` | 匿名入口；`client_secret_basic` 的 Client Credentials | Bearer Token、过期秒数和 Operation scope |
 | `GET /openapi/iot/devices/{deviceId}` | OpenAPI Bearer 或 OpenAPI HMAC；Client Operation `iot:devices:read` 与同名 permission | 独立的开放 API IoT Device 资料和状态；ID 与 `bindingGeneration` 为十进制字符串 |
 
-具体应用通过 `OpenApiAuthenticationEndpoint` Bean 选择认证路径，Token Controller 逻辑由 OpenAPI 模块实现。路由声明、独立请求与响应类型、Client 创建、Token 交换和 HMAC canonical request 见 [开放 API](/tutorials/external-api)。OpenAPI Bearer Token 不等同于浏览器默认 Token；启用 `sca4dj.openapi.jwt.enabled=true` 时由独立 HS256 密钥签发。
+具体应用通过 `OpenAuthenticationEndpoint` Bean 选择认证路径，Token Controller 逻辑由 开放平台模块实现。路由声明、独立请求与响应类型、Client 创建、Token 交换和 HMAC canonical request 见 [开放 API](/tutorials/external-api)。OpenAPI Bearer Token 不等同于浏览器默认 Token；启用 `sca4dj.open.jwt.enabled=true` 时由独立 HS256 密钥签发。
 
 ## OpenAPI 可用环境与排除项
 
 `local` 和 `dev` profile 启用 Springdoc，并把 `/v3/api-docs`、`/swagger-ui.html` 和 `/swagger-ui/**` 排除在认证拦截器之外，因此开发环境可以直接读取运行时 OpenAPI 或打开 Swagger UI。基础配置默认关闭 Core OpenAPI、Springdoc API docs 和 Swagger UI，生产环境不开放这些端点。
 
-Swagger UI 位于 `/swagger-ui/index.html`。文档选择器中的「开放 API」分组只包含应用明确声明的 `@OpenApiRoute` 方法和 `OpenApiAuthenticationEndpoint` Bean 配置的认证端点；Swagger UI 从 `/v3/api-docs/openapi` 读取该分组的运行时数据。应用不生成或提交静态 OpenAPI 文件。
+Swagger UI 位于 `/swagger-ui/index.html`。文档选择器中的「开放 API」分组只包含应用明确声明的 `@OpenApiRoute` 方法和 `OpenAuthenticationEndpoint` Bean 配置的认证端点；Swagger UI 从 `/v3/api-docs/openapi` 读取该分组的运行时数据。应用不生成或提交静态 OpenAPI 文件。
 
 标记 `@Hidden` 的 `/files/transfers/uploads` 与 `/files/transfers/objects` 不出现在 OpenAPI 中。条件装配的 EMQX 回调是 Broker 专用协议，管理端使用上表中的 IoT 管理接口。

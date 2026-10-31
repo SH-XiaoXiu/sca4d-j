@@ -18,7 +18,9 @@
 - [Principal 选择](/capabilities/identity-access/principal-selection)
 - [调用生命周期](/capabilities/identity-access/call-lifecycle)
 - [Operation 与权限声明](/capabilities/identity-access/operation-declaration)
+- [平台开放能力](/capabilities/identity-access/open-platform)
 - [OpenAPI 外部调用](/capabilities/identity-access/openapi-client)
+- [GraphQL 外部调用](/capabilities/identity-access/open-graphql)
 
 ## 开发规则
 

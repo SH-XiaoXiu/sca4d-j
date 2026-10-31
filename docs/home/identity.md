@@ -128,10 +128,10 @@ SubjectType 固定提供四种类型。这四种类型已经覆盖 Sca4d-J 直�
 |---|---|---|
 | `HUMAN` | 实际操作系统的自然人 | 密码、Passkey、企业登录等自然人认证 |
 | `DEVICE` | 直接接入 Sca4d-J 的设备 | IoT 设备认证、设备 Session 和设备调用 |
-| `APPLICATION` | 通过 OpenAPI 接入的外部程序 | OpenAPI Client、程序凭据和外部调用 |
+| `APPLICATION` | 通过平台开放能力接入的外部程序 | OpenAPI Client、程序凭据和外部调用 |
 | `SYSTEM` | 一个完整业务系统，包括其代码、组件、数据和部署共同体 | 定时、自动化和系统自主操作 |
 
-顾客、骑手、员工和租户成员都是自然人在具体业务中的身份，它们使用 `HUMAN` Subject 和不同的 Principal。ERP、支付平台和合作方服务通过 OpenAPI 接入时使用 `APPLICATION`；设备直连 IoT 模块时使用 `DEVICE`；系统任务使用固定的 `SYSTEM`。
+顾客、骑手、员工和租户成员都是自然人在具体业务中的身份，它们使用 `HUMAN` Subject 和不同的 Principal。ERP、支付平台和合作方服务通过平台开放能力接入时使用 `APPLICATION`；设备直连 IoT 模块时使用 `DEVICE`；系统任务使用固定的 `SYSTEM`。
 
 ### 业务数据什么时候关联 Subject
 
@@ -180,7 +180,7 @@ Sca4d-J 当前直接使用三个 Realm：
 | RealmKey | 对应接入方式 | 认证成功后的结果 |
 |---|---|---|
 | `platform` | 管理端等自然人登录入口 | 读取 Account 关联的 Platform Principal |
-| `openapi` | OpenAPI Client 调用 | 读取 Client 关联的业务身份和 OpenAPI 操作范围 |
+| `open` | 平台开放 Client 调用 | 读取 Client 关联的业务身份和 OpenAPI 操作范围 |
 | `iot-device` | IoT 设备直接接入 | 确认 Device Subject 并建立设备 Session |
 
 RealmKey 是开放字符串，具体应用可以定义自己的 Realm。新增字符串本身不会产生认证行为；应用还要同时定义登录入口、账号查找、认证规则和 Principal 读取规则。
@@ -473,11 +473,11 @@ SubjectType 只区分实际接入者属于自然人、设备、外部程序还�
 
 Sca4d-J 自身提供 IoT 模块，采用分布式单体，单实例与集群使用同一套业务实现。设备可以直接认证、建立设备 Session 并参与调用。Core 因此固定提供 `DEVICE`，让 IoT 模块直接识别设备接入者，不要求每个应用再从 `APPLICATION` 中判断哪些对象实际是设备。
 
-`APPLICATION` 留给 OpenAPI 模块。ERP、支付平台、合作方服务和自动化程序通过 OpenAPI 接入时，都可以使用这一类型，不需要继续增加 `PARTNER_SYSTEM`、`ERP` 或其他 SubjectType。
+`APPLICATION` 留给平台开放能力。ERP、支付平台、合作方服务和自动化程序通过 OpenAPI 或 GraphQL 接入时，都可以使用这一类型，不需要继续增加 `PARTNER_SYSTEM`、`ERP` 或其他 SubjectType。
 
 ### 为什么 SYSTEM 不使用 APPLICATION？
 
-`APPLICATION` 表示使用 OpenAPI Client、Account 和程序凭据完成认证的外部程序。系统任务和内部调用由当前应用直接建立，不需要经过 OpenAPI 认证。
+`APPLICATION` 表示使用 Open Client、Account 和程序凭据完成认证的外部程序。系统任务和内部调用由当前应用直接建立，不需要经过 OpenAPI 认证。
 
 如果内部任务也使用 `APPLICATION`，没有启用 OpenAPI 的应用也要创建 Client、Account 和凭据，只为表示应用自身。Core 因此提供固定的 `Subject.SYSTEM` 和 System Principal。它们不表示管理员，权限规则仍然要明确允许或拒绝目标操作。
 

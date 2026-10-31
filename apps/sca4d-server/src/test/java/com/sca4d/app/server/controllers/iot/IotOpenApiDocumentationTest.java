@@ -1,13 +1,21 @@
 package com.sca4d.app.server.controllers.iot;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.app.server.service.IotApplicationService;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationNode;
+import com.sca4d.openapi.web.OpenApiRouteCatalog;
+import com.sca4d.openapi.web.OpenApiRouteDefinition;
+import com.sca4d.openapi.web.OpenApiRouteRegistrar;
 import com.sca4d.openapi.web.OpenApiSpringdocAutoConfiguration;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -29,6 +37,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /** 验证示例应用 IoT 开放接口的运行时 schema、示例和管理端类型隔离。 */
 @WebMvcTest(properties = {
@@ -149,6 +159,41 @@ class IotOpenApiDocumentationTest {
         @Bean
         IotOpenApiController iotOpenApiController(IotApplicationService iot) {
             return new IotOpenApiController(iot);
+        }
+
+        /** @return 测试路由使用的最小 Operation 目录桩 */
+        @Bean
+        OperationCatalog operationCatalog() {
+            OperationCatalog operations = mock(OperationCatalog.class);
+            OperationNode.OperationAction action = mock(OperationNode.OperationAction.class);
+            when(action.operation())
+                    .thenReturn(new com.sca4d.core.api.permission.Operation("iot:devices:read"));
+            when(operations.actionByCode(any(TreeCode.class))).thenReturn(action);
+            return operations;
+        }
+
+        /** @return 通过注册器声明真实 IoT Controller 的开放路由 */
+        @Bean
+        OpenApiRouteRegistrar iotOpenApiRoutes() {
+            return routes -> routes.register(
+                    IotOpenApiController.class,
+                    "get",
+                    new OpenApiRouteDefinition(
+                            RequestMethod.GET,
+                            "/openapi/iot/devices/{deviceId}",
+                            "iot",
+                            "getDevice",
+                            TreeCode.ofColon("iot:devices:read")),
+                    long.class);
+        }
+
+        /** @return 测试使用的程序化 OpenAPI 路由目录 */
+        @Bean
+        OpenApiRouteCatalog openApiRouteCatalog(
+                RequestMappingHandlerMapping mappings,
+                OperationCatalog operations,
+                OpenApiRouteRegistrar registrar) {
+            return new OpenApiRouteCatalog(mappings, operations, java.util.List.of(registrar));
         }
     }
 }

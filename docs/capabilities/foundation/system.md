@@ -20,7 +20,7 @@
 | 运行任务 | `modules:audit:sca4dj-audit`、`modules:messaging:sca4dj-messaging`、`modules:notification:sca4dj-notification`、`modules:notification:sca4dj-notification-email`、`modules:notification:sca4dj-notification-sms`、`modules:job:sca4dj-job`、`modules:scheduling:sca4dj-scheduling-quartz` | 审计、可靠业务消息、通知、持久化任务和 Quartz 调度 |
 | 在线通信 | `modules:web-realtime:sca4dj-web-realtime` | 浏览器 SSE 与 WebSocket/STOMP 消息 |
 | IoT | `modules:iot:sca4dj-iot-api`、`sca4dj-iot`、`sca4dj-iot-emqx`、`sca4dj-iot-timescale` | 设备接口约定、设备领域状态、EMQX/MQTT 接入和 TimescaleDB 时序存储 |
-| 接口与扩展 | `modules:openapi:sca4dj-openapi`、`modules:plugin:sca4dj-plugin`、`sca4dj-plugin-pf4j`、`sca4dj-plugin-spring` | OpenAPI 文档生成、插件接口、PF4J 加载和 Spring 装配 |
+| 接口与扩展 | `modules:open:sca4dj-open`、`modules:open:sca4dj-openapi`、`modules:open:sca4dj-open-graphql`、`modules:plugin:sca4dj-plugin`、`sca4dj-plugin-pf4j`、`sca4dj-plugin-spring` | 平台开放 Client、OpenAPI/GraphQL 适配、插件接口、PF4J 加载和 Spring 装配 |
 | Storage | `modules:storage:sca4dj-storage-file`、`sca4dj-storage-local`、`sca4dj-storage-minio` | 文件生命周期、本地目录对象和 MinIO 对象 |
 | App | `apps:<应用名>-server` | HTTP API、权限、模块组合、配置和启动 |
 | App | `apps:<应用名>-iot-simulator` | 独立 MQTT 连接模拟进程，不是 Server 的库依赖或业务服务 App |

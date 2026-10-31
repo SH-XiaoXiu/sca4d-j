@@ -1,0 +1,7 @@
+com.sca4d.open.auth
+com.sca4d.open.client
+com.sca4d.open.client.mapper
+com.sca4d.open.config
+com.sca4d.open.exception
+com.sca4d.open.oauth
+com.sca4d.open.web

@@ -9,7 +9,6 @@ import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.iot.api.IotCapabilities;
-import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,13 +17,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 
-/** 声明具体应用对第三方 OpenAPI Client 公开的 IoT Tool 路由。 */
+/** 提供具体应用向第三方程序公开的 IoT Tool。 */
 @RestController
 @ConditionalOnCapability(IotCapabilities.API)
 @Tag(name = "IoT 设备", description = "供第三方程序读取 Sca4d Server 中已经登记的 IoT 设备。")
@@ -39,12 +39,12 @@ public class IotOpenApiController {
     }
 
     /**
-     * 读取指定 IoT Device 的公开资料、连接标识和启停状态。
+     * 按 Device 标识读取公开资料、连接标识和启停状态。
      *
-     * @param deviceId 十进制 Device 标识
-     * @return 独立于管理端响应类型的开放 API Device 响应
+     * @param deviceId Device 的十进制标识
+     * @return 与管理端响应类型分离的开放 API Device 响应
      */
-    @OpenApiRoute(method = RequestMethod.GET, path = "/openapi/iot/devices/{deviceId}", toolGroup = "iot", toolName = "getDevice", operation = IotOperations.DEVICES_READ_VALUE)
+    @GetMapping(value = "/openapi/iot/devices/{deviceId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "查询 IoT 设备", description = "按 Device 标识读取设备资料、Product 绑定、连接标识、接入方式和启停状态。")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "找到设备并返回当前资料", useReturnTypeSchema = true, content = @Content(mediaType = "application/json", examples = @ExampleObject(name = "device", summary = "数据库 Product 下启用的设备", value = """

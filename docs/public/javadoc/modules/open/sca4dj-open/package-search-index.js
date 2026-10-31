@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.open.auth"},{"l":"com.sca4d.open.client"},{"l":"com.sca4d.open.client.mapper"},{"l":"com.sca4d.open.config"},{"l":"com.sca4d.open.exception"},{"l":"com.sca4d.open.oauth"},{"l":"com.sca4d.open.web"}];updateSearchResults();

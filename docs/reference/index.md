@@ -67,7 +67,9 @@ IAM 管理 Subject、Account、Principal 和授权关系；Auth 管理认证尝�
 - [sca4dj-storage-file](/javadoc/modules/storage/sca4dj-storage-file/index.html)
 - [sca4dj-storage-local](/javadoc/modules/storage/sca4dj-storage-local/index.html)
 - [sca4dj-storage-minio](/javadoc/modules/storage/sca4dj-storage-minio/index.html)
-- [sca4dj-openapi](/javadoc/modules/openapi/sca4dj-openapi/index.html)
+- [sca4dj-open](/javadoc/modules/open/sca4dj-open/index.html)
+- [sca4dj-openapi](/javadoc/modules/open/sca4dj-openapi/index.html)
+- [sca4dj-open-graphql](/javadoc/modules/open/sca4dj-open-graphql/index.html)
 
 ### 示例应用与构建插件
 

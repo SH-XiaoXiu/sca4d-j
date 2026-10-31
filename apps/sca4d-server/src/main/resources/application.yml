@@ -294,16 +294,21 @@ sca4dj:
       issuer: ${SCA4DJ_AUTH_JWT_ISSUER:${spring.application.name}}
       audience: ${SCA4DJ_AUTH_JWT_AUDIENCE:${spring.application.name}}
       max-token-length: ${SCA4DJ_AUTH_JWT_MAX_TOKEN_LENGTH:6144}
-  openapi:
+  open:
     jwt:
-      enabled: ${SCA4DJ_OPENAPI_JWT_ENABLED:false}
-      active-key-id: ${SCA4DJ_OPENAPI_JWT_ACTIVE_KEY_ID:primary}
+      enabled: ${SCA4DJ_OPEN_JWT_ENABLED:false}
+      active-key-id: ${SCA4DJ_OPEN_JWT_ACTIVE_KEY_ID:primary}
       keys:
-        primary: ${SCA4DJ_OPENAPI_JWT_PRIMARY_KEY:}
-      issuer: ${SCA4DJ_OPENAPI_JWT_ISSUER:${spring.application.name}-openapi}
-      audience: ${SCA4DJ_OPENAPI_JWT_AUDIENCE:${spring.application.name}-openapi}
-      access-ttl: ${SCA4DJ_OPENAPI_JWT_ACCESS_TTL:PT5M}
-      max-token-length: ${SCA4DJ_OPENAPI_JWT_MAX_TOKEN_LENGTH:6144}
+        primary: ${SCA4DJ_OPEN_JWT_PRIMARY_KEY:}
+      issuer: ${SCA4DJ_OPEN_JWT_ISSUER:${spring.application.name}-open}
+      audience: ${SCA4DJ_OPEN_JWT_AUDIENCE:${spring.application.name}-open}
+      access-ttl: ${SCA4DJ_OPEN_JWT_ACCESS_TTL:PT5M}
+      max-token-length: ${SCA4DJ_OPEN_JWT_MAX_TOKEN_LENGTH:6144}
+    graphql:
+      enabled: ${SCA4DJ_OPEN_GRAPHQL_ENABLED:true}
+      introspection-enabled: ${SCA4DJ_OPEN_GRAPHQL_INTROSPECTION_ENABLED:false}
+      max-depth: ${SCA4DJ_OPEN_GRAPHQL_MAX_DEPTH:8}
+      max-complexity: ${SCA4DJ_OPEN_GRAPHQL_MAX_COMPLEXITY:1000}
 sa-token:
   token-name: ${SCA4DJ_AUTH_TOKEN_NAME:Authorization}
   timeout: ${SCA4DJ_SA_TOKEN_TIMEOUT:2592000}

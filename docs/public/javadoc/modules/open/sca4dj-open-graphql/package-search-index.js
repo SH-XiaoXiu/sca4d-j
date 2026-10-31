@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.open.graphql"},{"l":"com.sca4d.open.graphql.config"}];updateSearchResults();

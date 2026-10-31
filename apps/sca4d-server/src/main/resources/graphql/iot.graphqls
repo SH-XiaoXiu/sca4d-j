@@ -1,0 +1,14 @@
+type Query {
+    iotDevice(deviceId: ID!): IotGraphQlDevice
+        @openOperation(operation: "IOT:DEVICES:READ")
+}
+
+type IotGraphQlDevice {
+    id: ID!
+    productCode: String!
+    code: String!
+    displayName: String!
+    protocolCode: String!
+    status: String!
+    accessMethods: [String!]!
+}

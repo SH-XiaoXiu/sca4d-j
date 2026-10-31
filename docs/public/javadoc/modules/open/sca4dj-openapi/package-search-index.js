@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.openapi.config"},{"l":"com.sca4d.openapi.exception"},{"l":"com.sca4d.openapi.web"},{"l":"com.sca4d.openapi.web.annotation"}];updateSearchResults();

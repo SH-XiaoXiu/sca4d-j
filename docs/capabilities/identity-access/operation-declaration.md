@@ -78,7 +78,7 @@ flowchart TB
 - SYSTEM：`Subject.SYSTEM` 由启动配置发布 ID。`IdentityService.createSubject(SubjectType.SYSTEM)` 和 `createAccount(...)` 对 SYSTEM 抛出 `IllegalArgumentException`。SYSTEM 不使用登录 Account。
 
   系统调用由 `Call.system(...)` 建立，不调用 `authenticate`，因此没有 Session。`Call.grants(...)` 在没有 Session 时返回 `false`，固定操作的权限判断拒绝该调用。源码中未定义系统调用通过其他途径获得固定操作权限的机制。
-- APPLICATION：APPLICATION 主体由 OpenAPI Client 创建。`@OpenApiRoute` 路由只接受 APPLICATION 主体，并要求路由声明的 `operation` 已开放给该 Client。细节见 [OpenAPI 外部调用](/capabilities/identity-access/openapi-client)。
+- APPLICATION：APPLICATION 主体由 Open Client 创建。`@OpenApiRoute` 路由只接受 APPLICATION 主体，并要求路由声明的 `operation` 已开放给该 Client。细节见 [OpenAPI 外部调用](/capabilities/identity-access/openapi-client)。
 
 ## 限制与失败结果
 

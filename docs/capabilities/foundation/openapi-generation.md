@@ -2,7 +2,7 @@
 
 OpenAPI 文档由 Springdoc 生成。脚手架在其上补充统一的基础信息、HTTP 输入的默认限制、分页与排序参数，以及开放 API 分组。
 
-本页涵盖这些配置的入口、参数到 Schema 的映射规则、`@OpenApiRoute` 与 Operation 的关系，以及生成相关的失败结果。本页适用于新增 Controller、开放 API 路由或调整文档配置的开发者。读完后，开发者能判断一个接口的文档内容由哪个配置或注解决定。HTTP 响应中字段的约定见 [HTTP API 通用约定](/reference/http/common#openapi)。
+本页涵盖这些配置的入口、参数到 Schema 的映射规则、`OpenApiRouteDefinition` 与 Operation 的关系，以及生成相关的失败结果。本页适用于新增 Controller、开放 API 路由或调整文档配置的开发者。开放路由由 `OpenApiRouteCatalog` 在启动期登记并冻结，`@OpenApiRoute` 只是其中一种声明适配方式。HTTP 响应中字段的约定见 [HTTP API 通用约定](/reference/http/common#openapi)。
 
 ## 概念
 
@@ -10,7 +10,7 @@ Springdoc 根据 Spring MVC 的 Controller 方法生成 Operation 与 Schema。�
 
 - 类型映射：HTTP JSON 把 Java 的 `Long` 与 `long` 写成十进制字符串。`CoreOpenApiConfiguration` 把对应 Schema 替换为字符串，描述为「64 位整数的十进制字符串」。
 - 默认限制：`HttpInputOpenApiCustomizer` 把运行时的默认校验写入参数与请求体 Schema，例如整数的正数要求、字符串最大长度和容器最大元素数。
-- 注解补充：`@IfMatch` 增加 `If-Match` 请求头，`@ETag` 为成功响应增加 `ETag` 响应头，`PageRequest` 与 `ListParameters` 增加 `page`、`size` 和 `sort` 参数。
+- 声明补充：`@IfMatch` 增加 `If-Match` 请求头，`@ETag` 为成功响应增加 `ETag` 响应头，`PageRequest` 与 `ListParameters` 增加 `page`、`size` 和 `sort` 参数。
 
 例如，一个未声明显式范围的 `Long` 字段，在 `positive-integer-enabled` 为 `true` 时生成字符串 Schema，并设置模式 `^[1-9][0-9]*$`。
 
@@ -26,20 +26,24 @@ Springdoc 根据 Spring MVC 的 Controller 方法生成 Operation 与 Schema。�
 | --- | --- | --- |
 | `CoreOpenApiConfiguration` | 在 `sca4dj.core.openapi.enabled` 为 `true` 时注册 Springdoc 类型替换、默认 `OpenAPI` Bean 和 `HttpInputOpenApiCustomizer` Bean | 声明 Controller 路由，决定接口的认证要求 |
 | `HttpInputOpenApiCustomizer` | 为参数、属性和接口写入类型标记，补充 `If-Match`、`ETag`、`page`、`size` 和 `sort`，在最终文档中应用默认限制并删除内部标记 | 执行运行时校验，运行时校验由 `HttpInputValidationAspect` 执行 |
-| `OpenApiSpringdocAutoConfiguration` | 注册开放 API 的安全方案和固定错误 Schema，只把标注 `@OpenApiRoute` 的方法放入 `openapi` 分组，为这些方法设置 `operationId`、扩展字段、安全要求和固定错误响应，并在存在认证端点时注册 Token 路径 | 签发 Token，校验 Bearer 或 HMAC 凭据 |
-| `OpenApiRouteCatalog` | 创建时检查 `@OpenApiRoute` 的唯一性，以及 Controller 方法与 `operation` 的权限声明是否一致 | 生成文档内容 |
-| `@OpenApiRoute` | 组合 Spring MVC 的 `RequestMapping`，并声明 `toolGroup`、`toolName` 和 `operation` | 权限声明，权限仍由 Controller 上的 `@RequirePermission` 提供 |
+| `OpenApiSpringdocAutoConfiguration` | 注册开放 API 的安全方案和固定错误 Schema，只把 `OpenApiRouteCatalog` 中的路由放入 `openapi` 分组，为这些方法设置 `operationId`、扩展字段、安全要求和固定错误响应，并在存在认证端点时注册 Token 路径 | 签发 Token，校验 Bearer 或 HMAC 凭据 |
+| `OpenApiRouteCatalog` | 收集注解适配器和 `OpenApiRouteRegistrar` 注册的定义，检查唯一性、Spring MVC 映射和 Operation 权限一致性，发布只读查询快照 | 生成文档内容、读取请求凭据或执行权限检查 |
+| `OpenApiRouteDefinition` | 保存 HTTP 方法、路径、Tool 名称和 Operation，与声明方式无关 | 注册 Spring MVC 映射、认证或业务权限判断 |
+| `@OpenApiRoute` | 组合 Spring MVC 的 `RequestMapping`，并把 Tool 元数据交给启动期适配器 | 运行时认证和 Operation 检查 |
 
 ```mermaid
 flowchart TB
-    Controller[Controller 方法<br/>@PageOptions、@IfMatch、@ETag、@OpenApiRoute]
+    Controller[Controller 方法<br/>@PageOptions、@IfMatch、@ETag、Spring MVC 映射]
+    Catalog[OpenApiRouteCatalog<br/>注解适配器或程序化注册]
     Springdoc[Springdoc 生成 Operation 与 Schema]
     Field[HttpInputOpenApiCustomizer<br/>参数与属性写入标记]
     Operation[HttpInputOpenApiCustomizer<br/>接口补充参数与响应头]
     Tool[OpenApiSpringdocAutoConfiguration<br/>Tool 分组与固定错误]
     Final[HttpInputOpenApiCustomizer<br/>应用默认限制并删除标记]
     Doc[OpenAPI 文档]
-    Controller --> Springdoc --> Field --> Operation --> Tool --> Final --> Doc
+    Controller --> Catalog --> Springdoc
+    Controller --> Springdoc
+    Springdoc --> Field --> Operation --> Tool --> Final --> Doc
 ```
 
 ## 基础文档与类型映射
@@ -62,10 +66,10 @@ flowchart TB
 
 ## 与 Operation 的关系
 
-- 每个开放 API 路由使用 `@OpenApiRoute` 声明 HTTP 方法、路径、`toolGroup`、`toolName` 和 `operation`。`operation` 引用 `OperationCatalog` 中已经注册的固定编码。
-- `OpenApiRouteCatalog` 检查路由是否重复、Tool 名称是否重复、标准操作标识是否重复，以及 Controller 方法是否声明了与 `operation` 相同的 `@RequirePermission`。
+- 每个开放 API 路由由 `OpenApiRouteDefinition` 保存 HTTP 方法、路径、`toolGroup`、`toolName` 和 `operation`。`operation` 引用 `OperationCatalog` 中已经注册的固定编码。
+- `OpenApiRouteCatalog` 同时接受 `OpenApiRouteAnnotationRegistrar` 和应用提供的 `OpenApiRouteRegistrar`，检查路由是否重复、Tool 名称是否重复、标准操作标识是否重复、Controller 方法是否有 Spring MVC 映射，以及是否声明了与 `operation` 相同的 `@RequirePermission`。
 - Tool 的 `operationId` 由 `toolGroup` 加上首字母大写的 `toolName` 组成。
-- `openapi` 分组只包含标注 `@OpenApiRoute` 的方法。普通 Controller 方法不进入该分组。
+- `openapi` 分组只包含登记到 `OpenApiRouteCatalog` 的方法。普通 Controller 方法不进入该分组。
 - Tool 接口的安全要求为 `openApiBearer` 或 `openApiHmac` 之一。`400`、`401`、`403` 和 `500` 的固定错误响应，只在接口没有对应响应时添加。
 
 ## 配置
@@ -90,10 +94,11 @@ flowchart TB
 | --- | --- | --- |
 | Springdoc 类不在运行类路径中 | `CoreOpenApiConfiguration` 与 `OpenApiSpringdocAutoConfiguration` 的类条件不满足，两者都不注册。源码中未定义额外的错误输出 | 确认 Springdoc 依赖在运行类路径中 |
 | `sca4dj.core.openapi.enabled` 为 `false` | Core 的基础文档配置不注册 | 需要脚手架基础文档时保持 `true` |
-| `@OpenApiRoute` 的路径不以 OpenAPI 路径前缀加 `/` 开头，包含重复斜杠、查询参数或片段，或 HTTP 方法不是一个 | `IllegalArgumentException`，在 `OpenApiRouteDefinition` 中抛出 | 修正路径或方法声明 |
+| `OpenApiRouteDefinition` 的路径不以 OpenAPI 路径前缀加 `/` 开头，包含重复斜杠、查询参数或片段，或 HTTP 方法为空 | `IllegalArgumentException`，在 `OpenApiRouteDefinition` 中抛出 | 修正路由定义 |
 | 路由重复、Tool 名称重复或标准操作标识重复 | `IllegalStateException`，在 `OpenApiRouteCatalog` 中抛出 | 删除重复声明 |
+| 路由没有对应的 Spring MVC Handler | `IllegalStateException`，在 `OpenApiRouteCatalog` 冻结目录时抛出 | 保留有效的 `@GetMapping` 等映射，或让注册器指向有效的 Spring MVC 映射 |
 | Controller 方法缺少与 `operation` 相同的 `@RequirePermission` | `IllegalStateException`，消息包含方法签名 | 添加相同 Operation 的权限声明 |
-| 认证端点路径不是非根绝对路径，或以斜杠结尾，或包含重复斜杠、查询字符串与片段 | `IllegalArgumentException`，在 `OpenApiAuthenticationEndpoint` 构造时抛出 | 修正应用声明的认证端点路径 |
+| 认证端点路径不是非根绝对路径，或以斜杠结尾，或包含重复斜杠、查询字符串与片段 | `IllegalArgumentException`，在 `OpenAuthenticationEndpoint` 构造时抛出 | 修正应用声明的认证端点路径 |
 | Token 处理方法不存在 | `OpenapiException`，消息为「OpenAPI Token Handler 方法不存在」 | 检查 Token Handler 的方法与模块版本是否一致 |
 | 定制器在生成过程中抛出异常 | 定制器源码中没有捕获异常。异常的传播方式由 Springdoc 决定，源码中未定义具体的响应 | 以 Springdoc 的实际行为为准 |
 | 接口或参数标注 `@NoDefaultValidation` | 不写入默认限制，显式约束仍然写入 | 需要保留默认限制时不要标注 |
@@ -126,7 +131,7 @@ public class DocumentController {
         this.documents = documents;
     }
 
-    // 文档中生成 page、size 参数，size 最大值为 100
+    // 文档生成 page、size 参数，size 最大值为 100
     @GetMapping
     @RequirePermission(operation = "document:read")
     public ApiResponse<Page<DocumentView>> list(
@@ -135,7 +140,7 @@ public class DocumentController {
         return ApiResponse.ok(documents.find(workspaceId, page));
     }
 
-    // 文档中生成必填的 If-Match 请求头
+    // 文档生成必填的 If-Match 请求头
     @PatchMapping("/{documentId}")
     @IfMatch
     @RequirePermission(operation = "document:update")
@@ -147,7 +152,7 @@ public class DocumentController {
         return ApiResponse.ok();
     }
 
-    // 进入 openapi 分组，operation 必须与 @RequirePermission 一致
+    // 登记到 openapi 分组，operation 必须与 @RequirePermission 一致
     @OpenApiRoute(
             method = RequestMethod.GET,
             path = "/openapi/documents/{documentId}",
@@ -164,7 +169,7 @@ public class DocumentView {
 
     private final Version version;
 
-    // 成功响应增加 ETag 响应头；返回 null 时不发布
+    // 成功响应增加 ETag 响应头；返回 null 时不发布该响应头
     @ETag
     public Version revision() {
         return version;
@@ -172,7 +177,33 @@ public class DocumentView {
 }
 ```
 
-`@ETag` 标注在返回数据类型的公开方法上，而不是 Controller 方法上。上述 Tool 的 `operationId` 为 `documentGetDocument`。
+`@ETag` 标注在返回数据类型的公开方法上，而不是 Controller 方法上。示例中的 Tool 的 `operationId` 为 `documentGetDocument`。
+
+不使用 `@OpenApiRoute` 时，Controller 保留普通 Spring MVC 映射，再由 `OpenApiRouteRegistrar` 登记 Tool 元数据：
+
+```java
+@GetMapping(value = "/openapi/documents/{documentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequirePermission(operation = "document:read")
+public ApiResponse<DocumentView> get(@PathVariable long documentId) {
+    return ApiResponse.ok(documents.get(documentId));
+}
+
+@Bean
+OpenApiRouteRegistrar documentOpenApiRoutes() {
+    return routes -> routes.register(
+            DocumentController.class,
+            "get",
+            new OpenApiRouteDefinition(
+                    RequestMethod.GET,
+                    "/openapi/documents/{documentId}",
+                    "document",
+                    "getDocument",
+                    TreeCode.ofColon("document:read")),
+            long.class);
+}
+```
+
+注册器和注解适配器生成相同的 `OpenApiRouteCatalog` 条目。HTTP 映射仍可使用 Spring MVC 注解，也可以由应用自己的 `RequestMappingHandlerMapping` 注册器完成。
 
 只调整默认限制时，修改配置：
 
@@ -193,8 +224,8 @@ sca4dj:
 ## 扩展方式
 
 - 默认 `OpenAPI` Bean 带有 `@ConditionalOnMissingBean`。应用声明自己的 `OpenAPI` Bean 后，Core 不再创建默认实现。
-- 开放 API 路由由 `@OpenApiRoute` 声明，OpenApiRouteCatalog 在启动时扫描带该注解的 Controller 方法，并检查唯一性和权限声明。
-- 认证端点由应用提供 OpenApiAuthenticationEndpoint，OpenApiSpringdocAutoConfiguration 发现后注册 Token 路径。
+- 开放 API 路由由 `OpenApiRouteDefinition` 表达。应用可以使用 `@OpenApiRoute`，也可以提供 `OpenApiRouteRegistrar`；`OpenApiRouteCatalog` 在启动时统一校验并冻结路由。
+- 认证端点由应用提供 OpenAuthenticationEndpoint，OpenApiSpringdocAutoConfiguration 发现后注册 Token 路径。
 
 ## 相关页面
 
