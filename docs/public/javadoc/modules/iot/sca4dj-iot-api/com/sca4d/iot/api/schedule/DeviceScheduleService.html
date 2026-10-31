@@ -166,9 +166,9 @@ loadScripts(document, 'script');</script>
 <dd><code>trigger</code> - 未来的单次时间或带时区六字段 Cron</dd>
 <dd><code>validFor</code> - 从计划时间开始计算的正数下行有效期</dd>
 <dt>Returns:</dt>
-<dd>PostgreSQL 已保存的 ACTIVE 规则</dd>
+<dd>已保存的 ACTIVE 规则</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Device 不存在或触发规则非法时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Device 不存在或触发规则非法时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - command 或有效期为空、有效期不是正数或毫秒数溢出时抛出</dd>
 </dl>
 </section>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>版本已经推进的 ACTIVE 规则</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 触发规则非法、规则不存在或版本变化时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 触发规则非法、规则不存在或版本变化时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - command 或有效期为空、有效期不是正数或毫秒数溢出时抛出</dd>
 </dl>
 </section>
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>状态已经修改的规则；目标状态与当前状态相同时返回当前规则</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 状态非法、规则不存在、版本变化或规则已经结束时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 状态非法、规则不存在、版本变化或规则已经结束时抛出</dd>
 </dl>
 </section>
 </li>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <dd><code>scheduleId</code> - 规则标识</dd>
 <dd><code>expectedVersion</code> - 调用方最后读取到的非负版本，新建规则初始为 0</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 规则不存在、版本变化或规则已经取消时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 规则不存在、版本变化或规则已经取消时抛出</dd>
 </dl>
 </section>
 </li>

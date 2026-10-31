@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 @RequestMapping("${sca4dj.gateway.protocol.callback-path}")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">GatewayCallbackDispatcher</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">把 `/callbacks/{code}` 的 JSON 请求转换为应用声明的 `GatewayCallback` 调用。</div>
+<div class="block">把 `sca4dj.gateway.protocol.callback-path` 下 `/{code}` 的 JSON 请求转换为应用声明的 `GatewayCallback` 调用。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -194,6 +194,8 @@ loadScripts(document, 'script');</script>
 <dd><code>body</code> - 可选 JSON 请求体</dd>
 <dt>Returns:</dt>
 <dd>回调给出的原始 HTTP 结果；编码不存在时返回 404</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 请求体 JSON 无法转换为回调声明的 `requestType()` 时抛出，由 Spring MVC 处理为错误响应</dd>
 </dl>
 </section>
 </li>

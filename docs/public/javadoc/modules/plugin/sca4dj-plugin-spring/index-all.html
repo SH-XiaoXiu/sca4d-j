@@ -26,7 +26,8 @@ loadScripts(document, 'script');</script>
 <div class="top-nav" id="navbar-top"><button id="navbar-toggle-button" aria-controls="navbar-top" aria-expanded="false" aria-label="Toggle navigation links"><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span></button>
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
-<li><a href="com/sca4d/plugin/spring/package-summary.html">Package</a></li>
+<li><a href="index.html">Overview</a></li>
+<li>Package</li>
 <li>Class</li>
 <li><a href="overview-tree.html">Tree</a></li>
 <li class="nav-bar-cell1-rev">Index</li>
@@ -48,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around(CallExecution, CallLifecycle.Next)</a> - Method in class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html" title="class in com.sca4d.plugin.spring">PluginScopeCallInterceptor</a></dt>
@@ -62,9 +63,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html" title="class in com.sca4d.plugin.spring">PluginScopeCallInterceptor</a></dt>
 <dd>
-<div class="block">插件作用域生命周期节点。</div>
+<div class="block">插件作用域在 Call 拦截链中的节点。</div>
 </dd>
 <dt><a href="com/sca4d/plugin/spring/package-summary.html">com.sca4d.plugin.spring</a> - package com.sca4d.plugin.spring</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/plugin/spring/exception/package-summary.html">com.sca4d.plugin.spring.exception</a> - package com.sca4d.plugin.spring.exception</dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
@@ -94,17 +97,31 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html" class="type-name-link" title="class in com.sca4d.plugin.spring">PluginScopeCallInterceptor</a> - Class in <a href="com/sca4d/plugin/spring/package-summary.html">com.sca4d.plugin.spring</a></dt>
 <dd>
-<div class="block">在统一 Call 生命周期中固定插件代次，并把租用延续到外层事务完成。</div>
+<div class="block">在 Call 执行期间固定插件代次，并把租用保持到外层事务结束。</div>
 </dd>
 <dt><a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.plugin.PluginRuntime)" class="member-name-link">PluginScopeCallInterceptor(PluginRuntime)</a> - Constructor for class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html" title="class in com.sca4d.plugin.spring">PluginScopeCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/plugin/spring/exception/PluginSpringException.html" class="type-name-link" title="class in com.sca4d.plugin.spring.exception">PluginSpringException</a> - Exception Class in <a href="com/sca4d/plugin/spring/exception/package-summary.html">com.sca4d.plugin.spring.exception</a></dt>
+<dd>
+<div class="block">插件与 Spring 集成的故障，例如 App API 描述缺失。</div>
+</dd>
+<dt><a href="com/sca4d/plugin/spring/exception/PluginSpringException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">PluginSpringException(String)</a> - Constructor for exception class com.sca4d.plugin.spring.exception.<a href="com/sca4d/plugin/spring/exception/PluginSpringException.html" title="class in com.sca4d.plugin.spring.exception">PluginSpringException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/plugin/spring/exception/PluginSpringException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">PluginSpringException(String, Throwable)</a> - Constructor for exception class com.sca4d.plugin.spring.exception.<a href="com/sca4d/plugin/spring/exception/PluginSpringException.html" title="class in com.sca4d.plugin.spring.exception">PluginSpringException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
 <dt><a href="com/sca4d/plugin/spring/PluginProperties.html#setApi(java.lang.String)" class="member-name-link">setApi(String)</a> - Method in class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginProperties.html" title="class in com.sca4d.plugin.spring">PluginProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/plugin/spring/PluginProperties.html#setArtifacts(java.util.List)" class="member-name-link">setArtifacts(List&lt;String&gt;)</a> - Method in class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginProperties.html" title="class in com.sca4d.plugin.spring">PluginProperties</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">复制传入的构件列表并替换当前配置；列表中包含 null 元素时抛出 NullPointerException，原列表保持不变。</div>
+</dd>
 <dt><a href="com/sca4d/plugin/spring/PluginProperties.html#setCacheDirectory(java.lang.String)" class="member-name-link">setCacheDirectory(String)</a> - Method in class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginProperties.html" title="class in com.sca4d.plugin.spring">PluginProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/plugin/spring/PluginProperties.html#setDrainTimeout(java.time.Duration)" class="member-name-link">setDrainTimeout(Duration)</a> - Method in class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginProperties.html" title="class in com.sca4d.plugin.spring">PluginProperties</a></dt>
@@ -112,7 +129,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.plugin.spring.<a href="com/sca4d/plugin/spring/PluginScopeCallInterceptor.html" title="class in com.sca4d.plugin.spring">PluginScopeCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

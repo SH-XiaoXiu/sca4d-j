@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/NotificationDeliveryRouter.html#available(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.notification.Notification)" class="member-name-link">available(TreeCode, Notification)</a> - Method in class com.sca4d.notification.<a href="com/sca4d/notification/NotificationDeliveryRouter.html" title="class in com.sca4d.notification">NotificationDeliveryRouter</a></dt>
@@ -89,6 +89,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">装配渠道无关通知服务和默认模板引擎。</div>
 </dd>
+<dt><a href="com/sca4d/notification/exception/package-summary.html">com.sca4d.notification.exception</a> - package com.sca4d.notification.exception</dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
@@ -96,7 +98,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/DefaultNotifications.html" class="type-name-link" title="class in com.sca4d.notification">DefaultNotifications</a> - Class in <a href="com/sca4d/notification/package-summary.html">com.sca4d.notification</a></dt>
 <dd>
-<div class="block">使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。</div>
+<div class="block">使用通知类型注册的回调从业务对象生成通知，并同步发布或写入 Outbox。</div>
 </dd>
 <dt><a href="com/sca4d/notification/DefaultNotifications.html#%3Cinit%3E(com.sca4d.notification.NotificationTypeCatalog,com.sca4d.notification.config.NotificationSettings,com.sca4d.notification.NotificationLocaleResolver,com.sca4d.notification.NotificationRegionResolver,com.sca4d.notification.NotificationDeliveryRouter,com.sca4d.core.api.messaging.MessageBus,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">DefaultNotifications(NotificationTypeCatalog, NotificationSettings, NotificationLocaleResolver, NotificationRegionResolver, NotificationDeliveryRouter, MessageBus, IdGenerator)</a> - Constructor for class com.sca4d.notification.<a href="com/sca4d/notification/DefaultNotifications.html" title="class in com.sca4d.notification">DefaultNotifications</a></dt>
 <dd>
@@ -151,7 +153,19 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/NotificationErrorCode.html" class="type-name-link" title="enum class in com.sca4d.notification">NotificationErrorCode</a> - Enum Class in <a href="com/sca4d/notification/package-summary.html">com.sca4d.notification</a></dt>
 <dd>
-<div class="block">统一通知模板和渠道设置使用的稳定错误码。</div>
+<div class="block">通知模板和渠道设置失败时返回的错误码。</div>
+</dd>
+<dt><a href="com/sca4d/notification/exception/NotificationException.html" class="type-name-link" title="class in com.sca4d.notification.exception">NotificationException</a> - Exception Class in <a href="com/sca4d/notification/exception/package-summary.html">com.sca4d.notification.exception</a></dt>
+<dd>
+<div class="block">通知模块的依赖故障，例如通知渠道在投递时不可用。</div>
+</dd>
+<dt><a href="com/sca4d/notification/exception/NotificationException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">NotificationException(String)</a> - Constructor for exception class com.sca4d.notification.exception.<a href="com/sca4d/notification/exception/NotificationException.html" title="class in com.sca4d.notification.exception">NotificationException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/notification/exception/NotificationException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">NotificationException(String, Throwable)</a> - Constructor for exception class com.sca4d.notification.exception.<a href="com/sca4d/notification/exception/NotificationException.html" title="class in com.sca4d.notification.exception">NotificationException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
 </dd>
 <dt><a href="com/sca4d/notification/NotificationLocaleResolver.html" class="type-name-link" title="interface in com.sca4d.notification">NotificationLocaleResolver</a> - Interface in <a href="com/sca4d/notification/package-summary.html">com.sca4d.notification</a></dt>
 <dd>
@@ -165,7 +179,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/NotificationMessageCodec.html" class="type-name-link" title="class in com.sca4d.notification">NotificationMessageCodec</a> - Class in <a href="com/sca4d/notification/package-summary.html">com.sca4d.notification</a></dt>
 <dd>
-<div class="block">把 NotificationMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。</div>
+<div class="block">把 NotificationMessage 编解码为 RabbitMQ 消息和 Outbox 记录使用的 JSON payload。</div>
 </dd>
 <dt><a href="com/sca4d/notification/NotificationMessageCodec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">NotificationMessageCodec(ObjectMapper)</a> - Constructor for class com.sca4d.notification.<a href="com/sca4d/notification/NotificationMessageCodec.html" title="class in com.sca4d.notification">NotificationMessageCodec</a></dt>
 <dd>&nbsp;</dd>
@@ -227,11 +241,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/notification/NotificationErrorCode.html#TEMPLATE_INVALID" class="member-name-link">TEMPLATE_INVALID</a> - Enum constant in enum class com.sca4d.notification.<a href="com/sca4d/notification/NotificationErrorCode.html" title="enum class in com.sca4d.notification">NotificationErrorCode</a></dt>
 <dd>
-<div class="block">统一通知模板结构、Locale 或变量无效。</div>
+<div class="block">通知模板结构、Locale 或模板变量无效。</div>
 </dd>
 <dt><a href="com/sca4d/notification/NotificationErrorCode.html#TEMPLATE_NOT_FOUND" class="member-name-link">TEMPLATE_NOT_FOUND</a> - Enum constant in enum class com.sca4d.notification.<a href="com/sca4d/notification/NotificationErrorCode.html" title="enum class in com.sca4d.notification">NotificationErrorCode</a></dt>
 <dd>
-<div class="block">统一通知模板不存在。</div>
+<div class="block">通知模板不存在。</div>
 </dd>
 <dt><a href="com/sca4d/notification/NotificationTypeCatalog.html#types()" class="member-name-link">types()</a> - Method in class com.sca4d.notification.<a href="com/sca4d/notification/NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a></dt>
 <dd>&nbsp;</dd>
@@ -252,7 +266,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/notification/NotificationMessageCodec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.<a href="com/sca4d/notification/NotificationMessageCodec.html" title="class in com.sca4d.notification">NotificationMessageCodec</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

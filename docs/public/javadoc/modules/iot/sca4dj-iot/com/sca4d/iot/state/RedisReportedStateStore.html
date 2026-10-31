@@ -138,13 +138,13 @@ implements com.sca4d.iot.api.state.ReportedStateStore</span></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(long,long)" class="member-name-link">find</a><wbr>(long&nbsp;deviceId,
  long&nbsp;bindingGeneration)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取索引列出的全部字段组，并忽略已经不存在的 Hash。</div>
+<div class="block">读取 Device 绑定下全部字段组快照；索引中 Hash 已不存在的字段组被跳过，并从索引中移除。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>com.sca4d.iot.api.query.ReportedStateSnapshot&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(java.util.Map,java.lang.String)" class="member-name-link">find</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;bindingGenerations,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;groupCode)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按指定绑定代数构造 Redis key，各批使用一次 pipeline 读取同一字段组。</div>
+<div class="block">按 Device 绑定代数批量读取同一字段组；Hash 不存在的 Device 不出现在结果中，返回的 Map 不可修改。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.state.ReportedStateWriteResult</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(long,long,com.sca4d.iot.api.state.ReportedStateUpdate,java.util.Map,java.lang.String,java.lang.String,java.time.Instant)" class="member-name-link">update</a><wbr>(long&nbsp;deviceId,
@@ -229,7 +229,7 @@ implements com.sca4d.iot.api.state.ReportedStateStore</span></div>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.iot.api.query.ReportedStateSnapshot&gt;</span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(long&nbsp;deviceId,
  long&nbsp;bindingGeneration)</span></div>
-<div class="block">读取索引列出的全部字段组，并忽略已经不存在的 Hash。</div>
+<div class="block">读取 Device 绑定下全部字段组快照；索引中 Hash 已不存在的字段组被跳过，并从索引中移除。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>find</code>&nbsp;in interface&nbsp;<code>com.sca4d.iot.api.state.ReportedStateStore</code></dd>
@@ -244,7 +244,7 @@ implements com.sca4d.iot.api.state.ReportedStateStore</span></div>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;bindingGenerations,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;groupCode)</span></div>
-<div class="block">按指定绑定代数构造 Redis key，各批使用一次 pipeline 读取同一字段组。</div>
+<div class="block">按 Device 绑定代数批量读取同一字段组；Hash 不存在的 Device 不出现在结果中，返回的 Map 不可修改。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>find</code>&nbsp;in interface&nbsp;<code>com.sca4d.iot.api.state.ReportedStateStore</code></dd>

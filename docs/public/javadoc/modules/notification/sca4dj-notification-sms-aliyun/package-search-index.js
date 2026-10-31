@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.notification.sms.aliyun"},{"l":"com.sca4d.notification.sms.aliyun.config"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.notification.sms.aliyun"},{"l":"com.sca4d.notification.sms.aliyun.config"},{"l":"com.sca4d.notification.sms.aliyun.exception"}];updateSearchResults();

@@ -161,7 +161,7 @@ implements com.sca4d.iot.api.schedule.DeviceScheduleService, com.sca4d.iot.api.s
 <div class="block">按计划标识读取设备计划，并在不存在时抛出稳定的业务错误。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pauseFailedSchedule(com.sca4d.iot.schedule.DeviceScheduleTriggerFailure)" class="member-name-link">pauseFailedSchedule</a><wbr>(@NotNull <a href="DeviceScheduleTriggerFailure.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTriggerFailure</a>&nbsp;failure)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pauseFailedSchedule(com.sca4d.iot.schedule.exception.DeviceScheduleTriggerException)" class="member-name-link">pauseFailedSchedule</a><wbr>(@NotNull <a href="exception/DeviceScheduleTriggerException.html" title="class in com.sca4d.iot.schedule.exception">DeviceScheduleTriggerException</a>&nbsp;failure)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">在触发事务回滚后，取得同一规则的 Redis 锁，并在新事务中保存同版本 FAILED 结果。</div>
 </div>
@@ -352,15 +352,15 @@ implements com.sca4d.iot.api.schedule.DeviceScheduleService, com.sca4d.iot.api.s
 <div class="block">读取一条到期候选，取得候选规则的 Redis 锁后在事务内重新确认并生成 command；没有到期候选时返回 `false`。</div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code><a href="DeviceScheduleTriggerFailure.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTriggerFailure</a></code> - command 业务校验失败时抛出，调用方必须在新事务中暂停候选规则</dd>
+<dd><code><a href="exception/DeviceScheduleTriggerException.html" title="class in com.sca4d.iot.schedule.exception">DeviceScheduleTriggerException</a></code> - command 业务校验失败时抛出，调用方必须在新事务中暂停候选规则</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="pauseFailedSchedule(com.sca4d.iot.schedule.DeviceScheduleTriggerFailure)">
+<section class="detail" id="pauseFailedSchedule(com.sca4d.iot.schedule.exception.DeviceScheduleTriggerException)">
 <h3>pauseFailedSchedule</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">pauseFailedSchedule</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="DeviceScheduleTriggerFailure.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTriggerFailure</a>&nbsp;failure)</span></div>
+ @NotNull <a href="exception/DeviceScheduleTriggerException.html" title="class in com.sca4d.iot.schedule.exception">DeviceScheduleTriggerException</a>&nbsp;failure)</span></div>
 <div class="block">在触发事务回滚后，取得同一规则的 Redis 锁，并在新事务中保存同版本 FAILED 结果。</div>
 </section>
 </li>

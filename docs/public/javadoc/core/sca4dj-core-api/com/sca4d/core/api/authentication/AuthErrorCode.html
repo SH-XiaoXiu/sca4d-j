@@ -121,8 +121,28 @@ implements <a href="../error/ErrorCode.html" title="interface in com.sca4d.core.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="#AUTHENTICATION_FAILED" class="member-name-link">AUTHENTICATION_FAILED</a></code></div>
+<div class="col-first even-row-color"><code><a href="#AUTH_ATTEMPT_EXPIRED" class="member-name-link">AUTH_ATTEMPT_EXPIRED</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">认证尝试不存在或已过期，请重新发起认证。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#AUTH_ATTEMPT_ID_CONFLICT" class="member-name-link">AUTH_ATTEMPT_ID_CONFLICT</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">认证尝试标识发生冲突，请重新发起认证。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#AUTH_ATTEMPT_INCOMPLETE" class="member-name-link">AUTH_ATTEMPT_INCOMPLETE</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">认证尝试尚未满足当前动作策略。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#AUTH_ATTEMPT_SATISFIED" class="member-name-link">AUTH_ATTEMPT_SATISFIED</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">认证尝试已经满足，不能继续提交。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#AUTH_METHOD_UNAVAILABLE" class="member-name-link">AUTH_METHOD_UNAVAILABLE</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">认证方法当前不可用。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#AUTHENTICATION_FAILED" class="member-name-link">AUTHENTICATION_FAILED</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">认证材料或账号状态不允许建立登录会话。</div>
 </div>
 </div>
@@ -190,6 +210,41 @@ the order they are declared.</div>
 <h3>AUTHENTICATION_FAILED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AuthErrorCode.html" title="enum class in com.sca4d.core.api.authentication">AuthErrorCode</a></span>&nbsp;<span class="element-name">AUTHENTICATION_FAILED</span></div>
 <div class="block">认证材料或账号状态不允许建立登录会话。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AUTH_ATTEMPT_ID_CONFLICT">
+<h3>AUTH_ATTEMPT_ID_CONFLICT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AuthErrorCode.html" title="enum class in com.sca4d.core.api.authentication">AuthErrorCode</a></span>&nbsp;<span class="element-name">AUTH_ATTEMPT_ID_CONFLICT</span></div>
+<div class="block">认证尝试标识发生冲突，请重新发起认证。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AUTH_ATTEMPT_EXPIRED">
+<h3>AUTH_ATTEMPT_EXPIRED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AuthErrorCode.html" title="enum class in com.sca4d.core.api.authentication">AuthErrorCode</a></span>&nbsp;<span class="element-name">AUTH_ATTEMPT_EXPIRED</span></div>
+<div class="block">认证尝试不存在或已过期，请重新发起认证。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AUTH_ATTEMPT_SATISFIED">
+<h3>AUTH_ATTEMPT_SATISFIED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AuthErrorCode.html" title="enum class in com.sca4d.core.api.authentication">AuthErrorCode</a></span>&nbsp;<span class="element-name">AUTH_ATTEMPT_SATISFIED</span></div>
+<div class="block">认证尝试已经满足，不能继续提交。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AUTH_ATTEMPT_INCOMPLETE">
+<h3>AUTH_ATTEMPT_INCOMPLETE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AuthErrorCode.html" title="enum class in com.sca4d.core.api.authentication">AuthErrorCode</a></span>&nbsp;<span class="element-name">AUTH_ATTEMPT_INCOMPLETE</span></div>
+<div class="block">认证尝试尚未满足当前动作策略。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AUTH_METHOD_UNAVAILABLE">
+<h3>AUTH_METHOD_UNAVAILABLE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="AuthErrorCode.html" title="enum class in com.sca4d.core.api.authentication">AuthErrorCode</a></span>&nbsp;<span class="element-name">AUTH_METHOD_UNAVAILABLE</span></div>
+<div class="block">认证方法当前不可用。</div>
 </section>
 </li>
 </ul>
@@ -269,7 +324,7 @@ not permitted.)</div>
 <dt>Specified by:</dt>
 <dd><code><a href="../error/ErrorCode.html#messageKey()">messageKey</a></code>&nbsp;in interface&nbsp;<code><a href="../error/ErrorCode.html" title="interface in com.sca4d.core.api.error">ErrorCode</a></code></dd>
 <dt>Returns:</dt>
-<dd>默认消息键，由外围国际化实现解析</dd>
+<dd>默认消息键；外围国际化实现据此查找文案</dd>
 </dl>
 </section>
 </li>

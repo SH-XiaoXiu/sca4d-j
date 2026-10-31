@@ -1,4 +1,5 @@
 com.sca4d.messaging.config
+com.sca4d.messaging.exception
 com.sca4d.messaging.outbox
 com.sca4d.messaging.outbox.mapper
 com.sca4d.messaging.rabbit

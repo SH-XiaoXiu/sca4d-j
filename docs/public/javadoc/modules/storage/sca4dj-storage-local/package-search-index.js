@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.storage.local"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.storage.local"},{"l":"com.sca4d.storage.local.exception"}];updateSearchResults();

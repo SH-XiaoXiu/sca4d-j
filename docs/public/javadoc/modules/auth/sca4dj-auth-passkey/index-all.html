@@ -49,16 +49,20 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:Y">Y</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:Y">Y</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
+<dt><a href="com/sca4d/auth/passkey/PasskeyErrorCode.html#ACCOUNT_ANCHOR_NOT_FOUND" class="member-name-link">ACCOUNT_ANCHOR_NOT_FOUND</a> - Enum constant in enum class com.sca4d.auth.passkey.<a href="com/sca4d/auth/passkey/PasskeyErrorCode.html" title="enum class in com.sca4d.auth.passkey">PasskeyErrorCode</a></dt>
+<dd>
+<div class="block">Passkey 对应的账号不存在。</div>
+</dd>
 <dt><a href="com/sca4d/auth/passkey/credential/PasskeyCredentialRepository.CredentialSlotReservation.html#ACCOUNT_MISSING" class="member-name-link">ACCOUNT_MISSING</a> - Enum constant in enum class com.sca4d.auth.passkey.credential.<a href="com/sca4d/auth/passkey/credential/PasskeyCredentialRepository.CredentialSlotReservation.html" title="enum class in com.sca4d.auth.passkey.credential">PasskeyCredentialRepository.CredentialSlotReservation</a></dt>
 <dd>
 <div class="block">账号尚无 Passkey 锚点或锚点已经被删除。</div>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.RegistrationCeremony.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.RegistrationCeremony.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore.RegistrationCeremony</a></dt>
 <dd>
-<div class="block">开始 registration 时绑定的账号标识。</div>
+<div class="block">返回开始 registration 时绑定的账号。</div>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/credential/mapper/PasskeyAccountState.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.auth.passkey.credential.mapper.<a href="com/sca4d/auth/passkey/credential/mapper/PasskeyAccountState.html" title="class in com.sca4d.auth.passkey.credential.mapper">PasskeyAccountState</a></dt>
 <dd>
@@ -78,6 +82,18 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/PasskeyAuthenticationMethod.html#authenticate(com.sca4d.core.api.identity.Account,com.sca4d.auth.passkey.PasskeyProof)" class="member-name-link">authenticate(Account, PasskeyProof)</a> - Method in class com.sca4d.auth.passkey.<a href="com/sca4d/auth/passkey/PasskeyAuthenticationMethod.html" title="class in com.sca4d.auth.passkey">PasskeyAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/passkey/exception/AuthPasskeyException.html" class="type-name-link" title="class in com.sca4d.auth.passkey.exception">AuthPasskeyException</a> - Exception Class in <a href="com/sca4d/auth/passkey/exception/package-summary.html">com.sca4d.auth.passkey.exception</a></dt>
+<dd>
+<div class="block">Passkey 认证的依赖或数据故障，例如凭据存储返回结果不符合预期。</div>
+</dd>
+<dt><a href="com/sca4d/auth/passkey/exception/AuthPasskeyException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">AuthPasskeyException(String)</a> - Constructor for exception class com.sca4d.auth.passkey.exception.<a href="com/sca4d/auth/passkey/exception/AuthPasskeyException.html" title="class in com.sca4d.auth.passkey.exception">AuthPasskeyException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/auth/passkey/exception/AuthPasskeyException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">AuthPasskeyException(String, Throwable)</a> - Constructor for exception class com.sca4d.auth.passkey.exception.<a href="com/sca4d/auth/passkey/exception/AuthPasskeyException.html" title="class in com.sca4d.auth.passkey.exception">AuthPasskeyException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 <dt><a href="com/sca4d/auth/passkey/PasskeyAuthenticationMethod.html#available(com.sca4d.core.api.identity.Account)" class="member-name-link">available(Account)</a> - Method in class com.sca4d.auth.passkey.<a href="com/sca4d/auth/passkey/PasskeyAuthenticationMethod.html" title="class in com.sca4d.auth.passkey">PasskeyAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -144,6 +160,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">执行 Passkey 模块私有数据库读写。</div>
 </dd>
+<dt><a href="com/sca4d/auth/passkey/exception/package-summary.html">com.sca4d.auth.passkey.exception</a> - package com.sca4d.auth.passkey.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/passkey/registration/package-summary.html">com.sca4d.auth.passkey.registration</a> - package com.sca4d.auth.passkey.registration</dt>
 <dd>
 <div class="block">开始和完成 discoverable Passkey registration。</div>
@@ -215,7 +233,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.StoredCeremony.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.StoredCeremony.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore.StoredCeremony</a></dt>
 <dd>
-<div class="block">ceremony 失效时间。</div>
+<div class="block">返回 ceremony 的失效时间。</div>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/registration/PasskeyRegistrationOptions.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.auth.passkey.registration.<a href="com/sca4d/auth/passkey/registration/PasskeyRegistrationOptions.html" title="class in com.sca4d.auth.passkey.registration">PasskeyRegistrationOptions</a></dt>
 <dd>
@@ -291,7 +309,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.StoredCeremony.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.StoredCeremony.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore.StoredCeremony</a></dt>
 <dd>
-<div class="block">浏览器完成 ceremony 时必须提交的不透明标识。</div>
+<div class="block">返回 ceremony 在 Redis 中的标识，浏览器完成 ceremony 时必须提交该标识。</div>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/credential/PasskeyCredential.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.auth.passkey.credential.<a href="com/sca4d/auth/passkey/credential/PasskeyCredential.html" title="class in com.sca4d.auth.passkey.credential">PasskeyCredential</a></dt>
 <dd>
@@ -501,7 +519,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.RegistrationCeremony.html#requestJson()" class="member-name-link">requestJson()</a> - Method in class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.RegistrationCeremony.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore.RegistrationCeremony</a></dt>
 <dd>
-<div class="block">Yubico 完成 registration 所需的原始 request JSON。</div>
+<div class="block">返回 Yubico 完成 registration 所需的 request JSON。</div>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/credential/PasskeyCredentialRepository.html#reserveCredentialSlot(long,int)" class="member-name-link">reserveCredentialSlot(long, int)</a> - Method in class com.sca4d.auth.passkey.credential.<a href="com/sca4d/auth/passkey/credential/PasskeyCredentialRepository.html" title="class in com.sca4d.auth.passkey.credential">PasskeyCredentialRepository</a></dt>
 <dd>
@@ -637,7 +655,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/auth/passkey/credential/YubicoCredentialRepository.html#%3Cinit%3E(com.sca4d.auth.passkey.credential.PasskeyCredentialRepository)" class="member-name-link">YubicoCredentialRepository(PasskeyCredentialRepository)</a> - Constructor for class com.sca4d.auth.passkey.credential.<a href="com/sca4d/auth/passkey/credential/YubicoCredentialRepository.html" title="class in com.sca4d.auth.passkey.credential">YubicoCredentialRepository</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:Y">Y</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:Y">Y</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

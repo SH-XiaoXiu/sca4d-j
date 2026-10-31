@@ -71,65 +71,73 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示 EMQX `5.8.9` HTTP Authenticator 必须以 HTTP 200 返回的认证结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationService.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">EMQX HTTP Authenticator 的认证结论，只有 `allow` 和 `deny` 两个协议值。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationService.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按 Device 明确接入方式验证 MQTT CONNECT，并生成 EMQX client_attrs、ACL 和失效时间。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/config/EmqxAutoConfiguration.html" title="class in com.sca4d.iot.emqx.config">EmqxAutoConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/config/EmqxAutoConfiguration.html" title="class in com.sca4d.iot.emqx.config">EmqxAutoConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在具体应用启用后装配 EMQX MQTT、认证、连接快照对账和 Management API，不开放 HTTP 路由。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html" title="class in com.sca4d.iot.emqx.connection">EmqxClientConnection</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html" title="class in com.sca4d.iot.emqx.connection">EmqxClientConnection</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 EMQX Management API 返回的一条当前 MQTT Client Connection。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/connection/EmqxConnectionReconciler.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/connection/EmqxConnectionReconciler.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">用单 Client 当前状态实时刷新连接，并在 watchdog 分布式锁内使用完整快照修复遗漏事件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点事实。</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点名称。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/authentication/EmqxDeviceConnectionRequestFactory.html" title="interface in com.sca4d.iot.emqx.authentication">EmqxDeviceConnectionRequestFactory</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的统一 Device 连接请求。</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/authentication/EmqxDeviceConnectionRequestFactory.html" title="interface in com.sca4d.iot.emqx.authentication">EmqxDeviceConnectionRequestFactory</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的 Device 连接请求。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/management/EmqxDeviceConnectionTerminator.html" title="class in com.sca4d.iot.emqx.management">EmqxDeviceConnectionTerminator</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/management/EmqxDeviceConnectionTerminator.html" title="class in com.sca4d.iot.emqx.management">EmqxDeviceConnectionTerminator</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">根据通用 DeviceConnectionId 查找 EMQX Client ID，并通过 Management API 幂等终止连接。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/management/EmqxManagementClient.html" title="interface in com.sca4d.iot.emqx.management">EmqxManagementClient</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/management/EmqxManagementClient.html" title="interface in com.sca4d.iot.emqx.management">EmqxManagementClient</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">调用 EMQX `5.8.9` Management API 查询、终止连接并发布 MQTT 消息。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用目标 Device 的 MQTT 协议和已登记 Client ID 编码下行，并等待 EMQX PUBACK。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">维护单个应用实例的 MQTT 5 客户端、业务共享订阅、连接事件订阅和 QoS 1 发布。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttTransport</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttTransport</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">延迟取得 `EmqxMqttRuntime`，使 MQTT 消息路由能够返回协议响应。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/config/EmqxProperties.html" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/config/EmqxProperties.html" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存具体应用连接 EMQX MQTT 和 Management API 所选择的运行参数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/emqx/management/EmqxPublishResultUnknownException.html" title="class in com.sca4d.iot.emqx.management">EmqxPublishResultUnknownException</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/emqx/management/exception/EmqxPublishResultUnknownException.html" title="class in com.sca4d.iot.emqx.management.exception">EmqxPublishResultUnknownException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示管理端发布请求发生传输中断，调用方无法确认 EMQX 是否已经接受请求。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/protocol/EncodedMqttMessage.html" title="class in com.sca4d.iot.emqx.protocol">EncodedMqttMessage</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/protocol/EncodedMqttMessage.html" title="class in com.sca4d.iot.emqx.protocol">EncodedMqttMessage</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存协议 encoder 生成的最终 MQTT Topic 和 payload。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/management/HttpEmqxManagementClient.html" title="class in com.sca4d.iot.emqx.management">HttpEmqxManagementClient</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/management/HttpEmqxManagementClient.html" title="class in com.sca4d.iot.emqx.management">HttpEmqxManagementClient</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Basic API Key 和 HTTP/1.1 调用 EMQX `5.8.9` Management API。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/emqx/exception/IotEmqxException.html" title="class in com.sca4d.iot.emqx.exception">IotEmqxException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">表示 IoT EMQX 模块的技术失败，例如依赖不可用、数据格式损坏或运行环境缺失，保留原始原因供排障。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/authentication/MqttAuthorization.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorization</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -141,7 +149,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">统一解析应用授权策略或协议 ACL，并为连接失效判断生成稳定指纹。</div>
+<div class="block">解析应用授权策略或协议 ACL，并为连接失效判断生成指纹。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html" title="class in com.sca4d.iot.emqx.connection">MqttDeviceConnection</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -181,13 +189,13 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/transport/MqttMessageObserver.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageObserver</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">接收当前应用 MQTT Runtime 实际收到的消息，用于应用记录自身可见的通信事实。</div>
+<div class="block">接收当前应用 MQTT Runtime 实际收到的消息，用于记录应用自身可见的接收结果。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/transport/MqttMessageProcessingObserver.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageProcessingObserver</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">观察 MQTT 上行的拒绝、再次处理和最终失败，不参与消息确认决定。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRejectedException</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/emqx/transport/exception/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport.exception">MqttMessageRejectedException</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示 MQTT 上行存在确定的输入错误，记录后应确认消息且不再执行同一业务动作。</div>
 </div>

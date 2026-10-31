@@ -26,6 +26,7 @@ loadScripts(document, 'script');</script>
 <div class="top-nav" id="navbar-top"><button id="navbar-toggle-button" aria-controls="navbar-top" aria-expanded="false" aria-label="Toggle navigation links"><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span></button>
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
+<li><a href="../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
 <li>Class</li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -37,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Package:</p>
 <ul>
 <li>Description</li>
-<li>Related Packages</li>
+<li><a href="#related-package-summary">Related Packages</a></li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </li>
@@ -48,7 +49,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Package:&nbsp;</li>
 <li>Description&nbsp;|&nbsp;</li>
-<li>Related Packages&nbsp;|&nbsp;</li>
+<li><a href="#related-package-summary">Related Packages</a>&nbsp;|&nbsp;</li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </div>
@@ -70,6 +71,17 @@ loadScripts(document, 'script');</script>
 <section class="summary">
 <ul class="summary-list">
 <li>
+<div id="related-package-summary">
+<div class="caption"><span>Related Packages</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Package</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="exception/package-summary.html">com.sca4d.plugin.spring.exception</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</div>
+</li>
+<li>
 <div id="class-summary">
 <div class="caption"><span>Classes</span></div>
 <div class="summary-table two-column-summary">
@@ -85,7 +97,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="PluginScopeCallInterceptor.html" title="class in com.sca4d.plugin.spring">PluginScopeCallInterceptor</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">在统一 Call 生命周期中固定插件代次，并把租用延续到外层事务完成。</div>
+<div class="block">在 Call 执行期间固定插件代次，并把租用保持到外层事务结束。</div>
 </div>
 </div>
 </div>

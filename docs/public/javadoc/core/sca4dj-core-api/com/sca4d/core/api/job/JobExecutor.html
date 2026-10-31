@@ -348,8 +348,8 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 <dt>Returns:</dt>
 <dd>Job 输出；Void 输出返回 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></code> - 等待时间结束但 run 尚未完成时抛出</dd>
-<dd><code><a href="JobRunFailedException.html" title="class in com.sca4d.core.api.job">JobRunFailedException</a></code> - run 失败时抛出</dd>
+<dd><code><a href="exception/JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job.exception">JobWaitTimeoutException</a></code> - 等待时间结束但 run 尚未完成时抛出</dd>
+<dd><code><a href="exception/JobRunFailedException.html" title="class in com.sca4d.core.api.job.exception">JobRunFailedException</a></code> - run 失败时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Job、输入或等待时长无效时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 同键其他输入正在执行，本次提交被跳过时抛出</dd>
 </dl>
@@ -392,7 +392,7 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 <dt>Returns:</dt>
 <dd>run 尚未成功时为空；Void 输出成功时也为空，应结合 status 判断</dd>
 <dt>Throws:</dt>
-<dd><code><a href="JobRunFailedException.html" title="class in com.sca4d.core.api.job">JobRunFailedException</a></code> - run 已失败时抛出</dd>
+<dd><code><a href="exception/JobRunFailedException.html" title="class in com.sca4d.core.api.job.exception">JobRunFailedException</a></code> - run 已失败时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - run 不存在，或 Job key、定义版本、输入输出类型与登记定义不一致时抛出</dd>
 </dl>
 </section>
@@ -419,8 +419,8 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 <dt>Returns:</dt>
 <dd>Job 输出；Void 输出返回 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></code> - 等待时间结束但 run 尚未完成时抛出；run 不会被取消</dd>
-<dd><code><a href="JobRunFailedException.html" title="class in com.sca4d.core.api.job">JobRunFailedException</a></code> - run 失败时抛出</dd>
+<dd><code><a href="exception/JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job.exception">JobWaitTimeoutException</a></code> - 等待时间结束但 run 尚未完成时抛出；run 不会被取消</dd>
+<dd><code><a href="exception/JobRunFailedException.html" title="class in com.sca4d.core.api.job.exception">JobRunFailedException</a></code> - run 失败时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - run 不存在、Job 定义不匹配或等待时长不是正数时抛出</dd>
 </dl>
 </section>

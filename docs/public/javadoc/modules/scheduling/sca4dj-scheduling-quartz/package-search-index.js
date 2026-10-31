@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.scheduling.quartz"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.scheduling.quartz"},{"l":"com.sca4d.scheduling.quartz.exception"}];updateSearchResults();

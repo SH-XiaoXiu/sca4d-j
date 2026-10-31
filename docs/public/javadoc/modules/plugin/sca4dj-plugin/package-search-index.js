@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.plugin.runtime"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.plugin.runtime"},{"l":"com.sca4d.plugin.runtime.exception"}];updateSearchResults();

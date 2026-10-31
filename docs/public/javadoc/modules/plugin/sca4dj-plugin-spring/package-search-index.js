@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.plugin.spring"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.plugin.spring"},{"l":"com.sca4d.plugin.spring.exception"}];updateSearchResults();

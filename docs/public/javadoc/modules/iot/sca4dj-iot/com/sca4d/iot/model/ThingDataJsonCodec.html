@@ -104,7 +104,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">ThingDataJsonCodec</a><wbr>(@NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建物模型数据 Codec，之后所有编码和解析都使用该 ObjectMapper。</div>
+</div>
 </div>
 </section>
 </li>
@@ -121,16 +123,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decodeMap(java.lang.String)" class="member-name-link">decodeMap</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">把 JSON object 解析为不可修改的普通 Java Map，嵌套值保持 Jackson 默认的 Java 类型。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decodeValue(java.lang.String)" class="member-name-link">decodeValue</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">把单个 JSON 值解析为普通 Java 值，JSON null 不被接受。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encodeMap(java.util.Map)" class="member-name-link">encodeMap</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;values)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按 code 升序把已校验的字段值编码为 JSON object，值中的 <code>ThingObjectValue</code>、<code>ThingArrayValue</code> 与 Instant 会先展开。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encodeValue(java.lang.Object)" class="member-name-link">encodeValue</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">把单个已通过物模型校验的值编码为 JSON 文本，专用 object、array 和 Instant 会先展开。</div>
+</div>
 </div>
 </div>
 </div>
@@ -153,9 +163,10 @@ loadScripts(document, 'script');</script>
 <h3>ThingDataJsonCodec</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ThingDataJsonCodec</span><wbr><span class="parameters">(@NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</span></div>
+<div class="block">创建物模型数据 Codec，之后所有编码和解析都使用该 ObjectMapper。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>objectMapper</code> - 具体应用统一 JSON 映射器</dd>
+<dd><code>objectMapper</code> - 具体应用统一 JSON 映射器，为 null 时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a></dd>
 </dl>
 </section>
 </li>
@@ -174,9 +185,14 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">encodeMap</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;values)</span></div>
+<div class="block">按 code 升序把已校验的字段值编码为 JSON object，值中的 <code>ThingObjectValue</code>、<code>ThingArrayValue</code> 与 Instant 会先展开。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>values</code> - 已校验 code 到值 @return 规范 JSON object</dd>
+<dd><code>values</code> - 已通过物模型校验的 code 到值映射，不能包含 null 值</dd>
+<dt>Returns:</dt>
+<dd>规范 JSON object 文本</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/IotException.html" title="class in com.sca4d.iot.exception">IotException</a></code> - 值无法编码为 JSON 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -187,9 +203,14 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">encodeValue</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block">把单个已通过物模型校验的值编码为 JSON 文本，专用 object、array 和 Instant 会先展开。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - 单个已校验值 @return 规范 JSON</dd>
+<dd><code>value</code> - 已校验的物模型值，不能为 null</dd>
+<dt>Returns:</dt>
+<dd>规范 JSON 文本</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/IotException.html" title="class in com.sca4d.iot.exception">IotException</a></code> - 值无法编码为 JSON 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -200,9 +221,14 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name">decodeMap</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json)</span></div>
+<div class="block">把 JSON object 解析为不可修改的普通 Java Map，嵌套值保持 Jackson 默认的 Java 类型。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>json</code> - JSON object @return 普通不可修改 Map</dd>
+<dd><code>json</code> - JSON object 文本</dd>
+<dt>Returns:</dt>
+<dd>不可修改的顶层字段 Map</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/IotException.html" title="class in com.sca4d.iot.exception">IotException</a></code> - JSON 语法不合法或不是 object 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -213,9 +239,15 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name">decodeValue</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json)</span></div>
+<div class="block">把单个 JSON 值解析为普通 Java 值，JSON null 不被接受。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>json</code> - 单个 JSON 值 @return 普通 Java JSON 值</dd>
+<dd><code>json</code> - 单个 JSON 值文本</dd>
+<dt>Returns:</dt>
+<dd>普通 Java 值，不会为 null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/IotException.html" title="class in com.sca4d.iot.exception">IotException</a></code> - JSON 语法不合法时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - JSON 结果为 null 时抛出</dd>
 </dl>
 </section>
 </li>

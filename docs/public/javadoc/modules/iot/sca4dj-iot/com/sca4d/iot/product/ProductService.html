@@ -131,16 +131,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.Product</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#create(com.sca4d.iot.product.ProductRegistration)" class="member-name-link">create</a><wbr>(@NotNull <a href="ProductRegistration.html" title="class in com.sca4d.iot.product">ProductRegistration</a>&nbsp;registration)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">在 Product 分布式锁和事务内新增数据库 Product。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.iot.api.Product&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAll()" class="member-name-link">findAll</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">只读查询全部数据库 Product，不包含代码 Product。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.Product&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPage(com.sca4d.core.api.query.PageRequest)" class="member-name-link">findPage</a><wbr>(@NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">只读分页查询数据库 Product，不包含代码 Product。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.Product</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadById(long)" class="member-name-link">loadById</a><wbr>(long&nbsp;productId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">只读查询数据库 Product。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.Product</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceI18n(long,com.sca4d.core.api.i18n.LocalizedFields)" class="member-name-link">replaceI18n</a><wbr>(long&nbsp;productId,
  @NotNull com.sca4d.core.api.i18n.LocalizedFields&nbsp;i18n)</code></div>
@@ -209,9 +217,14 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.Product</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="ProductRegistration.html" title="class in com.sca4d.iot.product">ProductRegistration</a>&nbsp;registration)</span></div>
+<div class="block">在 Product 分布式锁和事务内新增数据库 Product。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>registration</code> - 完整 Product 创建数据 @return 新建 Product</dd>
+<dd><code>registration</code> - 完整 Product 创建数据，code 不能与代码 Product 冲突</dd>
+<dt>Returns:</dt>
+<dd>已保存的新 Product</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - code 与代码 Product 或已有 Product 冲突时抛出 IDENTITY_CONFLICT；协议未登记时抛出 IllegalArgumentException</dd>
 </dl>
 </section>
 </li>
@@ -254,9 +267,10 @@ loadScripts(document, 'script');</script>
 @CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.iot.api.Product&gt;</span>&nbsp;<span class="element-name">findAll</span>()</div>
+<div class="block">只读查询全部数据库 Product，不包含代码 Product。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>全部 Product</dd>
+<dd>全部数据库 Product，没有记录时为空列表</dd>
 </dl>
 </section>
 </li>
@@ -268,9 +282,12 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.query.Page&lt;com.sca4d.iot.api.Product&gt;</span>&nbsp;<span class="element-name">findPage</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</span></div>
+<div class="block">只读分页查询数据库 Product，不包含代码 Product。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>page</code> - 从一开始且页大小不超过 100 的分页要求 @return Product 分页结果</dd>
+<dd><code>page</code> - 从一开始且页大小不超过 100 的分页要求</dd>
+<dt>Returns:</dt>
+<dd>当前页数据库 Product 和总数</dd>
 </dl>
 </section>
 </li>
@@ -281,9 +298,14 @@ loadScripts(document, 'script');</script>
 @CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.Product</span>&nbsp;<span class="element-name">loadById</span><wbr><span class="parameters">(long&nbsp;productId)</span></div>
+<div class="block">只读查询数据库 Product。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>productId</code> - Product 标识 @return 必须存在的 Product</dd>
+<dd><code>productId</code> - Product 标识</dd>
+<dt>Returns:</dt>
+<dd>找到的 Product</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 标识对应的 Product 不存在时抛出 PRODUCT_NOT_FOUND</dd>
 </dl>
 </section>
 </li>

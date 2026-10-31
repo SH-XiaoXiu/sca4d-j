@@ -50,14 +50,14 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/DefaultJobExecutor.html" title="class in com.sca4d.job.runtime">DefaultJobExecutor</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。</div>
+<div class="block">通过 JobRunService 把持久化 Job 写入数据库并查询其运行结果；无记录 DirectJob 在本实例直接执行，或投递到目标实例的短期份额。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/DefaultJobHistory.html" title="class in com.sca4d.job.runtime">DefaultJobHistory</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -83,6 +83,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">已由目标实例领取的不保留 Run 的工作份额。</div>
 </div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">批量插入无记录份额时单个目标实例的全部列值。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">表示无记录工作份额在 `job_delivery.status` 中的协调状态。</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDispatchRecord.html" title="class in com.sca4d.job.persistence">JobDispatchRecord</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">从持久化广播头读取标识及触发时的目标快照。</div>
@@ -91,17 +99,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">一次广播下某个目标实例已创建的持久化 Run。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryCleanupTask.html" title="class in com.sca4d.job.runtime">JobHistoryCleanupTask</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/job/exception/JobException.html" title="class in com.sca4d.job.exception">JobException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="block">后台任务模块的运行时故障，例如任务定义、执行队列或序列化失败。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryCleanupTask.html" title="class in com.sca4d.job.runtime">JobHistoryCleanupTask</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">由集群定时器触发一次成功 Job run 历史清理。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryService.html" title="class in com.sca4d.job.runtime">JobHistoryService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryService.html" title="class in com.sca4d.job.runtime">JobHistoryService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按配置保留窗口分批删除已经成功的 Job run 历史。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">当前在线且具备执行能力的进程实例和本次启动代次。</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">当前在线且启用所需 capability 的进程实例及其本次启动代次。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/job/JobKind.html" title="enum class in com.sca4d.job">JobKind</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="block">表示根运行或节点执行的 Job 类型，写入 `job_run.job_kind` 与 `job_run_node.node_kind`。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
@@ -117,26 +133,30 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">隐藏 Job Mapper 和 App 隔离名称，提供稳定的持久化语义。</div>
+<div class="block">按当前 App 隔离名称读写 Job 实例、广播、无记录投递、运行根记录、节点、依赖和尝试记录，隐藏 JobMapper 的 SQL 细节。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。</div>
+<div class="block">批量插入运行节点时单个节点的全部列值。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobWorker.html" title="class in com.sca4d.job.runtime">JobWorker</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">创建 Job run、广播和无记录份额，领取与续租节点，保存节点和根运行结果；每个动作在独立事务中完成。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobWorker.html" title="class in com.sca4d.job.runtime">JobWorker</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">轮询可执行节点和短期投递，在有界线程池中执行并为运行中的工作续租。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一个 worker 已经持有租约的节点及其 Job 定义定位信息。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 JobExecutor 查询状态和结果需要的根运行列值。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存定时 Job 历史查询从根运行和目标节点读取的数据库列。</div>
 </div>
 </div>

@@ -104,7 +104,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Collection)" class="member-name-link">DeviceProtocolCatalog</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.protocol.DeviceProtocol&gt;&nbsp;protocols)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建协议目录，同一 code 登记多次时抛出异常。</div>
+</div>
 </div>
 </section>
 </li>
@@ -124,7 +126,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.protocol.DeviceProtocol</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadByCode(java.lang.String)" class="member-name-link">loadByCode</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按 code 取得已安装协议。</div>
+</div>
 </div>
 </div>
 </div>
@@ -147,9 +151,12 @@ loadScripts(document, 'script');</script>
 <h3>DeviceProtocolCatalog</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeviceProtocolCatalog</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.protocol.DeviceProtocol&gt;&nbsp;protocols)</span></div>
+<div class="block">创建协议目录，同一 code 登记多次时抛出异常。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>protocols</code> - App 安装的全部设备协议</dd>
+<dd><code>protocols</code> - App 安装的全部设备协议，不能包含 null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 协议 code 重复时抛出</dd>
 </dl>
 </section>
 </li>
@@ -167,9 +174,14 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.protocol.DeviceProtocol</span>&nbsp;<span class="element-name">loadByCode</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
+<div class="block">按 code 取得已安装协议。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>code</code> - 协议 code @return 匹配协议 @throws IllegalArgumentException 没有登记时抛出</dd>
+<dd><code>code</code> - 协议 code，不能为空</dd>
+<dt>Returns:</dt>
+<dd>匹配的协议实现</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - code 没有对应已安装协议时抛出</dd>
 </dl>
 </section>
 </li>

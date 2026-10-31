@@ -86,11 +86,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">在统一调用生命周期内执行 CurrentPrincipal 声明的主体选择。</div>
+<div class="block">在 <code>CallLifecycle</code> 的环绕阶段执行 <a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation"><code>CurrentPrincipal</code></a> 声明的业务身份选择，并把结果写入当前 <code>Call</code>。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="PrincipalSelectionInput.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInput</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Web 适配层从当前 HTTP 请求和 Controller 参数收集的业务身份选择输入。</div>
+<div class="block">由 Web 层从当前 HTTP 请求和 Controller 参数收集的业务身份选择输入，创建后不可修改。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PrincipalSelectionInputResolver.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInputResolver</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

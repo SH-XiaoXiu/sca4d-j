@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;commandsPerItem,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&gt;&nbsp;operation)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">分批执行没有合并结果的 Redis pipeline 操作，失败时停止并传播异常。</div>
+<div class="block">分批执行没有合并结果的 Redis pipeline 操作。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T,<wbr>
 R&gt;&nbsp;@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;R&gt;</code></div>
@@ -203,7 +203,19 @@ R&gt;</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="http
  int&nbsp;commandsPerItem,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;&gt;&nbsp;operation)</span></div>
-<div class="block">分批执行没有合并结果的 Redis pipeline 操作，失败时停止并传播异常。</div>
+<div class="block">分批执行没有合并结果的 Redis pipeline 操作。
+
+ <p>操作抛出异常时立即停止并原样传播；之前批次已经提交到 Redis 的写入不会回滚，剩余批次不再执行。</div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - 批量输入类型</dd>
+<dt>Parameters:</dt>
+<dd><code>items</code> - 保持调用方顺序的非空元素集合，为空时不调用 operation</dd>
+<dd><code>commandsPerItem</code> - 每个集合元素生成的 pipeline 命令数量，必须在 1 到 maxCommands 之间</dd>
+<dd><code>operation</code> - 接收一个不可修改批次并提交该批次命令的操作</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - commandsPerItem 超出范围时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>

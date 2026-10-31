@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/job/JobAttemptStatus.html#ABANDONED" class="member-name-link">ABANDONED</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></dt>
@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/runtime/JobCatalog.html#availableVersions(com.sca4d.core.api.runtime.InstanceCapabilities)" class="member-name-link">availableVersions(InstanceCapabilities)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a></dt>
 <dd>
-<div class="block">返回当前实例能力允许执行的全部 Job key 和定义版本。</div>
+<div class="block">返回当前实例启用的 capability 允许执行的全部 Job key 和定义版本。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/DefaultJobExecutor.html#await(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job,java.time.Duration)" class="member-name-link">await(Id, Job&lt;?, O&gt;, Duration)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/DefaultJobExecutor.html" title="class in com.sca4d.job.runtime">DefaultJobExecutor</a></dt>
 <dd>&nbsp;</dd>
@@ -114,6 +114,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/config/package-summary.html">com.sca4d.job.config</a> - package com.sca4d.job.config</dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/exception/package-summary.html">com.sca4d.job.exception</a> - package com.sca4d.job.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a> - package com.sca4d.job.persistence</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/runtime/package-summary.html">com.sca4d.job.runtime</a> - package com.sca4d.job.runtime</dt>
@@ -138,9 +140,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按工作目标提交一次普通运行。</div>
 </dd>
-<dt><a href="com/sca4d/job/persistence/JobRepository.html#createDelivery(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,java.lang.String,java.lang.String,com.sca4d.job.persistence.JobInstance,java.time.Instant)" class="member-name-link">createDelivery(Id, Job&lt;?, ?&gt;, TreeCode, JobWorkKey, String, String, JobInstance, Instant)</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></dt>
+<dt><a href="com/sca4d/job/persistence/JobRepository.html#createDeliveries(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,com.sca4d.core.api.scheduling.OverlapPolicy,java.lang.String,java.util.List,java.time.Instant)" class="member-name-link">createDeliveries(Id, Job&lt;?, ?&gt;, TreeCode, JobWorkKey, OverlapPolicy, String, List&lt;JobInstance&gt;, Instant)</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></dt>
 <dd>
-<div class="block">保存一份无需 Run 的指定实例工作。</div>
+<div class="block">批量保存无需 Run 的指定实例工作；目标为空时不执行 SQL。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobRepository.html#createDispatch(com.sca4d.core.api.job.JobKey,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,java.lang.String)" class="member-name-link">createDispatch(JobKey, ScheduleKey, Instant, String)</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></dt>
 <dd>
@@ -159,7 +161,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/job/runtime/DefaultJobExecutor.html" class="type-name-link" title="class in com.sca4d.job.runtime">DefaultJobExecutor</a> - Class in <a href="com/sca4d/job/runtime/package-summary.html">com.sca4d.job.runtime</a></dt>
 <dd>
-<div class="block">使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。</div>
+<div class="block">通过 JobRunService 把持久化 Job 写入数据库并查询其运行结果；无记录 DirectJob 在本实例直接执行，或投递到目标实例的短期份额。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/DefaultJobExecutor.html#%3Cinit%3E(com.sca4d.job.runtime.JobCatalog,com.sca4d.job.runtime.JobRunService,com.sca4d.core.spring.json.Sca4djMapper,com.sca4d.core.api.runtime.InstanceCapabilities,com.sca4d.core.spring.config.InstanceProperties,com.sca4d.core.api.concurrent.DistributedLock,java.time.Clock,com.sca4d.job.config.JobProperties)" class="member-name-link">DefaultJobExecutor(JobCatalog, JobRunService, Sca4djMapper, InstanceCapabilities, InstanceProperties, DistributedLock, Clock, JobProperties)</a> - Constructor for class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/DefaultJobExecutor.html" title="class in com.sca4d.job.runtime">DefaultJobExecutor</a></dt>
 <dd>
@@ -217,8 +219,16 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/JobAttemptStatus.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/JobKind.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobKind.html" title="enum class in com.sca4d.job">JobKind</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/JobNodeStatus.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/JobKind.html#DIRECT" class="member-name-link">DIRECT</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobKind.html" title="enum class in com.sca4d.job">JobKind</a></dt>
+<dd>
+<div class="block">单个 DirectJob 直接执行的根运行或节点。</div>
+</dd>
 <dt><a href="com/sca4d/job/runtime/JobRunService.html#dispatch(com.sca4d.core.api.job.Job,java.lang.String,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,com.sca4d.core.api.scheduling.OverlapPolicy,com.sca4d.core.api.job.JobTarget,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)" class="member-name-link">dispatch(Job&lt;?, ?&gt;, String, TreeCode, JobWorkKey, OverlapPolicy, JobTarget, ScheduleKey, Instant)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></dt>
 <dd>
 <div class="block">原子固定全部广播目标，并按 Job 记录策略创建各目标份额。</div>
@@ -232,11 +242,11 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/job/runtime/JobRunService.html#eligibleInstances(java.lang.String)" class="member-name-link">eligibleInstances(String)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></dt>
 <dd>
-<div class="block">查询具备目标能力的在线实例。</div>
+<div class="block">查询在线且启用目标 capability 的实例。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobRepository.html#eligibleInstances(java.lang.String,java.time.Instant)" class="member-name-link">eligibleInstances(String, Instant)</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></dt>
 <dd>
-<div class="block">返回仍在线且启用指定能力的实例快照。</div>
+<div class="block">返回仍在线且启用指定 capability 的实例快照。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#error()" class="member-name-link">error()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>&nbsp;</dd>
@@ -264,6 +274,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/job/JobAttemptStatus.html#FAILED" class="member-name-link">FAILED</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></dt>
 <dd>
 <div class="block">本次尝试失败。</div>
+</dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#FAILED" class="member-name-link">FAILED</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>
+<div class="block">工作失败，或目标实例等待期限已到。</div>
 </dd>
 <dt><a href="com/sca4d/job/JobNodeStatus.html#FAILED" class="member-name-link">FAILED</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></dt>
 <dd>
@@ -312,10 +326,20 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/job/persistence/JobInstance.html#generationId()" class="member-name-link">generationId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getAvailableAt()" class="member-name-link">getAvailableAt()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getCapability()" class="member-name-link">getCapability()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/config/JobProperties.html#getClaimBatchSize()" class="member-name-link">getClaimBatchSize()</a> - Method in class com.sca4d.job.config.<a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></dt>
 <dd>
 <div class="block">返回每轮最多领取的节点数。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getDefinitionVersion()" class="member-name-link">getDefinitionVersion()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getDispatchId()" class="member-name-link">getDispatchId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getExpiresAt()" class="member-name-link">getExpiresAt()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/config/JobProperties.html#getHistoryCleanupBatchSize()" class="member-name-link">getHistoryCleanupBatchSize()</a> - Method in class com.sca4d.job.config.<a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></dt>
 <dd>
 <div class="block">返回单次最多删除的成功根运行数。</div>
@@ -324,6 +348,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回相邻两次成功历史清理之间的时间。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getInputJson()" class="member-name-link">getInputJson()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getInputJson()" class="member-name-link">getInputJson()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getJobKey()" class="member-name-link">getJobKey()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getKind()" class="member-name-link">getKind()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/config/JobProperties.html#getLeaseDuration()" class="member-name-link">getLeaseDuration()</a> - Method in class com.sca4d.job.config.<a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></dt>
 <dd>
 <div class="block">返回一个 worker 持有节点的租约时长。</div>
@@ -332,20 +364,40 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回 worker 执行节点期间的续租间隔。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getNodeKey()" class="member-name-link">getNodeKey()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getOverlapPolicy()" class="member-name-link">getOverlapPolicy()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getParallelMerge()" class="member-name-link">getParallelMerge()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/runtime/JobWorker.html#getPhase()" class="member-name-link">getPhase()</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobWorker.html" title="class in com.sca4d.job.runtime">JobWorker</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/config/JobProperties.html#getPollInterval()" class="member-name-link">getPollInterval()</a> - Method in class com.sca4d.job.config.<a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></dt>
 <dd>
 <div class="block">返回相邻两轮节点领取之间的间隔。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getRetryRule()" class="member-name-link">getRetryRule()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getRunId()" class="member-name-link">getRunId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#getStatus()" class="member-name-link">getStatus()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/config/JobProperties.html#getSucceededRetention()" class="member-name-link">getSucceededRetention()</a> - Method in class com.sca4d.job.config.<a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></dt>
 <dd>
 <div class="block">返回成功 Job run 的保留时间。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getSystemIdentity()" class="member-name-link">getSystemIdentity()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getTargetGenerationId()" class="member-name-link">getTargetGenerationId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getTargetInstanceId()" class="member-name-link">getTargetInstanceId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/config/JobProperties.html#getWorkerCount()" class="member-name-link">getWorkerCount()</a> - Method in class com.sca4d.job.config.<a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></dt>
 <dd>
 <div class="block">返回同时执行业务节点的 worker 数量。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#getWorkKey()" class="member-name-link">getWorkKey()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
@@ -376,9 +428,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/RunRecord.html#inputJson()" class="member-name-link">inputJson()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/job/persistence/JobMapper.html#insertDelivery(com.sca4d.core.api.name.Name,long,com.sca4d.core.api.job.JobKey,int,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,java.lang.String,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant)" class="member-name-link">insertDelivery(Name, long, JobKey, int, TreeCode, TreeCode, JobWorkKey, String, String, String, UUID, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
+<dt><a href="com/sca4d/job/persistence/JobMapper.html#insertDeliveries(com.sca4d.core.api.name.Name,java.util.List)" class="member-name-link">insertDeliveries(Name, List&lt;JobDeliveryInsert&gt;)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
-<div class="block">为无记录广播或固定目标创建短期投递份额。</div>
+<div class="block">批量为无记录广播或固定目标创建短期投递份额，每个份额的全部列值由对应行提供。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html#insertDependencies(long,java.util.Map)" class="member-name-link">insertDependencies(long, Map&lt;Long, Map&lt;Integer, Long&gt;&gt;)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
@@ -388,11 +440,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">为一次普通或定时广播创建完整的目标清单。</div>
 </dd>
-<dt><a href="com/sca4d/job/persistence/JobMapper.html#insertNode(long,java.lang.String,java.lang.String,java.lang.String,com.sca4d.job.JobNodeStatus,boolean,com.sca4d.core.api.retry.RetryRule,java.time.Instant)" class="member-name-link">insertNode(long, String, String, String, JobNodeStatus, boolean, RetryRule, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
+<dt><a href="com/sca4d/job/persistence/JobMapper.html#insertNode(long,java.lang.String,com.sca4d.job.JobKind,java.lang.String,com.sca4d.job.JobNodeStatus,boolean,com.sca4d.core.api.retry.RetryRule,java.time.Instant)" class="member-name-link">insertNode(long, String, JobKind, String, JobNodeStatus, boolean, RetryRule, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
 <div class="block">插入运行节点并返回数据库主键。</div>
 </dd>
-<dt><a href="com/sca4d/job/persistence/JobMapper.html#insertRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,int,java.lang.String,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant,java.lang.Long,java.lang.String,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)" class="member-name-link">insertRun(Name, JobKey, int, String, TreeCode, TreeCode, JobWorkKey, String, String, UUID, Instant, Long, String, ScheduleKey, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
+<dt><a href="com/sca4d/job/persistence/JobMapper.html#insertNodes(java.util.List)" class="member-name-link">insertNodes(List&lt;JobRunNodeInsert&gt;)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
+<dd>
+<div class="block">批量插入同一根运行的节点，返回与输入顺序一致的数据库主键。</div>
+</dd>
+<dt><a href="com/sca4d/job/persistence/JobMapper.html#insertRun(com.sca4d.core.api.name.Name,com.sca4d.core.api.job.JobKey,int,com.sca4d.job.JobKind,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,com.sca4d.core.api.scheduling.OverlapPolicy,java.lang.String,java.util.UUID,java.time.Instant,java.lang.Long,java.lang.String,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant)" class="member-name-link">insertRun(Name, JobKey, int, JobKind, TreeCode, TreeCode, JobWorkKey, OverlapPolicy, String, UUID, Instant, Long, String, ScheduleKey, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
 <div class="block">插入根运行并返回数据库主键。</div>
 </dd>
@@ -447,6 +503,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建一份已领取投递的数据库快照。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html" class="type-name-link" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a> - Class in <a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a></dt>
+<dd>
+<div class="block">批量插入无记录份额时单个目标实例的全部列值。</div>
+</dd>
+<dt><a href="com/sca4d/job/persistence/JobDeliveryInsert.html#%3Cinit%3E(long,com.sca4d.core.api.job.JobKey,int,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.job.JobWorkKey,com.sca4d.core.api.scheduling.OverlapPolicy,java.lang.String,java.lang.String,java.util.UUID,java.time.Instant)" class="member-name-link">JobDeliveryInsert(long, JobKey, int, TreeCode, TreeCode, JobWorkKey, OverlapPolicy, String, String, UUID, Instant)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></dt>
+<dd>
+<div class="block">创建一个待批量插入的无记录份额。</div>
+</dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html" class="type-name-link" title="enum class in com.sca4d.job">JobDeliveryStatus</a> - Enum Class in <a href="com/sca4d/job/package-summary.html">com.sca4d.job</a></dt>
+<dd>
+<div class="block">表示无记录工作份额在 `job_delivery.status` 中的协调状态。</div>
+</dd>
 <dt><a href="com/sca4d/job/persistence/JobDispatchRecord.html" class="type-name-link" title="class in com.sca4d.job.persistence">JobDispatchRecord</a> - Class in <a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a></dt>
 <dd>
 <div class="block">从持久化广播头读取标识及触发时的目标快照。</div>
@@ -462,6 +530,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/job/persistence/JobDispatchRun.html#%3Cinit%3E(java.lang.String,long)" class="member-name-link">JobDispatchRun(String, long)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobDispatchRun.html" title="class in com.sca4d.job.persistence">JobDispatchRun</a></dt>
 <dd>
 <div class="block">创建广播目标与持久化运行的关联。</div>
+</dd>
+<dt><a href="com/sca4d/job/exception/JobException.html" class="type-name-link" title="class in com.sca4d.job.exception">JobException</a> - Exception Class in <a href="com/sca4d/job/exception/package-summary.html">com.sca4d.job.exception</a></dt>
+<dd>
+<div class="block">后台任务模块的运行时故障，例如任务定义、执行队列或序列化失败。</div>
+</dd>
+<dt><a href="com/sca4d/job/exception/JobException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">JobException(String)</a> - Constructor for exception class com.sca4d.job.exception.<a href="com/sca4d/job/exception/JobException.html" title="class in com.sca4d.job.exception">JobException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/job/exception/JobException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">JobException(String, Throwable)</a> - Constructor for exception class com.sca4d.job.exception.<a href="com/sca4d/job/exception/JobException.html" title="class in com.sca4d.job.exception">JobException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/JobHistoryCleanupTask.html" class="type-name-link" title="class in com.sca4d.job.runtime">JobHistoryCleanupTask</a> - Class in <a href="com/sca4d/job/runtime/package-summary.html">com.sca4d.job.runtime</a></dt>
 <dd>
@@ -481,7 +561,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobInstance.html" class="type-name-link" title="class in com.sca4d.job.persistence">JobInstance</a> - Class in <a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a></dt>
 <dd>
-<div class="block">当前在线且具备执行能力的进程实例和本次启动代次。</div>
+<div class="block">当前在线且启用所需 capability 的进程实例及其本次启动代次。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobInstance.html#%3Cinit%3E(java.lang.String,java.util.UUID)" class="member-name-link">JobInstance(String, UUID)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></dt>
 <dd>
@@ -501,6 +581,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根运行采用的 Job 种类。</div>
 </dd>
+<dt><a href="com/sca4d/job/JobKind.html" class="type-name-link" title="enum class in com.sca4d.job">JobKind</a> - Enum Class in <a href="com/sca4d/job/package-summary.html">com.sca4d.job</a></dt>
+<dd>
+<div class="block">表示根运行或节点执行的 Job 类型，写入 `job_run.job_kind` 与 `job_run_node.node_kind`。</div>
+</dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html" class="type-name-link" title="interface in com.sca4d.job.persistence">JobMapper</a> - Interface in <a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a></dt>
 <dd>
 <div class="block">使用 MyBatis 执行 Job run、节点、依赖和尝试的单条 PostgreSQL 读写。</div>
@@ -519,19 +603,27 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobRepository.html" class="type-name-link" title="class in com.sca4d.job.persistence">JobRepository</a> - Class in <a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a></dt>
 <dd>
-<div class="block">隐藏 Job Mapper 和 App 隔离名称，提供稳定的持久化语义。</div>
+<div class="block">按当前 App 隔离名称读写 Job 实例、广播、无记录投递、运行根记录、节点、依赖和尝试记录，隐藏 JobMapper 的 SQL 细节。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobRepository.html#%3Cinit%3E(com.sca4d.job.persistence.JobMapper,com.sca4d.core.spring.persistence.batch.SqlBatches)" class="member-name-link">JobRepository(JobMapper, SqlBatches)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></dt>
 <dd>
 <div class="block">创建绑定当前应用 App 隔离名称的 Job Repository。</div>
 </dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html" class="type-name-link" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a> - Class in <a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a></dt>
+<dd>
+<div class="block">批量插入运行节点时单个节点的全部列值。</div>
+</dd>
+<dt><a href="com/sca4d/job/persistence/JobRunNodeInsert.html#%3Cinit%3E(long,java.lang.String,com.sca4d.job.JobKind,java.lang.String,com.sca4d.job.JobNodeStatus,boolean,com.sca4d.core.api.retry.RetryRule,java.time.Instant)" class="member-name-link">JobRunNodeInsert(long, String, JobKind, String, JobNodeStatus, boolean, RetryRule, Instant)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></dt>
+<dd>
+<div class="block">创建一个待批量插入的运行节点。</div>
+</dd>
 <dt><a href="com/sca4d/job/runtime/JobRunService.html" class="type-name-link" title="class in com.sca4d.job.runtime">JobRunService</a> - Class in <a href="com/sca4d/job/runtime/package-summary.html">com.sca4d.job.runtime</a></dt>
 <dd>
-<div class="block">编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。</div>
+<div class="block">创建 Job run、广播和无记录份额，领取与续租节点，保存节点和根运行结果；每个动作在独立事务中完成。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/JobRunService.html#%3Cinit%3E(com.sca4d.job.persistence.JobRepository,org.springframework.transaction.PlatformTransactionManager,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock,com.sca4d.core.spring.json.Sca4djMapper)" class="member-name-link">JobRunService(JobRepository, PlatformTransactionManager, Clock, DistributedLock, Sca4djMapper)</a> - Constructor for class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></dt>
 <dd>
-<div class="block">创建带脚手架统一 JSON 映射器的 Job 运行服务。</div>
+<div class="block">创建使用脚手架 JSON 映射器的 JobRunService。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/JobWorker.html" class="type-name-link" title="class in com.sca4d.job.runtime">JobWorker</a> - Class in <a href="com/sca4d/job/runtime/package-summary.html">com.sca4d.job.runtime</a></dt>
 <dd>
@@ -572,7 +664,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存一个 worker 已经持有租约的节点及其 Job 定义定位信息。</div>
 </dd>
-<dt><a href="com/sca4d/job/persistence/NodeClaim.html#%3Cinit%3E(long,long,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,java.lang.String,long,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">NodeClaim(long, long, JobKey, int, String, String, String, long, RetryRule)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
+<dt><a href="com/sca4d/job/persistence/NodeClaim.html#%3Cinit%3E(long,long,com.sca4d.core.api.job.JobKey,int,com.sca4d.job.JobKind,java.lang.String,java.lang.String,long,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">NodeClaim(long, long, JobKey, int, JobKind, String, String, long, RetryRule)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
 <div class="block">创建已领取节点的完整执行列值。</div>
 </dd>
@@ -584,7 +676,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#nodeKey()" class="member-name-link">nodeKey()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">当前节点在 Job 定义内的稳定名称。</div>
+<div class="block">当前节点在 Job 定义内的名称。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
@@ -598,8 +690,19 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/job/persistence/ScheduledRunRecord.html#outputJson()" class="member-name-link">outputJson()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></dt>
 <dd>&nbsp;</dd>
 </dl>
+<h2 class="title" id="I:P">P</h2>
+<dl class="index">
+<dt><a href="com/sca4d/job/JobKind.html#PIPELINE" class="member-name-link">PIPELINE</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobKind.html" title="enum class in com.sca4d.job">JobKind</a></dt>
+<dd>
+<div class="block">PipelineJob 展开的根运行或节点，节点之间按依赖顺序执行。</div>
+</dd>
+</dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#READY" class="member-name-link">READY</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>
+<div class="block">份额已创建，等待目标实例代次领取。</div>
+</dd>
 <dt><a href="com/sca4d/job/JobNodeStatus.html#READY" class="member-name-link">READY</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></dt>
 <dd>
 <div class="block">已具备输入并等待领取。</div>
@@ -610,11 +713,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/runtime/JobRunService.html#registerInstance(com.sca4d.core.api.runtime.InstanceId,java.util.UUID,java.lang.String,java.time.Duration)" class="member-name-link">registerInstance(InstanceId, UUID, String, Duration)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></dt>
 <dd>
-<div class="block">登记当前实例正在提供的能力。</div>
+<div class="block">登记当前实例启用的 capability。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobRepository.html#registerInstance(com.sca4d.core.api.runtime.InstanceId,java.util.UUID,java.lang.String,java.time.Instant)" class="member-name-link">registerInstance(InstanceId, UUID, String, Instant)</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></dt>
 <dd>
-<div class="block">登记本次进程代次及可执行的能力。</div>
+<div class="block">登记本次进程代次及其可执行的 capability。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/JobRunService.html#renew(long,java.lang.String,java.time.Duration)" class="member-name-link">renew(long, String, Duration)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></dt>
 <dd>
@@ -638,7 +741,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobRepository.html#rescheduleExpired(com.sca4d.job.persistence.ExpiredJobAttempt,java.time.Instant,java.time.Instant)" class="member-name-link">rescheduleExpired(ExpiredJobAttempt, Instant, Instant)</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></dt>
 <dd>
-<div class="block">保存过期尝试的放弃事实和业务层计算的下次领取时间。</div>
+<div class="block">把过期尝试标记为放弃，并保存调用方计算出的下次可领取时间。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/DefaultJobExecutor.html#result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)" class="member-name-link">result(Id, Job&lt;?, O&gt;)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/DefaultJobExecutor.html" title="class in com.sca4d.job.runtime">DefaultJobExecutor</a></dt>
 <dd>&nbsp;</dd>
@@ -646,7 +749,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#retry(java.lang.String,java.time.Instant,java.time.Instant)" class="member-name-link">retry(String, Instant, Instant)</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">保存失败事实及业务层确定的下次可执行时间，本次尝试结束但节点继续等待。</div>
+<div class="block">记录本次尝试失败，并保存下次可执行时间；本次尝试结束，节点回到等待状态。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/ExpiredJobAttempt.html#retryRule()" class="member-name-link">retryRule()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/ExpiredJobAttempt.html" title="class in com.sca4d.job.persistence">ExpiredJobAttempt</a></dt>
 <dd>&nbsp;</dd>
@@ -665,6 +768,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/job/JobAttemptStatus.html#RUNNING" class="member-name-link">RUNNING</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></dt>
 <dd>
 <div class="block">工作实例仍在执行本次尝试。</div>
+</dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#RUNNING" class="member-name-link">RUNNING</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>
+<div class="block">份额已被目标实例代次领取并持有租约。</div>
 </dd>
 <dt><a href="com/sca4d/job/JobNodeStatus.html#RUNNING" class="member-name-link">RUNNING</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></dt>
 <dd>
@@ -715,7 +822,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html#selectEligibleInstances(com.sca4d.core.api.name.Name,java.lang.String,java.time.Instant)" class="member-name-link">selectEligibleInstances(Name, String, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
-<div class="block">查找提交时在线且启用目标能力的实例。</div>
+<div class="block">查找提交时在线且启用目标 capability 的实例。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html#selectExpiredAttempts(com.sca4d.core.api.name.Name,java.time.Instant)" class="member-name-link">selectExpiredAttempts(Name, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
@@ -809,6 +916,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">本次尝试完成。</div>
 </dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#SUCCEEDED" class="member-name-link">SUCCEEDED</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>
+<div class="block">工作已成功完成。</div>
+</dd>
 <dt><a href="com/sca4d/job/JobNodeStatus.html#SUCCEEDED" class="member-name-link">SUCCEEDED</a> - Enum constant in enum class com.sca4d.job.<a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></dt>
 <dd>
 <div class="block">节点输出已保存。</div>
@@ -847,7 +958,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">续期仍由目标实例代次持有的无记录工作份额。</div>
 </dd>
-<dt><a href="com/sca4d/job/persistence/JobMapper.html#updateDeliveryResult(long,java.lang.String,java.util.UUID,java.lang.String,java.lang.String,java.time.Instant)" class="member-name-link">updateDeliveryResult(long, String, UUID, String, String, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
+<dt><a href="com/sca4d/job/persistence/JobMapper.html#updateDeliveryResult(long,java.lang.String,java.util.UUID,com.sca4d.job.JobDeliveryStatus,java.lang.String,java.time.Instant)" class="member-name-link">updateDeliveryResult(long, String, UUID, JobDeliveryStatus, String, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
 <div class="block">保存无记录工作完成或失败；不重新投递。</div>
 </dd>
@@ -885,7 +996,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html#upsertInstance(com.sca4d.core.api.name.Name,java.lang.String,java.util.UUID,java.lang.String,java.time.Instant)" class="member-name-link">upsertInstance(Name, String, UUID, String, Instant)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
-<div class="block">登记或续约当前执行实例和启用能力。</div>
+<div class="block">登记或续约当前进程实例及其启用的 capability。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:V">V</h2>
@@ -896,9 +1007,21 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/JobAttemptStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/job/JobKind.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobKind.html" title="enum class in com.sca4d.job">JobKind</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/JobNodeStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.job.<a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/JobAttemptStatus.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.job.<a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/job/JobKind.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.job.<a href="com/sca4d/job/JobKind.html" title="enum class in com.sca4d.job">JobKind</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
@@ -907,6 +1030,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
 <dt><a href="com/sca4d/job/JobAttemptStatus.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.job.<a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="com/sca4d/job/JobDeliveryStatus.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.job.<a href="com/sca4d/job/JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="com/sca4d/job/JobKind.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.job.<a href="com/sca4d/job/JobKind.html" title="enum class in com.sca4d.job">JobKind</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
@@ -926,7 +1059,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/job/persistence/ExpiredJobAttempt.html#workerId()" class="member-name-link">workerId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/ExpiredJobAttempt.html" title="class in com.sca4d.job.persistence">ExpiredJobAttempt</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

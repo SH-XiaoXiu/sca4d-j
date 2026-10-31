@@ -202,7 +202,10 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>senders</code> - SMTP 配置持久化语义 @param transport SMTP 操作 @param keyring 密码加密密钥环 @param ids 全局标识生成器</dd>
+<dd><code>senders</code> - 读写 SMTP 配置记录的 Repository</dd>
+<dd><code>transport</code> - 测试连接和发送邮件使用的 SMTP 网关</dd>
+<dd><code>keyring</code> - 加密 SMTP 密码的密钥环</dd>
+<dd><code>ids</code> - 生成配置主键的标识生成器</dd>
 </dl>
 </section>
 </li>
@@ -234,7 +237,9 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></span>&nbsp;<span class="element-name">loadById</span><wbr><span class="parameters">(long&nbsp;senderId)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>指定 SMTP 配置；不存在时抛出稳定错误</dd>
+<dd>指定 SMTP 配置，不包含密码密文</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 配置不存在时抛出 SENDER_NOT_FOUND</dd>
 </dl>
 </section>
 </li>

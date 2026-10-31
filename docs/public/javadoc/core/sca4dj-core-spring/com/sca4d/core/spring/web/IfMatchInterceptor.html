@@ -130,7 +130,12 @@ implements org.springframework.web.servlet.HandlerInterceptor</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)" class="member-name-link">preHandle</a><wbr>(@NotNull jakarta.servlet.http.HttpServletRequest&nbsp;request,
  @NotNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">解析带 <a href="annotation/IfMatch.html" title="annotation interface in com.sca4d.core.spring.web.annotation"><code>IfMatch</code></a> 的方法请求中的 If-Match 头，并把版本交给 RequestVersionConditions。
+ 异步分派直接放行，不重复校验。Header 缺失或为空白时抛出 HTTP 428 对应的 PRECONDITION_REQUIRED；
+ 多个 Header 值、弱 ETag、通配符 ETag 或版本号不是整数时抛出 412 对应的 PRECONDITION_FAILED。
+ 校验失败时不绑定版本，请求在进入 Controller 之前结束。</div>
+</div>
 </div>
 </div>
 </div>
@@ -179,9 +184,21 @@ implements org.springframework.web.servlet.HandlerInterceptor</span></div>
  @NotNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler)</span></div>
+<div class="block">解析带 <a href="annotation/IfMatch.html" title="annotation interface in com.sca4d.core.spring.web.annotation"><code>IfMatch</code></a> 的方法请求中的 If-Match 头，并把版本交给 RequestVersionConditions。
+ 异步分派直接放行，不重复校验。Header 缺失或为空白时抛出 HTTP 428 对应的 PRECONDITION_REQUIRED；
+ 多个 Header 值、弱 ETag、通配符 ETag 或版本号不是整数时抛出 412 对应的 PRECONDITION_FAILED。
+ 校验失败时不绑定版本，请求在进入 Controller 之前结束。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>preHandle</code>&nbsp;in interface&nbsp;<code>org.springframework.web.servlet.HandlerInterceptor</code></dd>
+<dt>Parameters:</dt>
+<dd><code>request</code> - 当前 HTTP 请求</dd>
+<dd><code>response</code> - 当前 HTTP 响应</dd>
+<dd><code>handler</code> - Spring MVC 已选择的 Handler</dd>
+<dt>Returns:</dt>
+<dd>非 <a href="annotation/IfMatch.html" title="annotation interface in com.sca4d.core.spring.web.annotation"><code>IfMatch</code></a> 方法或校验通过时为 <code>true</code></dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - If-Match 缺失、重复或不符合强 ETag 格式时抛出，错误码见上文</dd>
 </dl>
 </section>
 </li>

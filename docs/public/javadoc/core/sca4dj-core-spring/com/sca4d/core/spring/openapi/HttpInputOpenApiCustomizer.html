@@ -135,11 +135,16 @@ implements org.springdoc.core.customizers.ParameterCustomizer, org.springdoc.cor
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull io.swagger.v3.oas.models.Operation</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#customize(io.swagger.v3.oas.models.Operation,org.springframework.web.method.HandlerMethod)" class="member-name-link">customize</a><wbr>(@NotNull io.swagger.v3.oas.models.Operation&nbsp;operation,
  @NotNull org.springframework.web.method.HandlerMethod&nbsp;handlerMethod)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为接口写入关闭默认校验的内部标记，并补充 <code>If-Match</code>、响应 ETag 和分页、排序参数。
+ 方法或 Controller 类声明 <a href="../validation/NoDefaultValidation.html" title="annotation interface in com.sca4d.core.spring.validation"><code>NoDefaultValidation</code></a> 时，最终文档阶段跳过该接口的默认限制。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull io.swagger.v3.oas.models.media.Schema</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#customize(io.swagger.v3.oas.models.media.Schema,io.swagger.v3.core.converter.AnnotatedType)" class="member-name-link">customize</a><wbr>(@NotNull io.swagger.v3.oas.models.media.Schema&nbsp;property,
  @NotNull io.swagger.v3.core.converter.AnnotatedType&nbsp;type)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为 Springdoc 生成的属性 Schema 写入类型和显式覆盖标记，供最终文档阶段判断是否应用默认限制。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable io.swagger.v3.oas.models.parameters.Parameter</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#customize(io.swagger.v3.oas.models.parameters.Parameter,org.springframework.core.MethodParameter)" class="member-name-link">customize</a><wbr>(@Nullable io.swagger.v3.oas.models.parameters.Parameter&nbsp;parameterModel,
  @NotNull org.springframework.core.MethodParameter&nbsp;methodParameter)</code></div>
@@ -199,10 +204,10 @@ implements org.springdoc.core.customizers.ParameterCustomizer, org.springdoc.cor
 <dt>Specified by:</dt>
 <dd><code>customize</code>&nbsp;in interface&nbsp;<code>org.springdoc.core.customizers.ParameterCustomizer</code></dd>
 <dt>Parameters:</dt>
-<dd><code>parameterModel</code> - Springdoc 生成的参数；无法生成参数模型时为空</dd>
+<dd><code>parameterModel</code> - Springdoc 生成的参数定义；Springdoc 未生成参数定义时为空</dd>
 <dd><code>methodParameter</code> - Controller 方法参数</dd>
 <dt>Returns:</dt>
-<dd>带有标记的参数定义；输入参数模型为空时仍返回空</dd>
+<dd>带有标记的参数定义；传入为空时返回空</dd>
 </dl>
 </section>
 </li>
@@ -214,11 +219,15 @@ implements org.springdoc.core.customizers.ParameterCustomizer, org.springdoc.cor
  @NotNull io.swagger.v3.oas.models.media.Schema&nbsp;property,
  @NotNull
  @NotNull io.swagger.v3.core.converter.AnnotatedType&nbsp;type)</span></div>
+<div class="block">为 Springdoc 生成的属性 Schema 写入类型和显式覆盖标记，供最终文档阶段判断是否应用默认限制。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>customize</code>&nbsp;in interface&nbsp;<code>org.springdoc.core.customizers.PropertyCustomizer</code></dd>
+<dt>Parameters:</dt>
+<dd><code>property</code> - Springdoc 生成的属性 Schema</dd>
+<dd><code>type</code> - 属性所在 Java 类型的注解上下文</dd>
 <dt>Returns:</dt>
-<dd>带有当前请求字段类型和显式覆盖标记的 Schema</dd>
+<dd>同一个属性 Schema，已写入内部标记</dd>
 </dl>
 </section>
 </li>
@@ -230,11 +239,16 @@ implements org.springdoc.core.customizers.ParameterCustomizer, org.springdoc.cor
  @NotNull io.swagger.v3.oas.models.Operation&nbsp;operation,
  @NotNull
  @NotNull org.springframework.web.method.HandlerMethod&nbsp;handlerMethod)</span></div>
+<div class="block">为接口写入关闭默认校验的内部标记，并补充 <code>If-Match</code>、响应 ETag 和分页、排序参数。
+ 方法或 Controller 类声明 <a href="../validation/NoDefaultValidation.html" title="annotation interface in com.sca4d.core.spring.validation"><code>NoDefaultValidation</code></a> 时，最终文档阶段跳过该接口的默认限制。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>customize</code>&nbsp;in interface&nbsp;<code>org.springdoc.core.customizers.OperationCustomizer</code></dd>
+<dt>Parameters:</dt>
+<dd><code>operation</code> - Springdoc 生成的接口定义</dd>
+<dd><code>handlerMethod</code> - Spring MVC 处理方法</dd>
 <dt>Returns:</dt>
-<dd>带有方法级关闭标记和请求体根类型标记的接口定义</dd>
+<dd>同一个接口定义，已写入补充参数和内部标记</dd>
 </dl>
 </section>
 </li>

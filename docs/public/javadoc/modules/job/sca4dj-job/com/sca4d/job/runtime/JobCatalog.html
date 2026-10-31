@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>com.sca4d.core.api.runtime.InstanceCapability&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#availableVersions(com.sca4d.core.api.runtime.InstanceCapabilities)" class="member-name-link">availableVersions</a><wbr>(@NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前实例能力允许执行的全部 Job key 和定义版本。</div>
+<div class="block">返回当前实例启用的 capability 允许执行的全部 Job key 和定义版本。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.job.Job<wbr>&lt;?,<wbr>?&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadByKeyAndVersion(com.sca4d.core.api.job.JobKey,int)" class="member-name-link">loadByKeyAndVersion</a><wbr>(@NotNull com.sca4d.core.api.job.JobKey&nbsp;key,
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <div class="block">按提交时保存的 key 和定义版本恢复 Job。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - 稳定 Job 标识</dd>
+<dd><code>key</code> - Job 标识</dd>
 <dd><code>definitionVersion</code> - 提交时的定义版本</dd>
 <dt>Returns:</dt>
 <dd>完全匹配的当前代码定义</dd>
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.job.JobKey,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>com.sca4d.core.api.runtime.InstanceCapability&gt;&gt;</span>&nbsp;<span class="element-name">availableVersions</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</span></div>
-<div class="block">返回当前实例能力允许执行的全部 Job key 和定义版本。</div>
+<div class="block">返回当前实例启用的 capability 允许执行的全部 Job key 和定义版本。</div>
 </section>
 </li>
 </ul>

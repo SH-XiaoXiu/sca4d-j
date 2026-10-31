@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Collection)" class="member-name-link">DictionaryRegistry</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;&gt;&nbsp;enumTypes)</code></div>
 <div class="col-last even-row-color">
-<div class="block">从扫描结果创建代码字典目录。</div>
+<div class="block">从扫描结果创建代码字典目录，并校验每个枚举的键、扩展规则和选项值。</div>
 </div>
 </div>
 </section>
@@ -132,7 +132,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull com.sca4d.core.api.dictionary.DictionaryOption&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#options(java.lang.String)" class="member-name-link">options</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回指定代码字典的选项副本，排序值相同时按选项值排序。</div>
+</div>
 </div>
 </div>
 </div>
@@ -155,10 +157,16 @@ loadScripts(document, 'script');</script>
 <h3>DictionaryRegistry</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DictionaryRegistry</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;&gt;&nbsp;enumTypes)</span></div>
-<div class="block">从扫描结果创建代码字典目录。</div>
+<div class="block">从扫描结果创建代码字典目录，并校验每个枚举的键、扩展规则和选项值。
+
+ <p>每个枚举的全部常量必须返回同一个键和同一个扩展规则；选项值忽略大小写后不能重复，
+ 选项排序值按声明顺序生成。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>enumTypes</code> - 实现 `Dictionary` 的枚举类型</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 枚举没有常量、键格式错误、键重复、常量之间的键或扩展规则不一致，
+         或选项值忽略大小写后重复时抛出</dd>
 </dl>
 </section>
 </li>
@@ -213,9 +221,14 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.dictionary.DictionaryOption&gt;</span>&nbsp;<span class="element-name">options</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="block">返回指定代码字典的选项副本，排序值相同时按选项值排序。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>key</code> - 代码字典键</dd>
 <dt>Returns:</dt>
-<dd>指定代码字典按枚举声明顺序生成的选项</dd>
+<dd>代码字典选项列表，列表本身不可修改</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 键不是由 Java 枚举声明的代码字典时抛出</dd>
 </dl>
 </section>
 </li>

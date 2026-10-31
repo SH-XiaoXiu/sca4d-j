@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InstanceCapabilityCondition</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.springframework.context.annotation.Condition</span></div>
-<div class="block">在 Bean 定义阶段读取实例能力选择，防止停用功能启动消费者或监听器。</div>
+<div class="block">在 Bean 定义阶段读取 `sca4dj.instance.capabilities`，未启用功能的 Bean 不会被创建，因此其中的消费者和监听器也不会启动。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

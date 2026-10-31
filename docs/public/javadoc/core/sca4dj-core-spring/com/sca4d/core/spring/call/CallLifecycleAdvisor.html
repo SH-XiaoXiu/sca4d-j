@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
  org.springframework.beans.factory.ObjectProvider&lt;<a href="CallLifecycleAdvisor.MethodBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a>&gt;&nbsp;methodBindings,
  org.springframework.beans.factory.ObjectProvider&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&gt;&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
-<div class="block">使用 Spring 延迟提供者，避免 Advisor 创建时提前实例化调用基础设施。</div>
+<div class="block">通过 Spring `ObjectProvider` 延迟获取调用执行器、绑定声明和时钟，避免 Advisor 创建时提前实例化这些 Bean。</div>
 </div>
 </div>
 </section>
@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
  org.springframework.beans.factory.ObjectProvider&lt;<a href="CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;?&gt;&gt;&nbsp;declarations,
  org.springframework.beans.factory.ObjectProvider&lt;<a href="CallLifecycleAdvisor.MethodBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a>&gt;&nbsp;methodBindings,
  org.springframework.beans.factory.ObjectProvider&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&gt;&nbsp;clock)</span></div>
-<div class="block">使用 Spring 延迟提供者，避免 Advisor 创建时提前实例化调用基础设施。</div>
+<div class="block">通过 Spring `ObjectProvider` 延迟获取调用执行器、绑定声明和时钟，避免 Advisor 创建时提前实例化这些 Bean。</div>
 </section>
 </li>
 </ul>

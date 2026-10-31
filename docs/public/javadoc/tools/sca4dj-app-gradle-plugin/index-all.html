@@ -57,7 +57,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/PluginArtifactGradlePlugin.html#apply(org.gradle.api.Project)" class="member-name-link">apply(Project)</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginArtifactGradlePlugin.html" title="class in com.sca4dj.gradle.app">PluginArtifactGradlePlugin</a></dt>
 <dd>
-<div class="block">API 仅用于编译与测试，插件作者维护的元信息与配置资源原样打包。</div>
+<div class="block">注册 pluginApi 依赖配置并把它接入 compileOnly 与 testImplementation，同时注册 pluginJar 任务。
+ 应用后 API 不进入 runtime 依赖；pluginJar 合并 main 输出和 runtimeClasspath 中的私有依赖，遇到重复类或资源时构建失败。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/Sca4djAppPlugin.html#apply(org.gradle.api.Project)" class="member-name-link">apply(Project)</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/Sca4djAppPlugin.html" title="class in com.sca4dj.gradle.app">Sca4djAppPlugin</a></dt>
 <dd>
@@ -101,7 +102,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/PluginApiExtension.html#getId()" class="member-name-link">getId()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginApiExtension.html" title="class in com.sca4dj.gradle.app">PluginApiExtension</a></dt>
 <dd>
-<div class="block">返回稳定 App API 编码。</div>
+<div class="block">返回 App API 编码。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/InitFlywayTask.html#getMigrationDirectory()" class="member-name-link">getMigrationDirectory()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/InitFlywayTask.html" title="class in com.sca4dj.gradle.app">InitFlywayTask</a></dt>
 <dd>
@@ -109,11 +110,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/InitFlywayTask.html#getMigrationName()" class="member-name-link">getMigrationName()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/InitFlywayTask.html" title="class in com.sca4dj.gradle.app">InitFlywayTask</a></dt>
 <dd>
-<div class="block">返回初始迁移文件使用的稳定名称。</div>
+<div class="block">返回初始迁移文件使用的名称。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/Sca4djAppExtension.html#getMigrationName()" class="member-name-link">getMigrationName()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/Sca4djAppExtension.html" title="class in com.sca4dj.gradle.app">Sca4djAppExtension</a></dt>
 <dd>
-<div class="block">返回 Flyway 初始迁移文件使用的稳定名称。</div>
+<div class="block">返回 Flyway 初始迁移文件使用的名称。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/InitFlywayTask.html#getRuntimeClasspath()" class="member-name-link">getRuntimeClasspath()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/InitFlywayTask.html" title="class in com.sca4dj.gradle.app">InitFlywayTask</a></dt>
 <dd>

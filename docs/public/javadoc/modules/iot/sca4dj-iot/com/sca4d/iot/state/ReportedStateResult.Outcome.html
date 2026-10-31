@@ -123,11 +123,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="#ACCEPTED" class="member-name-link">ACCEPTED</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">已写入 latest 投影；首次写入时 version 为 1，之后每次写入递增。</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="#DUPLICATE" class="member-name-link">DUPLICATE</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">顺序值与内容摘要都与当前投影相同，未改变投影。</div>
+</div>
 <div class="col-first even-row-color"><code><a href="#OLDER" class="member-name-link">OLDER</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">顺序值早于当前投影，未改变投影。</div>
+</div>
 </div>
 </section>
 </li>
@@ -177,18 +183,21 @@ the order they are declared.</div>
 <section class="detail" id="ACCEPTED">
 <h3>ACCEPTED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></span>&nbsp;<span class="element-name">ACCEPTED</span></div>
+<div class="block">已写入 latest 投影；首次写入时 version 为 1，之后每次写入递增。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DUPLICATE">
 <h3>DUPLICATE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></span>&nbsp;<span class="element-name">DUPLICATE</span></div>
+<div class="block">顺序值与内容摘要都与当前投影相同，未改变投影。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="OLDER">
 <h3>OLDER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></span>&nbsp;<span class="element-name">OLDER</span></div>
+<div class="block">顺序值早于当前投影，未改变投影。</div>
 </section>
 </li>
 </ul>

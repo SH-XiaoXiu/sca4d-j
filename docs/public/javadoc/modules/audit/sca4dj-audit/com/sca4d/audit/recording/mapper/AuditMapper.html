@@ -113,12 +113,32 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">消息重投时按主键去重，不覆盖首次写入的审计事实。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectById(long)" class="member-name-link">selectById</a><wbr>(long&nbsp;id)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPage(com.sca4d.audit.query.AuditQuery)" class="member-name-link">selectPage</a><wbr>(@NotNull <a href="../../query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a>&nbsp;query)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertResources(long,java.util.List)" class="member-name-link">insertResources</a><wbr>(long&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.resource.Resource.Ref&gt;&nbsp;resources)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">只从存在的原审计行复制时间，重复资源关联不重复插入。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#relatesTo(long,java.lang.String,java.lang.String)" class="member-name-link">relatesTo</a><wbr>(long&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">校验记录是否属于指定资源快照。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#scan(long,long,int)" class="member-name-link">scan</a><wbr>(long&nbsp;afterId,
+ long&nbsp;throughId,
+ int&nbsp;size)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">有界主键游标扫描，不依赖分页偏移。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectById(long)" class="member-name-link">selectById</a><wbr>(long&nbsp;id)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPage(com.sca4d.audit.query.AuditQuery)" class="member-name-link">selectPage</a><wbr>(@NotNull <a href="../../query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a>&nbsp;query)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -133,6 +153,40 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="insertResources(long,java.util.List)">
+<h3>insertResources</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insertResources</span><wbr><span class="parameters">(@Param("id")
+ long&nbsp;id,
+ @Param("resources")
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.resource.Resource.Ref&gt;&nbsp;resources)</span></div>
+<div class="block">只从存在的原审计行复制时间，重复资源关联不重复插入。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="relatesTo(long,java.lang.String,java.lang.String)">
+<h3>relatesTo</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">relatesTo</span><wbr><span class="parameters">(@Param("id")
+ long&nbsp;id,
+ @Param("type")
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+ @Param("resourceId")
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId)</span></div>
+<div class="block">校验记录是否属于指定资源快照。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="scan(long,long,int)">
+<h3>scan</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&gt;</span>&nbsp;<span class="element-name">scan</span><wbr><span class="parameters">(@Param("afterId")
+ long&nbsp;afterId,
+ @Param("throughId")
+ long&nbsp;throughId,
+ @Param("size")
+ int&nbsp;size)</span></div>
+<div class="block">有界主键游标扫描，不依赖分页偏移。</div>
+</section>
+</li>
 <li>
 <section class="detail" id="insert(com.sca4d.audit.recording.mapper.EncodedAuditEntry)">
 <h3>insert</h3>

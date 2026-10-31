@@ -360,6 +360,8 @@ loadScripts(document, 'script');</script>
 <dd><code>length</code> - 输出字节数，不能为负数</dd>
 <dt>Returns:</dt>
 <dd>初始内容全部为零的字节构建器</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - length 为负数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -453,7 +455,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>至少包含 <code>stageCode</code> 字段的 JSON 对象文本</dd>
 <dt>Throws:</dt>
-<dd><code><a href="DataAssertionException.html" title="class in com.sca4d.core.api.data">DataAssertionException</a></code> - detail 不是合法 JSON 时抛出</dd>
+<dd><code><a href="exception/DataAssertionException.html" title="class in com.sca4d.core.api.data.exception">DataAssertionException</a></code> - detail 不是合法 JSON 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -479,7 +481,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>原始绝对 HTTP URL，或以一个斜杠连接的 URL</dd>
 <dt>Throws:</dt>
-<dd><code><a href="DataAssertionException.html" title="class in com.sca4d.core.api.data">DataAssertionException</a></code> - path 为空，或相对 path 对应的 baseUrl 为空时抛出</dd>
+<dd><code><a href="exception/DataAssertionException.html" title="class in com.sca4d.core.api.data.exception">DataAssertionException</a></code> - path 为空，或相对 path 对应的 baseUrl 为空时抛出</dd>
 </dl>
 </section>
 </li>

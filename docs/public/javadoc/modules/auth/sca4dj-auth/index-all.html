@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#account()" class="member-name-link">account()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
@@ -97,6 +97,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#%3Cinit%3E(java.util.List)" class="member-name-link">AuthenticationMethods(List&lt;AuthenticationMethod&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
 <dd>
 <div class="block">创建认证方法目录。</div>
+</dd>
+<dt><a href="com/sca4d/auth/exception/AuthException.html" class="type-name-link" title="class in com.sca4d.auth.exception">AuthException</a> - Exception Class in <a href="com/sca4d/auth/exception/package-summary.html">com.sca4d.auth.exception</a></dt>
+<dd>
+<div class="block">认证模块的运行时故障，例如 Session 编解码、资源装载或持久化数据损坏。</div>
+</dd>
+<dt><a href="com/sca4d/auth/exception/AuthException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">AuthException(String)</a> - Constructor for exception class com.sca4d.auth.exception.<a href="com/sca4d/auth/exception/AuthException.html" title="class in com.sca4d.auth.exception">AuthException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/auth/exception/AuthException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">AuthException(String, Throwable)</a> - Constructor for exception class com.sca4d.auth.exception.<a href="com/sca4d/auth/exception/AuthException.html" title="class in com.sca4d.auth.exception">AuthException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
 </dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html" class="type-name-link" title="class in com.sca4d.auth.config">AuthProperties</a> - Class in <a href="com/sca4d/auth/config/package-summary.html">com.sca4d.auth.config</a></dt>
 <dd>
@@ -149,6 +161,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Redis 中保存动作认证尝试，并串行修改同一尝试。</div>
 </dd>
+<dt><a href="com/sca4d/auth/exception/package-summary.html">com.sca4d.auth.exception</a> - package com.sca4d.auth.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/jwt/package-summary.html">com.sca4d.auth.jwt</a> - package com.sca4d.auth.jwt</dt>
 <dd>
 <div class="block">签发并校验从 `Session` 投影得到的 JWT。</div>
@@ -590,7 +604,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/session/SaTokenSessionManager.html#terminate(com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminate(SessionId, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionManager.html" title="class in com.sca4d.auth.session">SaTokenSessionManager</a></dt>
 <dd>
-<div class="block">终止指定 Session 的权威登录状态。</div>
+<div class="block">按 Session 标识注销对应 Token 登录，并删除 Token 索引。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/SessionService.html#terminate(com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminate(SessionId, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
 <dt><a href="com/sca4d/auth/session/SessionService.html#terminate(com.sca4d.core.api.authentication.Session,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminate(Session, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
@@ -599,7 +613,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html#terminateAccount(long,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminateAccount(long, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionControl.html" title="class in com.sca4d.auth.session">SaTokenSessionControl</a></dt>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html#terminateOtherSessions(long,com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminateOtherSessions(long, SessionId, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionControl.html" title="class in com.sca4d.auth.session">SaTokenSessionControl</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">注销指定 Account 除保留 Session 外的全部 Sa-Token 登录状态，并递增该 Account 的 Session 失效代次。</div>
+</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.Token.html#%3Cinit%3E()" class="member-name-link">Token()</a> - Constructor for class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/session/codec/OperationResourceCodec.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/OperationResourceCodec.html" title="class in com.sca4d.auth.session.codec">OperationResourceCodec</a></dt>
@@ -629,7 +645,7 @@ loadScripts(document, 'script');</script>
 <div class="block">在最多等待两秒取得的自动续租分布式锁内执行操作。</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

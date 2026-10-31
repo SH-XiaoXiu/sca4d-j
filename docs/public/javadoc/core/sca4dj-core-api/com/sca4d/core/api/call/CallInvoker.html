@@ -129,7 +129,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#execute(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">execute</a><wbr>(<a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">同步完成方法执行和各环绕处理；返回 Future 只代表本次调度返回，不延伸事务或锁。</div>
+<div class="block">同步完成方法执行和各环绕处理，结束后才返回最终结果。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#executeAsync(com.sca4d.core.api.call.CallExecution,java.util.function.Supplier)" class="member-name-link">executeAsync</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">execute</span><wbr><span class="parameters">(<a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">同步完成方法执行和各环绕处理；返回 Future 只代表本次调度返回，不延伸事务或锁。</div>
+<div class="block">同步完成方法执行和各环绕处理，结束后才返回最终结果。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>execution</code> - 当前方法的独立执行范围</dd>

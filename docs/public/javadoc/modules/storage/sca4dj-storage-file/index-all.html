@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/storage/file/persistence/FileRepository.html#claimDeletion(java.time.Instant,java.time.Instant,java.lang.String)" class="member-name-link">claimDeletion(Instant, Instant, String)</a> - Method in class com.sca4d.storage.file.persistence.<a href="com/sca4d/storage/file/persistence/FileRepository.html" title="class in com.sca4d.storage.file.persistence">FileRepository</a></dt>
 <dd>
-<div class="block">按状态、重试时间和租约条件领取一批删除记录。</div>
+<div class="block">按状态、重试时间和租约条件最多领取 50 条删除记录，并以 owner 和 leaseUntil 写入删除租约。</div>
 </dd>
 <dt><a href="com/sca4d/storage/file/lifecycle/FileCleanupService.html#cleanup()" class="member-name-link">cleanup()</a> - Method in class com.sca4d.storage.file.lifecycle.<a href="com/sca4d/storage/file/lifecycle/FileCleanupService.html" title="class in com.sca4d.storage.file.lifecycle">FileCleanupService</a></dt>
 <dd>
@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/storage/file/config/package-summary.html">com.sca4d.storage.file.config</a> - package com.sca4d.storage.file.config</dt>
 <dd>
-<div class="block">装配文件生命周期、传输令牌、存储实现和清理任务。</div>
+<div class="block">装配文件上传、删除登记、传输令牌、存储实现和清理任务。</div>
 </dd>
 <dt><a href="com/sca4d/storage/file/lifecycle/package-summary.html">com.sca4d.storage.file.lifecycle</a> - package com.sca4d.storage.file.lifecycle</dt>
 <dd>
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/storage/file/persistence/package-summary.html">com.sca4d.storage.file.persistence</a> - package com.sca4d.storage.file.persistence</dt>
 <dd>
-<div class="block">保存文件状态、用途和存储位置，并提供生命周期所需的持久化操作。</div>
+<div class="block">保存文件状态、用途和存储位置，并提供文件删除登记所需的数据库操作。</div>
 </dd>
 <dt><a href="com/sca4d/storage/file/persistence/mapper/package-summary.html">com.sca4d.storage.file.persistence.mapper</a> - package com.sca4d.storage.file.persistence.mapper</dt>
 <dd>
@@ -178,7 +178,9 @@ loadScripts(document, 'script');</script>
 <div class="block">配置默认存储实现、公开传输地址和文件清理过程。</div>
 </dd>
 <dt><a href="com/sca4d/storage/file/config/FileProperties.html#%3Cinit%3E()" class="member-name-link">FileProperties()</a> - Constructor for class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.html" title="class in com.sca4d.storage.file.config">FileProperties</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">使用默认保留期、清理间隔和删除租约创建文件配置。</div>
+</dd>
 <dt><a href="com/sca4d/storage/file/config/FileProperties.Backend.html" class="type-name-link" title="class in com.sca4d.storage.file.config">FileProperties.Backend</a> - Class in <a href="com/sca4d/storage/file/config/package-summary.html">com.sca4d.storage.file.config</a></dt>
 <dd>
 <div class="block">配置新文件使用的默认 backend。</div>
@@ -197,7 +199,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/storage/file/persistence/FileRepository.html#%3Cinit%3E(com.sca4d.storage.file.persistence.mapper.FileMapper,com.sca4d.core.spring.persistence.batch.SqlBatches)" class="member-name-link">FileRepository(FileMapper, SqlBatches)</a> - Constructor for class com.sca4d.storage.file.persistence.<a href="com/sca4d/storage/file/persistence/FileRepository.html" title="class in com.sca4d.storage.file.persistence">FileRepository</a></dt>
 <dd>
-<div class="block">创建使用指定 Mapper 的文件持久化边界。</div>
+<div class="block">创建使用指定 Mapper 读写文件记录的 FileRepository。</div>
 </dd>
 <dt><a href="com/sca4d/storage/file/config/FileSettings.html" class="type-name-link" title="class in com.sca4d.storage.file.config">FileSettings</a> - Class in <a href="com/sca4d/storage/file/config/package-summary.html">com.sca4d.storage.file.config</a></dt>
 <dd>
@@ -217,7 +219,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/storage/file/persistence/FileRepository.html#findExpiredUploadObjects(java.time.Instant)" class="member-name-link">findExpiredUploadObjects(Instant)</a> - Method in class com.sca4d.storage.file.persistence.<a href="com/sca4d/storage/file/persistence/FileRepository.html" title="class in com.sca4d.storage.file.persistence">FileRepository</a></dt>
 <dd>
-<div class="block">读取签名到期后仍需清理临时对象的文件。</div>
+<div class="block">读取签名到期后仍需清理临时对象的文件，每次最多返回 100 条。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>

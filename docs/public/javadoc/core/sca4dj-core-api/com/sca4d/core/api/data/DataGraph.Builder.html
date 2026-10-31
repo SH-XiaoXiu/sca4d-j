@@ -108,7 +108,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">Builder</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建空构建器；通常通过 <a href="DataGraph.html#builder()"><code>DataGraph.builder()</code></a> 获取。</div>
+</div>
 </div>
 </section>
 </li>
@@ -131,12 +133,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="DataGraph.Builder.html" title="class in com.sca4d.core.api.data">DataGraph.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#input(com.sca4d.core.api.data.DataKey)" class="member-name-link">input</a><wbr>(@NotNull <a href="DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a>&lt;?&gt;&nbsp;key)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">登记调用方必须提供的输入。</div>
+<div class="block">登记调用方必须提供的输入。同名键和引用错误在 <a href="#build()"><code>build()</code></a> 时才报告。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="DataGraph.Builder.html" title="class in com.sca4d.core.api.data">DataGraph.Builder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operation(com.sca4d.core.api.data.DataOperation)" class="member-name-link">operation</a><wbr>(@NotNull <a href="DataOperation.html" title="class in com.sca4d.core.api.data">DataOperation</a>&lt;?&gt;&nbsp;operation)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">登记一个数据操作。</div>
+<div class="block">登记一个数据操作。重复名称、重复输出键和未声明的输入在 <a href="#build()"><code>build()</code></a> 时才报告。</div>
 </div>
 </div>
 </div>
@@ -159,6 +161,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Builder</span>()</div>
+<div class="block">创建空构建器；通常通过 <a href="DataGraph.html#builder()"><code>DataGraph.builder()</code></a> 获取。</div>
 </section>
 </li>
 </ul>
@@ -175,10 +178,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DataGraph.Builder.html" title="class in com.sca4d.core.api.data">DataGraph.Builder</a></span>&nbsp;<span class="element-name">input</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a>&lt;?&gt;&nbsp;key)</span></div>
-<div class="block">登记调用方必须提供的输入。</div>
+<div class="block">登记调用方必须提供的输入。同名键和引用错误在 <a href="#build()"><code>build()</code></a> 时才报告。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>key</code> - 输入键</dd>
+<dd><code>key</code> - 输入键，不能为空</dd>
 <dt>Returns:</dt>
 <dd>当前构建器</dd>
 </dl>
@@ -190,10 +193,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DataGraph.Builder.html" title="class in com.sca4d.core.api.data">DataGraph.Builder</a></span>&nbsp;<span class="element-name">operation</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="DataOperation.html" title="class in com.sca4d.core.api.data">DataOperation</a>&lt;?&gt;&nbsp;operation)</span></div>
-<div class="block">登记一个数据操作。</div>
+<div class="block">登记一个数据操作。重复名称、重复输出键和未声明的输入在 <a href="#build()"><code>build()</code></a> 时才报告。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>operation</code> - 数据操作</dd>
+<dd><code>operation</code> - 数据操作，不能为空</dd>
 <dt>Returns:</dt>
 <dd>当前构建器</dd>
 </dl>
@@ -209,6 +212,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>已按稳定拓扑顺序排列的数据图</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 节点名称或输入输出键重复、节点引用未声明或类型不一致的输入、存在依赖环时抛出</dd>
 </dl>
 </section>
 </li>

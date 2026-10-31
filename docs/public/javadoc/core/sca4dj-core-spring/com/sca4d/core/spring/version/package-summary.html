@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab6"><a href="ApiCapability.html" title="annotation interface in com.sca4d.core.spring.version">ApiCapability</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab6">
-<div class="block">声明接口所属能力及固定路由契约；contract 为零时按请求协商。</div>
+<div class="block">声明接口所属的 API 标识及固定路由契约；contract 为零时按请求协商。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ApplicationVersionAutoConfiguration.html" title="class in com.sca4d.core.spring.version">ApplicationVersionAutoConfiguration</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -98,7 +98,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="VersionCallInterceptor.html" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">在 Call 中报告兼容拒绝，使审计、拒绝分类和完成处理保持统一。</div>
+<div class="block">在 Call 执行前读取 MVC 拦截器写入的版本兼容结果，兼容拒绝时在业务执行前抛出异常。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab6"><a href="VersionDiscovery.html" title="annotation interface in com.sca4d.core.spring.version">VersionDiscovery</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab6">
@@ -106,7 +106,8 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="VersionWebConfiguration.html" title="class in com.sca4d.core.spring.version">VersionWebConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">应用显式导入的 MVC 适配；应用提供矩阵并选择默认能力和旧客户端策略。</div>
+<div class="block">应用显式导入的 MVC 配置类，注册版本响应头、客户端版本解析、版本拦截器和参数解析器。
+ 应用提供 CompatibilityResolver 兼容矩阵，并通过 sca4dj.versioning.default-capability 与 sca4dj.versioning.allow-unspecified 配置未声明接口的默认归属和未指定版本客户端的放行策略。</div>
 </div>
 </div>
 </div>

@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.auth.email"},{"l":"com.sca4d.auth.email.challenge"},{"l":"com.sca4d.auth.email.config"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.auth.email"},{"l":"com.sca4d.auth.email.challenge"},{"l":"com.sca4d.auth.email.config"},{"l":"com.sca4d.auth.email.exception"}];updateSearchResults();

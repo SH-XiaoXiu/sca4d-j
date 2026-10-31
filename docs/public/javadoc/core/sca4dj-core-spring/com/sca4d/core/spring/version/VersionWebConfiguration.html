@@ -97,7 +97,8 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">VersionWebConfiguration</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span></div>
-<div class="block">应用显式导入的 MVC 适配；应用提供矩阵并选择默认能力和旧客户端策略。</div>
+<div class="block">应用显式导入的 MVC 配置类，注册版本响应头、客户端版本解析、版本拦截器和参数解析器。
+ 应用提供 CompatibilityResolver 兼容矩阵，并通过 sca4dj.versioning.default-capability 与 sca4dj.versioning.allow-unspecified 配置未声明接口的默认归属和未指定版本客户端的放行策略。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -138,7 +139,9 @@ implements org.springframework.web.servlet.config.annotation.WebMvcConfigurer</s
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addInterceptors(org.springframework.web.servlet.config.annotation.InterceptorRegistry)" class="member-name-link">addInterceptors</a><wbr>(@NotNull org.springframework.web.servlet.config.annotation.InterceptorRegistry&nbsp;registry)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">注册版本判断，进入 Controller 前完成协议校验。</div>
+<div class="block">注册 MVC 拦截器。每个请求都写入服务端版本响应头；处理器带 <a href="VersionDiscovery.html" title="annotation interface in com.sca4d.core.spring.version"><code>VersionDiscovery</code></a> 时不解析客户端版本。
+ 其余请求解析客户端版本并计算兼容结果，结果写入请求属性，兼容状态通过 COMPATIBILITY_STATUS_HEADER 返回，状态不为 BLOCKED 且规则存在时还通过 API_CONTRACT_HEADER 返回接口契约版本，同时把客户端信息写入 MDC 供日志使用。
+ 拦截器在 afterCompletion 和异步处理开始时清理 MDC。</div>
 </div>
 </div>
 </div>
@@ -185,7 +188,9 @@ implements org.springframework.web.servlet.config.annotation.WebMvcConfigurer</s
 <h3>addInterceptors</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addInterceptors</span><wbr><span class="parameters">(@NotNull
  @NotNull org.springframework.web.servlet.config.annotation.InterceptorRegistry&nbsp;registry)</span></div>
-<div class="block">注册版本判断，进入 Controller 前完成协议校验。</div>
+<div class="block">注册 MVC 拦截器。每个请求都写入服务端版本响应头；处理器带 <a href="VersionDiscovery.html" title="annotation interface in com.sca4d.core.spring.version"><code>VersionDiscovery</code></a> 时不解析客户端版本。
+ 其余请求解析客户端版本并计算兼容结果，结果写入请求属性，兼容状态通过 COMPATIBILITY_STATUS_HEADER 返回，状态不为 BLOCKED 且规则存在时还通过 API_CONTRACT_HEADER 返回接口契约版本，同时把客户端信息写入 MDC 供日志使用。
+ 拦截器在 afterCompletion 和异步处理开始时清理 MDC。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>addInterceptors</code>&nbsp;in interface&nbsp;<code>org.springframework.web.servlet.config.annotation.WebMvcConfigurer</code></dd>

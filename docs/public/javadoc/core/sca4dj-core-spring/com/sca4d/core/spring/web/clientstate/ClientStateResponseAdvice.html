@@ -132,7 +132,9 @@ implements org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdv
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends org.springframework.http.converter.HttpMessageConverter&lt;?&gt;&gt;&nbsp;selectedConverterType,
  @NotNull org.springframework.http.server.ServerHttpRequest&nbsp;request,
  @NotNull org.springframework.http.server.ServerHttpResponse&nbsp;response)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">把当前请求登记的状态刷新目标写入即将输出的响应头，响应体原样返回。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supports(org.springframework.core.MethodParameter,java.lang.Class)" class="member-name-link">supports</a><wbr>(@NotNull org.springframework.core.MethodParameter&nbsp;returnType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends org.springframework.http.converter.HttpMessageConverter&lt;?&gt;&gt;&nbsp;converterType)</code></div>
@@ -197,9 +199,19 @@ implements org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdv
  @NotNull org.springframework.http.server.ServerHttpRequest&nbsp;request,
  @NotNull
  @NotNull org.springframework.http.server.ServerHttpResponse&nbsp;response)</span></div>
+<div class="block">把当前请求登记的状态刷新目标写入即将输出的响应头，响应体原样返回。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>beforeBodyWrite</code>&nbsp;in interface&nbsp;<code>org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>body</code> - 即将序列化的响应体</dd>
+<dd><code>returnType</code> - Controller 返回值声明</dd>
+<dd><code>selectedContentType</code> - 已选中的响应媒体类型</dd>
+<dd><code>selectedConverterType</code> - 已选中的消息转换器类型</dd>
+<dd><code>request</code> - 当前请求</dd>
+<dd><code>response</code> - 尚未提交的响应</dd>
+<dt>Returns:</dt>
+<dd>原响应体</dd>
 </dl>
 </section>
 </li>

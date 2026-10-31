@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InstanceCapabilityFilter</span>
 <span class="extends-implements">extends org.springframework.web.filter.OncePerRequestFilter</span></div>
-<div class="block">在业务 API 入口检查本实例能力，不替代认证、权限或 Gateway 回调校验。</div>
+<div class="block">在业务 API 入口检查当前实例是否启用了请求路径所需的功能，不替代认证、权限或 Gateway 回调校验。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -144,7 +144,8 @@ loadScripts(document, 'script');</script>
  @NotNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  @NotNull jakarta.servlet.FilterChain&nbsp;chain)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">根据最长 API 前缀检查实例能力；能力缺失时返回 503，不进入 Controller。</div>
+<div class="block">按最长匹配的 API 前缀检查所需功能；任一功能未启用时直接返回 503，请求不再进入后续过滤器和 Controller。
+ 以 `/actuator` 和回调路径开头的请求不做检查。</div>
 </div>
 </div>
 </div>
@@ -176,7 +177,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>capabilities</code> - 当前实例启用的能力和 API 前缀要求</dd>
+<dd><code>capabilities</code> - 当前实例启用的功能，以及各 API 前缀所需的功能编码</dd>
 </dl>
 </section>
 </li>
@@ -199,7 +200,8 @@ loadScripts(document, 'script');</script>
  @NotNull jakarta.servlet.FilterChain&nbsp;chain)</span>
                          throws <span class="exceptions">jakarta.servlet.ServletException,
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">根据最长 API 前缀检查实例能力；能力缺失时返回 503，不进入 Controller。</div>
+<div class="block">按最长匹配的 API 前缀检查所需功能；任一功能未启用时直接返回 503，请求不再进入后续过滤器和 Controller。
+ 以 `/actuator` 和回调路径开头的请求不做检查。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>doFilterInternal</code>&nbsp;in class&nbsp;<code>org.springframework.web.filter.OncePerRequestFilter</code></dd>

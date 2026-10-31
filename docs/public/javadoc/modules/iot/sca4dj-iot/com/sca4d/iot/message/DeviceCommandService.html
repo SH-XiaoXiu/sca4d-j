@@ -149,7 +149,9 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;inputs,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;acknowledgementTimeout)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按 command code 和原始输入创建即时下行消息；输入键与当前物模型 command 不一致或值不合法时抛出 <code>BusinessException</code>，且不写入数据库。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlink</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submitScheduled(long,java.lang.String,java.util.Map,java.time.Instant,java.time.Duration,long,java.time.Instant)" class="member-name-link">submitScheduled</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandCode,
@@ -225,6 +227,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;acknowledgementTimeout)</span></div>
+<div class="block">按 command code 和原始输入创建即时下行消息；输入键与当前物模型 command 不一致或值不合法时抛出 <code>BusinessException</code>，且不写入数据库。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>deviceId</code> - Device 标识</dd>
@@ -265,7 +268,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>新建下行消息</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 输入键不完整或目标 Device 当前物模型不匹配时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 输入键不完整或目标 Device 当前物模型不匹配时抛出</dd>
 </dl>
 </section>
 </li>
@@ -305,7 +308,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>本次登记取消时为 true；消息已经终结时为 false</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 消息不存在或不是 command 时抛出无效输入错误</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 消息不存在或不是 command 时抛出无效输入错误</dd>
 </dl>
 </section>
 </li>

@@ -50,7 +50,7 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab6" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button><button id="all-classes-table-tab6" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
@@ -63,44 +63,48 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">限定 IoT TimescaleDB 的基础 Bean；没有该注解的数据库 Bean 仍表示默认数据库。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/exception/IotTimescaleException.html" title="class in com.sca4d.iot.exception">IotTimescaleException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">Timescale 时序存储的依赖或数据故障，例如事件记录缺少必要字段。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 IoT 历史功能和清理参数；数据库连接由动态数据源配置负责。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html" title="class in com.sca4d.iot.telemetry">TimescaleDeviceHistoryStore</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html" title="class in com.sca4d.iot.telemetry">TimescaleDeviceHistoryStore</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">通过 TimescaleDB 两张历史表实现 Device 历史查询契约。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">消费物模型和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/config/TimescaleIotAutoConfiguration.html" title="class in com.sca4d.iot.config">TimescaleIotAutoConfiguration</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">消费 Device 事件和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/config/TimescaleIotAutoConfiguration.html" title="class in com.sca4d.iot.config">TimescaleIotAutoConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在启用时为 IoT Telemetry 和事件创建独立 TimescaleDB 存储及消息 Consumer。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">定义独立 TimescaleDB 中 Telemetry、事件查询、分区键内幂等写入和保留期清理 SQL。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">隐藏 TimescaleDB Mapper、JSON 字段和两张固定 hypertable 的写入形状。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleRetentionTask.html" title="class in com.sca4d.iot.telemetry">TimescaleRetentionTask</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleRetentionTask.html" title="class in com.sca4d.iot.telemetry">TimescaleRetentionTask</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 `drop_chunks` 清理 TimescaleDB Telemetry 和事件历史。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">消费 reported Telemetry 消息并按 Id 幂等写入 TimescaleDB。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/timescale/persistence/TimescaleTelemetrySample.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleTelemetrySample</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/timescale/persistence/TimescaleTelemetrySample.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleTelemetrySample</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次消息消费批量写入 TimescaleDB 所需的单条 Telemetry 样本字段。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 TimescaleDB 查询返回的一条已编码 ThingEvent。</div>
 </div>
 </div>

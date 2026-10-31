@@ -26,6 +26,7 @@ loadScripts(document, 'script');</script>
 <div class="top-nav" id="navbar-top"><button id="navbar-toggle-button" aria-controls="navbar-top" aria-expanded="false" aria-label="Toggle navigation links"><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span></button>
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
+<li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -339,7 +340,10 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="IssuedHmacKey.html" title="class in com.sca4d.auth.hmac">IssuedHmacKey</a></span>&nbsp;<span class="element-name">issue</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account)</span></div>
-<div class="block">为 Account 创建、轮换或重新签发 MAC Key。</div>
+<div class="block">为 Account 创建、轮换或重新签发 MAC Key。
+
+ <p>已有 Credential 时会把旧 Credential 替换为新版本，并结束该 Account 的全部 Session；
+ Key 明文只出现在返回值中，数据库只保存加密后的 Key。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>account</code> - 已经由管理流程确认存在的 Account；Account 停用时仍允许预置或轮换 Credential</dd>

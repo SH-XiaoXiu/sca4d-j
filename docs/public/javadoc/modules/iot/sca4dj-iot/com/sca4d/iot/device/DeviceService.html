@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DeviceService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存和修改 Device、Product、物模型、协议及接入方式等 IoT 技术状态。</div>
+<div class="block">创建、查询和修改 Device 台账，包括展示资料、物模型与协议绑定、直接连接绑定和接入方式。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -149,10 +149,14 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.iot.api.Device&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findByConnection(com.sca4d.iot.api.connection.DeviceConnectionBinding)" class="member-name-link">findByConnection</a><wbr>(@NotNull com.sca4d.iot.api.connection.DeviceConnectionBinding&nbsp;connection)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按完整直接连接绑定查找 Device，只读取主库中的当前绑定。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.Device</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadById(long)" class="member-name-link">loadById</a><wbr>(long&nbsp;deviceId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取必须存在的 Device，用于调用方已经依赖该 Device 存在的业务动作。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rebindDisabledDevice(long,com.sca4d.iot.device.DeviceBindingChange)" class="member-name-link">rebindDisabledDevice</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="DeviceBindingChange.html" title="class in com.sca4d.iot.device">DeviceBindingChange</a>&nbsp;change)</code></div>
@@ -163,7 +167,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateDetails(long,com.sca4d.iot.device.DeviceDetailsChange)" class="member-name-link">updateDetails</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="DeviceDetailsChange.html" title="class in com.sca4d.iot.device">DeviceDetailsChange</a>&nbsp;change)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">修改 Device 的展示名称和备注。</div>
+<div class="block">修改 Device 的展示名称和备注，在 Device 聚合锁和事务内执行。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateTechnicalActivation(long)" class="member-name-link">validateTechnicalActivation</a><wbr>(long&nbsp;deviceId)</code></div>
@@ -240,7 +244,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>新建 Device</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Product、协议、物模型或连接身份不合法，或者唯一身份冲突时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Product、协议、物模型或连接身份不合法，或者唯一身份冲突时抛出</dd>
 </dl>
 </section>
 </li>
@@ -251,9 +255,14 @@ loadScripts(document, 'script');</script>
 @CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.Device</span>&nbsp;<span class="element-name">loadById</span><wbr><span class="parameters">(long&nbsp;deviceId)</span></div>
+<div class="block">读取必须存在的 Device，用于调用方已经依赖该 Device 存在的业务动作。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>deviceId</code> - Device 标识 @return 必须存在的 Device</dd>
+<dd><code>deviceId</code> - Device 标识</dd>
+<dt>Returns:</dt>
+<dd>完整 Device</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Device 不存在时抛出 <a href="../IotErrorCode.html#DEVICE_NOT_FOUND"><code>IotErrorCode.DEVICE_NOT_FOUND</code></a></dd>
 </dl>
 </section>
 </li>
@@ -282,9 +291,12 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.iot.api.Device&gt;</span>&nbsp;<span class="element-name">findByConnection</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.iot.api.connection.DeviceConnectionBinding&nbsp;connection)</span></div>
+<div class="block">按完整直接连接绑定查找 Device，只读取主库中的当前绑定。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>connection</code> - 完整直接连接绑定 @return 匹配的 Device；不存在时为空</dd>
+<dd><code>connection</code> - 完整直接连接绑定</dd>
+<dt>Returns:</dt>
+<dd>匹配的 Device；不存在时为空</dd>
 </dl>
 </section>
 </li>
@@ -301,7 +313,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>deviceId</code> - 待启用 Device 标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Product、物模型、协议、连接身份或接入方式不完整时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Product、物模型、协议、连接身份或接入方式不完整时抛出</dd>
 </dl>
 </section>
 </li>
@@ -311,7 +323,16 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateDetails</span><wbr><span class="parameters">(long&nbsp;deviceId,
  @NotNull
  @NotNull <a href="DeviceDetailsChange.html" title="class in com.sca4d.iot.device">DeviceDetailsChange</a>&nbsp;change)</span></div>
-<div class="block">修改 Device 的展示名称和备注。</div>
+<div class="block">修改 Device 的展示名称和备注，在 Device 聚合锁和事务内执行。
+
+ <p>展示资料不参与身份、凭据、协议和连接判断，修改后发布 <code>DeviceChangeArea.DEVICE</code> 失效通知。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>deviceId</code> - Device 标识</dd>
+<dd><code>change</code> - 新展示名称和备注；备注为 <code>null</code> 时清除原备注</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Device 不存在时抛出 <a href="../IotErrorCode.html#DEVICE_NOT_FOUND"><code>IotErrorCode.DEVICE_NOT_FOUND</code></a></dd>
+</dl>
 </section>
 </li>
 <li>

@@ -92,7 +92,10 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@ConfigurationProperties("sca4dj.redis.idempotency")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">RedisIdempotencyProperties</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">配置 Redis 幂等处理中记录的租约和调用方重试时间。</div>
+<div class="block">配置 Redis 幂等处理的处理中租约、建议重试时间和已完成结果保留时间。
+
+ <p>三个配置项使用 Spring <code>Duration</code> 格式，例如 <code>5m</code>、<code>3s</code>、<code>1d</code>；
+ 设置为空、零或负数时启动绑定失败。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -122,22 +125,34 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getProcessingTtl()" class="member-name-link">getProcessingTtl</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回处理中租约。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResultRetention()" class="member-name-link">getResultRetention</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回已完成结果的默认保留时间。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRetryAfter()" class="member-name-link">getRetryAfter</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回建议重试时间。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setProcessingTtl(java.time.Duration)" class="member-name-link">setProcessingTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">设置处理中租约。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setResultRetention(java.time.Duration)" class="member-name-link">setResultRetention</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;resultRetention)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">设置已完成结果的默认保留时间。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRetryAfter(java.time.Duration)" class="member-name-link">setRetryAfter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">设置建议重试时间。</div>
+</div>
 </div>
 </div>
 </div>
@@ -173,6 +188,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getProcessingTtl()">
 <h3>getProcessingTtl</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getProcessingTtl</span>()</div>
+<div class="block">返回处理中租约。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>正数处理租约</dd>
@@ -183,9 +199,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setProcessingTtl(java.time.Duration)">
 <h3>setProcessingTtl</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setProcessingTtl</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl)</span></div>
+<div class="block">设置处理中租约。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>processingTtl</code> - 正数处理租约</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 值为 null 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 值为零或负数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -193,6 +213,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getRetryAfter()">
 <h3>getRetryAfter</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getRetryAfter</span>()</div>
+<div class="block">返回建议重试时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>正数建议重试时间</dd>
@@ -203,9 +224,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setRetryAfter(java.time.Duration)">
 <h3>setRetryAfter</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setRetryAfter</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter)</span></div>
+<div class="block">设置建议重试时间。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>retryAfter</code> - 正数建议重试时间</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 值为 null 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 值为零或负数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -213,6 +238,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getResultRetention()">
 <h3>getResultRetention</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getResultRetention</span>()</div>
+<div class="block">返回已完成结果的默认保留时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>已完成结果默认保留时间</dd>
@@ -223,9 +249,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setResultRetention(java.time.Duration)">
 <h3>setResultRetention</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setResultRetention</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;resultRetention)</span></div>
+<div class="block">设置已完成结果的默认保留时间。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>resultRetention</code> - 已完成结果默认保留时间</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 值为 null 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 值为零或负数时抛出</dd>
 </dl>
 </section>
 </li>

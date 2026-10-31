@@ -149,7 +149,12 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按路由顺序尝试 Provider 发送短信，并把每次尝试写入 SMS 投递记录。
+ 接收手机号必须已验证且符合 E.164，否则抛出 IllegalStateException 或 NullPointerException。
+ 已送达返回 confirmed；已接受、结果未知或处理中返回 pending 并登记一条延迟查询；所有候选项都明确拒绝或无绑定时返回 rejected。
+ 结果未知时不切换到其他 Provider，避免同一条短信被重复发送。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.retry.RetryRule</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryRule()" class="member-name-link">retryRule</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -245,11 +250,20 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
  @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</span></div>
+<div class="block">按路由顺序尝试 Provider 发送短信，并把每次尝试写入 SMS 投递记录。
+ 接收手机号必须已验证且符合 E.164，否则抛出 IllegalStateException 或 NullPointerException。
+ 已送达返回 confirmed；已接受、结果未知或处理中返回 pending 并登记一条延迟查询；所有候选项都明确拒绝或无绑定时返回 rejected。
+ 结果未知时不切换到其他 Provider，避免同一条短信被重复发送。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>deliver</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.delivery.Delivery&lt;com.sca4d.core.api.notification.Notification&gt;</code></dd>
 <dt>Specified by:</dt>
 <dd><code>deliver</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
+<dt>Parameters:</dt>
+<dd><code>messageId</code> - 通知投递消息 ID，用于查找和登记同一消息的各次 Provider 尝试</dd>
+<dd><code>notification</code> - 待发送通知，包含接收人、模板 code、区域、语言和模板变量</dd>
+<dt>Returns:</dt>
+<dd>投递结果</dd>
 </dl>
 </section>
 </li>

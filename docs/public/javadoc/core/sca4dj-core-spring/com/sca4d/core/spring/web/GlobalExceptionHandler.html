@@ -137,16 +137,17 @@ loadScripts(document, 'script');</script>
 <div class="block">处理查询参数和表单字段绑定失败。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#business(com.sca4d.core.api.error.BusinessException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">business</a><wbr>(com.sca4d.core.api.error.BusinessException&nbsp;exception,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#business(com.sca4d.core.api.error.exception.BusinessException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">business</a><wbr>(com.sca4d.core.api.error.exception.BusinessException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">处理 Core 或业务模块报告的预期失败。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientVersion(com.sca4d.core.api.version.VersionCompatibilityException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">clientVersion</a><wbr>(com.sca4d.core.api.version.VersionCompatibilityException&nbsp;exception,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientVersion(com.sca4d.core.api.version.exception.VersionCompatibilityException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">clientVersion</a><wbr>(com.sca4d.core.api.version.exception.VersionCompatibilityException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">将 Call 中的版本拒绝转换为统一错误，保留本地化、callId 与 SSE 行为。</div>
+<div class="block">把 Call 中记录的版本兼容拒绝转换为 ApiResponse 错误，HTTP 状态取自错误码。
+ 错误消息按当前请求的 Locale 生成；SSE 请求只返回状态码，不返回 JSON。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="FieldViolation.html" title="class in com.sca4d.core.spring.web">FieldViolation</a>&gt;&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#constraint(jakarta.validation.ConstraintViolationException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">constraint</a><wbr>(jakarta.validation.ConstraintViolationException&nbsp;exception,
@@ -155,7 +156,7 @@ loadScripts(document, 'script');</script>
 <div class="block">处理方法参数约束失败。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="FieldViolation.html" title="class in com.sca4d.core.spring.web">FieldViolation</a>&gt;&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultValidation(com.sca4d.core.spring.web.HttpInputValidationException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">defaultValidation</a><wbr>(<a href="HttpInputValidationException.html" title="class in com.sca4d.core.spring.web">HttpInputValidationException</a>&nbsp;exception,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultValidation(com.sca4d.core.spring.web.exception.HttpInputValidationException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">defaultValidation</a><wbr>(<a href="exception/HttpInputValidationException.html" title="class in com.sca4d.core.spring.web.exception">HttpInputValidationException</a>&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">处理按 HTTP 输入数据类型执行的默认校验失败。</div>
@@ -167,7 +168,7 @@ loadScripts(document, 'script');</script>
 <div class="block">结束客户端已经断开的异步响应，不再尝试向不可写的响应输出错误对象。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#idempotencyInProgress(com.sca4d.core.api.concurrent.IdempotencyInProgressException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">idempotencyInProgress</a><wbr>(com.sca4d.core.api.concurrent.IdempotencyInProgressException&nbsp;exception,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#idempotencyInProgress(com.sca4d.core.api.concurrent.exception.IdempotencyInProgressException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">idempotencyInProgress</a><wbr>(com.sca4d.core.api.concurrent.exception.IdempotencyInProgressException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">处理仍由其他执行者负责的幂等请求。</div>
@@ -218,7 +219,7 @@ loadScripts(document, 'script');</script>
 <div class="block">处理无法生成客户端接受格式的响应。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rateLimited(com.sca4d.core.api.concurrent.RateLimitExceededException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">rateLimited</a><wbr>(com.sca4d.core.api.concurrent.RateLimitExceededException&nbsp;exception,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rateLimited(com.sca4d.core.api.concurrent.exception.RateLimitExceededException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">rateLimited</a><wbr>(com.sca4d.core.api.concurrent.exception.RateLimitExceededException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">处理令牌桶额度已经耗尽的调用。</div>
@@ -254,7 +255,7 @@ loadScripts(document, 'script');</script>
 <div class="block">处理请求体字段校验失败。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#versionPreconditionFailed(com.sca4d.core.api.concurrent.VersionPreconditionFailedException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">versionPreconditionFailed</a><wbr>(com.sca4d.core.api.concurrent.VersionPreconditionFailedException&nbsp;exception,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#versionPreconditionFailed(com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">versionPreconditionFailed</a><wbr>(com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">处理调用方提交的版本前置条件失败。</div>
@@ -296,19 +297,27 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="clientVersion(com.sca4d.core.api.version.VersionCompatibilityException,jakarta.servlet.http.HttpServletRequest)">
+<section class="detail" id="clientVersion(com.sca4d.core.api.version.exception.VersionCompatibilityException,jakarta.servlet.http.HttpServletRequest)">
 <h3>clientVersion</h3>
-<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.version.VersionCompatibilityException.class)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">clientVersion</span><wbr><span class="parameters">(com.sca4d.core.api.version.VersionCompatibilityException&nbsp;exception,
+<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.version.exception.VersionCompatibilityException.class)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">clientVersion</span><wbr><span class="parameters">(com.sca4d.core.api.version.exception.VersionCompatibilityException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
-<div class="block">将 Call 中的版本拒绝转换为统一错误，保留本地化、callId 与 SSE 行为。</div>
+<div class="block">把 Call 中记录的版本兼容拒绝转换为 ApiResponse 错误，HTTP 状态取自错误码。
+ 错误消息按当前请求的 Locale 生成；SSE 请求只返回状态码，不返回 JSON。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>exception</code> - 版本兼容拒绝异常，携带错误码和判定结果</dd>
+<dd><code>request</code> - 当前 HTTP 请求</dd>
+<dt>Returns:</dt>
+<dd>版本兼容拒绝对应的 HTTP 错误响应</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="versionPreconditionFailed(com.sca4d.core.api.concurrent.VersionPreconditionFailedException,jakarta.servlet.http.HttpServletRequest)">
+<section class="detail" id="versionPreconditionFailed(com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException,jakarta.servlet.http.HttpServletRequest)">
 <h3>versionPreconditionFailed</h3>
-<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.concurrent.VersionPreconditionFailedException.class)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">versionPreconditionFailed</span><wbr><span class="parameters">(com.sca4d.core.api.concurrent.VersionPreconditionFailedException&nbsp;exception,
+<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException.class)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">versionPreconditionFailed</span><wbr><span class="parameters">(com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
 <div class="block">处理调用方提交的版本前置条件失败。</div>
 <dl class="notes">
@@ -321,10 +330,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="business(com.sca4d.core.api.error.BusinessException,jakarta.servlet.http.HttpServletRequest)">
+<section class="detail" id="business(com.sca4d.core.api.error.exception.BusinessException,jakarta.servlet.http.HttpServletRequest)">
 <h3>business</h3>
-<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.error.BusinessException.class)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">business</span><wbr><span class="parameters">(com.sca4d.core.api.error.BusinessException&nbsp;exception,
+<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.error.exception.BusinessException.class)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">business</span><wbr><span class="parameters">(com.sca4d.core.api.error.exception.BusinessException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
 <div class="block">处理 Core 或业务模块报告的预期失败。</div>
 <dl class="notes">
@@ -337,10 +346,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="rateLimited(com.sca4d.core.api.concurrent.RateLimitExceededException,jakarta.servlet.http.HttpServletRequest)">
+<section class="detail" id="rateLimited(com.sca4d.core.api.concurrent.exception.RateLimitExceededException,jakarta.servlet.http.HttpServletRequest)">
 <h3>rateLimited</h3>
-<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.concurrent.RateLimitExceededException.class)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">rateLimited</span><wbr><span class="parameters">(com.sca4d.core.api.concurrent.RateLimitExceededException&nbsp;exception,
+<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.concurrent.exception.RateLimitExceededException.class)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">rateLimited</span><wbr><span class="parameters">(com.sca4d.core.api.concurrent.exception.RateLimitExceededException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
 <div class="block">处理令牌桶额度已经耗尽的调用。</div>
 <dl class="notes">
@@ -353,10 +362,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="idempotencyInProgress(com.sca4d.core.api.concurrent.IdempotencyInProgressException,jakarta.servlet.http.HttpServletRequest)">
+<section class="detail" id="idempotencyInProgress(com.sca4d.core.api.concurrent.exception.IdempotencyInProgressException,jakarta.servlet.http.HttpServletRequest)">
 <h3>idempotencyInProgress</h3>
-<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.concurrent.IdempotencyInProgressException.class)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">idempotencyInProgress</span><wbr><span class="parameters">(com.sca4d.core.api.concurrent.IdempotencyInProgressException&nbsp;exception,
+<div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.concurrent.exception.IdempotencyInProgressException.class)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">idempotencyInProgress</span><wbr><span class="parameters">(com.sca4d.core.api.concurrent.exception.IdempotencyInProgressException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
 <div class="block">处理仍由其他执行者负责的幂等请求。</div>
 <dl class="notes">
@@ -417,10 +426,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="defaultValidation(com.sca4d.core.spring.web.HttpInputValidationException,jakarta.servlet.http.HttpServletRequest)">
+<section class="detail" id="defaultValidation(com.sca4d.core.spring.web.exception.HttpInputValidationException,jakarta.servlet.http.HttpServletRequest)">
 <h3>defaultValidation</h3>
-<div class="member-signature"><span class="annotations">@ExceptionHandler(<a href="HttpInputValidationException.html" title="class in com.sca4d.core.spring.web">HttpInputValidationException.class</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="FieldViolation.html" title="class in com.sca4d.core.spring.web">FieldViolation</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name">defaultValidation</span><wbr><span class="parameters">(<a href="HttpInputValidationException.html" title="class in com.sca4d.core.spring.web">HttpInputValidationException</a>&nbsp;exception,
+<div class="member-signature"><span class="annotations">@ExceptionHandler(<a href="exception/HttpInputValidationException.html" title="class in com.sca4d.core.spring.web.exception">HttpInputValidationException.class</a>)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="FieldViolation.html" title="class in com.sca4d.core.spring.web">FieldViolation</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name">defaultValidation</span><wbr><span class="parameters">(<a href="exception/HttpInputValidationException.html" title="class in com.sca4d.core.spring.web.exception">HttpInputValidationException</a>&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
 <div class="block">处理按 HTTP 输入数据类型执行的默认校验失败。</div>
 <dl class="notes">

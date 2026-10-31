@@ -214,7 +214,22 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../SmsCodeChallenge.html" title="class in com.sca4d.auth.sms">SmsCodeChallenge</a></span>&nbsp;<span class="element-name">issue</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account)</span></div>
-<div class="block">为认证尝试已经确定的 Account 签发 Challenge。</div>
+<div class="block">为认证尝试已经确定的 Account 签发 Challenge。
+
+ <p>方法重新读取启用的 Account，并要求它具备可用 SMS 渠道和已验证手机号。成功时在 Redis 中保存 PENDING
+ Challenge，并在当前事务中把短信验证码通知写入 Outbox；返回值不包含验证码和完整手机号。
+ 副作用：先在 Redis 登记重发冷却，再保存 Challenge。Redis 写入直接执行，不随外层事务回滚撤销。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>account</code> - 有效认证尝试绑定的 Account</dd>
+<dt>Returns:</dt>
+<dd>不包含完整手机号的 Challenge</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Account 不存在或已停用时抛出当前 IAM 实现的 ACCOUNT_UNAVAILABLE；
+                           SMS 渠道或手机号不可用时抛出 <a href="../SmsCodeErrorCode.html#CHALLENGE_UNAVAILABLE"><code>SmsCodeErrorCode.CHALLENGE_UNAVAILABLE</code></a>；
+                           重发间隔内抛出 <a href="../SmsCodeErrorCode.html#RESEND_TOO_SOON"><code>SmsCodeErrorCode.RESEND_TOO_SOON</code></a>；
+                           Challenge 标识冲突或有效期不为正数时抛出对应的 Challenge 错误码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -234,7 +249,23 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ConsumedSmsCodeChallenge.html" title="class in com.sca4d.auth.sms.challenge">ConsumedSmsCodeChallenge</a></span>&nbsp;<span class="element-name">consume</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../SmsCodeProof.html" title="class in com.sca4d.auth.sms">SmsCodeProof</a>&nbsp;proof)</span></div>
-<div class="block">单次消费 Challenge 并确认 Account。</div>
+<div class="block">单次消费 Challenge 并确认 Account。
+
+ <p>Challenge 不存在时仍执行一次摘要比较，避免通过响应时间判断 Challenge 是否存在。只有 Challenge 为 PENDING、
+ 未过期、绑定真实 Account、验证码为六位数字且摘要匹配时才成功。
+ 副作用：Challenge 为 PENDING 且未过期时，Redis 脚本都会写入一次结果，并递增版本。验证码不匹配或格式错误
+ 计为一次错误尝试，达到上限后状态变为 EXHAUSTED；成功时状态变为 CONSUMED。Challenge 已消费、已耗尽、
+ 已过期或版本已被其他请求改变时不写入 Redis。成功写入后，若 Account 已停用或不存在，Challenge 保持
+ CONSUMED，方法仍抛出 CODE_REJECTED，不会恢复 Challenge。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>proof</code> - Challenge 标识和原始验证码</dd>
+<dt>Returns:</dt>
+<dd>已确认 Account 和消费后版本</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 验证码不可接受、Challenge 不可用，或成功消费后 Account 不可用时抛出
+                           <a href="../SmsCodeErrorCode.html#CODE_REJECTED"><code>SmsCodeErrorCode.CODE_REJECTED</code></a></dd>
+</dl>
 </section>
 </li>
 <li>
@@ -245,7 +276,20 @@ loadScripts(document, 'script');</script>
  long&nbsp;accountId,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</span></div>
-<div class="block">最终完成认证前复核 Challenge 仍属于相同可用 Account 和消费版本。</div>
+<div class="block">最终完成认证前复核 Challenge 仍属于相同可用 Account 和消费版本。
+
+ <p>方法只读取 Redis Challenge 和 Account，不修改任何状态。Challenge 必须仍存在、为 CONSUMED、未过期，
+ 版本等于 <code>version</code>，并且绑定的 Account 等于 <code>accountId</code>；之后 Account 仍须启用。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>challengeId</code> - 已经消费的 Challenge 标识</dd>
+<dd><code>accountId</code> - 消费时确认的 Account 标识</dd>
+<dd><code>version</code> - <a href="#consume(com.sca4d.auth.sms.SmsCodeProof)"><code>consume(SmsCodeProof)</code></a> 返回的消费后版本</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Challenge 缺失、已过期、状态或版本不一致、Account 不一致或 Account 已不可用时抛出
+                           <a href="../SmsCodeErrorCode.html#CHALLENGE_CHANGED"><code>SmsCodeErrorCode.CHALLENGE_CHANGED</code></a></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - <code>AccountDirectory</code> 返回的 Account 标识与 <code>accountId</code> 不一致时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -11,6 +11,7 @@ com.sca4d.app.server.entity
 com.sca4d.app.server.files
 com.sca4d.app.server.files.request
 com.sca4d.app.server.files.view
+com.sca4d.app.server.graphql.iot
 com.sca4d.app.server.iot
 com.sca4d.app.server.iot.protocol
 com.sca4d.app.server.iot.request

@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <ul class="summary-list">
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
 <div id="class-summary.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
@@ -89,25 +89,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">表示 EMQX `5.8.9` HTTP Authenticator 必须以 HTTP 200 返回的认证结果。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EmqxAuthenticationService.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationService</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="EmqxAuthenticationResponse.Result.html" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">EMQX HTTP Authenticator 的认证结论，只有 `allow` 和 `deny` 两个协议值。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EmqxAuthenticationService.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationService</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">按 Device 明确接入方式验证 MQTT CONNECT，并生成 EMQX client_attrs、ACL 和失效时间。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="EmqxDeviceConnectionRequestFactory.html" title="interface in com.sca4d.iot.emqx.authentication">EmqxDeviceConnectionRequestFactory</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的统一 Device 连接请求。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="EmqxDeviceConnectionRequestFactory.html" title="interface in com.sca4d.iot.emqx.authentication">EmqxDeviceConnectionRequestFactory</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的 Device 连接请求。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MqttAuthorization.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorization</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MqttAuthorization.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorization</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存当前 Device MQTT ACL 及其稳定指纹。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MqttAuthorizationPolicy.html" title="interface in com.sca4d.iot.emqx.authentication">MqttAuthorizationPolicy</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MqttAuthorizationPolicy.html" title="interface in com.sca4d.iot.emqx.authentication">MqttAuthorizationPolicy</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">允许具体应用按 Device 选择一组完整且有序的 EMQX MQTT ACL。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">统一解析应用授权策略或协议 ACL，并为连接失效判断生成稳定指纹。</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">解析应用授权策略或协议 ACL，并为连接失效判断生成指纹。</div>
 </div>
 </div>
 </div>

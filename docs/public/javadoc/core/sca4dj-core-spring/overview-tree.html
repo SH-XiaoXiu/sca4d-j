@@ -54,6 +54,7 @@ loadScripts(document, 'script');</script>
 <li><a href="com/sca4d/core/spring/call/package-tree.html">com.sca4d.core.spring.call</a>, </li>
 <li><a href="com/sca4d/core/spring/config/package-tree.html">com.sca4d.core.spring.config</a>, </li>
 <li><a href="com/sca4d/core/spring/dictionary/package-tree.html">com.sca4d.core.spring.dictionary</a>, </li>
+<li><a href="com/sca4d/core/spring/exception/package-tree.html">com.sca4d.core.spring.exception</a>, </li>
 <li><a href="com/sca4d/core/spring/gateway/package-tree.html">com.sca4d.core.spring.gateway</a>, </li>
 <li><a href="com/sca4d/core/spring/i18n/package-tree.html">com.sca4d.core.spring.i18n</a>, </li>
 <li><a href="com/sca4d/core/spring/id/package-tree.html">com.sca4d.core.spring.id</a>, </li>
@@ -74,6 +75,7 @@ loadScripts(document, 'script');</script>
 <li><a href="com/sca4d/core/spring/web/package-tree.html">com.sca4d.core.spring.web</a>, </li>
 <li><a href="com/sca4d/core/spring/web/annotation/package-tree.html">com.sca4d.core.spring.web.annotation</a>, </li>
 <li><a href="com/sca4d/core/spring/web/clientstate/package-tree.html">com.sca4d.core.spring.web.clientstate</a>, </li>
+<li><a href="com/sca4d/core/spring/web/exception/package-tree.html">com.sca4d.core.spring.web.exception</a>, </li>
 <li><a href="com/sca4d/core/spring/web/list/package-tree.html">com.sca4d.core.spring.web.list</a>, </li>
 <li><a href="com/sca4d/core/spring/web/view/package-tree.html">com.sca4d.core.spring.web.view</a></li>
 </ul>
@@ -243,6 +245,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingsAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingsAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingsBootstrapProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties</a></li>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a> (implements com.sca4d.core.api.codec.SecretCodec&lt;V&gt;)</li>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a> (implements com.sca4d.core.api.codec.SecretCodec&lt;V&gt;)</li>
 <li class="circle">com.sca4d.core.spring.id.<a href="com/sca4d/core/spring/id/SnowflakeIdGenerator.html" class="type-name-link" title="class in com.sca4d.core.spring.id">SnowflakeIdGenerator</a> (implements com.sca4d.core.api.id.IdGenerator)</li>
 <li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpelCallValueResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpelCallValueResolver</a> (implements com.sca4d.core.api.call.SPICallValueResolver)</li>
@@ -257,13 +260,15 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" class="type-name-link external-link" title="class or interface in java.lang">RuntimeException</a>
 <ul>
-<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpInputValidationException.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpInputValidationException</a></li>
+<li class="circle">com.sca4d.core.spring.exception.<a href="com/sca4d/core/spring/exception/CoreSpringException.html" class="type-name-link" title="class in com.sca4d.core.spring.exception">CoreSpringException</a></li>
+<li class="circle">com.sca4d.core.spring.web.exception.<a href="com/sca4d/core/spring/web/exception/HttpInputValidationException.html" class="type-name-link" title="class in com.sca4d.core.spring.web.exception">HttpInputValidationException</a></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/TimeRangeValidator.html" class="type-name-link" title="class in com.sca4d.core.spring.validation">TimeRangeValidator</a> (implements jakarta.validation.ConstraintValidator&lt;A,<wbr>T&gt;)</li>
 <li class="circle">com.sca4d.core.spring.transaction.<a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" class="type-name-link" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a></li>
 <li class="circle">com.fasterxml.jackson.core.TreeCodec
 <ul>
@@ -301,6 +306,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.version">VersionCallInterceptor</a> (implements com.sca4d.core.api.call.CallLifecycle.Before)</li>
 <li class="circle">com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionWebConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.version">VersionWebConfiguration</a> (implements org.springframework.web.servlet.config.annotation.WebMvcConfigurer)</li>
 <li class="circle">com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/ViewJson.html" class="type-name-link" title="class in com.sca4d.core.spring.web.view">ViewJson</a></li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/WebRequestProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.config">WebRequestProperties</a></li>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/YamlCodec.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">YamlCodec</a>&lt;T&gt; (implements com.sca4d.core.api.codec.Codec&lt;V,<wbr>W&gt;)</li>
 </ul>
 </li>
@@ -341,6 +347,8 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/SafeText.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.validation">SafeText</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">com.sca4d.core.spring.json.<a href="com/sca4d/core/spring/json/Sca4djJson.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.json">Sca4djJson</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/Sca4djRedis.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.redis">Sca4djRedis</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
+<li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/TimeRange.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.validation">TimeRange</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
+<li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/TimeRanges.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.validation">TimeRanges</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/VersionDiscovery.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.version">VersionDiscovery</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 </ul>
 </section>

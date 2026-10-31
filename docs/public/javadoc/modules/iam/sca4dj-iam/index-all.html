@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/iam/base/user/User.html#account()" class="member-name-link">account()</a> - Method in class com.sca4d.iam.base.user.<a href="com/sca4d/iam/base/user/User.html" title="class in com.sca4d.iam.base.user">User</a></dt>
@@ -384,6 +384,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">装配 IAM 身份管理、基础管理功能和模块初始化。</div>
 </dd>
+<dt><a href="com/sca4d/iam/exception/package-summary.html">com.sca4d.iam.exception</a> - package com.sca4d.iam.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iam/identity/package-summary.html">com.sca4d.iam.identity</a> - package com.sca4d.iam.identity</dt>
 <dd>
 <div class="block">管理 Subject、Account、Principal 和登录标识之间的身份关系。</div>
@@ -898,6 +900,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表示默认 IAM 平台身份操作产生的固定错误码。</div>
 </dd>
+<dt><a href="com/sca4d/iam/exception/IamException.html" class="type-name-link" title="class in com.sca4d.iam.exception">IamException</a> - Exception Class in <a href="com/sca4d/iam/exception/package-summary.html">com.sca4d.iam.exception</a></dt>
+<dd>
+<div class="block">身份与访问管理的依赖或数据故障，例如 RBAC 数据或权限缓存结果异常。</div>
+</dd>
+<dt><a href="com/sca4d/iam/exception/IamException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">IamException(String)</a> - Constructor for exception class com.sca4d.iam.exception.<a href="com/sca4d/iam/exception/IamException.html" title="class in com.sca4d.iam.exception">IamException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/iam/exception/IamException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">IamException(String, Throwable)</a> - Constructor for exception class com.sca4d.iam.exception.<a href="com/sca4d/iam/exception/IamException.html" title="class in com.sca4d.iam.exception">IamException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 <dt><a href="com/sca4d/iam/config/IamProperties.html" class="type-name-link" title="class in com.sca4d.iam.config">IamProperties</a> - Class in <a href="com/sca4d/iam/config/package-summary.html">com.sca4d.iam.config</a></dt>
 <dd>
 <div class="block">配置本地开发环境的平台身份初始化。</div>
@@ -1046,7 +1060,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/rbac/RbacService.html#invalidatePermissions(com.sca4d.iam.rbac.RbacScope,java.util.Collection)" class="member-name-link">invalidatePermissions(RbacScope, Collection&lt;Long&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacService.html" title="class in com.sca4d.iam.rbac">RbacService</a></dt>
 <dd>
-<div class="block">在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session。</div>
+<div class="block">在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session；事务外调用时立即执行。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IdentityService.html#isActivePrincipal(java.lang.Long)" class="member-name-link">isActivePrincipal(Long)</a> - Method in class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IdentityService.html" title="class in com.sca4d.iam.identity">IdentityService</a></dt>
 <dd>
@@ -2298,7 +2312,7 @@ the order they are declared.</div>
 <div class="block">名称、状态、Operation 和删除共享的当前版本。</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

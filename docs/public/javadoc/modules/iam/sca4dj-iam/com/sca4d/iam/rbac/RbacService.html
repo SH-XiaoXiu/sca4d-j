@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidatePermissions(com.sca4d.iam.rbac.RbacScope,java.util.Collection)" class="member-name-link">invalidatePermissions</a><wbr>(@NotNull <a href="RbacScope.html" title="class in com.sca4d.iam.rbac">RbacScope</a>&nbsp;scope,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;principalIds)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session。</div>
+<div class="block">在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session；事务外调用时立即执行。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Role.html" title="class in com.sca4d.iam.rbac">Role</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadRoleById(com.sca4d.iam.rbac.RbacScope,java.lang.Long)" class="member-name-link">loadRoleById</a><wbr>(@NotNull <a href="RbacScope.html" title="class in com.sca4d.iam.rbac">RbacScope</a>&nbsp;scope,
@@ -305,7 +305,7 @@ loadScripts(document, 'script');</script>
 <div class="block">读取指定角色空间中的角色。</div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 角色不存在时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 角色不存在时抛出</dd>
 </dl>
 </section>
 </li>
@@ -492,7 +492,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>保持查询标识顺序的匹配子集；无授权的 Principal 被排除</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 任一 Operation 不属于当前 RBAC 领域时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 任一 Operation 不属于当前 RBAC 领域时抛出</dd>
 </dl>
 </section>
 </li>
@@ -544,7 +544,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="RbacScope.html" title="class in com.sca4d.iam.rbac">RbacScope</a>&nbsp;scope,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;principalIds)</span></div>
-<div class="block">在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session。</div>
+<div class="block">在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session；事务外调用时立即执行。</div>
 </section>
 </li>
 </ul>

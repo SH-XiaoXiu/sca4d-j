@@ -96,7 +96,8 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CompositeThingModelRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.iot.api.model.ThingModelRepository</span></div>
-<div class="block">按 Product code 把只读代码物模型和数据库物模型组合为唯一读写入口。</div>
+<div class="block">按 Product code 选择物模型来源：代码 Product 从 <a href="StaticThingModelRepository.html" title="class in com.sca4d.iot.model"><code>StaticThingModelRepository</code></a> 只读读取，
+ 其他 Product 从数据库读写。代码 Product 的发布和翻译替换会抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -111,7 +112,9 @@ implements com.sca4d.iot.api.model.ThingModelRepository</span></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.model.StaticThingModelRepository,com.sca4d.iot.persistence.DatabaseThingModelRepository)" class="member-name-link">CompositeThingModelRepository</a><wbr>(@NotNull <a href="../product/ProductDefinitionCatalog.html" title="class in com.sca4d.iot.product">ProductDefinitionCatalog</a>&nbsp;products,
  @NotNull <a href="StaticThingModelRepository.html" title="class in com.sca4d.iot.model">StaticThingModelRepository</a>&nbsp;codeModels,
  @NotNull <a href="../persistence/DatabaseThingModelRepository.html" title="class in com.sca4d.iot.persistence">DatabaseThingModelRepository</a>&nbsp;databaseModels)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建按 Product code 分派物模型读写的组合 Repository。</div>
+</div>
 </div>
 </section>
 </li>
@@ -168,6 +171,13 @@ implements com.sca4d.iot.api.model.ThingModelRepository</span></div>
  @NotNull <a href="StaticThingModelRepository.html" title="class in com.sca4d.iot.model">StaticThingModelRepository</a>&nbsp;codeModels,
  @NotNull
  @NotNull <a href="../persistence/DatabaseThingModelRepository.html" title="class in com.sca4d.iot.persistence">DatabaseThingModelRepository</a>&nbsp;databaseModels)</span></div>
+<div class="block">创建按 Product code 分派物模型读写的组合 Repository。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>products</code> - 判断 Product code 是否属于代码 Product 的目录</dd>
+<dd><code>codeModels</code> - 代码 Product 的只读静态物模型来源</dd>
+<dd><code>databaseModels</code> - 其他 Product 的数据库物模型来源</dd>
+</dl>
 </section>
 </li>
 </ul>

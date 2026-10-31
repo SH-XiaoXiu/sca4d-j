@@ -162,7 +162,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;issuer,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;accountLabel)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回由可以用于生成二维码的 otpauth URI。</div>
+<div class="block">解密 enrollment 中的 Secret，并返回可用于生成二维码的 otpauth URI。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../credential/TotpCredential.html" title="class in com.sca4d.auth.totp.credential">TotpCredential</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(long,java.lang.String,java.lang.String)" class="member-name-link">replace</a><wbr>(long&nbsp;accountId,
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;issuer,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;accountLabel)</span></div>
-<div class="block">返回由可以用于生成二维码的 otpauth URI。
+<div class="block">解密 enrollment 中的 Secret，并返回可用于生成二维码的 otpauth URI。
 
  <p>调用方不得把 URI 写入响应 JSON、日志或持久化存储。</div>
 <dl class="notes">

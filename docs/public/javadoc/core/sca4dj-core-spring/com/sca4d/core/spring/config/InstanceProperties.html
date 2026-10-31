@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@ConfigurationProperties("sca4dj.instance")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">InstanceProperties</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">配置进程执行位置和入口能力选择，不影响调用者身份或行级数据范围。</div>
+<div class="block">配置进程标识和启用的功能入口，不影响调用者身份或行级数据范围。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -167,12 +167,20 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getId()">
 <h3>getId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前进程的实例标识，格式由 InstanceAutoConfiguration 校验</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="setId(java.lang.String)">
 <h3>setId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - 当前进程的实例标识，必须是 1 到 128 位字母、数字、点、下划线或连字符</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -180,6 +188,10 @@ loadScripts(document, 'script');</script>
 <h3>getCapabilities</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getCapabilities</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>配置的功能编码副本；null 表示启用全部已声明功能，空列表表示不启用任何功能</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -187,6 +199,10 @@ loadScripts(document, 'script');</script>
 <h3>setCapabilities</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setCapabilities</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;capabilities)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>capabilities</code> - 配置的功能编码；null 表示启用全部已声明功能，复制后保存为不可修改列表</dd>
+</dl>
 </section>
 </li>
 </ul>

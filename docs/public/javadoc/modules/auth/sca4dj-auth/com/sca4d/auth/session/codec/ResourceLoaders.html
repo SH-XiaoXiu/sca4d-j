@@ -175,6 +175,15 @@ loadScripts(document, 'script');</script>
 <h3>load</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.resource.Resource&gt;&gt;</span>&nbsp;<span class="element-name">load</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</span></div>
 <div class="block">同步装载并合并静态资源；异步节点由本对象的 Executor 调度。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>principals</code> - 需要装载资源的 Principal，不能包含重复或空元素</dd>
+<dt>Returns:</dt>
+<dd>每个输入 Principal 对应的静态资源列表，按 Loader 顺序合并</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../../exception/AuthException.html" title="class in com.sca4d.auth.exception">AuthException</a></code> - 某个 ResourceLoader 抛出非 NPE 的异常时抛出，并保留原始异常为 cause</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - ResourceLoader 抛出空指针或返回 null 时原样抛出</dd>
+</dl>
 </section>
 </li>
 <li>

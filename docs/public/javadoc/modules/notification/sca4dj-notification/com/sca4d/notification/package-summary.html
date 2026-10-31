@@ -83,6 +83,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">装配渠道无关通知服务和默认模板引擎。</div>
 </div>
+<div class="col-first odd-row-color"><a href="exception/package-summary.html">com.sca4d.notification.exception</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -95,7 +97,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="DefaultNotifications.html" title="class in com.sca4d.notification">DefaultNotifications</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。</div>
+<div class="block">使用通知类型注册的回调从业务对象生成通知，并同步发布或写入 Outbox。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NotificationDeliveryRouter.html" title="class in com.sca4d.notification">NotificationDeliveryRouter</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -103,7 +105,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab3"><a href="NotificationErrorCode.html" title="enum class in com.sca4d.notification">NotificationErrorCode</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab3">
-<div class="block">统一通知模板和渠道设置使用的稳定错误码。</div>
+<div class="block">通知模板和渠道设置失败时返回的错误码。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NotificationLocaleResolver.html" title="interface in com.sca4d.notification">NotificationLocaleResolver</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
@@ -115,7 +117,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NotificationMessageCodec.html" title="class in com.sca4d.notification">NotificationMessageCodec</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">把 NotificationMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。</div>
+<div class="block">把 NotificationMessage 编解码为 RabbitMQ 消息和 Outbox 记录使用的 JSON payload。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="NotificationMessageHandler.html" title="class in com.sca4d.notification">NotificationMessageHandler</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="KeyRedisSerializer.html" title="class in com.sca4d.core.spring.redis">KeyRedisSerializer</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">在 Redis key 字节边界应用 App 隔离及模块声明的 Cluster 同槽分组。</div>
+<div class="block">序列化和反序列化 Redis key 字节时应用 App 隔离，并按模块声明把同组 key 放入同一个 Cluster 槽。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedisBatches.html" title="class in com.sca4d.core.spring.redis">RedisBatches</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -94,11 +94,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">声明需要在 Redis Cluster 中共同参与 Lua 操作的一组逻辑 key。</div>
+<div class="block">声明一个编码根，使该根下的 Redis key 在 Redis Cluster 中落在同一个槽位。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="RedisIdempotencyProperties.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyProperties</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">配置 Redis 幂等处理中记录的租约和调用方重试时间。</div>
+<div class="block">配置 Redis 幂等处理的处理中租约、建议重试时间和已完成结果保留时间。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedisIdempotencyStore.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyStore</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scan(java.util.Collection)" class="member-name-link">scan</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;packages)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">查找指定包下全部 Dictionary 枚举。</div>
+<div class="block">查找指定包下全部实现 `Dictionary` 的枚举，包含子包；只加载类型，不校验枚举常量。</div>
 </div>
 </div>
 </div>
@@ -166,12 +166,15 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;&gt;</span>&nbsp;<span class="element-name">scan</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;packages)</span></div>
-<div class="block">查找指定包下全部 Dictionary 枚举。</div>
+<div class="block">查找指定包下全部实现 `Dictionary` 的枚举，包含子包；只加载类型，不校验枚举常量。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>packages</code> - 应用基础包与 Sca4d-J 公共包</dd>
 <dt>Returns:</dt>
-<dd>按完整类名排序的枚举类型</dd>
+<dd>按完整类名排序的枚举类型；没有匹配类型时返回空列表</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 扫描结果缺少类名或加载的类型不是枚举时抛出</dd>
+<dd><code><a href="../exception/CoreSpringException.html" title="class in com.sca4d.core.spring.exception">CoreSpringException</a></code> - 类型无法加载时抛出</dd>
 </dl>
 </section>
 </li>

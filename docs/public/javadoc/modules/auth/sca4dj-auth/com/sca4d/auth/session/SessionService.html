@@ -248,6 +248,9 @@ implements com.sca4d.core.api.authentication.SessionLifecycle</span></div>
 <dd>新 Session 及当前 Token 模式需要返回的 Token</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 认证列表为空或包含其他账号的记录时抛出</dd>
+<dd><code>com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException</code> - 身份、Principal 或 Resource 装载期间 Account 失效代次发生变化，
+                                             <code>sessions.establish</code> 拒绝建立 Session 时抛出；此时不签发 Token，
+                                             Sa-Token 登录状态已由 <code>SaTokenSessionManager</code> 清理</dd>
 </dl>
 </section>
 </li>
@@ -310,7 +313,7 @@ implements com.sca4d.core.api.authentication.SessionLifecycle</span></div>
 <dt>Returns:</dt>
 <dd>当前 Token 模式需要交付的 Token</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Session Token 无效时抛出认证失败</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Session Token 无效时抛出认证失败</dd>
 </dl>
 </section>
 </li>

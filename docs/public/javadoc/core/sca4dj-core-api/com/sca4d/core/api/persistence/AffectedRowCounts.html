@@ -172,9 +172,9 @@ loadScripts(document, 'script');</script>
 <dd><code>whenZero</code> - 零行解释方式</dd>
 <dd><code>target</code> - 发生写入的持久化对象说明</dd>
 <dt>Throws:</dt>
-<dd><code><a href="AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></code> - 行数不符合声明范围时抛出</dd>
-<dd><code><a href="../concurrent/OptimisticLockException.html" title="class in com.sca4d.core.api.concurrent">OptimisticLockException</a></code> - 零行表示内部乐观版本冲突时抛出</dd>
-<dd><code><a href="../concurrent/VersionPreconditionFailedException.html" title="class in com.sca4d.core.api.concurrent">VersionPreconditionFailedException</a></code> - 零行表示调用方版本前置条件失败时抛出</dd>
+<dd><code><a href="exception/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence.exception">AffectedRowsMismatchException</a></code> - 行数不符合声明范围时抛出</dd>
+<dd><code><a href="../concurrent/exception/OptimisticLockException.html" title="class in com.sca4d.core.api.concurrent.exception">OptimisticLockException</a></code> - 零行表示内部乐观版本冲突时抛出</dd>
+<dd><code><a href="../concurrent/exception/VersionPreconditionFailedException.html" title="class in com.sca4d.core.api.concurrent.exception">VersionPreconditionFailedException</a></code> - 零行表示调用方版本前置条件失败时抛出</dd>
 </dl>
 </section>
 </li>
@@ -194,7 +194,7 @@ loadScripts(document, 'script');</script>
 <dd><code>target</code> - 发生写入的持久化对象说明</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - expected 小于零时抛出</dd>
-<dd><code><a href="AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></code> - 实际行数不等于预期行数时抛出</dd>
+<dd><code><a href="exception/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence.exception">AffectedRowsMismatchException</a></code> - 实际行数不等于预期行数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <dd><code>target</code> - 发生写入的持久化对象说明</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - minimum 小于零时抛出</dd>
-<dd><code><a href="AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></code> - 实际行数小于最小行数时抛出</dd>
+<dd><code><a href="exception/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence.exception">AffectedRowsMismatchException</a></code> - 实际行数小于最小行数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -234,7 +234,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>影响一行时为 <code>true</code>，没有影响行时为 <code>false</code></dd>
 <dt>Throws:</dt>
-<dd><code><a href="AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></code> - 实际影响多行或返回负数时抛出</dd>
+<dd><code><a href="exception/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence.exception">AffectedRowsMismatchException</a></code> - 实际影响多行或返回负数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -254,7 +254,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>至少影响一行时为 <code>true</code>，没有影响行时为 <code>false</code></dd>
 <dt>Throws:</dt>
-<dd><code><a href="AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></code> - 实际影响行数为负数时抛出</dd>
+<dd><code><a href="exception/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence.exception">AffectedRowsMismatchException</a></code> - 实际影响行数为负数时抛出</dd>
 </dl>
 </section>
 </li>

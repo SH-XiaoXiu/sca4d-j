@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">FileSettingReader</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.setting.access.SettingReader&lt;byte[]&gt;</span></div>
-<div class="block">按明确所属读取手工维护的文件字节；格式由构造 Setting 时选择的 Codec 解释。</div>
+<div class="block">按明确所属读取手工维护的文件字节；字节内容由设置声明的 Codec 解释。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -133,7 +133,9 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;byte[]&gt;</span><
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.value.SettingValue<wbr>&lt;byte[]&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">read</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取 `owner` 映射到的设置文件内容；文件不存在时返回值为 null 的 SettingValue。</div>
+</div>
 </div>
 </div>
 </div>
@@ -188,9 +190,13 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;byte[]&gt;</span><
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</span></div>
+<div class="block">读取 `owner` 映射到的设置文件内容；文件不存在时返回值为 null 的 SettingValue。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>read</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.access.SettingReader&lt;byte[]&gt;</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 定位路径超出根目录、路径中包含符号链接或文件超过 1 MiB 时抛出</dd>
+<dd><code><a href="../exception/CoreSpringException.html" title="class in com.sca4d.core.spring.exception">CoreSpringException</a></code> - 文件读取发生 IO 错误时抛出，异常消息只包含设置键</dd>
 </dl>
 </section>
 </li>

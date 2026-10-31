@@ -162,7 +162,9 @@ implements com.sca4d.iot.api.connection.DeviceConnectionResolver</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCurrentBinding(long,long)" class="member-name-link">isCurrentBinding</a><wbr>(long&nbsp;deviceId,
  long&nbsp;bindingGeneration)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">检查 Device 是否仍处于调用方持有的绑定版本。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceAccessMethods(long,java.util.Collection)" class="member-name-link">replaceAccessMethods</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.DeviceAccessMethod&gt;&nbsp;accessMethods)</code></div>
@@ -240,7 +242,7 @@ implements com.sca4d.iot.api.connection.DeviceConnectionResolver</span></div>
 <dt>Parameters:</dt>
 <dd><code>device</code> - 待保存的完整 Device</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.persistence.AffectedRowsMismatchException</code> - 任一必要写入没有准确影响预期行数时抛出</dd>
+<dd><code>com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException</code> - 任一必要写入没有准确影响预期行数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -283,7 +285,11 @@ implements com.sca4d.iot.api.connection.DeviceConnectionResolver</span></div>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isCurrentBinding</span><wbr><span class="parameters">(long&nbsp;deviceId,
  long&nbsp;bindingGeneration)</span></div>
+<div class="block">检查 Device 是否仍处于调用方持有的绑定版本。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>deviceId</code> - Device 标识</dd>
+<dd><code>bindingGeneration</code> - 调用方读取到的 binding generation</dd>
 <dt>Returns:</dt>
 <dd>Device 当前仍存在且 binding generation 未变化时为 <code>true</code></dd>
 </dl>
@@ -353,7 +359,7 @@ implements com.sca4d.iot.api.connection.DeviceConnectionResolver</span></div>
 <dd><code>deviceId</code> - Device 标识</dd>
 <dd><code>accessMethods</code> - 已经按 Product 规则校验的新接入方式</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.persistence.AffectedRowsMismatchException</code> - 接入方式写入没有准确影响预期行数时抛出</dd>
+<dd><code>com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException</code> - 接入方式写入没有准确影响预期行数时抛出</dd>
 </dl>
 </section>
 </li>

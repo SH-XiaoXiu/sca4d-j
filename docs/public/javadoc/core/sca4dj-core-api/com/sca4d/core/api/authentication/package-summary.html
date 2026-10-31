@@ -79,8 +79,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="principalsession/package-summary.html">com.sca4d.core.api.authentication.principalsession</a></div>
-<div class="col-last even-row-color">
+<div class="col-first even-row-color"><a href="exception/package-summary.html">com.sca4d.core.api.authentication.exception</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="principalsession/package-summary.html">com.sca4d.core.api.authentication.principalsession</a></div>
+<div class="col-last odd-row-color">
 <div class="block">定义 Session 中可扩展 Principal 和 Resource 的装载与 wire 编解码契约。</div>
 </div>
 </div>
@@ -88,7 +90,7 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exception Classes</button><button id="class-summary-tab6" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab6" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="class-summary.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
@@ -173,28 +175,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">认领 Account 并读取认证 Session 共用的 Subject 和 Account。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="SessionIdentityUnavailableException.html" title="class in com.sca4d.core.api.authentication">SessionIdentityUnavailableException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
-<div class="block">表示 Account 当前状态或身份关系已经不能恢复为有效 Session。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SessionInvalidationListener.html" title="interface in com.sca4d.core.api.authentication">SessionInvalidationListener</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SessionInvalidationListener.html" title="interface in com.sca4d.core.api.authentication">SessionInvalidationListener</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">接收 Account Session 失效结果，并执行通知等不改变失效代次的操作。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SessionLifecycle.html" title="interface in com.sca4d.core.api.authentication">SessionLifecycle</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SessionLifecycle.html" title="interface in com.sca4d.core.api.authentication">SessionLifecycle</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">建立、读取和终止单个权威 Session。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SessionTerminationReason.html" title="class in com.sca4d.core.api.authentication">SessionTerminationReason</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SessionTerminationReason.html" title="class in com.sca4d.core.api.authentication">SessionTerminationReason</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">表示结束认证 Session 的开放原因。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SessionTokens.html" title="class in com.sca4d.core.api.authentication">SessionTokens</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SessionTokens.html" title="class in com.sca4d.core.api.authentication">SessionTokens</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存客户端访问当前 Session 所需的 access Token 和可选在线 Session Token。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VerifiedAuthentication.html" title="class in com.sca4d.core.api.authentication">VerifiedAuthentication</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VerifiedAuthentication.html" title="class in com.sca4d.core.api.authentication">VerifiedAuthentication</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存一种认证方法成功验证的账号、认证记录以及完成动作前可以复核的非秘密引用。</div>
 </div>
 </div>

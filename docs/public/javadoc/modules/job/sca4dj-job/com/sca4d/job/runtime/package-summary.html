@@ -80,8 +80,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><a href="../config/package-summary.html">com.sca4d.job.config</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="../persistence/package-summary.html">com.sca4d.job.persistence</a></div>
+<div class="col-first even-row-color"><a href="../exception/package-summary.html">com.sca4d.job.exception</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="../persistence/package-summary.html">com.sca4d.job.persistence</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -93,7 +95,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="DefaultJobExecutor.html" title="class in com.sca4d.job.runtime">DefaultJobExecutor</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。</div>
+<div class="block">通过 JobRunService 把持久化 Job 写入数据库并查询其运行结果；无记录 DirectJob 在本实例直接执行，或投递到目标实例的短期份额。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DefaultJobHistory.html" title="class in com.sca4d.job.runtime">DefaultJobHistory</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -113,7 +115,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。</div>
+<div class="block">创建 Job run、广播和无记录份额，领取与续租节点，保存节点和根运行结果；每个动作在独立事务中完成。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobWorker.html" title="class in com.sca4d.job.runtime">JobWorker</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

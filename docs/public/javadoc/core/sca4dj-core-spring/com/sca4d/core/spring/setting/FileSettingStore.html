@@ -136,11 +136,17 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;com.fasterxml.jack
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#erase(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">erase</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">删除 `setting` 与 `owner` 对应的设置文件，文件不存在时不报错。
+ 不比较修订号；删除后 `read` 返回修订为 0 的空值。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.value.SettingValue<wbr>&lt;com.fasterxml.jackson.databind.JsonNode&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">read</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取设置文件并校验元数据与 `setting`、`owner` 是否一致；文件不存在时返回修订为 0 且值为 null 的结果。
+ 敏感设置使用元数据中 keyId 对应的密钥解密密文后再由 Codec 解码。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner,com.fasterxml.jackson.databind.JsonNode,int,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">replace</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
@@ -154,7 +160,10 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;com.fasterxml.jack
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  int&nbsp;codecVersion,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expected)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">将设置文件改写为 `present=false` 的版本，修订号加一，不删除文件。
+ 修订与 `expected` 不一致时抛出 OptimisticLockException，文件保持原内容。</div>
+</div>
 </div>
 </div>
 </div>
@@ -217,9 +226,15 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;com.fasterxml.jack
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</span></div>
+<div class="block">读取设置文件并校验元数据与 `setting`、`owner` 是否一致；文件不存在时返回修订为 0 且值为 null 的结果。
+ 敏感设置使用元数据中 keyId 对应的密钥解密密文后再由 Codec 解码。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>read</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.access.SettingReader&lt;com.fasterxml.jackson.databind.JsonNode&gt;</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 定位路径超出根目录、包含符号链接或文件超过 1 MiB 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 元数据不一致或无效、敏感设置缺少密钥环或密钥、内容缺失时抛出，异常消息不包含设置值</dd>
+<dd><code><a href="../exception/CoreSpringException.html" title="class in com.sca4d.core.spring.exception">CoreSpringException</a></code> - 读取发生 IO 错误时抛出</dd>
 </dl>
 </section>
 </li>
@@ -252,6 +267,8 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;com.fasterxml.jack
  int&nbsp;codecVersion,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expected)</span></div>
+<div class="block">将设置文件改写为 `present=false` 的版本，修订号加一，不删除文件。
+ 修订与 `expected` 不一致时抛出 OptimisticLockException，文件保持原内容。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>reset</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.access.SettingWriter&lt;com.fasterxml.jackson.databind.JsonNode&gt;</code></dd>
@@ -265,9 +282,13 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;com.fasterxml.jack
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</span></div>
+<div class="block">删除 `setting` 与 `owner` 对应的设置文件，文件不存在时不报错。
+ 不比较修订号；删除后 `read` 返回修订为 0 的空值。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>erase</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.access.SettingWriter&lt;com.fasterxml.jackson.databind.JsonNode&gt;</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/CoreSpringException.html" title="class in com.sca4d.core.spring.exception">CoreSpringException</a></code> - 删除文件失败时抛出</dd>
 </dl>
 </section>
 </li>

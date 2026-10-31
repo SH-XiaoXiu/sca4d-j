@@ -1,3 +1,4 @@
 com.sca4d.auth.sms
 com.sca4d.auth.sms.challenge
 com.sca4d.auth.sms.config
+com.sca4d.auth.sms.exception

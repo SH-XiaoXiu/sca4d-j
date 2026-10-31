@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/sms/SmsDeliveryStatus.html#ACCEPTED" class="member-name-link">ACCEPTED</a> - Enum constant in enum class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></dt>
@@ -146,6 +146,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/config/package-summary.html">com.sca4d.notification.sms.config</a> - package com.sca4d.notification.sms.config</dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/sms/exception/package-summary.html">com.sca4d.notification.sms.exception</a> - package com.sca4d.notification.sms.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/mapper/package-summary.html">com.sca4d.notification.sms.mapper</a> - package com.sca4d.notification.sms.mapper</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/SmsConfigurationService.html#createBinding(long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">createBinding(long, String, String, String, String, String, Map&lt;String, String&gt;)</a> - Method in class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsConfigurationService.html" title="class in com.sca4d.notification.sms">SmsConfigurationService</a></dt>
@@ -186,7 +188,12 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/notification/sms/mapper/SmsProviderMapper.html#deleteProvider(long,com.sca4d.core.api.concurrent.Version)" class="member-name-link">deleteProvider(long, Version)</a> - Method in interface com.sca4d.notification.sms.mapper.<a href="com/sca4d/notification/sms/mapper/SmsProviderMapper.html" title="interface in com.sca4d.notification.sms.mapper">SmsProviderMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/SmsNotificationDelivery.html#deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver(Id, Notification)</a> - Method in class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsNotificationDelivery.html" title="class in com.sca4d.notification.sms">SmsNotificationDelivery</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">按路由顺序尝试 Provider 发送短信，并把每次尝试写入 SMS 投递记录。
+ 接收手机号必须已验证且符合 E.164，否则抛出 IllegalStateException 或 NullPointerException。
+ 已送达返回 confirmed；已接受、结果未知或处理中返回 pending 并登记一条延迟查询；所有候选项都明确拒绝或无绑定时返回 rejected。
+ 结果未知时不切换到其他 Provider，避免同一条短信被重复发送。</div>
+</dd>
 <dt><a href="com/sca4d/notification/sms/SmsDeliveryStatus.html#DELIVERED" class="member-name-link">DELIVERED</a> - Enum constant in enum class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></dt>
 <dd>
 <div class="block">Provider 查询确认手机已经收到短信。</div>
@@ -223,7 +230,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/SmsDeliveryStore.html#finish(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderResult)" class="member-name-link">finish(Id, SmsProvider, SmsProviderResult)</a> - Method in class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsDeliveryStore.html" title="class in com.sca4d.notification.sms">SmsDeliveryStore</a></dt>
 <dd>
-<div class="block">把 PENDING 尝试写成 Provider API 的最终确定程度。</div>
+<div class="block">把同一消息在该 Provider 上的 PENDING 尝试更新为 Provider 返回的状态和外部标识。
+ 尝试不存在或已经不是 PENDING 时抛出 IllegalStateException，调用方不能继续沿用该结果。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:H">H</h2>
@@ -260,6 +268,18 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/notification/sms/SmsDeliveryCheck.html#notification()" class="member-name-link">notification()</a> - Method in class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsDeliveryCheck.html" title="class in com.sca4d.notification.sms">SmsDeliveryCheck</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/sms/exception/NotificationSmsException.html" class="type-name-link" title="class in com.sca4d.notification.sms.exception">NotificationSmsException</a> - Exception Class in <a href="com/sca4d/notification/sms/exception/package-summary.html">com.sca4d.notification.sms.exception</a></dt>
+<dd>
+<div class="block">短信通知的依赖或数据故障，例如短信服务商绑定缺失。</div>
+</dd>
+<dt><a href="com/sca4d/notification/sms/exception/NotificationSmsException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">NotificationSmsException(String)</a> - Constructor for exception class com.sca4d.notification.sms.exception.<a href="com/sca4d/notification/sms/exception/NotificationSmsException.html" title="class in com.sca4d.notification.sms.exception">NotificationSmsException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/notification/sms/exception/NotificationSmsException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">NotificationSmsException(String, Throwable)</a> - Constructor for exception class com.sca4d.notification.sms.exception.<a href="com/sca4d/notification/sms/exception/NotificationSmsException.html" title="class in com.sca4d.notification.sms.exception">NotificationSmsException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
@@ -428,7 +448,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsConfigurationService.html" class="type-name-link" title="class in com.sca4d.notification.sms">SmsConfigurationService</a> - Class in <a href="com/sca4d/notification/sms/package-summary.html">com.sca4d.notification.sms</a></dt>
 <dd>
-<div class="block">管理 SMS Provider 实例和统一通知到供应商模板的传输绑定。</div>
+<div class="block">管理 SMS Provider 实例，以及通知变量到 Provider 模板参数的绑定记录。</div>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsConfigurationService.html#%3Cinit%3E(com.sca4d.notification.sms.SmsRepository,com.sca4d.notification.NotificationTypeCatalog,java.util.List,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">SmsConfigurationService(SmsRepository, NotificationTypeCatalog, List&lt;SmsProviderClient&gt;, IdGenerator)</a> - Constructor for class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsConfigurationService.html" title="class in com.sca4d.notification.sms">SmsConfigurationService</a></dt>
 <dd>
@@ -471,7 +491,9 @@ loadScripts(document, 'script');</script>
 <div class="block">使用独立短事务登记和完成 SMS Provider 调用，不让外部请求占用数据库事务。</div>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsDeliveryStore.html#%3Cinit%3E(com.sca4d.notification.sms.mapper.SmsDeliveryMapper,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">SmsDeliveryStore(SmsDeliveryMapper, IdGenerator)</a> - Constructor for class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsDeliveryStore.html" title="class in com.sca4d.notification.sms">SmsDeliveryStore</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建 SMS 投递记录存储；mapper 和 ids 为空时抛出 NullPointerException。</div>
+</dd>
 <dt><a href="com/sca4d/notification/sms/config/SmsNotificationAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.notification.sms.config">SmsNotificationAutoConfiguration</a> - Class in <a href="com/sca4d/notification/sms/config/package-summary.html">com.sca4d.notification.sms.config</a></dt>
 <dd>
 <div class="block">自动装配 SMS Provider、默认优先级选择、投递状态和独立通知 Consumer。</div>
@@ -490,7 +512,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsNotificationErrorCode.html" class="type-name-link" title="enum class in com.sca4d.notification.sms">SmsNotificationErrorCode</a> - Enum Class in <a href="com/sca4d/notification/sms/package-summary.html">com.sca4d.notification.sms</a></dt>
 <dd>
-<div class="block">SMS Provider 与传输绑定管理使用的稳定错误码。</div>
+<div class="block">SMS Provider 与模板绑定管理失败时返回的错误码。</div>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsProvider.html" class="type-name-link" title="class in com.sca4d.notification.sms">SmsProvider</a> - Class in <a href="com/sca4d/notification/sms/package-summary.html">com.sca4d.notification.sms</a></dt>
 <dd>
@@ -502,7 +524,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsProviderBinding.html" class="type-name-link" title="class in com.sca4d.notification.sms">SmsProviderBinding</a> - Class in <a href="com/sca4d/notification/sms/package-summary.html">com.sca4d.notification.sms</a></dt>
 <dd>
-<div class="block">把统一通知变量绑定到一个 Provider 已审核模板，不保存业务模板正文。</div>
+<div class="block">把通知变量绑定到一个 Provider 已审核的短信模板，不保存业务模板正文。</div>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsProviderBinding.html#%3Cinit%3E(long,long,com.sca4d.core.api.name.code.TreeCode,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String,java.lang.String,java.util.Map,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">SmsProviderBinding(long, long, TreeCode, SmsRoute, String, String, String, Map&lt;String, String&gt;, boolean, Version)</a> - Constructor for class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsProviderBinding.html" title="class in com.sca4d.notification.sms">SmsProviderBinding</a></dt>
 <dd>
@@ -521,7 +543,9 @@ loadScripts(document, 'script');</script>
 <div class="block">保存 Provider API 接受、拒绝或结果未知及其非敏感标识。</div>
 </dd>
 <dt><a href="com/sca4d/notification/sms/SmsProviderResult.html#%3Cinit%3E(com.sca4d.notification.sms.SmsDeliveryStatus,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">SmsProviderResult(SmsDeliveryStatus, String, String, String)</a> - Constructor for class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsProviderResult.html" title="class in com.sca4d.notification.sms">SmsProviderResult</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">保存一次 Provider 提交的结果；status 为空时抛出 NullPointerException，其余字段原样保存。</div>
+</dd>
 <dt><a href="com/sca4d/notification/sms/SmsProviderSelector.html" class="type-name-link" title="interface in com.sca4d.notification.sms">SmsProviderSelector</a> - Interface in <a href="com/sca4d/notification/sms/package-summary.html">com.sca4d.notification.sms</a></dt>
 <dd>
 <div class="block">按具体应用已经确定的 SMS 路由排列可尝试的 Provider。</div>
@@ -612,7 +636,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/notification/sms/SmsProviderBinding.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.sms.<a href="com/sca4d/notification/sms/SmsProviderBinding.html" title="class in com.sca4d.notification.sms">SmsProviderBinding</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

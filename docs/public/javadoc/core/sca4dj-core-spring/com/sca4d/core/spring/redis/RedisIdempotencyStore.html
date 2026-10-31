@@ -111,7 +111,7 @@ implements com.sca4d.core.api.concurrent.IdempotencyStore</span></div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">RedisIdempotencyStore</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建使用脚手架 Redis 模板和内部稳定 JSON 契约的幂等存储。</div>
+<div class="block">创建幂等存储；幂等记录以 JSON 字符串形式写入 Redis，并由 Lua 脚本原子修改。</div>
 </div>
 </div>
 </section>
@@ -175,7 +175,7 @@ implements com.sca4d.core.api.concurrent.IdempotencyStore</span></div>
  @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</span></div>
-<div class="block">创建使用脚手架 Redis 模板和内部稳定 JSON 契约的幂等存储。</div>
+<div class="block">创建幂等存储；幂等记录以 JSON 字符串形式写入 Redis，并由 Lua 脚本原子修改。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>redis</code> - 脚手架内部字符串 Redis 模板</dd>

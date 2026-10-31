@@ -1,6 +1,7 @@
 com.sca4d.auth.config
 com.sca4d.auth.engine
 com.sca4d.auth.engine.attempt
+com.sca4d.auth.exception
 com.sca4d.auth.jwt
 com.sca4d.auth.session
 com.sca4d.auth.session.codec

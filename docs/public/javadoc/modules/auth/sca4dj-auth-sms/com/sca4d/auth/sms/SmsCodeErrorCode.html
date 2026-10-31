@@ -95,8 +95,8 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.error.ErrorCode</code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="annotations">@ErrorCodeRange(start=3400,
-                end=3499)
+<div class="type-signature"><span class="annotations">@ErrorCodeRange(start=1300,
+                end=1399)
 </span><span class="modifiers">public enum </span><span class="element-name type-name-label">SmsCodeErrorCode</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a>&gt;
 implements com.sca4d.core.api.error.ErrorCode</span></div>
@@ -121,12 +121,30 @@ implements com.sca4d.core.api.error.ErrorCode</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="#CHALLENGE_UNAVAILABLE" class="member-name-link">CHALLENGE_UNAVAILABLE</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="#CODE_REJECTED" class="member-name-link">CODE_REJECTED</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="#RESEND_TOO_SOON" class="member-name-link">RESEND_TOO_SOON</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="#CHALLENGE_CHANGED" class="member-name-link">CHALLENGE_CHANGED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">短信验证码挑战已变化或不可用，请重新获取。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#CHALLENGE_EXPIRED" class="member-name-link">CHALLENGE_EXPIRED</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">短信验证码已经过期，请重新获取。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#CHALLENGE_ID_CONFLICT" class="member-name-link">CHALLENGE_ID_CONFLICT</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">短信验证码挑战标识发生冲突，请重新获取验证码。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#CHALLENGE_UNAVAILABLE" class="member-name-link">CHALLENGE_UNAVAILABLE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Account 的 SMS 渠道或手机号不可用，无法签发 Challenge。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#CODE_REJECTED" class="member-name-link">CODE_REJECTED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">验证码格式错误、摘要不匹配、Challenge 不可用或并发消费失败。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#RESEND_TOO_SOON" class="member-name-link">RESEND_TOO_SOON</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Challenge 在重发间隔内已经签发。</div>
+</div>
 </div>
 </section>
 </li>
@@ -185,18 +203,42 @@ the order they are declared.</div>
 <section class="detail" id="CHALLENGE_UNAVAILABLE">
 <h3>CHALLENGE_UNAVAILABLE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a></span>&nbsp;<span class="element-name">CHALLENGE_UNAVAILABLE</span></div>
+<div class="block">Account 的 SMS 渠道或手机号不可用，无法签发 Challenge。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="CODE_REJECTED">
 <h3>CODE_REJECTED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a></span>&nbsp;<span class="element-name">CODE_REJECTED</span></div>
+<div class="block">验证码格式错误、摘要不匹配、Challenge 不可用或并发消费失败。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="RESEND_TOO_SOON">
 <h3>RESEND_TOO_SOON</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a></span>&nbsp;<span class="element-name">RESEND_TOO_SOON</span></div>
+<div class="block">Challenge 在重发间隔内已经签发。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="CHALLENGE_ID_CONFLICT">
+<h3>CHALLENGE_ID_CONFLICT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a></span>&nbsp;<span class="element-name">CHALLENGE_ID_CONFLICT</span></div>
+<div class="block">短信验证码挑战标识发生冲突，请重新获取验证码。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="CHALLENGE_EXPIRED">
+<h3>CHALLENGE_EXPIRED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a></span>&nbsp;<span class="element-name">CHALLENGE_EXPIRED</span></div>
+<div class="block">短信验证码已经过期，请重新获取。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="CHALLENGE_CHANGED">
+<h3>CHALLENGE_CHANGED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsCodeErrorCode.html" title="enum class in com.sca4d.auth.sms">SmsCodeErrorCode</a></span>&nbsp;<span class="element-name">CHALLENGE_CHANGED</span></div>
+<div class="block">短信验证码挑战已变化或不可用，请重新获取。</div>
 </section>
 </li>
 </ul>

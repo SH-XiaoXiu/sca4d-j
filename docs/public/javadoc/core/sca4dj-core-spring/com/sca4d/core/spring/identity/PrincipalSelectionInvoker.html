@@ -183,6 +183,8 @@ loadScripts(document, 'script');</script>
 <dd><code>input</code> - 当前 HTTP 请求和 Controller 参数形成的选择输入</dd>
 <dt>Returns:</dt>
 <dd>选择出的业务身份；选择器无法确定时为空</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 参数类型是接口或抽象类，或属性绑定失败时抛出，错误码为 BAD_REQUEST；JavaBean 实例化失败按选择器配置错误直接向上传播</dd>
 </dl>
 </section>
 </li>

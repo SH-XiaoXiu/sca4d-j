@@ -72,6 +72,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.html#allow(java.util.Map,java.util.List,java.time.Instant)" class="member-name-link">allow(Map&lt;String, String&gt;, List&lt;EmqxAclRule&gt;, Instant)</a> - Static method in class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html#ALLOW" class="member-name-link">ALLOW</a> - Enum constant in enum class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a></dt>
+<dd>
+<div class="block">允许连接，并使用响应中的 client_attrs、ACL 和 expire_at。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttInboundFailure.html#attempts()" class="member-name-link">attempts()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttInboundFailure.html" title="class in com.sca4d.iot.emqx.transport">MqttInboundFailure</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationService.html#authenticate(com.sca4d.iot.emqx.authentication.EmqxAuthenticationRequest)" class="member-name-link">authenticate(EmqxAuthenticationRequest)</a> - Method in class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationService.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationService</a></dt>
@@ -109,7 +113,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html#clientId(java.lang.String)" class="member-name-link">clientId(String)</a> - Static method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html" title="class in com.sca4d.iot.emqx.connection">MqttDeviceConnection</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttDeviceProtocol.html#clientId(java.lang.String)" class="member-name-link">clientId(String)</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDeviceProtocol.html" title="class in com.sca4d.iot.emqx.protocol">MqttDeviceProtocol</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">把 Topic 中解析出的设备身份映射为 MQTT Client ID。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttTopicIdentityMapper.html#clientId(java.lang.String)" class="member-name-link">clientId(String)</a> - Method in interface com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttTopicIdentityMapper.html" title="interface in com.sca4d.iot.emqx.protocol">MqttTopicIdentityMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/PrefixedMqttTopicIdentityMapper.html#clientId(java.lang.String)" class="member-name-link">clientId(String)</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/PrefixedMqttTopicIdentityMapper.html" title="class in com.sca4d.iot.emqx.protocol">PrefixedMqttTopicIdentityMapper</a></dt>
@@ -124,11 +130,17 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/package-summary.html">com.sca4d.iot.emqx.connection</a> - package com.sca4d.iot.emqx.connection</dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/exception/package-summary.html">com.sca4d.iot.emqx.exception</a> - package com.sca4d.iot.emqx.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/management/package-summary.html">com.sca4d.iot.emqx.management</a> - package com.sca4d.iot.emqx.management</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/management/exception/package-summary.html">com.sca4d.iot.emqx.management.exception</a> - package com.sca4d.iot.emqx.management.exception</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/package-summary.html">com.sca4d.iot.emqx.protocol</a> - package com.sca4d.iot.emqx.protocol</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a> - package com.sca4d.iot.emqx.transport</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/exception/package-summary.html">com.sca4d.iot.emqx.transport.exception</a> - package com.sca4d.iot.emqx.transport.exception</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkRoute.html#command(java.lang.String)" class="member-name-link">command(String)</a> - Static method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDownlinkRoute.html" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkRoute</a></dt>
 <dd>
@@ -179,6 +191,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.html#deny()" class="member-name-link">deny()</a> - Static method in class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html#DENY" class="member-name-link">DENY</a> - Enum constant in enum class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a></dt>
+<dd>
+<div class="block">明确拒绝连接，之后的 Authenticator 不能放宽该结果。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkRoute.html#desired(java.lang.String)" class="member-name-link">desired(String)</a> - Static method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDownlinkRoute.html" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkRoute</a></dt>
 <dd>
 <div class="block">使用默认的 desired Topic 模板。</div>
@@ -242,12 +258,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表示 EMQX `5.8.9` HTTP Authenticator 必须以 HTTP 200 返回的认证结果。</div>
 </dd>
+<dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html" class="type-name-link" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a> - Enum Class in <a href="com/sca4d/iot/emqx/authentication/package-summary.html">com.sca4d.iot.emqx.authentication</a></dt>
+<dd>
+<div class="block">EMQX HTTP Authenticator 的认证结论，只有 `allow` 和 `deny` 两个协议值。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationService.html" class="type-name-link" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationService</a> - Class in <a href="com/sca4d/iot/emqx/authentication/package-summary.html">com.sca4d.iot.emqx.authentication</a></dt>
 <dd>
 <div class="block">按 Device 明确接入方式验证 MQTT CONNECT，并生成 EMQX client_attrs、ACL 和失效时间。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationService.html#%3Cinit%3E(com.sca4d.iot.emqx.authentication.EmqxDeviceConnectionRequestFactory,com.sca4d.iot.api.connection.DeviceConnectionAdmission,com.sca4d.iot.emqx.authentication.MqttAuthorizationService)" class="member-name-link">EmqxAuthenticationService(EmqxDeviceConnectionRequestFactory, DeviceConnectionAdmission, MqttAuthorizationService)</a> - Constructor for class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationService.html" title="class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建 EMQX 认证服务。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/config/EmqxAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.iot.emqx.config">EmqxAutoConfiguration</a> - Class in <a href="com/sca4d/iot/emqx/config/package-summary.html">com.sca4d.iot.emqx.config</a></dt>
 <dd>
 <div class="block">在具体应用启用后装配 EMQX MQTT、认证、连接快照对账和 Management API，不开放 HTTP 路由。</div>
@@ -274,7 +296,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" class="type-name-link" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a> - Class in <a href="com/sca4d/iot/emqx/connection/package-summary.html">com.sca4d.iot.emqx.connection</a></dt>
 <dd>
-<div class="block">使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点事实。</div>
+<div class="block">使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点名称。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">EmqxConnectionRepository(RedisTemplate&lt;Key, String&gt;, RedisBatches)</a> - Constructor for class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></dt>
 <dd>
@@ -282,7 +304,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/EmqxDeviceConnectionRequestFactory.html" class="type-name-link" title="interface in com.sca4d.iot.emqx.authentication">EmqxDeviceConnectionRequestFactory</a> - Interface in <a href="com/sca4d/iot/emqx/authentication/package-summary.html">com.sca4d.iot.emqx.authentication</a></dt>
 <dd>
-<div class="block">把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的统一 Device 连接请求。</div>
+<div class="block">把 EMQX 的 CONNECT 和 TLS 字段转换为具体应用安装的 Device 连接请求。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/management/EmqxDeviceConnectionTerminator.html" class="type-name-link" title="class in com.sca4d.iot.emqx.management">EmqxDeviceConnectionTerminator</a> - Class in <a href="com/sca4d/iot/emqx/management/package-summary.html">com.sca4d.iot.emqx.management</a></dt>
 <dd>
@@ -322,11 +344,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/config/EmqxProperties.html#%3Cinit%3E()" class="member-name-link">EmqxProperties()</a> - Constructor for class com.sca4d.iot.emqx.config.<a href="com/sca4d/iot/emqx/config/EmqxProperties.html" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/emqx/management/EmqxPublishResultUnknownException.html" class="type-name-link" title="class in com.sca4d.iot.emqx.management">EmqxPublishResultUnknownException</a> - Exception Class in <a href="com/sca4d/iot/emqx/management/package-summary.html">com.sca4d.iot.emqx.management</a></dt>
+<dt><a href="com/sca4d/iot/emqx/management/exception/EmqxPublishResultUnknownException.html" class="type-name-link" title="class in com.sca4d.iot.emqx.management.exception">EmqxPublishResultUnknownException</a> - Exception Class in <a href="com/sca4d/iot/emqx/management/exception/package-summary.html">com.sca4d.iot.emqx.management.exception</a></dt>
 <dd>
 <div class="block">表示管理端发布请求发生传输中断，调用方无法确认 EMQX 是否已经接受请求。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/management/EmqxPublishResultUnknownException.html#%3Cinit%3E(java.lang.Throwable)" class="member-name-link">EmqxPublishResultUnknownException(Throwable)</a> - Constructor for exception class com.sca4d.iot.emqx.management.<a href="com/sca4d/iot/emqx/management/EmqxPublishResultUnknownException.html" title="class in com.sca4d.iot.emqx.management">EmqxPublishResultUnknownException</a></dt>
+<dt><a href="com/sca4d/iot/emqx/management/exception/EmqxPublishResultUnknownException.html#%3Cinit%3E(java.lang.Throwable)" class="member-name-link">EmqxPublishResultUnknownException(Throwable)</a> - Constructor for exception class com.sca4d.iot.emqx.management.exception.<a href="com/sca4d/iot/emqx/management/exception/EmqxPublishResultUnknownException.html" title="class in com.sca4d.iot.emqx.management.exception">EmqxPublishResultUnknownException</a></dt>
 <dd>
 <div class="block">保留底层传输异常，异常消息不包含请求载荷或 Management API 凭据。</div>
 </dd>
@@ -369,7 +391,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html#findConnectionIds(java.util.Collection)" class="member-name-link">findConnectionIds(Collection&lt;String&gt;)</a> - Method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></dt>
 <dd>
-<div class="block">使用一次 Redis pipeline 读取一批 Client ID 当前映射的连接代次。</div>
+<div class="block">按 Redis 批次分批使用 pipeline 读取 Client ID 当前映射的连接代次。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/MqttAuthorization.html#fingerprint()" class="member-name-link">fingerprint()</a> - Method in class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/MqttAuthorization.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorization</a></dt>
 <dd>&nbsp;</dd>
@@ -442,6 +464,18 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html#inboundStatus()" class="member-name-link">inboundStatus()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/exception/IotEmqxException.html" class="type-name-link" title="class in com.sca4d.iot.emqx.exception">IotEmqxException</a> - Exception Class in <a href="com/sca4d/iot/emqx/exception/package-summary.html">com.sca4d.iot.emqx.exception</a></dt>
+<dd>
+<div class="block">表示 IoT EMQX 模块的技术失败，例如依赖不可用、数据格式损坏或运行环境缺失，保留原始原因供排障。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/exception/IotEmqxException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">IotEmqxException(String)</a> - Constructor for exception class com.sca4d.iot.emqx.exception.<a href="com/sca4d/iot/emqx/exception/IotEmqxException.html" title="class in com.sca4d.iot.emqx.exception">IotEmqxException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/exception/IotEmqxException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">IotEmqxException(String, Throwable)</a> - Constructor for exception class com.sca4d.iot.emqx.exception.<a href="com/sca4d/iot/emqx/exception/IotEmqxException.html" title="class in com.sca4d.iot.emqx.exception">IotEmqxException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html#isConnected()" class="member-name-link">isConnected()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html#isCurrent(com.sca4d.iot.api.Device,java.lang.String,java.util.Map)" class="member-name-link">isCurrent(Device, String, Map&lt;String, String&gt;)</a> - Method in class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></dt>
@@ -497,7 +531,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">观察一条已经由当前应用 MQTT 订阅收到的消息。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/MqttMessageProcessingObserver.html#messageRejected(java.lang.String,com.sca4d.iot.emqx.transport.MqttMessage,com.sca4d.iot.emqx.transport.MqttMessageRejectedException)" class="member-name-link">messageRejected(String, MqttMessage, MqttMessageRejectedException)</a> - Method in interface com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessageProcessingObserver.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageProcessingObserver</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttMessageProcessingObserver.html#messageRejected(java.lang.String,com.sca4d.iot.emqx.transport.MqttMessage,com.sca4d.iot.emqx.transport.exception.MqttMessageRejectedException)" class="member-name-link">messageRejected(String, MqttMessage, MqttMessageRejectedException)</a> - Method in interface com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessageProcessingObserver.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageProcessingObserver</a></dt>
 <dd>
 <div class="block">观察一条不会再次处理的格式、身份或协议拒绝结果。</div>
 </dd>
@@ -523,7 +557,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html" class="type-name-link" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a> - Class in <a href="com/sca4d/iot/emqx/authentication/package-summary.html">com.sca4d.iot.emqx.authentication</a></dt>
 <dd>
-<div class="block">统一解析应用授权策略或协议 ACL，并为连接失效判断生成稳定指纹。</div>
+<div class="block">解析应用授权策略或协议 ACL，并为连接失效判断生成指纹。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html#%3Cinit%3E(com.sca4d.iot.emqx.protocol.MqttProtocolCatalog,java.util.Collection)" class="member-name-link">MqttAuthorizationService(MqttProtocolCatalog, Collection&lt;MqttAuthorizationPolicy&gt;)</a> - Constructor for class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></dt>
 <dd>
@@ -546,7 +580,9 @@ loadScripts(document, 'script');</script>
 <div class="block">把标准下行消息元数据和已按 `DataKey` 整理的值交给协议 Pipeline。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html#%3Cinit%3E(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.core.api.data.DataValues)" class="member-name-link">MqttDownlinkFrame(DeviceDownlink, DataValues)</a> - Constructor for class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkFrame</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建协议 Pipeline 的输入帧。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkRoute.html" class="type-name-link" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkRoute</a> - Class in <a href="com/sca4d/iot/emqx/protocol/package-summary.html">com.sca4d.iot.emqx.protocol</a></dt>
 <dd>
 <div class="block">按 desired property 或 command code 选择下行 encoder 和 Topic 模板。</div>
@@ -568,7 +604,9 @@ loadScripts(document, 'script');</script>
 <div class="block">返回当前进程 MQTT 上行队列和累计处理结果，供健康检查和运行排障使用。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttInboundStatus.html#%3Cinit%3E(int,int,long,long,long,long,long,long)" class="member-name-link">MqttInboundStatus(int, int, long, long, long, long, long, long)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttInboundStatus.html" title="class in com.sca4d.iot.emqx.transport">MqttInboundStatus</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建一次 MQTT 上行状态快照，各计数由 <code>MqttInboundProcessor</code> 在读取时汇总。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessage.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">MqttMessage</a> - Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
 <dd>
 <div class="block">保存 EMQX 共享订阅收到的一条 MQTT Topic、原始 Payload、发布标志和平台观察时间。</div>
@@ -579,17 +617,17 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessageObserver.html" class="type-name-link" title="interface in com.sca4d.iot.emqx.transport">MqttMessageObserver</a> - Interface in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
 <dd>
-<div class="block">接收当前应用 MQTT Runtime 实际收到的消息，用于应用记录自身可见的通信事实。</div>
+<div class="block">接收当前应用 MQTT Runtime 实际收到的消息，用于记录应用自身可见的接收结果。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessageProcessingObserver.html" class="type-name-link" title="interface in com.sca4d.iot.emqx.transport">MqttMessageProcessingObserver</a> - Interface in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
 <dd>
 <div class="block">观察 MQTT 上行的拒绝、再次处理和最终失败，不参与消息确认决定。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">MqttMessageRejectedException</a> - Exception Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/exception/MqttMessageRejectedException.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport.exception">MqttMessageRejectedException</a> - Exception Class in <a href="com/sca4d/iot/emqx/transport/exception/package-summary.html">com.sca4d.iot.emqx.transport.exception</a></dt>
 <dd>
 <div class="block">表示 MQTT 上行存在确定的输入错误，记录后应确认消息且不再执行同一业务动作。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html#%3Cinit%3E(com.sca4d.iot.emqx.transport.MqttMessageRejectionReason,java.lang.String,java.lang.RuntimeException)" class="member-name-link">MqttMessageRejectedException(MqttMessageRejectionReason, String, RuntimeException)</a> - Constructor for exception class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRejectedException</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/exception/MqttMessageRejectedException.html#%3Cinit%3E(com.sca4d.iot.emqx.transport.MqttMessageRejectionReason,java.lang.String,java.lang.RuntimeException)" class="member-name-link">MqttMessageRejectedException(MqttMessageRejectionReason, String, RuntimeException)</a> - Constructor for exception class com.sca4d.iot.emqx.transport.exception.<a href="com/sca4d/iot/emqx/transport/exception/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport.exception">MqttMessageRejectedException</a></dt>
 <dd>
 <div class="block">创建不会因再次处理恢复的 MQTT 上行错误。</div>
 </dd>
@@ -681,6 +719,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html#protocolType()" class="member-name-link">protocolType()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html#protocolValue()" class="member-name-link">protocolValue()</a> - Method in enum class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/management/EmqxManagementClient.html#publish(com.sca4d.iot.emqx.management.MqttPublication)" class="member-name-link">publish(MqttPublication)</a> - Method in interface com.sca4d.iot.emqx.management.<a href="com/sca4d/iot/emqx/management/EmqxManagementClient.html" title="interface in com.sca4d.iot.emqx.management">EmqxManagementClient</a></dt>
 <dd>
 <div class="block">通过 EMQX Broker 发布一条 MQTT 消息。</div>
@@ -719,7 +759,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
-<dt><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html#reason()" class="member-name-link">reason()</a> - Method in exception class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRejectedException</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/exception/MqttMessageRejectedException.html#reason()" class="member-name-link">reason()</a> - Method in exception class com.sca4d.iot.emqx.transport.exception.<a href="com/sca4d/iot/emqx/transport/exception/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport.exception">MqttMessageRejectedException</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html#reconciled(java.util.List,java.time.Instant)" class="member-name-link">reconciled(List&lt;EmqxClientConnection&gt;, Instant)</a> - Method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></dt>
 <dd>
@@ -899,6 +939,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">验证全部 DataKey 名称和 Java 类型与物模型一致。</div>
 </dd>
+<dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttUplinkKind.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttUplinkKind.html" title="enum class in com.sca4d.iot.emqx.protocol">MqttUplinkKind</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
@@ -906,6 +950,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectionReason.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessageRejectionReason.html" title="enum class in com.sca4d.iot.emqx.transport">MqttMessageRejectionReason</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxAuthenticationResponse.Result.html" title="enum class in com.sca4d.iot.emqx.authentication">EmqxAuthenticationResponse.Result</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html#values()" class="member-name-link">values()</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkFrame</a></dt>
 <dd>&nbsp;</dd>

@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DictionaryRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">隔离字典服务对 MyBatis 和空查询结果的依赖。</div>
+<div class="block">封装 `DictionaryMapper` 的动态字典与数据库选项读写，并把影响行数转换为 `boolean` 结果。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;enabled,
  int&nbsp;sortOrder)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">新增动态字典；键已经存在时返回 <code>false</code>。</div>
+<div class="block">新增动态字典。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createOption(java.lang.String,com.sca4d.core.api.dictionary.DictionaryOption)" class="member-name-link">createOption</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
@@ -146,7 +146,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  long&nbsp;version)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按乐观版本删除数据库选项；目标不存在或版本变化时返回 <code>false</code>。</div>
+<div class="block">按乐观版本删除一个数据库选项。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="DynamicDictionary.html" title="class in com.sca4d.core.spring.dictionary">DynamicDictionary</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findDictionaries()" class="member-name-link">findDictionaries</a>()</code></div>
@@ -164,7 +164,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;sortOrder,
  long&nbsp;version)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按乐观版本修改动态字典；目标不存在或版本变化时返回 <code>false</code>。</div>
+<div class="block">按乐观版本修改动态字典的名称、启用状态和排序值。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateOption(java.lang.String,com.sca4d.core.api.dictionary.DictionaryOption,long)" class="member-name-link">updateOption</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
@@ -196,6 +196,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DictionaryRepository</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="DictionaryMapper.html" title="interface in com.sca4d.core.spring.dictionary">DictionaryMapper</a>&nbsp;mapper)</span></div>
 <div class="block">创建字典 Repository。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>mapper</code> - 动态字典和数据库选项的 MyBatis Mapper，不能为空</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -254,7 +258,16 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
  boolean&nbsp;enabled,
  int&nbsp;sortOrder)</span></div>
-<div class="block">新增动态字典；键已经存在时返回 <code>false</code>。</div>
+<div class="block">新增动态字典。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>key</code> - 字典键，同时作为数据库主键</dd>
+<dd><code>label</code> - 字典名称</dd>
+<dd><code>enabled</code> - 字典是否启用</dd>
+<dd><code>sortOrder</code> - 字典排序值</dd>
+<dt>Returns:</dt>
+<dd>新增成功时为 <code>true</code>；键已经存在时为 <code>false</code>，原字典不变</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -268,7 +281,17 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;enabled,
  int&nbsp;sortOrder,
  long&nbsp;version)</span></div>
-<div class="block">按乐观版本修改动态字典；目标不存在或版本变化时返回 <code>false</code>。</div>
+<div class="block">按乐观版本修改动态字典的名称、启用状态和排序值。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>key</code> - 字典键</dd>
+<dd><code>label</code> - 修改后的字典名称</dd>
+<dd><code>enabled</code> - 修改后的启用状态</dd>
+<dd><code>sortOrder</code> - 修改后的排序值</dd>
+<dd><code>version</code> - 调用方读取到的乐观锁版本</dd>
+<dt>Returns:</dt>
+<dd>修改成功时为 <code>true</code>；目标不存在或版本变化时为 <code>false</code></dd>
+</dl>
 </section>
 </li>
 <li>
@@ -335,7 +358,15 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  long&nbsp;version)</span></div>
-<div class="block">按乐观版本删除数据库选项；目标不存在或版本变化时返回 <code>false</code>。</div>
+<div class="block">按乐观版本删除一个数据库选项。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>key</code> - 字典键</dd>
+<dd><code>value</code> - 要删除的选项值</dd>
+<dd><code>version</code> - 调用方读取到的选项乐观锁版本</dd>
+<dt>Returns:</dt>
+<dd>删除成功时为 <code>true</code>；目标不存在或版本变化时为 <code>false</code></dd>
+</dl>
 </section>
 </li>
 </ul>

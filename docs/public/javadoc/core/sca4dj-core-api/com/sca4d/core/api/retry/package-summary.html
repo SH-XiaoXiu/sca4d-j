@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Package:</p>
 <ul>
 <li><a href="#package-description">Description</a></li>
-<li>Related Packages</li>
+<li><a href="#related-package-summary">Related Packages</a></li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </li>
@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Package:&nbsp;</li>
 <li><a href="#package-description">Description</a>&nbsp;|&nbsp;</li>
-<li>Related Packages&nbsp;|&nbsp;</li>
+<li><a href="#related-package-summary">Related Packages</a>&nbsp;|&nbsp;</li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </div>
@@ -74,8 +74,19 @@ loadScripts(document, 'script');</script>
 <section class="summary">
 <ul class="summary-list">
 <li>
+<div id="related-package-summary">
+<div class="caption"><span>Related Packages</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Package</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="exception/package-summary.html">com.sca4d.core.api.retry.exception</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</div>
+</li>
+<li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exception Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
 <div id="class-summary.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
@@ -100,28 +111,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">执行同步操作并按共同策略重试，不传播或创建 Call、事务和分布式状态。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="RetryInterruptedException.html" title="class in com.sca4d.core.api.retry">RetryInterruptedException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
-<div class="block">表示同步重试等待或执行被中断，线程中断标记保持有效。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RetryListener.html" title="interface in com.sca4d.core.api.retry">RetryListener</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RetryListener.html" title="interface in com.sca4d.core.api.retry">RetryListener</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">观察重试执行，不参与重试决定；监听异常不能改变操作结果。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RetryOperation.html" title="interface in com.sca4d.core.api.retry">RetryOperation</a>&lt;T,<wbr>E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a>&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RetryOperation.html" title="interface in com.sca4d.core.api.retry">RetryOperation</a>&lt;T,<wbr>E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">表示一次同步尝试，操作自身负责事务、幂等和副作用范围。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RetryPolicy.html" title="interface in com.sca4d.core.api.retry">RetryPolicy</a>&lt;F&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RetryPolicy.html" title="interface in com.sca4d.core.api.retry">RetryPolicy</a>&lt;F&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">根据失败事实和规则作出无副作用的决定；实现必须可并发使用且不保存执行进度。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存包含首次执行的次数限制和不可变退避规则，不持有执行进度。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="RetryStopReason.html" title="enum class in com.sca4d.core.api.retry">RetryStopReason</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="RetryStopReason.html" title="enum class in com.sca4d.core.api.retry">RetryStopReason</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
 <div class="block">表示共同重试判断停止的原因，由所属模块映射业务终态。</div>
 </div>
 </div>

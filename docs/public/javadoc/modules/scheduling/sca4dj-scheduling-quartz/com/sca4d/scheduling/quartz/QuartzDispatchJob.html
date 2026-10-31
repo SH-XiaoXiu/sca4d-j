@@ -26,6 +26,7 @@ loadScripts(document, 'script');</script>
 <div class="top-nav" id="navbar-top"><button id="navbar-toggle-button" aria-controls="navbar-top" aria-expanded="false" aria-label="Toggle navigation links"><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span></button>
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
+<li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
@@ -110,10 +111,14 @@ implements org.quartz.Job</span></div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#CAPABILITIES_CONTEXT_KEY" class="member-name-link">CAPABILITIES_CONTEXT_KEY</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Quartz SchedulerContext 中保存 InstanceCapabilities 的键。</div>
+</div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#CLOCK_CONTEXT_KEY" class="member-name-link">CLOCK_CONTEXT_KEY</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Quartz SchedulerContext 中保存 Clock 的键。</div>
+</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#EXECUTOR_CONTEXT_KEY" class="member-name-link">EXECUTOR_CONTEXT_KEY</a></code></div>
 <div class="col-last even-row-color">
@@ -121,10 +126,14 @@ implements org.quartz.Job</span></div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#INSTANCE_CONTEXT_KEY" class="member-name-link">INSTANCE_CONTEXT_KEY</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Quartz SchedulerContext 中保存 InstanceProperties 的键。</div>
+</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#LOCK_CONTEXT_KEY" class="member-name-link">LOCK_CONTEXT_KEY</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Quartz SchedulerContext 中保存 DistributedLock 的键。</div>
+</div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#REGISTRY_CONTEXT_KEY" class="member-name-link">REGISTRY_CONTEXT_KEY</a></code></div>
 <div class="col-last odd-row-color">
@@ -138,7 +147,7 @@ implements org.quartz.Job</span></div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#SCHEDULE_KEY" class="member-name-link">SCHEDULE_KEY</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">JobDataMap 中保存稳定计划 key 的键。</div>
+<div class="block">JobDataMap 中保存计划 key 的键名。</div>
 </div>
 </div>
 </section>
@@ -191,6 +200,7 @@ implements org.quartz.Job</span></div>
 <section class="detail" id="CAPABILITIES_CONTEXT_KEY">
 <h3>CAPABILITIES_CONTEXT_KEY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CAPABILITIES_CONTEXT_KEY</span></div>
+<div class="block">Quartz SchedulerContext 中保存 InstanceCapabilities 的键。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -205,6 +215,7 @@ implements org.quartz.Job</span></div>
 <section class="detail" id="CLOCK_CONTEXT_KEY">
 <h3>CLOCK_CONTEXT_KEY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CLOCK_CONTEXT_KEY</span></div>
+<div class="block">Quartz SchedulerContext 中保存 Clock 的键。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -234,6 +245,7 @@ implements org.quartz.Job</span></div>
 <section class="detail" id="INSTANCE_CONTEXT_KEY">
 <h3>INSTANCE_CONTEXT_KEY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">INSTANCE_CONTEXT_KEY</span></div>
+<div class="block">Quartz SchedulerContext 中保存 InstanceProperties 的键。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -248,6 +260,7 @@ implements org.quartz.Job</span></div>
 <section class="detail" id="LOCK_CONTEXT_KEY">
 <h3>LOCK_CONTEXT_KEY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">LOCK_CONTEXT_KEY</span></div>
+<div class="block">Quartz SchedulerContext 中保存 DistributedLock 的键。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -292,7 +305,7 @@ implements org.quartz.Job</span></div>
 <section class="detail" id="SCHEDULE_KEY">
 <h3>SCHEDULE_KEY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SCHEDULE_KEY</span></div>
-<div class="block">JobDataMap 中保存稳定计划 key 的键。</div>
+<div class="block">JobDataMap 中保存计划 key 的键名。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>

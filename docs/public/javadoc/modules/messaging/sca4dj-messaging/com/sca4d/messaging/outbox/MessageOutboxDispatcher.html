@@ -110,7 +110,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建保留消息级租约、退避和分批清理语义的 Outbox 操作。</div>
+<div class="block">创建按消息级租约和退避时间派发 Outbox 消息、并分批删除过期 SENT 记录的操作对象。</div>
 </div>
 </div>
 </section>
@@ -129,12 +129,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cleanup()" class="member-name-link">cleanup</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">分批删除保留期已经结束的 SENT 记录。</div>
+<div class="block">删除发送时间早于 clock 当前时间减去 sentRetention 的 SENT 记录，每次最多删除 cleanupBatchSize 条。
+ 只删除已经发送成功的记录，未发送或失败中的记录不受影响；没有可删除记录时不产生日志。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dispatch()" class="member-name-link">dispatch</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">领取一批到期记录并逐条尝试发布；单条失败不阻止其他消息。</div>
+<div class="block">领取一批到期记录并逐条尝试发布。成功后写回 SENT；失败后写回下一次 availableAt 与错误摘要。
+ 单条失败只影响该记录，不中断本批次其余消息。会修改 Outbox 记录的租约、尝试次数、可用时间和状态，不抛出发布异常。
+ 结果写回失败时只记录 ERROR 并保留租约，等待租约到期后重新领取。</div>
 </div>
 </div>
 </div>
@@ -166,7 +169,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a>&nbsp;properties,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
-<div class="block">创建保留消息级租约、退避和分批清理语义的 Outbox 操作。</div>
+<div class="block">创建按消息级租约和退避时间派发 Outbox 消息、并分批删除过期 SENT 记录的操作对象。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>repository</code> - Outbox 持久化入口</dd>
@@ -189,14 +192,17 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="dispatch()">
 <h3>dispatch</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">dispatch</span>()</div>
-<div class="block">领取一批到期记录并逐条尝试发布；单条失败不阻止其他消息。</div>
+<div class="block">领取一批到期记录并逐条尝试发布。成功后写回 SENT；失败后写回下一次 availableAt 与错误摘要。
+ 单条失败只影响该记录，不中断本批次其余消息。会修改 Outbox 记录的租约、尝试次数、可用时间和状态，不抛出发布异常。
+ 结果写回失败时只记录 ERROR 并保留租约，等待租约到期后重新领取。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="cleanup()">
 <h3>cleanup</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">cleanup</span>()</div>
-<div class="block">分批删除保留期已经结束的 SENT 记录。</div>
+<div class="block">删除发送时间早于 clock 当前时间减去 sentRetention 的 SENT 记录，每次最多删除 cleanupBatchSize 条。
+ 只删除已经发送成功的记录，未发送或失败中的记录不受影响；没有可删除记录时不产生日志。</div>
 </section>
 </li>
 </ul>

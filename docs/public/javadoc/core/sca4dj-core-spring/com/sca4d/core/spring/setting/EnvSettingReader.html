@@ -133,7 +133,9 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://d
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.value.SettingValue<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">read</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取 `setting` 经 `variable` 映射得到的环境变量；变量不存在时返回值为 null 的 SettingValue，不写入数据库。</div>
+</div>
 </div>
 </div>
 </div>
@@ -188,9 +190,12 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://d
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;setting,
  @NotNull
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner)</span></div>
+<div class="block">读取 `setting` 经 `variable` 映射得到的环境变量；变量不存在时返回值为 null 的 SettingValue，不写入数据库。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>read</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - owner 不是 `SettingOwner.system()` 时抛出</dd>
 </dl>
 </section>
 </li>

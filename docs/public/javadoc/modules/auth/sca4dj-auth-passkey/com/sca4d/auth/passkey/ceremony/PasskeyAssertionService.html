@@ -197,7 +197,10 @@ loadScripts(document, 'script');</script>
 <dd><code>expectedAccount</code> - 认证引擎已经确定的账号；允许方法从 discoverable Credential 识别账号时为 <code>null</code></dd>
 <dd><code>proof</code> - 浏览器 assertion 响应</dd>
 <dt>Returns:</dt>
-<dd>assertion 验证并更新后的 Credential</dd>
+<dd>assertion 验证并更新后的 Credential，签名计数器已在当前事务中更新</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - ceremony 不存在或已消费时抛出 CEREMONY_UNAVAILABLE；响应无法验证、Credential 不存在、
+                           与期望账号不一致或版本推进失败时抛出 ASSERTION_REJECTED</dd>
 </dl>
 </section>
 </li>

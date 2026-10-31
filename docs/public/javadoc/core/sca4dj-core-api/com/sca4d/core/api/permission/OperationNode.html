@@ -227,6 +227,9 @@ loadScripts(document, 'script');</script>
 <dd><code>resources</code> - 局部 RESOURCE 声明</dd>
 <dt>Returns:</dt>
 <dd>只包含完整编码节点的 MODULE 聚合</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 锚点不是单段编码、锚点含通配符、RESOURCE 或 ACTION 编码重复时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一 RESOURCE 声明为 <code>null</code> 时抛出</dd>
 </dl>
 </section>
 </li>

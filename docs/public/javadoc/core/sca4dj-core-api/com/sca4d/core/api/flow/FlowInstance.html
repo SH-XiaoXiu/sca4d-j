@@ -184,7 +184,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startedAt()" class="member-name-link">startedAt</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">创建时间。</div>
+<div class="block">开始时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../concurrent/Version.html" title="class in com.sca4d.core.api.concurrent">Version</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#version()" class="member-name-link">version</a>()</code></div>
@@ -302,10 +302,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="startedAt()">
 <h3>startedAt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">startedAt</span>()</div>
-<div class="block">创建时间。</div>
+<div class="block">开始时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>创建时间</dd>
+<dd>开始时间</dd>
 </dl>
 </section>
 </li>
@@ -380,6 +380,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>标记为已消费且版本递增的新快照</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../error/exception/BusinessException.html" title="class in com.sca4d.core.api.error.exception">BusinessException</a></code> - 结果已经消费时抛出</dd>
 </dl>
 </section>
 </li>

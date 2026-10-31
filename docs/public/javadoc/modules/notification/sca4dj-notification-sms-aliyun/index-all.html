@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/sms/aliyun/config/AliyunSmsAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.notification.sms.aliyun.config">AliyunSmsAutoConfiguration</a> - Class in <a href="com/sca4d/notification/sms/aliyun/config/package-summary.html">com.sca4d.notification.sms.aliyun.config</a></dt>
@@ -75,13 +75,17 @@ loadScripts(document, 'script');</script>
 <div class="block">使用阿里云 V2 Java SDK 提交国内或账号已开通的国际 SMS 模板请求。</div>
 </dd>
 <dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html#%3Cinit%3E(com.sca4d.notification.sms.aliyun.AliyunSmsProperties,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">AliyunSmsProviderClient(AliyunSmsProperties, ObjectMapper)</a> - Constructor for class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">保存阿里云 SMS 连接配置和 JSON 映射器；两者为空时抛出 NullPointerException。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/sms/aliyun/package-summary.html">com.sca4d.notification.sms.aliyun</a> - package com.sca4d.notification.sms.aliyun</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/aliyun/config/package-summary.html">com.sca4d.notification.sms.aliyun.config</a> - package com.sca4d.notification.sms.aliyun.config</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/sms/aliyun/exception/package-summary.html">com.sca4d.notification.sms.aliyun.exception</a> - package com.sca4d.notification.sms.aliyun.exception</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProperties.Credential.html#%3Cinit%3E()" class="member-name-link">Credential()</a> - Constructor for class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProperties.Credential.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProperties.Credential</a></dt>
 <dd>&nbsp;</dd>
@@ -98,6 +102,21 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProperties.Credential.html#getRegionId()" class="member-name-link">getRegionId()</a> - Method in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProperties.Credential.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProperties.Credential</a></dt>
 <dd>&nbsp;</dd>
+</dl>
+<h2 class="title" id="I:N">N</h2>
+<dl class="index">
+<dt><a href="com/sca4d/notification/sms/aliyun/exception/NotificationSmsAliyunException.html" class="type-name-link" title="class in com.sca4d.notification.sms.aliyun.exception">NotificationSmsAliyunException</a> - Exception Class in <a href="com/sca4d/notification/sms/aliyun/exception/package-summary.html">com.sca4d.notification.sms.aliyun.exception</a></dt>
+<dd>
+<div class="block">阿里云短信通道的依赖故障，例如 SDK 客户端创建或查询结果异常。</div>
+</dd>
+<dt><a href="com/sca4d/notification/sms/aliyun/exception/NotificationSmsAliyunException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">NotificationSmsAliyunException(String)</a> - Constructor for exception class com.sca4d.notification.sms.aliyun.exception.<a href="com/sca4d/notification/sms/aliyun/exception/NotificationSmsAliyunException.html" title="class in com.sca4d.notification.sms.aliyun.exception">NotificationSmsAliyunException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/notification/sms/aliyun/exception/NotificationSmsAliyunException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">NotificationSmsAliyunException(String, Throwable)</a> - Constructor for exception class com.sca4d.notification.sms.aliyun.exception.<a href="com/sca4d/notification/sms/aliyun/exception/NotificationSmsAliyunException.html" title="class in com.sca4d.notification.sms.aliyun.exception">NotificationSmsAliyunException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
@@ -128,10 +147,10 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html#TYPE" class="member-name-link">TYPE</a> - Static variable in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a></dt>
 <dd>
-<div class="block">数据库 Provider 使用的适配器类型。</div>
+<div class="block">数据库中 Provider 记录的类型值，选中后由本客户端调用阿里云短信 API。</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

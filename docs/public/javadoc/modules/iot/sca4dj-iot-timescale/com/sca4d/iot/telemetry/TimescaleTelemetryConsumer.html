@@ -133,12 +133,12 @@ implements com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.teleme
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.messaging.HandlingDecision</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handle(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handle</a><wbr>(@NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.core.api.event.Event&lt;com.sca4d.iot.api.telemetry.TelemetryBatch&gt;&gt;&nbsp;delivery)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">RabbitMQ 调用的入口先选择历史库，再开启事务；提交后才能确认消息。</div>
+<div class="block">消息投递入口先选择历史库，再开启事务；事务提交后才能确认消息。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleEvent(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handleEvent</a><wbr>(@NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.core.api.event.Event&lt;com.sca4d.iot.api.telemetry.TelemetryBatch&gt;&gt;&nbsp;delivery)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">同一 Id 的 RabbitMQ 重复投递不会产生重复样本。</div>
+<div class="block">同一 Id 的消息被重复投递时不会写入重复样本。</div>
 </div>
 </div>
 </div>
@@ -209,7 +209,7 @@ implements com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.teleme
 @SystemExecution("IOT")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">handleEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.core.api.event.Event&lt;com.sca4d.iot.api.telemetry.TelemetryBatch&gt;&gt;&nbsp;delivery)</span></div>
-<div class="block">同一 Id 的 RabbitMQ 重复投递不会产生重复样本。</div>
+<div class="block">同一 Id 的消息被重复投递时不会写入重复样本。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>handleEvent</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.telemetry.TelemetryBatch&gt;</code></dd>
@@ -226,7 +226,7 @@ implements com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.teleme
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.messaging.HandlingDecision</span>&nbsp;<span class="element-name">handle</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.core.api.event.Event&lt;com.sca4d.iot.api.telemetry.TelemetryBatch&gt;&gt;&nbsp;delivery)</span>
                                                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">RabbitMQ 调用的入口先选择历史库，再开启事务；提交后才能确认消息。</div>
+<div class="block">消息投递入口先选择历史库，再开启事务；事务提交后才能确认消息。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>handle</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.telemetry.TelemetryBatch&gt;</code></dd>

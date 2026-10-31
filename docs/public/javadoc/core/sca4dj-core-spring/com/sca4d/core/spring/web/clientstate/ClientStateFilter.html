@@ -143,7 +143,10 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)" class="member-name-link">doFilterInternal</a><wbr>(@NotNull jakarta.servlet.http.HttpServletRequest&nbsp;request,
  @NotNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  jakarta.servlet.FilterChain&nbsp;filterChain)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">执行后续过滤器链；响应尚未提交时把当前请求的状态刷新头写入响应，并在最后清理 ClientState。
+ 异常情况下同样在 finally 中写入和清理，异常本身继续向上抛出。</div>
+</div>
 </div>
 </div>
 </div>
@@ -191,6 +194,8 @@ loadScripts(document, 'script');</script>
  jakarta.servlet.FilterChain&nbsp;filterChain)</span>
                          throws <span class="exceptions">jakarta.servlet.ServletException,
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">执行后续过滤器链；响应尚未提交时把当前请求的状态刷新头写入响应，并在最后清理 ClientState。
+ 异常情况下同样在 finally 中写入和清理，异常本身继续向上抛出。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>doFilterInternal</code>&nbsp;in class&nbsp;<code>org.springframework.web.filter.OncePerRequestFilter</code></dd>

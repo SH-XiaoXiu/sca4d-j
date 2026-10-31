@@ -86,11 +86,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab6"><a href="ConditionalOnCapability.html" title="annotation interface in com.sca4d.core.spring.config">ConditionalOnCapability</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab6">
-<div class="block">根据实例配置启用一个功能入口；能力声明 Bean 本身不能使用此条件。</div>
+<div class="block">按 `sca4dj.instance.capabilities` 决定被标注的类或 Bean 方法是否参与容器装配；功能声明 Bean（`InstanceCapability`）本身不应使用此注解。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="CoreJacksonAutoConfiguration.html" title="class in com.sca4d.core.spring.config">CoreJacksonAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">配置 Spring Boot HTTP JSON 格式和脚手架内部稳定 JSON 映射器。</div>
+<div class="block">配置 Spring Boot HTTP JSON 的名称类型和长整数输出，并提供脚手架内部使用的 `Sca4djMapper`。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CoreRedisAutoConfiguration.html" title="class in com.sca4d.core.spring.config">CoreRedisAutoConfiguration</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -98,7 +98,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="CoreSpringAutoConfiguration.html" title="class in com.sca4d.core.spring.config">CoreSpringAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">统一导入 Core Spring 的内部 Bean 工厂，保持自动配置条件和排除语义。</div>
+<div class="block">导入 Core Spring 各配置类并绑定其配置属性，启用 AspectJ 代理；本类不直接定义 Bean。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CoreSpringProperties.html" title="class in com.sca4d.core.spring.config">CoreSpringProperties</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -122,15 +122,15 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="InstanceAutoConfiguration.html" title="class in com.sca4d.core.spring.config">InstanceAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">校验当前进程标识并固化全部能力声明及启用选择。</div>
+<div class="block">校验 `sca4dj.instance.id` 并生成本进程的功能启用快照（`InstanceCapabilities`）。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="InstanceCapabilityCondition.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityCondition</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">在 Bean 定义阶段读取实例能力选择，防止停用功能启动消费者或监听器。</div>
+<div class="block">在 Bean 定义阶段读取 `sca4dj.instance.capabilities`，未启用功能的 Bean 不会被创建，因此其中的消费者和监听器也不会启动。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="InstanceCapabilityFilter.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityFilter</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">在业务 API 入口检查本实例能力，不替代认证、权限或 Gateway 回调校验。</div>
+<div class="block">在业务 API 入口检查当前实例是否启用了请求路径所需的功能，不替代认证、权限或 Gateway 回调校验。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="InstanceEnvironmentPostProcessor.html" title="class in com.sca4d.core.spring.config">InstanceEnvironmentPostProcessor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -138,7 +138,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">配置进程执行位置和入口能力选择，不影响调用者身份或行级数据范围。</div>
+<div class="block">配置进程标识和启用的功能入口，不影响调用者身份或行级数据范围。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="WebRequestProperties.html" title="class in com.sca4d.core.spring.config">WebRequestProperties</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">配置整个 Servlet 应用的慢 HTTP 请求判定阈值。</div>
 </div>
 </div>
 </div>

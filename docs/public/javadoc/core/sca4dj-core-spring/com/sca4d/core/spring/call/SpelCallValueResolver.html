@@ -185,6 +185,9 @@ implements com.sca4d.core.api.call.SPICallValueResolver</span></div>
 <dd><code>execution</code> - 当前方法执行</dd>
 <dt>Returns:</dt>
 <dd>表达式原始值，包括明确的空值</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 表达式为空白、引用未定义变量，或在调用前读取 `result`、`error`、`outcome` 时抛出</dd>
+<dd><code><a href="../exception/CoreSpringException.html" title="class in com.sca4d.core.spring.exception">CoreSpringException</a></code> - 表达式解析或取值失败时抛出</dd>
 </dl>
 </section>
 </li>

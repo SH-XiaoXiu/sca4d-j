@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/audit/query/AuditQuery.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
@@ -66,12 +66,30 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/AuditRepository.html#append(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">append(AuditRecord)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
 <dd>
-<div class="block">追加一条写入后不再更新的审计行。</div>
+<div class="block">追加一条写入后不再更新的审计行，并在同一事务中写入关联资源。</div>
 </dd>
 <dt><a href="com/sca4d/audit/recording/AuditRepository.html#appendDelivery(long,com.sca4d.audit.recording.AuditMessage)" class="member-name-link">appendDelivery(long, AuditMessage)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
 <dd>
 <div class="block">使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。</div>
 </dd>
+<dt><a href="com/sca4d/audit/recording/AuditRepository.html#appendFrozen(com.sca4d.audit.recording.FrozenAuditEntry)" class="member-name-link">appendFrozen(FrozenAuditEntry)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
+<dd>
+<div class="block">为已冻结字段分配主键并追加单条审计行。</div>
+</dd>
+<dt><a href="com/sca4d/audit/query/AuditAssociationService.html#associate(long,java.util.Collection)" class="member-name-link">associate(long, Collection&lt;? extends Resource&gt;)</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditAssociationService.html" title="class in com.sca4d.audit.query">AuditAssociationService</a></dt>
+<dd>
+<div class="block">为已经保存的审计记录追加资源快照关联。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/AuditRepository.html#associate(long,java.util.Collection)" class="member-name-link">associate(long, Collection&lt;? extends Resource&gt;)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
+<dd>
+<div class="block">幂等追加关联，不改写原审计事实；关联时间直接取原记录。</div>
+</dd>
+<dt><a href="com/sca4d/audit/query/AuditAssociationService.html" class="type-name-link" title="class in com.sca4d.audit.query">AuditAssociationService</a> - Class in <a href="com/sca4d/audit/query/package-summary.html">com.sca4d.audit.query</a></dt>
+<dd>
+<div class="block">为历史审计追加有证据的资源关联，不改写原记录或已有关系。</div>
+</dd>
+<dt><a href="com/sca4d/audit/query/AuditAssociationService.html#%3Cinit%3E(com.sca4d.audit.recording.AuditRepository)" class="member-name-link">AuditAssociationService(AuditRepository)</a> - Constructor for class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditAssociationService.html" title="class in com.sca4d.audit.query">AuditAssociationService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/config/AuditAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.audit.config">AuditAutoConfiguration</a> - Class in <a href="com/sca4d/audit/config/package-summary.html">com.sca4d.audit.config</a></dt>
 <dd>
 <div class="block">自动装配通用审计编码、数据库记录器和查询服务。</div>
@@ -84,8 +102,28 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html#%3Cinit%3E(long,java.lang.String,com.sca4d.core.api.audit.AuditActor,com.sca4d.core.api.audit.AuditOperation,com.sca4d.core.api.resource.Resource,com.sca4d.core.api.audit.AuditResult,com.sca4d.audit.payload.AuditPayloadData,com.sca4d.core.api.audit.HttpCall,java.time.Instant,java.lang.String)" class="member-name-link">AuditEntry(long, String, AuditActor, AuditOperation, Resource, AuditResult, AuditPayloadData, HttpCall, Instant, String)</a> - Constructor for class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
 <dd>
+<div class="block">创建没有链路元数据的历史测试记录。</div>
+</dd>
+<dt><a href="com/sca4d/audit/query/AuditEntry.html#%3Cinit%3E(long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.core.api.audit.AuditActor,com.sca4d.core.api.audit.AuditOperation,com.sca4d.core.api.resource.Resource,com.sca4d.core.api.audit.AuditResult,com.sca4d.audit.payload.AuditPayloadData,com.sca4d.core.api.audit.HttpCall,java.time.Instant,java.lang.String)" class="member-name-link">AuditEntry(long, String, String, String, String, AuditActor, AuditOperation, Resource, AuditResult, AuditPayloadData, HttpCall, Instant, String)</a> - Constructor for class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
+<dd>
 <div class="block">创建已从数据库恢复的审计记录。</div>
 </dd>
+<dt><a href="com/sca4d/audit/exception/AuditException.html" class="type-name-link" title="class in com.sca4d.audit.exception">AuditException</a> - Exception Class in <a href="com/sca4d/audit/exception/package-summary.html">com.sca4d.audit.exception</a></dt>
+<dd>
+<div class="block">审计模块的运行时故障，例如审计载荷编解码失败。</div>
+</dd>
+<dt><a href="com/sca4d/audit/exception/AuditException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">AuditException(String)</a> - Constructor for exception class com.sca4d.audit.exception.<a href="com/sca4d/audit/exception/AuditException.html" title="class in com.sca4d.audit.exception">AuditException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/audit/exception/AuditException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">AuditException(String, Throwable)</a> - Constructor for exception class com.sca4d.audit.exception.<a href="com/sca4d/audit/exception/AuditException.html" title="class in com.sca4d.audit.exception">AuditException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/audit/query/AuditEntry.html#auditId()" class="member-name-link">auditId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#auditId()" class="member-name-link">auditId()</a> - Method in class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/mapper/AuditMapper.html" class="type-name-link" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a> - Interface in <a href="com/sca4d/audit/recording/mapper/package-summary.html">com.sca4d.audit.recording.mapper</a></dt>
 <dd>
 <div class="block">读写 `audit_record` 的审计列，并提供按条件统计、分页和单条查询。</div>
@@ -96,20 +134,32 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/audit/recording/AuditMessageCodec.html" class="type-name-link" title="class in com.sca4d.audit.recording">AuditMessageCodec</a> - Class in <a href="com/sca4d/audit/recording/package-summary.html">com.sca4d.audit.recording</a></dt>
 <dd>
-<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+<div class="block">读取和写入审计消息 v1 载荷；新消息由 <a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording"><code>AuditMessageV2Codec</code></a> 写入。</div>
 </dd>
 <dt><a href="com/sca4d/audit/recording/AuditMessageCodec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">AuditMessageCodec(ObjectMapper)</a> - Constructor for class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></dt>
 <dd>
-<div class="block">使用 Messaging 同一 JSON 基础契约，显式写入协议字段。</div>
+<div class="block">使用 Messaging 同一 JSON 基础契约，保留审计消息 v1 的字段。</div>
 </dd>
 <dt><a href="com/sca4d/audit/recording/AuditMessageHandler.html" class="type-name-link" title="class in com.sca4d.audit.recording">AuditMessageHandler</a> - Class in <a href="com/sca4d/audit/recording/package-summary.html">com.sca4d.audit.recording</a></dt>
 <dd>
 <div class="block">独立事务追加审计，成功提交后确认消息；技术失败由 Messaging 重试并最终进入 DLQ。</div>
 </dd>
-<dt><a href="com/sca4d/audit/recording/AuditMessageHandler.html#%3Cinit%3E(com.sca4d.audit.recording.AuditRepository,com.sca4d.audit.recording.AuditMessageCodec)" class="member-name-link">AuditMessageHandler(AuditRepository, AuditMessageCodec)</a> - Constructor for class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageHandler.html" title="class in com.sca4d.audit.recording">AuditMessageHandler</a></dt>
+<dt><a href="com/sca4d/audit/recording/AuditMessageHandler.html#%3Cinit%3E(com.sca4d.audit.recording.AuditRepository,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">AuditMessageHandler(AuditRepository, MessageCodec&lt;AuditMessage&gt;)</a> - Constructor for class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageHandler.html" title="class in com.sca4d.audit.recording">AuditMessageHandler</a></dt>
 <dd>
 <div class="block">使用 Audit 模块的持久化入口和消息编码器消费可靠审计。</div>
 </dd>
+<dt><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" class="type-name-link" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a> - Class in <a href="com/sca4d/audit/recording/package-summary.html">com.sca4d.audit.recording</a></dt>
+<dd>
+<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">AuditMessageV2Codec(ObjectMapper)</a> - Constructor for class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></dt>
+<dd>
+<div class="block">使用 Messaging 同一 JSON 基础契约，显式写入协议字段。</div>
+</dd>
+<dt><a href="com/sca4d/audit/query/AuditEntry.html#auditParentId()" class="member-name-link">auditParentId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#auditParentId()" class="member-name-link">auditParentId()</a> - Method in class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/AuditPayloadData.html" class="type-name-link" title="class in com.sca4d.audit.payload">AuditPayloadData</a> - Class in <a href="com/sca4d/audit/payload/package-summary.html">com.sca4d.audit.payload</a></dt>
 <dd>
 <div class="block">返回审计 payload 的持久化类型、版本、原始 JSON 和可选强类型结果。</div>
@@ -146,6 +196,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建审计记录分页查询。</div>
 </dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#%3Cinit%3E(java.lang.String,java.lang.Long,java.lang.Long,java.lang.String,com.sca4d.core.api.audit.AuditResult,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.query.PageRequest,java.lang.String,java.lang.String)" class="member-name-link">AuditQuery(String, Long, Long, String, AuditResult, String, String, Instant, Instant, PageRequest, String, String)</a> - Constructor for class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>
+<div class="block">在普通条件外按已冻结的关联资源过滤；必须同时提供类型和标识。</div>
+</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#%3Cinit%3E(java.lang.String,java.lang.Long,java.lang.Long,java.lang.String,com.sca4d.core.api.audit.AuditResult,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.query.PageRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">AuditQuery(String, Long, Long, String, AuditResult, String, String, Instant, Instant, PageRequest, String, String, String, String)</a> - Constructor for class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>
+<div class="block">在身份、资源和时间条件外按审计链或直接父记录筛选。</div>
+</dd>
 <dt><a href="com/sca4d/audit/query/AuditQueryService.html" class="type-name-link" title="class in com.sca4d.audit.query">AuditQueryService</a> - Class in <a href="com/sca4d/audit/query/package-summary.html">com.sca4d.audit.query</a></dt>
 <dd>
 <div class="block">按标识或筛选条件读取 `audit_record` 中的审计记录。</div>
@@ -162,6 +220,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建负责审计领域对象和数据库列值转换的 Repository。</div>
 </dd>
+<dt><a href="com/sca4d/audit/query/AuditEntry.html#auditTrailId()" class="member-name-link">auditTrailId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#auditTrailId()" class="member-name-link">auditTrailId()</a> - Method in class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
@@ -173,6 +235,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/AuditMessageHandler.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageHandler.html" title="class in com.sca4d.audit.recording">AuditMessageHandler</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/AuditMessage.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a></dt>
 <dd>
 <div class="block">审计可靠交接使用的消息编码。</div>
@@ -183,6 +247,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">装配 Audit 配置、payload 编码、数据库记录和查询服务。</div>
 </dd>
+<dt><a href="com/sca4d/audit/exception/package-summary.html">com.sca4d.audit.exception</a> - package com.sca4d.audit.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/package-summary.html">com.sca4d.audit.payload</a> - package com.sca4d.audit.payload</dt>
 <dd>
 <div class="block">定义 Audit payload 的编码、掩码和类型注册。</div>
@@ -214,6 +280,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/audit/recording/AuditMessageCodec.html#decode(byte%5B%5D)" class="member-name-link">decode(byte[])</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html#decode(byte%5B%5D)" class="member-name-link">decode(byte[])</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></dt>
+<dd>
+<div class="block">解析 V2 JSON 字节为 AuditMessage。根节点必须是 JSON 对象；可选字段必须成组出现或成组为空，
+ relatedResources 存在时必须是每项都含 type 和 id 的数组。JSON 语法错误和字段不合法时抛出异常，不返回部分解析结果。</div>
+</dd>
 <dt><a href="com/sca4d/audit/payload/AuditPayloadJson.html#decode(java.lang.String,int,java.lang.String)" class="member-name-link">decode(String, int, String)</a> - Method in class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a></dt>
 <dd>
 <div class="block">返回原始 JSON，并在存在对应 Codec 且内容未截断时附加强类型结果。</div>
@@ -225,6 +296,8 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/audit/recording/AuditMessageCodec.html#encode(com.sca4d.audit.recording.AuditMessage)" class="member-name-link">encode(AuditMessage)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html#encode(com.sca4d.audit.recording.AuditMessage)" class="member-name-link">encode(AuditMessage)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/AuditPayloadJson.html#encode(com.sca4d.core.api.audit.AuditPayload)" class="member-name-link">encode(AuditPayload)</a> - Method in class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a></dt>
 <dd>
 <div class="block">把可选强类型载荷转换成可以直接写入数据库的 JSON。</div>
@@ -233,7 +306,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 audit_record 查询和写入使用的数据库列值。</div>
 </dd>
-<dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#%3Cinit%3E(long,java.lang.String,long,java.lang.Long,long,java.lang.String,java.lang.String,java.lang.String,com.sca4d.core.api.audit.AuditResult,java.lang.String,java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.lang.String)" class="member-name-link">EncodedAuditEntry(long, String, long, Long, long, String, String, String, AuditResult, String, Integer, String, String, String, String, String, Instant, String)</a> - Constructor for class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
+<dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#%3Cinit%3E(long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.Long,long,java.lang.String,java.lang.String,java.lang.String,com.sca4d.core.api.audit.AuditResult,java.lang.String,java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.lang.String)" class="member-name-link">EncodedAuditEntry(long, String, String, String, String, long, Long, long, String, String, String, AuditResult, String, Integer, String, String, String, String, String, Instant, String)</a> - Constructor for class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
 <dd>
 <div class="block">创建已经完成 JSON 编码的审计字段。</div>
 </dd>
@@ -249,6 +322,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/audit/recording/AuditRepository.html#find(long)" class="member-name-link">find(long)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
 <dd>
 <div class="block">按标识读取审计行。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/FrozenAuditEntry.html" class="type-name-link" title="class in com.sca4d.audit.recording">FrozenAuditEntry</a> - Class in <a href="com/sca4d/audit/recording/package-summary.html">com.sca4d.audit.recording</a></dt>
+<dd>
+<div class="block">保存交接时已编码的审计行及关联资源，供同步、队列和提交后记录共用。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
@@ -289,6 +366,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">消息重投时按主键去重，不覆盖首次写入的审计事实。</div>
 </dd>
+<dt><a href="com/sca4d/audit/recording/mapper/AuditMapper.html#insertResources(long,java.util.List)" class="member-name-link">insertResources(long, List&lt;Resource.Ref&gt;)</a> - Method in interface com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a></dt>
+<dd>
+<div class="block">只从存在的原审计行复制时间，重复资源关联不重复插入。</div>
+</dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html#instanceId()" class="member-name-link">instanceId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
 <dd>
 <div class="block">操作实际发生的进程标识；旧审计记录为空，不属于 IAM 主体。</div>
@@ -314,6 +395,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#matchingResources(java.util.List)" class="member-name-link">matchingResources(List&lt;Resource.Ref&gt;)</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>
+<div class="block">限定主目标或关联资源；空集合明确不匹配记录，不会取消过滤。</div>
+</dd>
 <dt><a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html#mode()" class="member-name-link">mode()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html" title="class in com.sca4d.audit.recording">AfterCommitAuditRecorder</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/QueuedAuditRecorder.html#mode()" class="member-name-link">mode()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/QueuedAuditRecorder.html" title="class in com.sca4d.audit.recording">QueuedAuditRecorder</a></dt>
@@ -345,6 +430,10 @@ loadScripts(document, 'script');</script>
 <div class="block">按可选身份、操作、结果、目标和时间条件分页读取审计记录。</div>
 </dd>
 <dt><a href="com/sca4d/audit/recording/AuditRepository.html#page(com.sca4d.audit.query.AuditQuery)" class="member-name-link">page(AuditQuery)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#parent(java.lang.String)" class="member-name-link">parent(String)</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#parentId()" class="member-name-link">parentId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html#payload()" class="member-name-link">payload()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
 <dd>&nbsp;</dd>
@@ -386,11 +475,29 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/audit/recording/QueuedAuditRecorder.html#record(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">record(AuditRecord)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/QueuedAuditRecorder.html" title="class in com.sca4d.audit.recording">QueuedAuditRecorder</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#relatedId()" class="member-name-link">relatedId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#relatedType()" class="member-name-link">relatedType()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQueryService.html#relatesTo(long,com.sca4d.core.api.resource.Resource)" class="member-name-link">relatesTo(long, Resource)</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQueryService.html" title="class in com.sca4d.audit.query">AuditQueryService</a></dt>
+<dd>
+<div class="block">判断审计记录是否保存了指定资源的历史关联。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/AuditRepository.html#relatesTo(long,com.sca4d.core.api.resource.Resource)" class="member-name-link">relatesTo(long, Resource)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
+<dd>
+<div class="block">查询快照关联，不通过当前业务归属推断。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/mapper/AuditMapper.html#relatesTo(long,java.lang.String,java.lang.String)" class="member-name-link">relatesTo(long, String, String)</a> - Method in interface com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a></dt>
+<dd>
+<div class="block">校验记录是否属于指定资源快照。</div>
+</dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html#requestId()" class="member-name-link">requestId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/query/AuditQuery.html#requestId()" class="member-name-link">requestId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#requestId()" class="member-name-link">requestId()</a> - Method in class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#resourceMatches()" class="member-name-link">resourceMatches()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html#result()" class="member-name-link">result()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
 <dd>&nbsp;</dd>
@@ -403,6 +510,18 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
+<dt><a href="com/sca4d/audit/query/AuditQueryService.html#scan(long,long,int)" class="member-name-link">scan(long, long, int)</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQueryService.html" title="class in com.sca4d.audit.query">AuditQueryService</a></dt>
+<dd>
+<div class="block">按持久化标识范围有界扫描审计记录。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/AuditRepository.html#scan(long,long,int)" class="member-name-link">scan(long, long, int)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
+<dd>
+<div class="block">按主键游标读取原始事实，用于有界历史补齐。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/mapper/AuditMapper.html#scan(long,long,int)" class="member-name-link">scan(long, long, int)</a> - Method in interface com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a></dt>
+<dd>
+<div class="block">有界主键游标扫描，不依赖分页偏移。</div>
+</dd>
 <dt><a href="com/sca4d/audit/recording/mapper/AuditMapper.html#selectById(long)" class="member-name-link">selectById(long)</a> - Method in interface com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/mapper/AuditMapper.html#selectPage(com.sca4d.audit.query.AuditQuery)" class="member-name-link">selectPage(AuditQuery)</a> - Method in interface com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a></dt>
@@ -444,6 +563,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#targetType()" class="member-name-link">targetType()</a> - Method in class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#trail(java.lang.String)" class="member-name-link">trail(String)</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/query/AuditQuery.html#trailId()" class="member-name-link">trailId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/AuditPayloadData.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/AuditPayloadData.html" title="class in com.sca4d.audit.payload">AuditPayloadData</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/EncodedAuditPayload.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></dt>
@@ -458,11 +581,15 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/audit/recording/AuditMessageCodec.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/AuditPayloadData.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/AuditPayloadData.html" title="class in com.sca4d.audit.payload">AuditPayloadData</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/EncodedAuditPayload.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/AuditMessageCodec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:W">W</h2>
@@ -472,7 +599,7 @@ loadScripts(document, 'script');</script>
 <div class="block">为冻结的审计字段分配数据库主键，其他列保持不变。</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

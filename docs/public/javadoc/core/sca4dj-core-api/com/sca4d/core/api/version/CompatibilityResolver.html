@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">CompatibilityResolver</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;&nbsp;rules)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">CompatibilityResolver</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;&nbsp;rules)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建静态矩阵并拒绝重叠范围，避免按文件顺序选择行为。</div>
 </div>
@@ -121,14 +121,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolve(com.sca4d.core.api.version.ClientVersion,java.lang.String,java.lang.Integer)" class="member-name-link">resolve</a><wbr>(<a href="ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a>&nbsp;client,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capability,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolve(com.sca4d.core.api.version.ClientVersion,java.lang.String,java.lang.Integer)" class="member-name-link">resolve</a><wbr>(@NotNull <a href="ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a>&nbsp;client,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capability,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;routeContract)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">显式路由契约和请求头不一致时拒绝；未显式选择时使用客户端匹配的最高可用契约。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rules()" class="member-name-link">rules</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
@@ -151,7 +151,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.List)">
 <h3>CompatibilityResolver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CompatibilityResolver</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;&nbsp;rules)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CompatibilityResolver</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;&nbsp;rules)</span></div>
 <div class="block">创建静态矩阵并拒绝重叠范围，避免按文件顺序选择行为。</div>
 </section>
 </li>
@@ -166,7 +167,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rules()">
 <h3>rules</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;</span>&nbsp;<span class="element-name">rules</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a>&gt;</span>&nbsp;<span class="element-name">rules</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>用于公开查询的不可变规则</dd>
@@ -176,8 +178,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(com.sca4d.core.api.version.ClientVersion,java.lang.String,java.lang.Integer)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></span>&nbsp;<span class="element-name">resolve</span><wbr><span class="parameters">(<a href="ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a>&nbsp;client,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capability,
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></span>&nbsp;<span class="element-name">resolve</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a>&nbsp;client,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capability,
  @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;routeContract)</span></div>
 <div class="block">显式路由契约和请求头不一致时拒绝；未显式选择时使用客户端匹配的最高可用契约。</div>

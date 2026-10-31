@@ -140,7 +140,8 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;action)</span></div>
 <div class="block">在当前真实事务提交后执行动作；回滚时不执行。
 
- <p>动作在提交线程执行，不持久化或重试。一个动作失败时仍执行其余动作，最后抛出第一个异常，并把后续异常放入 suppressed。</div>
+ <p>动作在提交线程执行，不持久化或重试。一个动作失败时仍执行其余动作，最后抛出第一个异常，并把后续异常放入 suppressed。
+ 异常在事务已经提交后沿 commit 调用链抛出，调用方不能据此把该事务当作回滚。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>action</code> - 不依赖原事务继续写库的进程内动作</dd>

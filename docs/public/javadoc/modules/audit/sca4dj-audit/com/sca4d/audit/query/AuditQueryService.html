@@ -131,6 +131,19 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按可选身份、操作、结果、目标和时间条件分页读取审计记录。</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relatesTo(long,com.sca4d.core.api.resource.Resource)" class="member-name-link">relatesTo</a><wbr>(long&nbsp;id,
+ @NotNull com.sca4d.core.api.resource.Resource&nbsp;resource)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">判断审计记录是否保存了指定资源的历史关联。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scan(long,long,int)" class="member-name-link">scan</a><wbr>(long&nbsp;afterId,
+ long&nbsp;throughId,
+ int&nbsp;size)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按持久化标识范围有界扫描审计记录。</div>
+</div>
 </div>
 </div>
 </div>
@@ -164,6 +177,47 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="relatesTo(long,com.sca4d.core.api.resource.Resource)">
+<h3>relatesTo</h3>
+<div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">relatesTo</span><wbr><span class="parameters">(long&nbsp;id,
+ @NotNull
+ @NotNull com.sca4d.core.api.resource.Resource&nbsp;resource)</span></div>
+<div class="block">判断审计记录是否保存了指定资源的历史关联。
+
+ <p>业务详情查询应先完成资源授权，再使用此方法限制记录；结果不读取资源当前归属。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - 审计记录标识</dd>
+<dd><code>resource</code> - 要匹配的资源</dd>
+<dt>Returns:</dt>
+<dd>该记录保存过同类型、同标识的资源关联时为 true</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="scan(long,long,int)">
+<h3>scan</h3>
+<div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</span>&nbsp;<span class="element-name">scan</span><wbr><span class="parameters">(long&nbsp;afterId,
+ long&nbsp;throughId,
+ int&nbsp;size)</span></div>
+<div class="block">按持久化标识范围有界扫描审计记录。
+
+ <p>调用方可以保存最后一条标识作为下次 <code>afterId</code>，避免深分页；单次最多读取 500 条。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>afterId</code> - 不包含的起始标识</dd>
+<dd><code>throughId</code> - 包含的结束标识</dd>
+<dd><code>size</code> - 本次读取上限，范围为 1 到 500</dd>
+<dt>Returns:</dt>
+<dd>按标识递增排列的审计记录</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 范围或批量大小无效时抛出</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="loadById(long)">
 <h3>loadById</h3>

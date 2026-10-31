@@ -50,7 +50,7 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/notification/email/EmailNotificationErrorCode.html" title="enum class in com.sca4d.notification.email">EmailNotificationErrorCode</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
-<div class="block">Email 通知配置、模板和投递使用的稳定错误码。</div>
+<div class="block">Email 通知配置、模板和投递失败时返回的错误码。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/config/EmailNotificationProperties.html" title="class in com.sca4d.notification.email.config">EmailNotificationProperties</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -113,7 +113,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">提供 SMTP 配置查询、加密列读取和版本保护的持久化语义。</div>
+<div class="block">查询 SMTP 配置、读取加密密码列，并按版本号更新或删除配置记录。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -133,26 +133,30 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">Email 模块拥有的模板持久化边界。</div>
+<div class="block">读写 Email 模板记录，隐藏 Mapper 和影响行数，并负责版本校验。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存 Email 模板的主题、纯文本正文和 HTML 正文源码。</div>
+<div class="block">保存 Email 模板一个 Locale 的显示名称、主题、纯文本正文和 HTML 正文源码。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Email 模板 Mapper 读取的数据库状态。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/notification/email/exception/NotificationEmailException.html" title="class in com.sca4d.notification.email.exception">NotificationEmailException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">邮件通知的依赖或数据故障，例如 SMTP 配置或发送结果异常。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存已经完成变量转义、主题校验和 HTML 清洗的 Email 内容。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 JavaMail 和 SecretKeyring 建立三种 TLS 模式的 SMTP 连接。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/notification/email/sender/SmtpSecurity.html" title="enum class in com.sca4d.notification.email.sender">SmtpSecurity</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/notification/email/sender/SmtpSecurity.html" title="enum class in com.sca4d.notification.email.sender">SmtpSecurity</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">声明 SMTP 连接使用明文、STARTTLS 升级或隐式 TLS。</div>
 </div>
 </div>

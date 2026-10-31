@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Package:</p>
 <ul>
 <li><a href="#package-description">Description</a></li>
-<li>Related Packages</li>
+<li><a href="#related-package-summary">Related Packages</a></li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </li>
@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Package:&nbsp;</li>
 <li><a href="#package-description">Description</a>&nbsp;|&nbsp;</li>
-<li>Related Packages&nbsp;|&nbsp;</li>
+<li><a href="#related-package-summary">Related Packages</a>&nbsp;|&nbsp;</li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </div>
@@ -76,8 +76,19 @@ loadScripts(document, 'script');</script>
 <section class="summary">
 <ul class="summary-list">
 <li>
+<div id="related-package-summary">
+<div class="caption"><span>Related Packages</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Package</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="exception/package-summary.html">com.sca4d.core.api.concurrent.exception</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</div>
+</li>
+<li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exception Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
 <div id="class-summary.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
@@ -102,17 +113,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">把方法参数转换成字段顺序稳定的 JSON，并生成不暴露原始参数的幂等摘要。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="IdempotencyInProgressException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyInProgressException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
-<div class="block">表示同一幂等请求仍由其他执行者处理。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">一次幂等操作的不透明键。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="IdempotencyKeyConflictException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKeyConflictException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
-<div class="block">表示同一幂等键已经用于不同的方法参数。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
@@ -130,33 +133,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">表示 `@RateLimited` 没有声明额外的自定义限流键解析器。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="OptimisticLockException.html" title="class in com.sca4d.core.api.concurrent">OptimisticLockException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
-<div class="block">预期版本与当前版本不一致时抛出的乐观锁异常（Optimistic Lock Exception）。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimit.html" title="class in com.sca4d.core.api.concurrent">RateLimit</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RateLimit.html" title="class in com.sca4d.core.api.concurrent">RateLimit</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">指定时间窗口内允许的最大调用次数。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
 <div class="block">声明限流键使用的稳定维度。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">解析 `@RateLimited` 的内置和自定义维度，并取得每个维度的限流额度。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存一次限流额度判断是否允许以及拒绝后的等待时间。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RateLimiter.html" title="interface in com.sca4d.core.api.concurrent">RateLimiter</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RateLimiter.html" title="interface in com.sca4d.core.api.concurrent">RateLimiter</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">使用共享令牌桶判断一个业务键是否仍有调用额度。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="RateLimitExceededException.html" title="class in com.sca4d.core.api.concurrent">RateLimitExceededException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
-<div class="block">表示调用没有取得全部限流额度，并携带调用方再次尝试前的等待秒数。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -173,10 +168,6 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">为一次根资源写入选择调用方提交的版本条件或 Repository 当前版本。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="VersionPreconditionFailedException.html" title="class in com.sca4d.core.api.concurrent">VersionPreconditionFailedException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
-<div class="block">表示调用方提交的预期版本与持久化对象的当前版本不一致。</div>
 </div>
 </div>
 </div>

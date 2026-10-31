@@ -221,9 +221,9 @@ loadScripts(document, 'script');</script>
 <div class="block">从文本开头截取不超过指定 UTF-16 长度的内容。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>maxLength</code> - 允许保留的最大长度；非正数产生空文本</dd>
+<dd><code>maxLength</code> - 允许保留的最大长度；非正数时结果为空文本</dd>
 <dt>Returns:</dt>
-<dd>当前值为空时保留空值，否则返回包含截取结果的新对象</dd>
+<dd>当前值为空且 maxLength 为正数时保留空值；maxLength 非正数时返回空文本；否则返回包含截取结果的新对象</dd>
 </dl>
 </section>
 </li>
@@ -267,7 +267,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>当前对象</dd>
 <dt>Throws:</dt>
-<dd><code><a href="DataAssertionException.html" title="class in com.sca4d.core.api.data">DataAssertionException</a></code> - 当前文本为空或空白时抛出</dd>
+<dd><code><a href="exception/DataAssertionException.html" title="class in com.sca4d.core.api.data.exception">DataAssertionException</a></code> - 当前文本为空或空白时抛出</dd>
 </dl>
 </section>
 </li>

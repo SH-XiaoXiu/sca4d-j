@@ -112,18 +112,18 @@ loadScripts(document, 'script');</script>
 <div class="block">标记当前配置删除。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(java.lang.String,java.lang.String,java.lang.String,boolean,int,java.lang.String,boolean,java.lang.String,java.lang.String)" class="member-name-link">insert</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;protocol,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(java.lang.String,com.sca4d.auth.federation.FederatedProviderProtocol,com.sca4d.auth.federation.FederatedProviderStatus,boolean,int,com.sca4d.auth.federation.FederatedUnlinkedIdentityAction,boolean,java.lang.String,java.lang.String)" class="member-name-link">insert</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
+ @NotNull <a href="../../FederatedProviderProtocol.html" title="enum class in com.sca4d.auth.federation">FederatedProviderProtocol</a>&nbsp;protocol,
+ @NotNull <a href="../../FederatedProviderStatus.html" title="enum class in com.sca4d.auth.federation">FederatedProviderStatus</a>&nbsp;status,
  boolean&nbsp;loginPageVisible,
  int&nbsp;displayOrder,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;unlinkedIdentityAction,
+ @NotNull <a href="../../FederatedUnlinkedIdentityAction.html" title="enum class in com.sca4d.auth.federation">FederatedUnlinkedIdentityAction</a>&nbsp;unlinkedIdentityAction,
  boolean&nbsp;autoLinkVerifiedEmail,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;i18n,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iconReference)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings</a><wbr>(long&nbsp;providerId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings</a><wbr>(long&nbsp;providerId,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;issuer,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secretKeyId,
@@ -132,7 +132,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tokenEndpoint,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userInfoEndpoint,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jwksEndpoint,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientAuthentication,
+ @NotNull <a href="../../FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a>&nbsp;clientAuthentication,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scopes,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;profileMapping,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authorizationParameters)</code></div>
@@ -163,9 +163,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateConfigurationVersion(long,com.sca4d.core.api.concurrent.Version)" class="member-name-link">updateConfigurationVersion</a><wbr>(long&nbsp;providerId,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">按 Provider 版本原子确认配置仍属于当前状态。</div>
-</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -206,20 +204,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="insert(java.lang.String,java.lang.String,java.lang.String,boolean,int,java.lang.String,boolean,java.lang.String,java.lang.String)">
+<section class="detail" id="insert(java.lang.String,com.sca4d.auth.federation.FederatedProviderProtocol,com.sca4d.auth.federation.FederatedProviderStatus,boolean,int,com.sca4d.auth.federation.FederatedUnlinkedIdentityAction,boolean,java.lang.String,java.lang.String)">
 <h3>insert</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insert</span><wbr><span class="parameters">(@Param("code") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
  @Param("protocol") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;protocol,
+ @NotNull <a href="../../FederatedProviderProtocol.html" title="enum class in com.sca4d.auth.federation">FederatedProviderProtocol</a>&nbsp;protocol,
  @Param("status") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;status,
+ @NotNull <a href="../../FederatedProviderStatus.html" title="enum class in com.sca4d.auth.federation">FederatedProviderStatus</a>&nbsp;status,
  @Param("loginPageVisible")
  boolean&nbsp;loginPageVisible,
  @Param("displayOrder")
  int&nbsp;displayOrder,
  @Param("unlinkedIdentityAction") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;unlinkedIdentityAction,
+ @NotNull <a href="../../FederatedUnlinkedIdentityAction.html" title="enum class in com.sca4d.auth.federation">FederatedUnlinkedIdentityAction</a>&nbsp;unlinkedIdentityAction,
  @Param("autoLinkVerifiedEmail")
  boolean&nbsp;autoLinkVerifiedEmail,
  @Param("i18n") @NotNull
@@ -283,7 +281,7 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte[],java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
+<section class="detail" id="insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte[],java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String)">
 <h3>insertSettings</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insertSettings</span><wbr><span class="parameters">(@Param("providerId")
  long&nbsp;providerId,
@@ -303,7 +301,7 @@ loadScripts(document, 'script');</script>
  @Param("jwksEndpoint") @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jwksEndpoint,
  @Param("clientAuthentication") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientAuthentication,
+ @NotNull <a href="../../FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a>&nbsp;clientAuthentication,
  @Param("scopes") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scopes,
  @Param("profileMapping") @NotNull
@@ -320,7 +318,10 @@ loadScripts(document, 'script');</script>
  long&nbsp;providerId,
  @Param("expectedVersion") @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</span></div>
-<div class="block">按 Provider 版本原子确认配置仍属于当前状态。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>修改行数；按期望版本原子递增 Provider 版本，版本不匹配或 Provider 已删除时为零</dd>
+</dl>
 </section>
 </li>
 </ul>

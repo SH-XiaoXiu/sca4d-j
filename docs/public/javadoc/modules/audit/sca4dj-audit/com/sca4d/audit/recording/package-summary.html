@@ -102,19 +102,27 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+<div class="block">读取和写入审计消息 v1 载荷；新消息由 <a href="AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording"><code>AuditMessageV2Codec</code></a> 写入。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditMessageHandler.html" title="class in com.sca4d.audit.recording">AuditMessageHandler</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">独立事务追加审计，成功提交后确认消息；技术失败由 Messaging 重试并最终进入 DLQ。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">向 `audit_record` 追加审计行，并按查询条件读取审计行。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">把 Core AuditRecord 同步追加到 audit_record。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FrozenAuditEntry.html" title="class in com.sca4d.audit.recording">FrozenAuditEntry</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">保存交接时已编码的审计行及关联资源，供同步、队列和提交后记录共用。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="QueuedAuditRecorder.html" title="class in com.sca4d.audit.recording">QueuedAuditRecorder</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

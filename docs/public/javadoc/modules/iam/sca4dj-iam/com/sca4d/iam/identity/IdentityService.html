@@ -382,6 +382,8 @@ loadScripts(document, 'script');</script>
 <dd><code>type</code> - 固定 Subject 类型</dd>
 <dt>Returns:</dt>
 <dd>新建的 Subject</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 请求创建 SYSTEM 类型时抛出，SYSTEM Subject 只能由启动登记</dd>
 </dl>
 </section>
 </li>
@@ -434,7 +436,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>启用的 Subject</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Subject 不存在或未启用时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Subject 不存在或未启用时抛出</dd>
 </dl>
 </section>
 </li>
@@ -452,7 +454,8 @@ loadScripts(document, 'script');</script>
 <dd><code>id</code> - Subject 标识</dd>
 <dd><code>status</code> - 新状态</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 目标不存在时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 目标不存在时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 目标为 SYSTEM Subject 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -474,7 +477,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>新建的 Account</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Subject 不存在或未启用时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Subject 不存在或未启用时抛出</dd>
 </dl>
 </section>
 </li>
@@ -501,7 +504,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>新建的 Account</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Subject 不存在，或创建启用 Account 时 Subject 已停用</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Subject 不存在，或创建启用 Account 时 Subject 已停用</dd>
 </dl>
 </section>
 </li>
@@ -596,7 +599,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>启用的 Account</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Account 不存在或未启用时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Account 不存在或未启用时抛出</dd>
 </dl>
 </section>
 </li>
@@ -614,7 +617,7 @@ loadScripts(document, 'script');</script>
 <dd><code>id</code> - Account 标识</dd>
 <dd><code>status</code> - 新状态</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 目标不存在时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 目标不存在时抛出</dd>
 </dl>
 </section>
 </li>
@@ -633,7 +636,8 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>新建的 Principal 标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Java 类型没有 Principal Codec 时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Java 类型没有 Principal Codec 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 类型为 SystemPrincipal 时抛出，系统身份只能由启动登记</dd>
 </dl>
 </section>
 </li>
@@ -694,7 +698,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>保持查询标识顺序的匹配子集；缺失或不满足条件的标识被排除</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 查询指定的 Java 类型没有 Principal Codec 时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 查询指定的 Java 类型没有 Principal Codec 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -716,7 +720,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>启用的 Principal 标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Principal 不可用或类型未登记时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Principal 不可用或类型未登记时抛出</dd>
 </dl>
 </section>
 </li>
@@ -754,7 +758,8 @@ loadScripts(document, 'script');</script>
 <dd><code>id</code> - Principal 标识</dd>
 <dd><code>status</code> - 新状态</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 目标不存在时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 目标不存在时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 目标为系统身份时抛出，系统身份状态只能人工维护</dd>
 </dl>
 </section>
 </li>
@@ -775,8 +780,9 @@ loadScripts(document, 'script');</script>
 <dd><code>ids</code> - Principal 标识集合；重复标识只处理一次</dd>
 <dd><code>type</code> - Principal 精确 Java 类型</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Java 类型没有 Principal Codec 时抛出</dd>
-<dd><code>com.sca4d.core.api.persistence.AffectedRowsMismatchException</code> - 任一 Principal 不存在、类型不匹配或已经删除时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Java 类型没有 Principal Codec 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 类型为 SystemPrincipal 时抛出，系统身份只能人工迁移</dd>
+<dd><code>com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException</code> - 任一 Principal 不存在、类型不匹配或已经删除时抛出</dd>
 </dl>
 </section>
 </li>
@@ -797,8 +803,9 @@ loadScripts(document, 'script');</script>
 <dd><code>ids</code> - Principal 标识集合；重复标识只处理一次</dd>
 <dd><code>type</code> - Principal 精确 Java 类型</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Java 类型没有 Principal Codec 时抛出</dd>
-<dd><code>com.sca4d.core.api.persistence.AffectedRowsMismatchException</code> - 任一 Principal 不存在、类型不匹配或未删除时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Java 类型没有 Principal Codec 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 类型为 SystemPrincipal 时抛出，系统身份只能人工迁移</dd>
+<dd><code>com.sca4d.core.api.persistence.exception.AffectedRowsMismatchException</code> - 任一 Principal 不存在、类型不匹配或未删除时抛出</dd>
 </dl>
 </section>
 </li>
@@ -816,7 +823,8 @@ loadScripts(document, 'script');</script>
 <dd><code>accountId</code> - Account 标识</dd>
 <dd><code>principalId</code> - Principal 标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Account 或 Principal 不可用时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Account 或 Principal 不可用时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Principal 为系统身份时抛出，系统身份不能授权给登录 Account</dd>
 </dl>
 </section>
 </li>
@@ -834,7 +842,7 @@ loadScripts(document, 'script');</script>
 <dd><code>accountId</code> - Account 标识</dd>
 <dd><code>principalId</code> - Principal 标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 关系不存在时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 关系不存在时抛出</dd>
 </dl>
 </section>
 </li>
@@ -947,7 +955,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>新建登录标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - Account 不可用、类型未支持或规范值重复时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Account 不可用、类型未支持或规范值重复时抛出</dd>
 </dl>
 </section>
 </li>
@@ -968,7 +976,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>修改后的登录标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 标识不存在或规范值重复时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 标识不存在或规范值重复时抛出</dd>
 </dl>
 </section>
 </li>
@@ -989,7 +997,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>修改后的登录标识</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 标识不存在时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 标识不存在时抛出</dd>
 </dl>
 </section>
 </li>
@@ -1003,7 +1011,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>identifierId</code> - 登录标识主键</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 标识不存在时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 标识不存在时抛出</dd>
 </dl>
 </section>
 </li>

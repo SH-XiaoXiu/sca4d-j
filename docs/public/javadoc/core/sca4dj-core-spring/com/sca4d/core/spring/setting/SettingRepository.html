@@ -126,7 +126,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#erase(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">erase</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">owner 生命周期结束时物理删除指定设置行。</div>
+<div class="block">物理删除指定 owner 的设置行；owner 被删除时由调用方使用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">find</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
@@ -143,7 +143,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findCanonical(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">findCanonical</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">拒绝旧编码和归一冲突；只有确实不存在任何对应记录时才返回空。</div>
+<div class="block">按标准编码读取设置行；同一 owner 下同时存在标准编码和旧编码，或只有旧编码时抛出异常，不回退到默认值。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initializeSystem(java.lang.String,int,java.lang.String,java.lang.String,byte%5B%5D,java.lang.Integer)" class="member-name-link">initializeSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
@@ -158,7 +158,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#lockBootstrap()" class="member-name-link">lockBootstrap</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">取得当前事务持有的初始化互斥锁。</div>
+<div class="block">尝试取得初始化互斥锁，锁由当前数据库事务持有，事务结束后自动释放。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#releaseSystemSynchronization(java.lang.String)" class="member-name-link">releaseSystemSynchronization</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
@@ -334,14 +334,18 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
-<div class="block">owner 生命周期结束时物理删除指定设置行。</div>
+<div class="block">物理删除指定 owner 的设置行；owner 被删除时由调用方使用。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="lockBootstrap()">
 <h3>lockBootstrap</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">lockBootstrap</span>()</div>
-<div class="block">取得当前事务持有的初始化互斥锁。</div>
+<div class="block">尝试取得初始化互斥锁，锁由当前数据库事务持有，事务结束后自动释放。</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 其他初始化节点已持有该锁时抛出，调用方应中止本次 Settings 同步</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -352,7 +356,16 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
-<div class="block">拒绝旧编码和归一冲突；只有确实不存在任何对应记录时才返回空。</div>
+<div class="block">按标准编码读取设置行；同一 owner 下同时存在标准编码和旧编码，或只有旧编码时抛出异常，不回退到默认值。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>owner</code> - 设置所属 owner</dd>
+<dd><code>code</code> - 标准编码</dd>
+<dt>Returns:</dt>
+<dd>找到的设置行；两种编码都不存在时返回空</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 查询结果含多行，或只命中旧编码行时抛出，需要显式迁移</dd>
+</dl>
 </section>
 </li>
 </ul>

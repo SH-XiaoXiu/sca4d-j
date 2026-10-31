@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 @EnableConfigurationProperties(<a href="InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties.class</a>)
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">InstanceAutoConfiguration</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">校验当前进程标识并固化全部能力声明及启用选择。</div>
+<div class="block">校验 `sca4dj.instance.id` 并生成本进程的功能启用快照（`InstanceCapabilities`）。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -125,12 +125,12 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#instanceCapabilities(com.sca4d.core.spring.config.InstanceProperties,java.util.List)" class="member-name-link">instanceCapabilities</a><wbr>(@NotNull <a href="InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a>&nbsp;properties,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.runtime.InstanceCapability&gt;&nbsp;definitions)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">启动时拒绝未知能力和非法实例标识。</div>
+<div class="block">校验实例标识并把配置的功能编码转换为 `TreeCode`；标识不合法时启动失败。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.boot.web.servlet.FilterRegistrationBean<wbr>&lt;<a href="InstanceCapabilityFilter.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityFilter</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#instanceCapabilityFilter(com.sca4d.core.api.runtime.InstanceCapabilities)" class="member-name-link">instanceCapabilityFilter</a><wbr>(@NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">在业务认证前拒绝当前实例未启用的 API；能力检查不授予任何业务权限。</div>
+<div class="block">注册 `InstanceCapabilityFilter`，在认证前拒绝当前实例未启用功能的 API；该过滤器不授予任何业务权限。</div>
 </div>
 </div>
 </div>
@@ -171,7 +171,7 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.boot.web.servlet.FilterRegistrationBean&lt;<a href="InstanceCapabilityFilter.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityFilter</a>&gt;</span>&nbsp;<span class="element-name">instanceCapabilityFilter</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</span></div>
-<div class="block">在业务认证前拒绝当前实例未启用的 API；能力检查不授予任何业务权限。</div>
+<div class="block">注册 `InstanceCapabilityFilter`，在认证前拒绝当前实例未启用功能的 API；该过滤器不授予任何业务权限。</div>
 </section>
 </li>
 <li>
@@ -183,7 +183,16 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a>&nbsp;properties,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.runtime.InstanceCapability&gt;&nbsp;definitions)</span></div>
-<div class="block">启动时拒绝未知能力和非法实例标识。</div>
+<div class="block">校验实例标识并把配置的功能编码转换为 `TreeCode`；标识不合法时启动失败。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>properties</code> - 实例配置，`capabilities` 为空时启用全部已声明功能</dd>
+<dd><code>definitions</code> - 应用声明的全部功能定义</dd>
+<dt>Returns:</dt>
+<dd>当前进程的功能启用快照</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - `sca4dj.instance.id` 不是 1 到 128 位字母、数字、点、下划线或连字符时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>

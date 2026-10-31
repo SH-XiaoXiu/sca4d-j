@@ -109,7 +109,9 @@ implements com.sca4d.iot.api.model.ThingModelRepository</span></div>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Collection)" class="member-name-link">StaticThingModelRepository</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.model.ThingModel&gt;&nbsp;models)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建只读 Repository，所有模型都只使用 code 作为回退展示，不提供静态消息展示。</div>
+</div>
 <div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.Collection,java.util.Collection)" class="member-name-link">StaticThingModelRepository</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.model.ThingModel&gt;&nbsp;models,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.model.ThingModelPresentation&gt;&nbsp;presentations)</code></div>
 <div class="col-last odd-row-color">
@@ -167,9 +169,10 @@ implements com.sca4d.iot.api.model.ThingModelRepository</span></div>
 <h3>StaticThingModelRepository</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StaticThingModelRepository</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.model.ThingModel&gt;&nbsp;models)</span></div>
+<div class="block">创建只读 Repository，所有模型都只使用 code 作为回退展示，不提供静态消息展示。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>models</code> - App 固定提供的全部物模型</dd>
+<dd><code>models</code> - App 固定提供的全部物模型；集合或任一元素为 null 时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a>，同一 Product 与版本重复时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a></dd>
 </dl>
 </section>
 </li>
@@ -183,8 +186,10 @@ implements com.sca4d.iot.api.model.ThingModelRepository</span></div>
 <div class="block">创建同时接受纯技术回退模型和带静态消息展示模型的只读 Repository。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>models</code> - 没有静态消息时仅使用 code 展示的模型</dd>
-<dd><code>presentations</code> - 使用 `MessageText` 声明完整展示字段的模型</dd>
+<dd><code>models</code> - 没有静态消息时仅使用 code 展示的模型；集合或任一元素为 null 时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a></dd>
+<dd><code>presentations</code> - 使用 `MessageText` 声明完整展示字段的模型；集合或任一元素为 null 时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 同一 Product 与版本在 models 和 presentations 中重复出现时抛出</dd>
 </dl>
 </section>
 </li>

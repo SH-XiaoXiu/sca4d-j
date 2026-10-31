@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>Provider 实例稳定编码</dd>
+<dd>Provider 实例的编码</dd>
 </dl>
 </section>
 </li>
@@ -221,7 +221,8 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">type</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>选择 `SmsProviderClient` 使用的 Provider 类型</dd>
+<dd>Provider 类型，与某个已安装 `SmsProviderClient` 的 providerType 相同；
+         由 `SmsConfigurationService` 创建和替换时校验，不在本对象内校验</dd>
 </dl>
 </section>
 </li>
@@ -233,7 +234,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">credentialRef</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>部署配置中凭据集合的稳定引用</dd>
+<dd>部署配置中凭据集合的引用名称</dd>
 </dl>
 </section>
 </li>

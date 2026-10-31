@@ -195,7 +195,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate(com.sca4d.auth.federation.FederatedProviderConfiguration)" class="member-name-link">validate</a><wbr>(@NotNull <a href="FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a>&nbsp;configuration)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">校验协议端点、映射和授权参数。</div>
+<div class="block">校验协议端点、映射和授权参数，不读写数据库。</div>
 </div>
 </div>
 </div>
@@ -415,7 +415,13 @@ loadScripts(document, 'script');</script>
 <h3>validate</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">validate</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a>&nbsp;configuration)</span></div>
-<div class="block">校验协议端点、映射和授权参数。</div>
+<div class="block">校验协议端点、映射和授权参数，不读写数据库。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>configuration</code> - 待校验的协议配置</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 端点不是 HTTPS URL、必填字段为空、映射或授权参数不在允许范围内时抛出 CONFIGURATION_INVALID</dd>
+</dl>
 </section>
 </li>
 </ul>

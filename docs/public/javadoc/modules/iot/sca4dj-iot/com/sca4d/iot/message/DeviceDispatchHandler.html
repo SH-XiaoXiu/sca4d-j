@@ -108,14 +108,15 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceTransportRouter,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceDispatchHandler</a><wbr>(@NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceTransportRouter,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.sca4d.core.api.messaging.MessageCodec,com.sca4d.iot.api.message.DeviceDispatchAdmission)" class="member-name-link">DeviceDispatchHandler</a><wbr>(@NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
  @NotNull <a href="DeviceTransportRouter.html" title="class in com.sca4d.iot.message">DeviceTransportRouter</a>&nbsp;router,
  @NotNull <a href="DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a>&nbsp;messages,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
  @NotNull org.springframework.transaction.support.TransactionTemplate&nbsp;transactions,
- @NotNull com.sca4d.core.api.messaging.MessageCodec&lt;com.sca4d.iot.api.message.DeviceDispatchMessage&gt;&nbsp;codec)</code></div>
+ @NotNull com.sca4d.core.api.messaging.MessageCodec&lt;com.sca4d.iot.api.message.DeviceDispatchMessage&gt;&nbsp;codec,
+ @NotNull com.sca4d.iot.api.message.DeviceDispatchAdmission&nbsp;admission)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建按 messageId 加锁、使用短事务转换下行状态的消息 Consumer。</div>
 </div>
@@ -165,7 +166,7 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceTransportRouter,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.sca4d.core.api.messaging.MessageCodec)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceTransportRouter,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.sca4d.core.api.messaging.MessageCodec,com.sca4d.iot.api.message.DeviceDispatchAdmission)">
 <h3>DeviceDispatchHandler</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeviceDispatchHandler</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
@@ -182,7 +183,9 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
  @NotNull
  @NotNull org.springframework.transaction.support.TransactionTemplate&nbsp;transactions,
  @NotNull
- @NotNull com.sca4d.core.api.messaging.MessageCodec&lt;com.sca4d.iot.api.message.DeviceDispatchMessage&gt;&nbsp;codec)</span></div>
+ @NotNull com.sca4d.core.api.messaging.MessageCodec&lt;com.sca4d.iot.api.message.DeviceDispatchMessage&gt;&nbsp;codec,
+ @NotNull
+ @NotNull com.sca4d.iot.api.message.DeviceDispatchAdmission&nbsp;admission)</span></div>
 <div class="block">创建按 messageId 加锁、使用短事务转换下行状态的消息 Consumer。</div>
 </section>
 </li>

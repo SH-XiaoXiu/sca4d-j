@@ -111,7 +111,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;observedAt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;receivedAt)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建完整 current projection。</div>
+<div class="block">创建字段组当前投影；所有引用参数都不能为空，values 会被复制为不可修改的 Map。</div>
 </div>
 </div>
 </section>
@@ -181,7 +181,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;observedAt,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;receivedAt)</span></div>
-<div class="block">创建完整 current projection。</div>
+<div class="block">创建字段组当前投影；所有引用参数都不能为空，values 会被复制为不可修改的 Map。</div>
 </section>
 </li>
 </ul>
@@ -232,7 +232,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name">values</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>latest values</dd>
+<dd>最新字段值的不可修改副本</dd>
 </dl>
 </section>
 </li>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">version</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>latest version</dd>
+<dd>当前字段组的 version</dd>
 </dl>
 </section>
 </li>

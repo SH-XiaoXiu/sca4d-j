@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">CallLifecycleConfiguration</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a>&gt;&nbsp;interceptors)</code></div>
 <div class="col-last even-row-color">
-<div class="block">从已注册的环绕处理创建默认配置；处理自身的依赖会作为初始约束。</div>
+<div class="block">从已注册的生命周期参与者创建默认配置；参与者自身声明的 before/after 依赖作为初始约束，并应用内置顺序。</div>
 </div>
 </div>
 </section>
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;&nbsp;before,
  int&nbsp;priority)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">登记一个阶段参与者。</div>
+<div class="block">登记一个阶段参与者及其排序约束。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrations()" class="member-name-link">registrations</a>()</code></div>
@@ -214,7 +214,13 @@ loadScripts(document, 'script');</script>
 <h3>CallLifecycleConfiguration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CallLifecycleConfiguration</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a>&gt;&nbsp;interceptors)</span></div>
-<div class="block">从已注册的环绕处理创建默认配置；处理自身的依赖会作为初始约束。</div>
+<div class="block">从已注册的生命周期参与者创建默认配置；参与者自身声明的 before/after 依赖作为初始约束，并应用内置顺序。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>interceptors</code> - 生命周期参与者，每个参与者只能实现一种阶段回调，编码不能重复</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 参与者没有阶段回调、实现多个阶段或编码重复时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -244,7 +250,17 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;&nbsp;before,
  int&nbsp;priority)</span></div>
-<div class="block">登记一个阶段参与者。</div>
+<div class="block">登记一个阶段参与者及其排序约束。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>lifecycle</code> - 参与者声明的阶段，必须与其实现的回调接口一致</dd>
+<dd><code>interceptor</code> - 阶段参与者，编码在配置中必须唯一</dd>
+<dd><code>after</code> - 当前节点必须排在其之后的节点编码</dd>
+<dd><code>before</code> - 当前节点必须排在其之前的节点编码</dd>
+<dd><code>priority</code> - 无硬依赖时的排序优先级</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 阶段与回调类型不一致或编码重复时抛出</dd>
+</dl>
 </section>
 </li>
 <li>

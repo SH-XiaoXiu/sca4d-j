@@ -124,17 +124,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.core.api.call.CallExecution&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#executions()" class="member-name-link">executions</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">返回当前线程仍在生命周期内的方法执行。</div>
+<div class="block">返回当前线程执行栈中尚未结束的方法执行。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#pop(com.sca4d.core.api.call.CallExecution)" class="member-name-link">pop</a><wbr>(com.sca4d.core.api.call.CallExecution&nbsp;execution)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">移除刚刚离开生命周期的方法执行。</div>
+<div class="block">移除刚结束的方法执行；调用方必须在方法返回或抛出异常后的 finally 中调用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#push(com.sca4d.core.api.call.CallExecution)" class="member-name-link">push</a><wbr>(com.sca4d.core.api.call.CallExecution&nbsp;execution)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">把即将进入生命周期的方法执行压入当前线程。</div>
+<div class="block">把即将开始执行的方法执行压入当前线程的执行栈，栈顶为最内层方法。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#run(com.sca4d.core.api.call.Call,java.util.concurrent.Callable)" class="member-name-link">run</a><wbr>(com.sca4d.core.api.call.Call&nbsp;call,
@@ -172,6 +172,8 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>call</code> - 当前 HTTP、消息或任务调用</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 当前线程已经绑定调用时抛出，调用方必须先清理原绑定</dd>
 </dl>
 </section>
 </li>
@@ -204,7 +206,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="push(com.sca4d.core.api.call.CallExecution)">
 <h3>push</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">push</span><wbr><span class="parameters">(com.sca4d.core.api.call.CallExecution&nbsp;execution)</span></div>
-<div class="block">把即将进入生命周期的方法执行压入当前线程。</div>
+<div class="block">把即将开始执行的方法执行压入当前线程的执行栈，栈顶为最内层方法。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>execution</code> - 与当前 `Call` 关联的方法执行</dd>
@@ -215,7 +217,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="pop(com.sca4d.core.api.call.CallExecution)">
 <h3>pop</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">pop</span><wbr><span class="parameters">(com.sca4d.core.api.call.CallExecution&nbsp;execution)</span></div>
-<div class="block">移除刚刚离开生命周期的方法执行。</div>
+<div class="block">移除刚结束的方法执行；调用方必须在方法返回或抛出异常后的 finally 中调用。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>execution</code> - 必须是当前最内层的方法执行</dd>
@@ -226,7 +228,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="executions()">
 <h3>executions</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.call.CallExecution&gt;</span>&nbsp;<span class="element-name">executions</span>()</div>
-<div class="block">返回当前线程仍在生命周期内的方法执行。</div>
+<div class="block">返回当前线程执行栈中尚未结束的方法执行。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>从最内层到最外层排列的方法执行</dd>
@@ -250,7 +252,7 @@ loadScripts(document, 'script');</script>
 
  <p>此方法不调度线程；已有调用派生的工作使用 Call.fork，自主系统任务使用 Call.system。
  每项工作独立使用一个 Call，不复制事务或方法执行栈，也不改变当前线程已经存在的事务。
- 业务方法仍通过统一生命周期切面执行。</div>
+ 业务方法仍由 `CallLifecycleAdvisor` 切面建立方法执行。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>call</code> - 仅由当前任务使用的独立调用</dd>

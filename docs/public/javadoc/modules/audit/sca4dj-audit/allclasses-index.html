@@ -50,7 +50,7 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
@@ -59,13 +59,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">提交后尽力把冻结审计记录交给有界进程内执行器，不提供恢复和重试。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/config/AuditAutoConfiguration.html" title="class in com.sca4d.audit.config">AuditAutoConfiguration</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditAssociationService.html" title="class in com.sca4d.audit.query">AuditAssociationService</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">为历史审计追加有证据的资源关联，不改写原记录或已有关系。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/config/AuditAutoConfiguration.html" title="class in com.sca4d.audit.config">AuditAutoConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">自动装配通用审计编码、数据库记录器和查询服务。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回一条持久化审计记录及其原始或强类型 payload。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/audit/exception/AuditException.html" title="class in com.sca4d.audit.exception">AuditException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">审计模块的运行时故障，例如审计载荷编解码失败。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/audit/recording/mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
@@ -77,51 +85,59 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+<div class="block">读取和写入审计消息 v1 载荷；新消息由 <a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording"><code>AuditMessageV2Codec</code></a> 写入。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditMessageHandler.html" title="class in com.sca4d.audit.recording">AuditMessageHandler</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">独立事务追加审计，成功提交后确认消息；技术失败由 Messaging 重试并最终进入 DLQ。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadData.html" title="class in com.sca4d.audit.payload">AuditPayloadData</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording">AuditMessageV2Codec</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadData.html" title="class in com.sca4d.audit.payload">AuditPayloadData</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回审计 payload 的持久化类型、版本、原始 JSON 和可选强类型结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Raw JSON 或可选 Codec 编码、脱敏、限制并读取审计 payload。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadRegistry.html" title="class in com.sca4d.audit.payload">AuditPayloadRegistry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadRegistry.html" title="class in com.sca4d.audit.payload">AuditPayloadRegistry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验并索引应用注册的审计 payload Codec。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置默认审计记录方式、payload 最大字节数和递归掩码字段。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存审计记录分页查询使用的可选身份、操作、结果、目标和时间条件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQueryService.html" title="class in com.sca4d.audit.query">AuditQueryService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQueryService.html" title="class in com.sca4d.audit.query">AuditQueryService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按标识或筛选条件读取 `audit_record` 中的审计记录。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">向 `audit_record` 追加审计行，并按查询条件读取审计行。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把 Core AuditRecord 同步追加到 audit_record。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 audit_record 查询和写入使用的数据库列值。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一份准备写入数据库的 payload 类型、版本和 JSON。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/FrozenAuditEntry.html" title="class in com.sca4d.audit.recording">FrozenAuditEntry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存交接时已编码的审计行及关联资源，供同步、队列和提交后记录共用。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/QueuedAuditRecorder.html" title="class in com.sca4d.audit.recording">QueuedAuditRecorder</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

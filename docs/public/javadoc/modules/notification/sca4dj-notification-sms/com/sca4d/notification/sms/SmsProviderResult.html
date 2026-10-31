@@ -107,7 +107,9 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bizId,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;failureCode)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">保存一次 Provider 提交的结果；status 为空时抛出 NullPointerException，其余字段原样保存。</div>
+</div>
 </div>
 </section>
 </li>
@@ -162,6 +164,14 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;bizId,
  @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;failureCode)</span></div>
+<div class="block">保存一次 Provider 提交的结果；status 为空时抛出 NullPointerException，其余字段原样保存。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>status</code> - Provider API 对本次提交的确定程度</dd>
+<dd><code>requestId</code> - Provider 返回的请求标识，没有返回时为空</dd>
+<dd><code>bizId</code> - Provider 返回的业务标识，没有返回时为空</dd>
+<dd><code>failureCode</code> - Provider 返回的失败码，成功时为空</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -50,65 +50,69 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/enrollment/RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/auth/totp/exception/AuthTotpException.html" title="class in com.sca4d.auth.totp.exception">AuthTotpException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">TOTP 认证的依赖或数据故障，例如密钥解密失败或凭据数据损坏。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/enrollment/RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Redis TTL 保存加密 enrollment，并以 value CAS 完成一次性消费。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/TotpAuthenticationMethod.html" title="class in com.sca4d.auth.totp">TotpAuthenticationMethod</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/TotpAuthenticationMethod.html" title="class in com.sca4d.auth.totp">TotpAuthenticationMethod</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">验证 Google Authenticator 兼容 TOTP 验证码，并原子拒绝旧时间步。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/config/TotpAutoConfiguration.html" title="class in com.sca4d.auth.totp.config">TotpAutoConfiguration</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/config/TotpAutoConfiguration.html" title="class in com.sca4d.auth.totp.config">TotpAutoConfiguration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">自动装配 TOTP 方法、SQL 凭据和 Redis enrollment，不注册 HTTP 或二维码实现。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpCodeVerifier.html" title="class in com.sca4d.auth.totp.credential">TotpCodeVerifier</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpCodeVerifier.html" title="class in com.sca4d.auth.totp.credential">TotpCodeVerifier</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Google Authenticator 兼容参数生成密钥并匹配 TOTP 时间步。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpCredential.html" title="class in com.sca4d.auth.totp.credential">TotpCredential</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpCredential.html" title="class in com.sca4d.auth.totp.credential">TotpCredential</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Account 当前激活的加密 TOTP 凭据及已接受时间步下限。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/auth/totp/credential/mapper/TotpCredentialMapper.html" title="interface in com.sca4d.auth.totp.credential.mapper">TotpCredentialMapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/auth/totp/credential/mapper/TotpCredentialMapper.html" title="interface in com.sca4d.auth.totp.credential.mapper">TotpCredentialMapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">定义 TOTP 模块私有凭据表的原子读写。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpCredentialRepository.html" title="class in com.sca4d.auth.totp.credential">TotpCredentialRepository</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpCredentialRepository.html" title="class in com.sca4d.auth.totp.credential">TotpCredentialRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">隔离 TOTP 服务与 MyBatis Mapper，并使用数据库原子拒绝过时验证码。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/mapper/TotpCredentialState.html" title="class in com.sca4d.auth.totp.credential.mapper">TotpCredentialState</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/mapper/TotpCredentialState.html" title="class in com.sca4d.auth.totp.credential.mapper">TotpCredentialState</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 MyBatis 从 TOTP 凭据表读取的模块内部持久化状态。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/enrollment/TotpEnrollment.html" title="class in com.sca4d.auth.totp.enrollment">TotpEnrollment</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/enrollment/TotpEnrollment.html" title="class in com.sca4d.auth.totp.enrollment">TotpEnrollment</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回给调用方的非秘密 TOTP enrollment 元数据。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/enrollment/TotpEnrollmentService.html" title="class in com.sca4d.auth.totp.enrollment">TotpEnrollmentService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/enrollment/TotpEnrollmentService.html" title="class in com.sca4d.auth.totp.enrollment">TotpEnrollmentService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">管理 TOTP enrollment、激活、替换和删除，不提供 HTTP 或二维码图片类型。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/auth/totp/TotpErrorCode.html" title="enum class in com.sca4d.auth.totp">TotpErrorCode</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/auth/totp/TotpErrorCode.html" title="enum class in com.sca4d.auth.totp">TotpErrorCode</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">TOTP 方法和 enrollment 生命周期使用的稳定错误码。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/TotpProof.html" title="class in com.sca4d.auth.totp">TotpProof</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/TotpProof.html" title="class in com.sca4d.auth.totp">TotpProof</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">只在一次认证方法调用中存在的 TOTP 验证码。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpSecretCryptography.html" title="class in com.sca4d.auth.totp.credential">TotpSecretCryptography</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/credential/TotpSecretCryptography.html" title="class in com.sca4d.auth.totp.credential">TotpSecretCryptography</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 TOTP 内部集中选择加密密钥并拒绝未知历史 key。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/config/TotpSettings.html" title="class in com.sca4d.auth.totp.config">TotpSettings</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/totp/config/TotpSettings.html" title="class in com.sca4d.auth.totp.config">TotpSettings</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明 TOTP enrollment 可以由客户管理的有效期。</div>
 </div>
 </div>

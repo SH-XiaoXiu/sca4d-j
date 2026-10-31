@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AuditMessageCodec</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.messaging.MessageCodec&lt;<a href="AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a>&gt;</span></div>
-<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+<div class="block">读取和写入审计消息 v1 载荷；新消息由 <a href="AuditMessageV2Codec.html" title="class in com.sca4d.audit.recording"><code>AuditMessageV2Codec</code></a> 写入。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,7 +110,7 @@ implements com.sca4d.core.api.messaging.MessageCodec&lt;<a href="AuditMessage.ht
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">AuditMessageCodec</a><wbr>(com.fasterxml.jackson.databind.ObjectMapper&nbsp;json)</code></div>
 <div class="col-last even-row-color">
-<div class="block">使用 Messaging 同一 JSON 基础契约，显式写入协议字段。</div>
+<div class="block">使用 Messaging 同一 JSON 基础契约，保留审计消息 v1 的字段。</div>
 </div>
 </div>
 </section>
@@ -162,7 +162,7 @@ implements com.sca4d.core.api.messaging.MessageCodec&lt;<a href="AuditMessage.ht
 <section class="detail" id="&lt;init&gt;(com.fasterxml.jackson.databind.ObjectMapper)">
 <h3>AuditMessageCodec</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AuditMessageCodec</span><wbr><span class="parameters">(com.fasterxml.jackson.databind.ObjectMapper&nbsp;json)</span></div>
-<div class="block">使用 Messaging 同一 JSON 基础契约，显式写入协议字段。</div>
+<div class="block">使用 Messaging 同一 JSON 基础契约，保留审计消息 v1 的字段。</div>
 </section>
 </li>
 </ul>

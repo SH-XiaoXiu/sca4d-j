@@ -112,7 +112,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;observedAt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;receivedAt)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建已经完成物模型值编码的 Telemetry 持久化字段。</div>
+<div class="block">创建已经完成属性值编码的 Telemetry 持久化字段。</div>
 </div>
 </div>
 </section>
@@ -184,7 +184,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;observedAt,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;receivedAt)</span></div>
-<div class="block">创建已经完成物模型值编码的 Telemetry 持久化字段。</div>
+<div class="block">创建已经完成属性值编码的 Telemetry 持久化字段。</div>
 </section>
 </li>
 </ul>
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">messageId</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>通用 Messaging 分配的稳定消息标识</dd>
+<dd>Messaging 分配的消息标识</dd>
 </dl>
 </section>
 </li>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sampleIndex</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>样本在消息内的稳定序号</dd>
+<dd>样本在消息内的序号，从 0 开始</dd>
 </dl>
 </section>
 </li>
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">bindingGeneration</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>Device 物模型绑定代数</dd>
+<dd>Device 属性绑定代数</dd>
 </dl>
 </section>
 </li>
@@ -253,7 +253,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">valueJson</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>已规范化的物模型值 JSON</dd>
+<dd>按属性定义编码后的值 JSON</dd>
 </dl>
 </section>
 </li>

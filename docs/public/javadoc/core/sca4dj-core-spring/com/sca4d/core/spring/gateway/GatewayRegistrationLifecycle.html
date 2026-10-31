@@ -108,7 +108,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../config/InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a>&nbsp;instanceProperties,
  @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建注册生命周期并校验全部地址、Secret 和间隔。</div>
+<div class="block">创建 Gateway 注册租约管理器，并校验地址、Secret、readiness 路径和时长配置。</div>
 </div>
 </div>
 </section>
@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#applicationReady()" class="member-name-link">applicationReady</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">应用完成启动并进入 readiness 后立即发起第一次注册。</div>
+<div class="block">应用进入 ready 状态后，在 scheduler 线程上立即执行第一次注册，不阻塞启动线程。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contextClosed()" class="member-name-link">contextClosed</a>()</code></div>
@@ -162,11 +162,15 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../config/InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a>&nbsp;instanceProperties,
  @NotNull
  @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</span></div>
-<div class="block">创建注册生命周期并校验全部地址、Secret 和间隔。</div>
+<div class="block">创建 Gateway 注册租约管理器，并校验地址、Secret、readiness 路径和时长配置。
+
+ <p>创建时只保存校验后的值，不发起网络请求；注册在 `ApplicationReadyEvent` 后才开始。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>properties</code> - Gateway 注册配置</dd>
-<dd><code>callbacks</code> - 当前实例声明的全部回调</dd>
+<dd><code>callbacks</code> - 当前实例声明的全部回调，用于注册时上报回调编码</dd>
+<dd><code>instanceProperties</code> - 提供注册使用的实例标识</dd>
+<dd><code>capabilities</code> - 注册时上报的已启用功能码和 API 要求</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 地址、Secret、路径或时长配置不合法时抛出</dd>
 </dl>
@@ -185,7 +189,7 @@ loadScripts(document, 'script');</script>
 <h3>applicationReady</h3>
 <div class="member-signature"><span class="annotations">@EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">applicationReady</span>()</div>
-<div class="block">应用完成启动并进入 readiness 后立即发起第一次注册。</div>
+<div class="block">应用进入 ready 状态后，在 scheduler 线程上立即执行第一次注册，不阻塞启动线程。</div>
 </section>
 </li>
 <li>

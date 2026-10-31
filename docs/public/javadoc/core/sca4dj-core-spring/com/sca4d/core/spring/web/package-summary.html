@@ -85,14 +85,16 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="clientstate/package-summary.html">com.sca4d.core.spring.web.clientstate</a></div>
 <div class="col-last odd-row-color">
-<div class="block">提供当前 HTTP 调用的客户端本地状态刷新信号。</div>
+<div class="block">登记当前 HTTP 请求需要客户端重新读取的状态目标，并通过 <code>HttpConstants.CLIENT_STATE_REFRESH_HEADER</code> 指定的响应头返回，默认名称为 <code>X-Client-State-Refresh</code>。</div>
 </div>
-<div class="col-first even-row-color"><a href="list/package-summary.html">com.sca4d.core.spring.web.list</a></div>
-<div class="col-last even-row-color">
+<div class="col-first even-row-color"><a href="exception/package-summary.html">com.sca4d.core.spring.web.exception</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="list/package-summary.html">com.sca4d.core.spring.web.list</a></div>
+<div class="col-last odd-row-color">
 <div class="block">把 HTTP 列表参数转换成 Core API 类型，并拒绝未声明的排序字段。</div>
 </div>
-<div class="col-first odd-row-color"><a href="view/package-summary.html">com.sca4d.core.spring.web.view</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="view/package-summary.html">com.sca4d.core.spring.web.view</a></div>
+<div class="col-last even-row-color">
 <div class="block">提供 BaseView 最终 JSON 定制、本地化内置定制和 HTTP Jackson 序列化接入。</div>
 </div>
 </div>
@@ -100,7 +102,7 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exception Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
 <div id="class-summary.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
@@ -111,7 +113,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ApiResponseAdvice.html" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头。</div>
+<div class="block">在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 <code>@ETag</code> 时写入强 ETag。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="BearerToken.html" title="class in com.sca4d.core.spring.web">BearerToken</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -131,7 +133,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="HttpCallFilter.html" title="class in com.sca4d.core.spring.web">HttpCallFilter</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">为每次 HTTP 请求建立和清理 <code>Call</code>。</div>
+<div class="block">为 HTTP 请求建立和清理 <code>Call</code>，在同步或异步请求完成时记录访问结果。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -149,40 +151,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">在 Controller 执行前校验外部 HTTP 输入的显式约束和按 Java 数据类型配置的默认规则。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="HttpInputValidationException.html" title="class in com.sca4d.core.spring.web">HttpInputValidationException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
-<div class="block">保存 Controller 执行前发现的 HTTP 默认校验失败结果。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IdentityMdcInterceptor.html" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IdentityMdcInterceptor.html" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">在 Controller 执行期间把当前会话、主体和账号标识写入日志上下文。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IfMatchInterceptor.html" title="class in com.sca4d.core.spring.web">IfMatchInterceptor</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IfMatchInterceptor.html" title="class in com.sca4d.core.spring.web">IfMatchInterceptor</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">为声明 `@IfMatch` 的 HTTP 方法解析强 ETag，并绑定独立的请求版本条件。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ListParametersArgumentResolver.html" title="class in com.sca4d.core.spring.web">ListParametersArgumentResolver</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ListParametersArgumentResolver.html" title="class in com.sca4d.core.spring.web">ListParametersArgumentResolver</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">解析列表接口的 <code>page</code>、<code>size</code> 和重复 <code>sort</code> 查询参数。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MethodArgumentsIdempotencyKeyResolver.html" title="class in com.sca4d.core.spring.web">MethodArgumentsIdempotencyKeyResolver</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">使用规范化方法参数摘要生成不暴露原始参数的幂等键。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PageRequestArgumentResolver.html" title="class in com.sca4d.core.spring.web">PageRequestArgumentResolver</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MethodArgumentsIdempotencyKeyResolver.html" title="class in com.sca4d.core.spring.web">MethodArgumentsIdempotencyKeyResolver</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">使用 IdempotencyFingerprints 计算方法参数摘要，生成幂等键，不保存原始参数值。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PageRequestArgumentResolver.html" title="class in com.sca4d.core.spring.web">PageRequestArgumentResolver</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">解析并校验 <code>page</code> 和 <code>size</code> 查询参数。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RequestVersionConditionFilter.html" title="class in com.sca4d.core.spring.web">RequestVersionConditionFilter</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RequestVersionConditionFilter.html" title="class in com.sca4d.core.spring.web">RequestVersionConditionFilter</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">在每次 HTTP 请求结束后清理当前线程保存的版本前置条件。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的预提交条件。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ResponseETagContractValidator.html" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ResponseETagContractValidator.html" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">在应用启动时校验 Controller 返回的顶层响应数据 ETag 声明。</div>
 </div>
 </div>

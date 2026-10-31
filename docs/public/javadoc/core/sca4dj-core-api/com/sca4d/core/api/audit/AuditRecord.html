@@ -103,6 +103,33 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,com.sca4d.core.api.audit.AuditActor,com.sca4d.core.api.audit.AuditOperation,com.sca4d.core.api.resource.Resource,com.sca4d.core.api.audit.AuditResult,com.sca4d.core.api.audit.AuditPayload,com.sca4d.core.api.audit.HttpCall,java.time.Instant,java.util.Collection)" class="member-name-link">AuditRecord</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
+ @NotNull <a href="AuditActor.html" title="class in com.sca4d.core.api.audit">AuditActor</a>&nbsp;actor,
+ @NotNull <a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a>&nbsp;operation,
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;target,
+ @NotNull <a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a>&nbsp;result,
+ @Nullable <a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&nbsp;payload,
+ @Nullable <a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&nbsp;httpCall,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;occurredAt,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;&nbsp;relatedResources)</code></div>
+<div class="col-last even-row-color">
+<div class="block">创建没有链路元数据的固定审计记录；仅供已有非调用生命周期写入点使用。</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.core.api.audit.AuditActor,com.sca4d.core.api.audit.AuditOperation,com.sca4d.core.api.resource.Resource,com.sca4d.core.api.audit.AuditResult,com.sca4d.core.api.audit.AuditPayload,com.sca4d.core.api.audit.HttpCall,java.time.Instant,java.util.Collection)" class="member-name-link">AuditRecord</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;auditId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;auditTrailId,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;auditParentId,
+ @NotNull <a href="AuditActor.html" title="class in com.sca4d.core.api.audit">AuditActor</a>&nbsp;actor,
+ @NotNull <a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a>&nbsp;operation,
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;target,
+ @NotNull <a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a>&nbsp;result,
+ @Nullable <a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&nbsp;payload,
+ @Nullable <a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&nbsp;httpCall,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;occurredAt,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;&nbsp;relatedResources)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">创建审计记录并复制操作当时关联的资源标识；后续资源移动不改变快照。</div>
+</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,com.sca4d.core.api.audit.AuditActor,com.sca4d.core.api.audit.AuditOperation,com.sca4d.core.api.resource.Resource,com.sca4d.core.api.audit.AuditResult,com.sca4d.core.api.audit.AuditPayload,com.sca4d.core.api.audit.HttpCall,java.time.Instant)" class="member-name-link">AuditRecord</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
  <a href="AuditActor.html" title="class in com.sca4d.core.api.audit">AuditActor</a>&nbsp;actor,
  <a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a>&nbsp;operation,
@@ -133,25 +160,39 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">行为主体。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpCall()" class="member-name-link">httpCall</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#auditId()" class="member-name-link">auditId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#auditParentId()" class="member-name-link">auditParentId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#auditTrailId()" class="member-name-link">auditTrailId</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpCall()" class="member-name-link">httpCall</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回可选 HTTP 请求快照。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#occurredAt()" class="member-name-link">occurredAt</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#occurredAt()" class="member-name-link">occurredAt</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">事件发生时间。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operation()" class="member-name-link">operation</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operation()" class="member-name-link">operation</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">业务操作。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#payload()" class="member-name-link">payload</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#payload()" class="member-name-link">payload</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回可选结构化载荷。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../resource/Resource.Ref.html" title="class in com.sca4d.core.api.resource">Resource.Ref</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relatedResources()" class="member-name-link">relatedResources</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回操作当时的关联资源，不包含可变业务对象。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requestId()" class="member-name-link">requestId</a>()</code></div>
@@ -210,6 +251,60 @@ loadScripts(document, 'script');</script>
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,com.sca4d.core.api.audit.AuditActor,com.sca4d.core.api.audit.AuditOperation,com.sca4d.core.api.resource.Resource,com.sca4d.core.api.audit.AuditResult,com.sca4d.core.api.audit.AuditPayload,com.sca4d.core.api.audit.HttpCall,java.time.Instant,java.util.Collection)">
+<h3>AuditRecord</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AuditRecord</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
+ @NotNull
+ @NotNull <a href="AuditActor.html" title="class in com.sca4d.core.api.audit">AuditActor</a>&nbsp;actor,
+ @NotNull
+ @NotNull <a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a>&nbsp;operation,
+ @Nullable
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;target,
+ @NotNull
+ @NotNull <a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a>&nbsp;result,
+ @Nullable
+ @Nullable <a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&nbsp;payload,
+ @Nullable
+ @Nullable <a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&nbsp;httpCall,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;occurredAt,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;&nbsp;relatedResources)</span></div>
+<div class="block">创建没有链路元数据的固定审计记录；仅供已有非调用生命周期写入点使用。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.core.api.audit.AuditActor,com.sca4d.core.api.audit.AuditOperation,com.sca4d.core.api.resource.Resource,com.sca4d.core.api.audit.AuditResult,com.sca4d.core.api.audit.AuditPayload,com.sca4d.core.api.audit.HttpCall,java.time.Instant,java.util.Collection)">
+<h3>AuditRecord</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AuditRecord</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;auditId,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;auditTrailId,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;auditParentId,
+ @NotNull
+ @NotNull <a href="AuditActor.html" title="class in com.sca4d.core.api.audit">AuditActor</a>&nbsp;actor,
+ @NotNull
+ @NotNull <a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a>&nbsp;operation,
+ @Nullable
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;target,
+ @NotNull
+ @NotNull <a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a>&nbsp;result,
+ @Nullable
+ @Nullable <a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&nbsp;payload,
+ @Nullable
+ @Nullable <a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&nbsp;httpCall,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;occurredAt,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;&nbsp;relatedResources)</span></div>
+<div class="block">创建审计记录并复制操作当时关联的资源标识；后续资源移动不改变快照。</div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -218,6 +313,47 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="auditId()">
+<h3>auditId</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">auditId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前审计记录逻辑标识</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="auditTrailId()">
+<h3>auditTrailId</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">auditTrailId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前审计链标识</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="auditParentId()">
+<h3>auditParentId</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">auditParentId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>父审计记录逻辑标识</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="relatedResources()">
+<h3>relatedResources</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../resource/Resource.Ref.html" title="class in com.sca4d.core.api.resource">Resource.Ref</a>&gt;</span>&nbsp;<span class="element-name">relatedResources</span>()</div>
+<div class="block">返回操作当时的关联资源，不包含可变业务对象。</div>
+</section>
+</li>
 <li>
 <section class="detail" id="requestId()">
 <h3>requestId</h3>

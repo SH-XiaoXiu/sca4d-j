@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.storage.file.persistence.mapper.FileMapper,com.sca4d.core.spring.persistence.batch.SqlBatches)" class="member-name-link">FileRepository</a><wbr>(@NotNull <a href="mapper/FileMapper.html" title="interface in com.sca4d.storage.file.persistence.mapper">FileMapper</a>&nbsp;mapper,
  @NotNull com.sca4d.core.spring.persistence.batch.SqlBatches&nbsp;sqlBatches)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建使用指定 Mapper 的文件持久化边界。</div>
+<div class="block">创建使用指定 Mapper 读写文件记录的 FileRepository。</div>
 </div>
 </div>
 </section>
@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;owner)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按状态、重试时间和租约条件领取一批删除记录。</div>
+<div class="block">按状态、重试时间和租约条件最多领取 50 条删除记录，并以 owner 和 leaseUntil 写入删除租约。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createPending(com.sca4d.storage.file.persistence.FileRecord)" class="member-name-link">createPending</a><wbr>(@NotNull <a href="FileRecord.html" title="class in com.sca4d.storage.file.persistence">FileRecord</a>&nbsp;record)</code></div>
@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="FileRecord.html" title="class in com.sca4d.storage.file.persistence">FileRecord</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findExpiredUploadObjects(java.time.Instant)" class="member-name-link">findExpiredUploadObjects</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取签名到期后仍需清理临时对象的文件。</div>
+<div class="block">读取签名到期后仍需清理临时对象的文件，每次最多返回 100 条。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#markUploadObjectCleaned(long)" class="member-name-link">markUploadObjectCleaned</a><wbr>(long&nbsp;id)</code></div>
@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="mapper/FileMapper.html" title="interface in com.sca4d.storage.file.persistence.mapper">FileMapper</a>&nbsp;mapper,
  @NotNull
  @NotNull com.sca4d.core.spring.persistence.batch.SqlBatches&nbsp;sqlBatches)</span></div>
-<div class="block">创建使用指定 Mapper 的文件持久化边界。</div>
+<div class="block">创建使用指定 Mapper 读写文件记录的 FileRepository。</div>
 </section>
 </li>
 </ul>
@@ -246,7 +246,13 @@ loadScripts(document, 'script');</script>
 <h3>saveCompleted</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">saveCompleted</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="FileRecord.html" title="class in com.sca4d.storage.file.persistence">FileRecord</a>&nbsp;completed)</span></div>
-<div class="block">保存上传完成后的正式对象位置和实际元数据。</div>
+<div class="block">保存上传完成后的正式对象位置和实际元数据。
+
+ <p>只有状态仍为 PENDING 时才改为 READY 并写入对象信息；状态已经推进时返回 false 且不修改记录。</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 对象键、媒体类型、字节数或就绪有效期缺失时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -275,7 +281,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="FileRecord.html" title="class in com.sca4d.storage.file.persistence">FileRecord</a>&gt;</span>&nbsp;<span class="element-name">findExpiredUploadObjects</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
-<div class="block">读取签名到期后仍需清理临时对象的文件。</div>
+<div class="block">读取签名到期后仍需清理临时对象的文件，每次最多返回 100 条。</div>
 </section>
 </li>
 <li>
@@ -297,7 +303,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;leaseUntil,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;owner)</span></div>
-<div class="block">按状态、重试时间和租约条件领取一批删除记录。</div>
+<div class="block">按状态、重试时间和租约条件最多领取 50 条删除记录，并以 owner 和 leaseUntil 写入删除租约。</div>
 </section>
 </li>
 <li>

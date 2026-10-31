@@ -1,4 +1,5 @@
 com.sca4d.auth.federation
+com.sca4d.auth.federation.exception
 com.sca4d.auth.federation.identity
 com.sca4d.auth.federation.identity.mapper
 com.sca4d.auth.federation.provider

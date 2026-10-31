@@ -146,22 +146,33 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按下行消息标识读取主库保存的最近 ACK 投影。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../EncodedDownlinkMessage.html" title="class in com.sca4d.iot.persistence">EncodedDownlinkMessage</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectDeviceDownlinks(long,long,int)" class="member-name-link">selectDeviceDownlinks</a><wbr>(long&nbsp;deviceId,
- long&nbsp;offset,
- int&nbsp;limit)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../EncodedDeviceAcknowledgement.html" title="class in com.sca4d.iot.persistence">EncodedDeviceAcknowledgement</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectAcknowledgementsByMessageIds(java.util.List)" class="member-name-link">selectAcknowledgementsByMessageIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">分页读取 Device 下行消息。</div>
+<div class="block">批量读取仍保存在主库中的最新回执投影。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../EncodedDownlinkMessage.html" title="class in com.sca4d.iot.persistence">EncodedDownlinkMessage</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectDownlinkMessages(java.util.List)" class="member-name-link">selectDownlinkMessages</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../EncodedDeviceAcknowledgement.html" title="class in com.sca4d.iot.persistence">EncodedDeviceAcknowledgement</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectLatestAcknowledgements(long,long,int)" class="member-name-link">selectLatestAcknowledgements</a><wbr>(long&nbsp;deviceId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectDeviceDownlinks(long,long,int)" class="member-name-link">selectDeviceDownlinks</a><wbr>(long&nbsp;deviceId,
  long&nbsp;offset,
  int&nbsp;limit)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">分页读取 Device 下行消息。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../EncodedDownlinkMessage.html" title="class in com.sca4d.iot.persistence">EncodedDownlinkMessage</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectDownlinkMessages(java.util.List)" class="member-name-link">selectDownlinkMessages</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../EncodedDeviceAcknowledgement.html" title="class in com.sca4d.iot.persistence">EncodedDeviceAcknowledgement</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectLatestAcknowledgements(long,long,int)" class="member-name-link">selectLatestAcknowledgements</a><wbr>(long&nbsp;deviceId,
+ long&nbsp;offset,
+ int&nbsp;limit)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">分页读取 Device 下行消息保存的最新 ACK。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../EncodedDownlinkMessage.html" title="class in com.sca4d.iot.persistence">EncodedDownlinkMessage</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectRecentDeviceDownlinks(java.util.List,int)" class="member-name-link">selectRecentDeviceDownlinks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds,
+ int&nbsp;limit)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">按设备集合读取每个设备最近的下行消息，不统计完整历史数量。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateLatestAcknowledgement(long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant)" class="member-name-link">updateLatestAcknowledgement</a><wbr>(long&nbsp;messageId,
@@ -205,6 +216,26 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="selectRecentDeviceDownlinks(java.util.List,int)">
+<h3>selectRecentDeviceDownlinks</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../EncodedDownlinkMessage.html" title="class in com.sca4d.iot.persistence">EncodedDownlinkMessage</a>&gt;</span>&nbsp;<span class="element-name">selectRecentDeviceDownlinks</span><wbr><span class="parameters">(@Param("deviceIds") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds,
+ @Param("limit")
+ int&nbsp;limit)</span></div>
+<div class="block">按设备集合读取每个设备最近的下行消息，不统计完整历史数量。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectAcknowledgementsByMessageIds(java.util.List)">
+<h3>selectAcknowledgementsByMessageIds</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../EncodedDeviceAcknowledgement.html" title="class in com.sca4d.iot.persistence">EncodedDeviceAcknowledgement</a>&gt;</span>&nbsp;<span class="element-name">selectAcknowledgementsByMessageIds</span><wbr><span class="parameters">(@Param("messageIds") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</span></div>
+<div class="block">批量读取仍保存在主库中的最新回执投影。</div>
+</section>
+</li>
 <li>
 <section class="detail" id="countDeviceDownlinks(long)">
 <h3>countDeviceDownlinks</h3>

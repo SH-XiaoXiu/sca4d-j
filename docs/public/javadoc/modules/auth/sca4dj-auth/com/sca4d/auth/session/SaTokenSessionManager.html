@@ -158,7 +158,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminate(com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminate</a><wbr>(@NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId,
  @NotNull com.sca4d.core.api.authentication.SessionTerminationReason&nbsp;reason)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">终止指定 Session 的权威登录状态。</div>
+<div class="block">按 Session 标识注销对应 Token 登录，并删除 Token 索引。</div>
 </div>
 </div>
 </div>
@@ -225,7 +225,11 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
  long&nbsp;expectedGeneration)</span></div>
-<div class="block">创建 Sa-Token 登录状态，并保存完整 Core Session 和当前失效代次。</div>
+<div class="block">创建 Sa-Token 登录状态，并保存完整 Core Session 和当前失效代次。
+
+ <p>调用前若 Account 的失效代次已经不等于 <code>expectedGeneration</code>，直接抛出异常且不写入任何状态。
+ 登录状态创建后，若编码、写入 Token-Session 或 SessionId 索引失败，或写入后再次检查发现代次已变化，
+ 方法会注销刚创建的 Sa-Token 登录状态、删除 SessionId 索引，再抛出原异常。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>session</code> - 已经完成身份和 Resource 装载的 Session</dd>
@@ -233,6 +237,9 @@ loadScripts(document, 'script');</script>
 <dd><code>expectedGeneration</code> - 身份和 Resource 装载前读取到的 Account Session 失效代次</dd>
 <dt>Returns:</dt>
 <dd>新建在线 Session 的不透明 Token</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException</code> - Account 在装载期间被失效，即当前失效代次不等于
+                                             <code>expectedGeneration</code>，此时不返回 Token</dd>
 </dl>
 </section>
 </li>
@@ -304,11 +311,13 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.SessionTerminationReason&nbsp;reason)</span></div>
-<div class="block">终止指定 Session 的权威登录状态。</div>
+<div class="block">按 Session 标识注销对应 Token 登录，并删除 Token 索引。
+
+ <p>索引不存在时（Token 已注销、已过期或从未建立）不执行任何操作，也不抛出异常，只记录 TRACE 日志。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>sessionId</code> - Session 标识</dd>
-<dd><code>reason</code> - 终止原因</dd>
+<dd><code>reason</code> - 终止原因，只用于日志</dd>
 </dl>
 </section>
 </li>

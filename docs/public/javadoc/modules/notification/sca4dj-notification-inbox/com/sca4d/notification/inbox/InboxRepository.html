@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InboxRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">隐藏站内信 Mapper、游标分页和幂等新增语义。</div>
+<div class="block">隐藏站内信 Mapper，对外提供游标分页查询和幂等新增。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -142,9 +142,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#page(long,java.lang.Long,int)" class="member-name-link">page</a><wbr>(long&nbsp;accountId,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;beforeId,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;beforeId,
  int&nbsp;limit)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按标识倒序读取指定 Account 的站内信。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unreadCount(long)" class="member-name-link">unreadCount</a><wbr>(long&nbsp;accountId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -190,11 +192,16 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a>&gt;</span>&nbsp;<span class="element-name">page</span><wbr><span class="parameters">(long&nbsp;accountId,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;beforeId,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;beforeId,
  int&nbsp;limit)</span></div>
+<div class="block">按标识倒序读取指定 Account 的站内信。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>beforeId</code> - 上一页最后一条的标识，为 null 时从最新一条开始读取；只返回标识小于该值的记录</dd>
+<dd><code>limit</code> - 本页最多返回的条数，范围为 1 到 100</dd>
 <dt>Returns:</dt>
-<dd>指定 Account 的倒序站内信页</dd>
+<dd>指定 Account 的倒序站内信页，没有数据时为空列表</dd>
 </dl>
 </section>
 </li>

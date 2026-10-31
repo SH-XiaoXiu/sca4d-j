@@ -111,7 +111,9 @@ loadScripts(document, 'script');</script>
  long&nbsp;unacknowledged,
  long&nbsp;overloaded,
  long&nbsp;acknowledgementFailures)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建一次 MQTT 上行状态快照，各计数由 <code>MqttInboundProcessor</code> 在读取时汇总。</div>
+</div>
 </div>
 </section>
 </li>
@@ -181,6 +183,18 @@ loadScripts(document, 'script');</script>
  long&nbsp;unacknowledged,
  long&nbsp;overloaded,
  long&nbsp;acknowledgementFailures)</span></div>
+<div class="block">创建一次 MQTT 上行状态快照，各计数由 <code>MqttInboundProcessor</code> 在读取时汇总。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>pending</code> - 尚在分片队列、处理中或等待再次处理的消息数量</dd>
+<dd><code>retrying</code> - 当前等待下一次处理的消息数量</dd>
+<dd><code>processed</code> - 进程启动后处理完成并 ACK 的累计数量</dd>
+<dd><code>rejected</code> - 进程启动后明确拒绝并 ACK 的累计数量</dd>
+<dd><code>quarantined</code> - 进程启动后可靠保存失败并 ACK 的累计数量</dd>
+<dd><code>unacknowledged</code> - 因最终失败未能可靠保存而保持未确认的累计数量</dd>
+<dd><code>overloaded</code> - 因本地分片队列已满而未进入处理的累计数量</dd>
+<dd><code>acknowledgementFailures</code> - 业务处理结束后 ACK 失败的累计数量</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SpringRetryExecutor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.retry.RetryExecutor</span></div>
-<div class="block">使用 Spring Retry 执行同步重试，共同策略是次数和退避判断的唯一来源。</div>
+<div class="block">使用 Spring Retry 的重试循环执行同步操作；是否重试和等待时间由每次失败后的 `RetryPolicy` 决定。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

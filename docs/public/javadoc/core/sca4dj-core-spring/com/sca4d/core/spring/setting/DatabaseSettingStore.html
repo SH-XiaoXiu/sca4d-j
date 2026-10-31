@@ -111,7 +111,9 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://d
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.spring.setting.SettingRepository,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.concurrent.VersionConditions)" class="member-name-link">DatabaseSettingStore</a><wbr>(@NotNull <a href="SettingRepository.html" title="class in com.sca4d.core.spring.setting">SettingRepository</a>&nbsp;repository,
  @Nullable com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
  @NotNull com.sca4d.core.api.concurrent.VersionConditions&nbsp;versionConditions)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建数据库设置存储。</div>
+</div>
 </div>
 </section>
 </li>
@@ -177,6 +179,11 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://d
  @Nullable com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.VersionConditions&nbsp;versionConditions)</span></div>
+<div class="block">创建数据库设置存储。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>keyring</code> - 敏感设置使用的密钥环；为 null 时只能读写非敏感设置，写入敏感设置会失败</dd>
+</dl>
 </section>
 </li>
 </ul>

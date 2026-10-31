@@ -164,7 +164,9 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around</a><wbr>(@NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  <a href="../call/CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a>&nbsp;next)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Future 不能作为幂等重放结果；异步提交应返回持久任务标识或在工作方法声明幂等。</div>
+<div class="block">对声明 <a href="../annotation/Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation"><code>Idempotent</code></a> 的同步方法执行幂等控制。首次调用取得处理权后执行内层方法并保存成功结果；
+ 相同键和指纹的已完成调用直接返回保存的结果，存储返回处理中状态时抛出 IdempotencyInProgressException，返回冲突状态时抛出 IdempotencyKeyConflictException。
+ 方法返回 Future 或 CompletionStage 时直接抛出 IllegalStateException，不取得处理权。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;<a href="../call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync</a><wbr>(@NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
@@ -310,10 +312,17 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
  @NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  @NotNull
  <a href="../call/CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a>&nbsp;next)</span></div>
-<div class="block">Future 不能作为幂等重放结果；异步提交应返回持久任务标识或在工作方法声明幂等。</div>
+<div class="block">对声明 <a href="../annotation/Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation"><code>Idempotent</code></a> 的同步方法执行幂等控制。首次调用取得处理权后执行内层方法并保存成功结果；
+ 相同键和指纹的已完成调用直接返回保存的结果，存储返回处理中状态时抛出 IdempotencyInProgressException，返回冲突状态时抛出 IdempotencyKeyConflictException。
+ 方法返回 Future 或 CompletionStage 时直接抛出 IllegalStateException，不取得处理权。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../call/CallLifecycle.Around.html#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)">around</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>execution</code> - 当前方法执行上下文，包含声明、方法和客户端键</dd>
+<dd><code>next</code> - 内层调用，只会在取得处理权后执行一次</dd>
+<dt>Returns:</dt>
+<dd>内层结果，或重放的已保存结果</dd>
 </dl>
 </section>
 </li>

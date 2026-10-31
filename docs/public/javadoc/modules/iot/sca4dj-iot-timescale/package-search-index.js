@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.iot.config"},{"l":"com.sca4d.iot.telemetry"},{"l":"com.sca4d.iot.timescale.persistence"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.iot.config"},{"l":"com.sca4d.iot.exception"},{"l":"com.sca4d.iot.telemetry"},{"l":"com.sca4d.iot.timescale.persistence"}];updateSearchResults();

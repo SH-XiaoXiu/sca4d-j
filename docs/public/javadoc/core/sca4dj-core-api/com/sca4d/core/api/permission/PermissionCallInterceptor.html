@@ -155,7 +155,7 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync</a><wbr>(@NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  <a href="../call/CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a>&nbsp;next)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">异步业务只延后通过权限判断后的内层调用。</div>
+<div class="block">异步执行前先完成全部权限判断，只有全部允许后才调用 <code>next.proceedAsync()</code>。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
@@ -216,6 +216,7 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <dt>Parameters:</dt>
 <dd><code>permissionAssessment</code> - 按资源查找唯一策略的权限评估器</dd>
 <dd><code>resolverLookup</code> - 动态资源解析器查找入口</dd>
+<dd><code>expressionResolver</code> - 解析 <code>@RequirePermission</code> 资源表达式的解析器</dd>
 </dl>
 </section>
 </li>
@@ -271,7 +272,7 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <dt>Returns:</dt>
 <dd>内层调用结果</dd>
 <dt>Throws:</dt>
-<dd><code><a href="../error/BusinessException.html" title="class in com.sca4d.core.api.error">BusinessException</a></code> - 任一权限被拒绝时抛出</dd>
+<dd><code><a href="../error/exception/BusinessException.html" title="class in com.sca4d.core.api.error.exception">BusinessException</a></code> - 任一权限被拒绝时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 权限声明、解析结果或策略配置无效时抛出</dd>
 </dl>
 </section>
@@ -284,10 +285,18 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
  @NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  @NotNull
  <a href="../call/CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a>&nbsp;next)</span></div>
-<div class="block">异步业务只延后通过权限判断后的内层调用。</div>
+<div class="block">异步执行前先完成全部权限判断，只有全部允许后才调用 <code>next.proceedAsync()</code>。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../call/CallLifecycle.Around.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)">aroundAsync</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>execution</code> - 已完成身份和 Principal 选择的方法执行</dd>
+<dd><code>next</code> - 通过全部权限后启动的异步内层调用</dd>
+<dt>Returns:</dt>
+<dd>内层异步调用的完成阶段</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../error/exception/BusinessException.html" title="class in com.sca4d.core.api.error.exception">BusinessException</a></code> - 任一权限被拒绝时同步抛出，不启动内层调用</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 尚未选择 Principal 或权限声明无效时同步抛出</dd>
 </dl>
 </section>
 </li>

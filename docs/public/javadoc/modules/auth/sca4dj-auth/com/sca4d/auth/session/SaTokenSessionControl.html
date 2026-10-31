@@ -142,7 +142,9 @@ implements com.sca4d.core.api.authentication.SessionControl</span></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminateOtherSessions(long,com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminateOtherSessions</a><wbr>(long&nbsp;accountId,
  @NotNull com.sca4d.core.api.authentication.SessionId&nbsp;retainedSessionId,
  @NotNull com.sca4d.core.api.authentication.SessionTerminationReason&nbsp;reason)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">注销指定 Account 除保留 Session 外的全部 Sa-Token 登录状态，并递增该 Account 的 Session 失效代次。</div>
+</div>
 </div>
 </div>
 </div>
@@ -227,9 +229,21 @@ implements com.sca4d.core.api.authentication.SessionControl</span></div>
  @NotNull com.sca4d.core.api.authentication.SessionId&nbsp;retainedSessionId,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.SessionTerminationReason&nbsp;reason)</span></div>
+<div class="block">注销指定 Account 除保留 Session 外的全部 Sa-Token 登录状态，并递增该 Account 的 Session 失效代次。
+
+ <p>保留 Session 的 Token 在调用时立即从 SessionId 索引读取；索引不存在时没有可保留的 Token，
+ 该 Account 的全部登录状态都会被注销。注销 Token 与递增失效代次在事务提交后执行，事务外调用时立即执行。
+ 方法不删除 SessionId 索引，之后按这些索引读取时，因 Token 已无登录状态而得到空结果。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>terminateOtherSessions</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.authentication.SessionControl</code></dd>
+<dt>Parameters:</dt>
+<dd><code>accountId</code> - Account 标识</dd>
+<dd><code>retainedSessionId</code> - 必须保留的当前 Session 标识</dd>
+<dd><code>reason</code> - 终止原因，只用于日志</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Account 标识不是正数时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 保留 Session 标识或终止原因为空时抛出</dd>
 </dl>
 </section>
 </li>

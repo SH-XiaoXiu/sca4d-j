@@ -29,10 +29,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /** 使用阿里云 V2 Java SDK 提交国内或账号已开通的国际 SMS 模板请求。 */
 public class AliyunSmsProviderClient implements SmsProviderClient {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AliyunSmsProviderClient.class);
+
     /** 数据库中 Provider 记录的类型值，选中后由本客户端调用阿里云短信 API。 */
     public static final String TYPE = "ALIYUN";
-
-    private static final Logger LOG = LoggerFactory.getLogger(AliyunSmsProviderClient.class);
 
     private static final Region CHINA_MAINLAND = new Region("CN");
 

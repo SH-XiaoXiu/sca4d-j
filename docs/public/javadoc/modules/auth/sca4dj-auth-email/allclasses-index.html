@@ -50,65 +50,69 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab3" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab3', 2)" class="table-tab">Enum Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/ConsumedEmailCodeChallenge.html" title="class in com.sca4d.auth.email.challenge">ConsumedEmailCodeChallenge</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/auth/email/exception/AuthEmailException.html" title="class in com.sca4d.auth.email.exception">AuthEmailException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">邮箱验证码认证的依赖或数据故障，例如 Redis 中挑战数据损坏。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/ConsumedEmailCodeChallenge.html" title="class in com.sca4d.auth.email.challenge">ConsumedEmailCodeChallenge</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存成功消费 Challenge 后确认的 Account、非秘密引用和版本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeAuthenticationMethod.html" title="class in com.sca4d.auth.email">EmailCodeAuthenticationMethod</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeAuthenticationMethod.html" title="class in com.sca4d.auth.email">EmailCodeAuthenticationMethod</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">单次消费 Email Code Challenge，并向认证引擎返回持有因素证据。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/config/EmailCodeAutoConfiguration.html" title="class in com.sca4d.auth.email.config">EmailCodeAutoConfiguration</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/config/EmailCodeAutoConfiguration.html" title="class in com.sca4d.auth.email.config">EmailCodeAutoConfiguration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">自动装配 Email Code 设置、Redis Challenge 和认证方法，不注册 HTTP 路由。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeChallenge.html" title="class in com.sca4d.auth.email">EmailCodeChallenge</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeChallenge.html" title="class in com.sca4d.auth.email">EmailCodeChallenge</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回匿名调用方可以安全读取的 Challenge 标识、脱敏提示和时间边界。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeChallengeId.html" title="class in com.sca4d.auth.email">EmailCodeChallengeId</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeChallengeId.html" title="class in com.sca4d.auth.email">EmailCodeChallengeId</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示不包含验证码或邮箱的 Email Code Challenge 标识。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">签发匿名一致的 Challenge，异步登记通知，并原子验证 Argon2id 验证码摘要。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeState.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeState</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeState.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeState</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Redis 中的验证码摘要、可选 Account、状态、次数和时间边界。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeStatus.html" title="enum class in com.sca4d.auth.email.challenge">EmailCodeChallengeStatus</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeStatus.html" title="enum class in com.sca4d.auth.email.challenge">EmailCodeChallengeStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示 Redis Email Code Challenge 是否仍可验证、已消费或已耗尽。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/auth/email/EmailCodeErrorCode.html" title="enum class in com.sca4d.auth.email">EmailCodeErrorCode</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/auth/email/EmailCodeErrorCode.html" title="enum class in com.sca4d.auth.email">EmailCodeErrorCode</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Email Code Challenge 签发、消费和认证使用的稳定错误码。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeNotice.html" title="class in com.sca4d.auth.email">EmailCodeNotice</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeNotice.html" title="class in com.sca4d.auth.email">EmailCodeNotice</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次 Email Code 通知需要投递的 Account、验证码和有效分钟数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeProof.html" title="class in com.sca4d.auth.email">EmailCodeProof</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/EmailCodeProof.html" title="class in com.sca4d.auth.email">EmailCodeProof</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">只在一次认证方法调用中存在的 Email Code Challenge 标识和原始验证码。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/config/EmailCodeProperties.html" title="class in com.sca4d.auth.email.config">EmailCodeProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/config/EmailCodeProperties.html" title="class in com.sca4d.auth.email.config">EmailCodeProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置 Email 登录标识使用的 Account 认证域。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明 Email Code Challenge 有效期、重发间隔和错误次数上限。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html" title="class in com.sca4d.auth.email.challenge">RedisEmailCodeChallengeStore</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html" title="class in com.sca4d.auth.email.challenge">RedisEmailCodeChallengeStore</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Redis Hash TTL 和 Lua 原子消费 Email Code Challenge。</div>
 </div>
 </div>

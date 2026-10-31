@@ -137,7 +137,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.Key</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#routingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">routingKey</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
+<div class="block">在消息编码前追加 `MESSAGING:ROUTE` 路由前缀；业务消息编码本身保持原值，不做改写。</div>
 </div>
 </div>
 </div>
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.Key</span>&nbsp;<span class="element-name">routingKey</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode)</span></div>
-<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
+<div class="block">在消息编码前追加 `MESSAGING:ROUTE` 路由前缀；业务消息编码本身保持原值，不做改写。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>messageCode</code> - 业务消息编码</dd>

@@ -245,7 +245,8 @@ implements com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.core.api.authent
 <dt>Returns:</dt>
 <dd>包含身份、成功认证记录、资源和有效期的 JSON wire</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 缺少具体类型的 Codec 或 JSON 编码失败时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 缺少 Principal 或 Resource 具体类型的 Codec 时抛出</dd>
+<dd><code><a href="../../exception/AuthException.html" title="class in com.sca4d.auth.exception">AuthException</a></code> - JSON 编码失败时抛出</dd>
 </dl>
 </section>
 </li>
@@ -264,7 +265,7 @@ implements com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.core.api.authent
 <dt>Returns:</dt>
 <dd>恢复的 Session</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - wire 损坏、版本未知、缺少 Codec 或 payload 无法解码时抛出</dd>
+<dd><code><a href="../../exception/AuthException.html" title="class in com.sca4d.auth.exception">AuthException</a></code> - wire 损坏、版本未知、缺少 Codec 或 payload 无法解码时抛出，原始异常保留为 cause</dd>
 </dl>
 </section>
 </li>

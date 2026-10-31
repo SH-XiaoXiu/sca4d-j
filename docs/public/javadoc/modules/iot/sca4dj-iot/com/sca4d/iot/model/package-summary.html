@@ -89,7 +89,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="CompositeThingModelRepository.html" title="class in com.sca4d.iot.model">CompositeThingModelRepository</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">按 Product code 把只读代码物模型和数据库物模型组合为唯一读写入口。</div>
+<div class="block">按 Product code 选择物模型来源：代码 Product 从 <a href="StaticThingModelRepository.html" title="class in com.sca4d.iot.model"><code>StaticThingModelRepository</code></a> 只读读取，
+ 其他 Product 从数据库读写。代码 Product 的发布和翻译替换会抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StaticThingModelRepository.html" title="class in com.sca4d.iot.model">StaticThingModelRepository</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

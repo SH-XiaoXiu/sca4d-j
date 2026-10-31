@@ -121,7 +121,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.version.ClientVersion</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolve(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">resolve</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取五个客户端版本请求头并校验组合关系。</div>
+</div>
 </div>
 </div>
 </div>
@@ -157,9 +159,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="resolve(jakarta.servlet.http.HttpServletRequest)">
 <h3>resolve</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.version.ClientVersion</span>&nbsp;<span class="element-name">resolve</span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
+<div class="block">读取五个客户端版本请求头并校验组合关系。
+
+ <p>所有版本头都不存在时返回未声明的 ClientVersion。声明了任一版本头但缺少客户端名称或版本，
+ 或契约号不是正整数时，抛出 VersionCompatibilityException。任一头重复或格式不合法时同样抛出该异常。
+ 解析结果只用于版本兼容判断，不作为身份依据。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>request</code> - 当前 HTTP 请求</dd>
 <dt>Returns:</dt>
-<dd>客户端声明；畸形或重复头返回版本输入异常</dd>
+<dd>客户端版本声明</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.version.exception.VersionCompatibilityException</code> - 版本头格式或组合不合法时抛出</dd>
 </dl>
 </section>
 </li>

@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">RabbitMessageBus</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.messaging.MessageBus</span></div>
-<div class="block">使用固定 RabbitMQ 基座实现立即、提交后和 Outbox 三种 Message 分发方式。</div>
+<div class="block">通过 RabbitPublisher 立即发布消息，或在事务提交后发布，或先写入 Outbox 表再由派发任务发布。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

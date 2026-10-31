@@ -78,10 +78,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="config/package-summary.html">com.sca4d.job.config</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="persistence/package-summary.html">com.sca4d.job.persistence</a></div>
+<div class="col-first odd-row-color"><a href="exception/package-summary.html">com.sca4d.job.exception</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="runtime/package-summary.html">com.sca4d.job.runtime</a></div>
+<div class="col-first even-row-color"><a href="persistence/package-summary.html">com.sca4d.job.persistence</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="runtime/package-summary.html">com.sca4d.job.runtime</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -94,6 +96,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color class-summary class-summary-tab3"><a href="JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">表示 Job 节点一次尝试的执行结果，与节点是否继续重试分别保存。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="JobDeliveryStatus.html" title="enum class in com.sca4d.job">JobDeliveryStatus</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">表示无记录工作份额在 `job_delivery.status` 中的协调状态。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="JobKind.html" title="enum class in com.sca4d.job">JobKind</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="block">表示根运行或节点执行的 Job 类型，写入 `job_run.job_kind` 与 `job_run_node.node_kind`。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab3"><a href="JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab3">

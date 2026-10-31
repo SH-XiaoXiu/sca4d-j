@@ -104,7 +104,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Collection)" class="member-name-link">DeviceConnectionTerminatorRouter</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.connection.DeviceConnectionTerminator&gt;&nbsp;terminators)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建协议到终止实现的只读路由。</div>
+</div>
 </div>
 </section>
 </li>
@@ -123,7 +125,9 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#disconnect(com.sca4d.iot.api.connection.DeviceConnectionProtocol,com.sca4d.iot.api.connection.DeviceConnectionId,java.lang.String)" class="member-name-link">disconnect</a><wbr>(@NotNull com.sca4d.iot.api.connection.DeviceConnectionProtocol&nbsp;protocol,
  @NotNull com.sca4d.iot.api.connection.DeviceConnectionId&nbsp;connectionId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按协议选择终止实现，并让该实现断开指定连接代次。</div>
+</div>
 </div>
 </div>
 </div>
@@ -146,9 +150,12 @@ loadScripts(document, 'script');</script>
 <h3>DeviceConnectionTerminatorRouter</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeviceConnectionTerminatorRouter</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.iot.api.connection.DeviceConnectionTerminator&gt;&nbsp;terminators)</span></div>
+<div class="block">创建协议到终止实现的只读路由。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>terminators</code> - 具体设备接入模块登记的全部连接终止实现</dd>
+<dd><code>terminators</code> - 具体设备接入模块登记的全部连接终止实现；集合或任一元素为空时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 两个实现声明了同一 <code>DeviceConnectionProtocol</code> 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -169,6 +176,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.iot.api.connection.DeviceConnectionId&nbsp;connectionId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
+<div class="block">按协议选择终止实现，并让该实现断开指定连接代次。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>protocol</code> - 待终止连接使用的协议</dd>

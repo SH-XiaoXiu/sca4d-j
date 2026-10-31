@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">EmqxConnectionRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点事实。</div>
+<div class="block">使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点名称。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>com.sca4d.iot.api.connection.DeviceConnectionId&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findConnectionIds(java.util.Collection)" class="member-name-link">findConnectionIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;clientIds)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用一次 Redis pipeline 读取一批 Client ID 当前映射的连接代次。</div>
+<div class="block">按 Redis 批次分批使用 pipeline 读取 Client ID 当前映射的连接代次。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCurrent(java.lang.String,com.sca4d.iot.api.connection.DeviceConnectionId)" class="member-name-link">isCurrent</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId,
@@ -293,7 +293,7 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>com.sca4d.iot.api.connection.DeviceConnectionId&gt;</span>&nbsp;<span class="element-name">findConnectionIds</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;clientIds)</span></div>
-<div class="block">使用一次 Redis pipeline 读取一批 Client ID 当前映射的连接代次。</div>
+<div class="block">按 Redis 批次分批使用 pipeline 读取 Client ID 当前映射的连接代次。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>clientIds</code> - MQTT Client ID 集合</dd>

@@ -240,7 +240,8 @@ loadScripts(document, 'script');</script>
 <div class="block">在最多等待两秒取得的自动续租分布式锁内执行操作。</div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 等待期间始终由其他实例持有租约时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 等待超时（其他实例持有租约）时抛出 CONFLICT，等待线程被中断时抛出 UNAVAILABLE；任务不会执行</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 任务结束时已失去锁所有权时抛出，任务已经执行</dd>
 </dl>
 </section>
 </li>

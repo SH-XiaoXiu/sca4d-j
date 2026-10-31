@@ -108,7 +108,9 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../model/ThingDataJsonCodec.html" title="class in com.sca4d.iot.model">ThingDataJsonCodec</a>&nbsp;json,
  @NotNull <a href="DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a>&nbsp;policies,
  @NotNull com.sca4d.core.spring.persistence.batch.SqlBatches&nbsp;sqlBatches)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建下行消息 Repository，并在构造时检查全部依赖非空。</div>
+</div>
 </div>
 </section>
 </li>
@@ -133,7 +135,7 @@ loadScripts(document, 'script');</script>
  long&nbsp;expectedDesiredSequence,
  long&nbsp;desiredSequence)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">当 desired sequence 仍等于预期值时更新它。</div>
+<div class="block">当 Device 当前 desired sequence 仍等于 expectedDesiredSequence 时更新为 desiredSequence；条件不满足时返回 false 且不修改数据。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#beginDispatch(long,int)" class="member-name-link">beginDispatch</a><wbr>(long&nbsp;messageId,
@@ -147,7 +149,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;error,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">把仍未结束的消息转换成最终状态。</div>
+<div class="block">把仍处于 PENDING、SENDING 或 WAITING_ACK 的消息转换成给定最终状态；消息已经结束或不存在时返回 false。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DesiredConvergence.html" title="class in com.sca4d.iot.message">DesiredConvergence</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#convergeDesired(long,long,java.util.Map,java.time.Instant)" class="member-name-link">convergeDesired</a><wbr>(long&nbsp;deviceId,
@@ -221,6 +223,17 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">分页读取 Device 下行消息。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.iot.api.message.DeviceAcknowledgement&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findLatestAcknowledgements(java.util.Collection)" class="member-name-link">findLatestAcknowledgements</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">批量读取指定下行消息的最新 Device 回执；每个消息标识对应一个不可修改列表，没有回执时为空列表。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.iot.api.message.DeviceDownlink&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findRecentDownlinks(java.util.Collection,int)" class="member-name-link">findRecentDownlinks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds,
+ int&nbsp;limitPerDevice)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">批量读取最近记录；每个标识对应有序且不可修改的列表，无记录时为空列表。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#finishPreviousDesiredMessages(long,long,java.lang.String,com.sca4d.iot.api.message.DeviceDownlinkStatus,java.time.Instant)" class="member-name-link">finishPreviousDesiredMessages</a><wbr>(long&nbsp;deviceId,
@@ -301,6 +314,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a>&nbsp;policies,
  @NotNull
  @NotNull com.sca4d.core.spring.persistence.batch.SqlBatches&nbsp;sqlBatches)</span></div>
+<div class="block">创建下行消息 Repository，并在构造时检查全部依赖非空。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>messages</code> - 下行消息 SQL Mapper</dd>
@@ -319,6 +333,40 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="findRecentDownlinks(java.util.Collection,int)">
+<h3>findRecentDownlinks</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.iot.api.message.DeviceDownlink&gt;&gt;</span>&nbsp;<span class="element-name">findRecentDownlinks</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds,
+ int&nbsp;limitPerDevice)</span></div>
+<div class="block">批量读取最近记录；每个标识对应有序且不可修改的列表，无记录时为空列表。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>deviceIds</code> - 正数标识集合，重复标识合并，空集合不查询数据库</dd>
+<dd><code>limitPerDevice</code> - 每个标识的记录上限，范围为 1 到 100</dd>
+<dt>Returns:</dt>
+<dd>按标识分组的不可修改结果</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="findLatestAcknowledgements(java.util.Collection)">
+<h3>findLatestAcknowledgements</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.iot.api.message.DeviceAcknowledgement&gt;&gt;</span>&nbsp;<span class="element-name">findLatestAcknowledgements</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</span></div>
+<div class="block">批量读取指定下行消息的最新 Device 回执；每个消息标识对应一个不可修改列表，没有回执时为空列表。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>messageIds</code> - 正数消息标识集合，重复标识合并，空集合不查询数据库</dd>
+<dt>Returns:</dt>
+<dd>按消息标识分组的不可修改结果</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 任一消息标识不是正数时抛出</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="hasActiveMessages(long,long)">
 <h3>hasActiveMessages</h3>
@@ -356,7 +404,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">advanceDesiredSequence</span><wbr><span class="parameters">(long&nbsp;deviceId,
  long&nbsp;expectedDesiredSequence,
  long&nbsp;desiredSequence)</span></div>
-<div class="block">当 desired sequence 仍等于预期值时更新它。</div>
+<div class="block">当 Device 当前 desired sequence 仍等于 expectedDesiredSequence 时更新为 desiredSequence；条件不满足时返回 false 且不修改数据。</div>
 </section>
 </li>
 <li>
@@ -537,7 +585,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;error,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</span></div>
-<div class="block">把仍未结束的消息转换成最终状态。</div>
+<div class="block">把仍处于 PENDING、SENDING 或 WAITING_ACK 的消息转换成给定最终状态；消息已经结束或不存在时返回 false。</div>
 </section>
 </li>
 <li>

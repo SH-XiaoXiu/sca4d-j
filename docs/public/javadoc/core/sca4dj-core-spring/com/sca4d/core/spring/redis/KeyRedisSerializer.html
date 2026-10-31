@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">KeyRedisSerializer</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.springframework.data.redis.serializer.RedisSerializer&lt;com.sca4d.core.api.name.Key&gt;</span></div>
-<div class="block">在 Redis key 字节边界应用 App 隔离及模块声明的 Cluster 同槽分组。</div>
+<div class="block">序列化和反序列化 Redis key 字节时应用 App 隔离，并按模块声明把同组 key 放入同一个 Cluster 槽。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,7 +110,7 @@ implements org.springframework.data.redis.serializer.RedisSerializer&lt;com.sca4
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">KeyRedisSerializer</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a>&gt;&nbsp;hashTags)</code></div>
 <div class="col-last even-row-color">
-<div class="block">保存按最长稳定根编码优先匹配的同槽声明；App 名必须已经初始化。</div>
+<div class="block">保存同槽声明，并按根编码长度从长到短排序，较长的根优先匹配；构造时要求 AppName 已经初始化。</div>
 </div>
 </div>
 </section>
@@ -169,7 +169,7 @@ implements org.springframework.data.redis.serializer.RedisSerializer&lt;com.sca4
 <h3>KeyRedisSerializer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">KeyRedisSerializer</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a>&gt;&nbsp;hashTags)</span></div>
-<div class="block">保存按最长稳定根编码优先匹配的同槽声明；App 名必须已经初始化。</div>
+<div class="block">保存同槽声明，并按根编码长度从长到短排序，较长的根优先匹配；构造时要求 AppName 已经初始化。</div>
 </section>
 </li>
 </ul>

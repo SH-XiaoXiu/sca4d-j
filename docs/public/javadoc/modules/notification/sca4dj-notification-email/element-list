@@ -1,5 +1,6 @@
 com.sca4d.notification.email
 com.sca4d.notification.email.config
+com.sca4d.notification.email.exception
 com.sca4d.notification.email.mapper
 com.sca4d.notification.email.sender
 com.sca4d.notification.email.sender.mapper

@@ -110,7 +110,9 @@ implements com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.iot.api.model.Th
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.iot.message.DevicePolicyCatalog)" class="member-name-link">ThingModelJsonCodec</a><wbr>(@NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
  @NotNull <a href="../message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a>&nbsp;policies)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建物模型 Codec。解析时 acknowledgementPolicy 与 retryPolicy 的 code 都从 policies 查找，未登记的 code 在 decode 中转换为 BusinessException。</div>
+</div>
 </div>
 </section>
 </li>
@@ -168,9 +170,11 @@ implements com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.iot.api.model.Th
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
  @NotNull
  @NotNull <a href="../message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a>&nbsp;policies)</span></div>
+<div class="block">创建物模型 Codec。解析时 acknowledgementPolicy 与 retryPolicy 的 code 都从 policies 查找，未登记的 code 在 decode 中转换为 BusinessException。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>objectMapper</code> - App 统一 JSON 映射器 @param policies App 已登记的策略对象目录</dd>
+<dd><code>objectMapper</code> - App 统一 JSON 映射器，为 null 时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a></dd>
+<dd><code>policies</code> - App 已登记的策略对象目录，为 null 时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link"><code>NullPointerException</code></a></dd>
 </dl>
 </section>
 </li>
@@ -236,7 +240,7 @@ implements com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.iot.api.model.Th
 <dt>Returns:</dt>
 <dd>与静态 Builder 相同的不可变对象</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - JSON 语法、格式版本、字段类型或模型约束不合法时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - JSON 语法、格式版本、字段类型或模型约束不合法时抛出</dd>
 </dl>
 </section>
 </li>

@@ -91,7 +91,9 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RedisHashTag</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">声明需要在 Redis Cluster 中共同参与 Lua 操作的一组逻辑 key。</div>
+<div class="block">声明一个编码根，使该根下的 Redis key 在 Redis Cluster 中落在同一个槽位。
+
+ <p><code>KeyRedisSerializer</code> 序列化 key 时，匹配该根的 key 会把根编码放入花括号 hash tag。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -104,7 +106,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">RedisHashTag</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;root)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建同槽声明。</div>
+</div>
 </div>
 </section>
 </li>
@@ -122,7 +126,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#root()" class="member-name-link">root</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">需要共享 Cluster hash tag 的编码根。</div>
+<div class="block">返回同槽编码根。</div>
 </div>
 </div>
 </div>
@@ -146,6 +150,13 @@ loadScripts(document, 'script');</script>
 <h3>RedisHashTag</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisHashTag</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;root)</span></div>
+<div class="block">创建同槽声明。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>root</code> - 同槽编码根，位于该根下的 key 共享同一个 hash tag</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 编码根为空时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -161,10 +172,10 @@ loadScripts(document, 'script');</script>
 <h3>root</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">root</span>()</div>
-<div class="block">需要共享 Cluster hash tag 的编码根。</div>
+<div class="block">返回同槽编码根。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>需要共享 Cluster hash tag 的编码根</dd>
+<dd>构造时传入的编码根</dd>
 </dl>
 </section>
 </li>

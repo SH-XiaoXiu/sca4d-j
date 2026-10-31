@@ -103,11 +103,11 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,java.lang.String,long,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">NodeClaim</a><wbr>(long&nbsp;nodeId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,com.sca4d.core.api.job.JobKey,int,com.sca4d.job.JobKind,java.lang.String,java.lang.String,long,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">NodeClaim</a><wbr>(long&nbsp;nodeId,
  long&nbsp;runId,
  @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
  int&nbsp;jobDefinitionVersion,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobKind,
+ @NotNull <a href="../JobKind.html" title="enum class in com.sca4d.job">JobKind</a>&nbsp;jobKind,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeKey,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
  long&nbsp;attempt,
@@ -161,7 +161,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">恢复 Job 定义使用的 Job key。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../JobKind.html" title="enum class in com.sca4d.job">JobKind</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#jobKind()" class="member-name-link">jobKind</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">根运行采用的 Job 种类。</div>
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nodeKey()" class="member-name-link">nodeKey</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">当前节点在 Job 定义内的稳定名称。</div>
+<div class="block">当前节点在 Job 定义内的名称。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outputJson()" class="member-name-link">outputJson</a>()</code></div>
@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;nextAttemptAt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;at)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">保存失败事实及业务层确定的下次可执行时间，本次尝试结束但节点继续等待。</div>
+<div class="block">记录本次尝试失败，并保存下次可执行时间；本次尝试结束，节点回到等待状态。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.retry.RetryRule</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryRule()" class="member-name-link">retryRule</a>()</code></div>
@@ -221,7 +221,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,long,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,java.lang.String,long,com.sca4d.core.api.retry.RetryRule)">
+<section class="detail" id="&lt;init&gt;(long,long,com.sca4d.core.api.job.JobKey,int,com.sca4d.job.JobKind,java.lang.String,java.lang.String,long,com.sca4d.core.api.retry.RetryRule)">
 <h3>NodeClaim</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NodeClaim</span><wbr><span class="parameters">(long&nbsp;nodeId,
  long&nbsp;runId,
@@ -229,7 +229,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
  int&nbsp;jobDefinitionVersion,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobKind,
+ @NotNull <a href="../JobKind.html" title="enum class in com.sca4d.job">JobKind</a>&nbsp;jobKind,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeKey,
  @Nullable
@@ -244,8 +244,8 @@ loadScripts(document, 'script');</script>
 <dd><code>runId</code> - 根运行数据库主键</dd>
 <dd><code>jobKey</code> - 提交时保存的 Job key</dd>
 <dd><code>jobDefinitionVersion</code> - 提交时保存的 Job 定义版本</dd>
-<dd><code>jobKind</code> - DIRECT 或 PIPELINE</dd>
-<dd><code>nodeKey</code> - 节点在 Job 内的稳定名称</dd>
+<dd><code>jobKind</code> - 根运行的 Job 类型，DIRECT 或 PIPELINE</dd>
+<dd><code>nodeKey</code> - 节点在 Job 内的名称</dd>
 <dd><code>inputJson</code> - 已准备的输入 JSON；Void 或合并节点为空</dd>
 <dd><code>attempt</code> - 当前从 1 开始的尝试次数</dd>
 <dd><code>retryRule</code> - 节点创建时冻结的重试规则</dd>
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;nextAttemptAt,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;at)</span></div>
-<div class="block">保存失败事实及业务层确定的下次可执行时间，本次尝试结束但节点继续等待。</div>
+<div class="block">记录本次尝试失败，并保存下次可执行时间；本次尝试结束，节点回到等待状态。</div>
 </section>
 </li>
 <li>
@@ -380,7 +380,7 @@ loadScripts(document, 'script');</script>
 <div class="block">恢复 Job 定义使用的 Job key。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>Job key 文本</dd>
+<dd>提交根运行时保存的 JobKey 对象</dd>
 </dl>
 </section>
 </li>
@@ -399,7 +399,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="jobKind()">
 <h3>jobKind</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">jobKind</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../JobKind.html" title="enum class in com.sca4d.job">JobKind</a></span>&nbsp;<span class="element-name">jobKind</span>()</div>
 <div class="block">根运行采用的 Job 种类。</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -412,10 +412,10 @@ loadScripts(document, 'script');</script>
 <h3>nodeKey</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">nodeKey</span>()</div>
-<div class="block">当前节点在 Job 定义内的稳定名称。</div>
+<div class="block">当前节点在 Job 定义内的名称。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>节点在 Job 内的稳定名称</dd>
+<dd>节点在 Job 内的名称</dd>
 </dl>
 </section>
 </li>

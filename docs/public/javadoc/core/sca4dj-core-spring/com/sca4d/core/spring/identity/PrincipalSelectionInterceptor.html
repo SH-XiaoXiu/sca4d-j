@@ -207,9 +207,9 @@ loadScripts(document, 'script');</script>
 <dd><code>handler</code> - Spring MVC 已选择的 Handler</dd>
 <dd><code>call</code> - 当前请求唯一的调用</dd>
 <dt>Returns:</dt>
-<dd>业务身份选择完成时为 <code>true</code></dd>
+<dd>始终为 <code>true</code>，表示继续执行后续拦截器和 Controller；未选出业务身份时由 <a href="PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity"><code>PrincipalSelectionCallInterceptor</code></a> 在参数绑定后继续处理</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.BusinessException</code> - 必须选择 Principal 但请求尚未认证时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 必须选择 Principal 但请求尚未认证时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 无法确定必须存在的 Principal 时抛出</dd>
 </dl>
 </section>

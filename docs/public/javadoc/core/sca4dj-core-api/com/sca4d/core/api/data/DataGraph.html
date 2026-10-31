@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <div class="block">构建阶段完成依赖校验和排序后的节点。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>按节点登记顺序确定拓扑次序的不可变节点列表</dd>
+<dd>不可变节点列表；每个节点排在其全部输入节点之后，依赖关系相同的节点保持登记顺序</dd>
 </dl>
 </section>
 </li>

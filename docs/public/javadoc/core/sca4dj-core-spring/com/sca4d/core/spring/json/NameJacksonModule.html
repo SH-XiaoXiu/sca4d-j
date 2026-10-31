@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">NameJacksonModule</span>
 <span class="extends-implements">extends com.fasterxml.jackson.databind.module.SimpleModule</span></div>
-<div class="block">在 JSON 字符串边界恢复名称类型；Code 保持业务编码，只有 Key 应用 App 隔离。</div>
+<div class="block">在 JSON 字符串读写时恢复名称类型；Code 保持业务编码，只有 Key 按 App 隔离输出。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -139,7 +139,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">NameJacksonModule</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">注册公共名称类型与明确的领域协议格式，不根据 JSON 字段名猜测隔离规则。</div>
+<div class="block">注册公共名称类型及各自协议约定的输出格式，不根据 JSON 字段名推断 App 隔离规则。</div>
 </div>
 </div>
 </section>
@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>NameJacksonModule</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NameJacksonModule</span>()</div>
-<div class="block">注册公共名称类型与明确的领域协议格式，不根据 JSON 字段名猜测隔离规则。</div>
+<div class="block">注册公共名称类型及各自协议约定的输出格式，不根据 JSON 字段名推断 App 隔离规则。</div>
 </section>
 </li>
 </ul>

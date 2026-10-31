@@ -106,7 +106,9 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.emqx.authentication.EmqxDeviceConnectionRequestFactory,com.sca4d.iot.api.connection.DeviceConnectionAdmission,com.sca4d.iot.emqx.authentication.MqttAuthorizationService)" class="member-name-link">EmqxAuthenticationService</a><wbr>(@NotNull <a href="EmqxDeviceConnectionRequestFactory.html" title="interface in com.sca4d.iot.emqx.authentication">EmqxDeviceConnectionRequestFactory</a>&nbsp;requests,
  @NotNull com.sca4d.iot.api.connection.DeviceConnectionAdmission&nbsp;admission,
  @NotNull <a href="MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a>&nbsp;authorization)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建 EMQX 认证服务。</div>
+</div>
 </div>
 </section>
 </li>
@@ -152,6 +154,13 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.iot.api.connection.DeviceConnectionAdmission&nbsp;admission,
  @NotNull
  @NotNull <a href="MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a>&nbsp;authorization)</span></div>
+<div class="block">创建 EMQX 认证服务。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>requests</code> - 从 EMQX 认证请求生成 Device 连接请求的工厂</dd>
+<dd><code>admission</code> - Device 连接准入入口，决定 Device 和接入方式是否可以连接</dd>
+<dd><code>authorization</code> - 为通过准入的 Device 生成 MQTT ACL 的授权服务</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">YamlCodec&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.codec.Codec&lt;T,<wbr>byte[]&gt;</span></div>
-<div class="block">用独立 YAML 解析器与领域 JsonCodec 转换内容，不访问文件或启用 Java 多态类型。</div>
+<div class="block">通过 YAML 解析器在 JsonCodec 的 JSON 树与 YAML 文本之间转换内容，不访问文件也不启用 Java 多态类型。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,7 +110,7 @@ implements com.sca4d.core.api.codec.Codec&lt;T,<wbr>byte[]&gt;</span></div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.codec.JsonCodec)" class="member-name-link">YamlCodec</a><wbr>(@NotNull com.sca4d.core.api.codec.JsonCodec&lt;<a href="YamlCodec.html" title="type parameter in YamlCodec">T</a>&gt;&nbsp;domain)</code></div>
 <div class="col-last even-row-color">
-<div class="block">保存领域解码规则，YAML 格式不决定字段含义。</div>
+<div class="block">保存 JsonCodec 的字段解析规则；YAML 语法本身不决定字段含义。</div>
 </div>
 </div>
 </section>
@@ -154,7 +154,7 @@ implements com.sca4d.core.api.codec.Codec&lt;T,<wbr>byte[]&gt;</span></div>
 <h3>YamlCodec</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">YamlCodec</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.codec.JsonCodec&lt;<a href="YamlCodec.html" title="type parameter in YamlCodec">T</a>&gt;&nbsp;domain)</span></div>
-<div class="block">保存领域解码规则，YAML 格式不决定字段含义。</div>
+<div class="block">保存 JsonCodec 的字段解析规则；YAML 语法本身不决定字段含义。</div>
 </section>
 </li>
 </ul>

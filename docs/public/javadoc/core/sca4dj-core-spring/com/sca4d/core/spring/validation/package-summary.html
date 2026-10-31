@@ -69,7 +69,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">com.sca4d.core.spring.validation</span></div>
 <section class="package-description" id="package-description">
-<div class="block">提供跨模块复用的 Bean Validation 注解及 Spring 条件接入。</div>
+<div class="block">提供可跨模块使用的 Bean Validation 注解和校验器，PhoneNumber 的地区与条件元数据由 Spring Bean 提供。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -152,8 +152,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">执行 SafeText 声明的长度和控制字符检查。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ValidationPatterns.html" title="class in com.sca4d.core.spring.validation">ValidationPatterns</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab6"><a href="TimeRange.html" title="annotation interface in com.sca4d.core.spring.validation">TimeRange</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab6">
+<div class="block">校验同一对象的两个 Instant 属性满足开始时间严格早于结束时间；任一属性为 null 时不校验。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="TimeRanges.html" title="annotation interface in com.sca4d.core.spring.validation">TimeRanges</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab6">
+<div class="block">容纳同一对象上声明的多组 TimeRange 约束。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TimeRangeValidator.html" title="class in com.sca4d.core.spring.validation">TimeRangeValidator</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">比较 TimeRange 指定的两个 Instant 属性，并将失败定位到结束属性。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ValidationPatterns.html" title="class in com.sca4d.core.spring.validation">ValidationPatterns</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存跨业务固定复用的文本格式规则。</div>
 </div>
 </div>

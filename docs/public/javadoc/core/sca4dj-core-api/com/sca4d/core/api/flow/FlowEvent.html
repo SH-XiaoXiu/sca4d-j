@@ -180,10 +180,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="type()">
 <h3>type</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">type</span>()</div>
-<div class="block">事件类型。</div>
+<div class="block">事件类型。
+
+ <p>取值由接入的 <a href="FlowGraph.html" title="class in com.sca4d.core.api.flow"><code>FlowGraph</code></a> 转换规则声明，流程核心不预设集合，因此保留为字符串。
+ 没有转换接受该类型时，<a href="FlowGraph.html#selectTransition(com.sca4d.core.api.flow.FlowInstance,com.sca4d.core.api.flow.FlowEvent)"><code>FlowGraph.selectTransition(com.sca4d.core.api.flow.FlowInstance, com.sca4d.core.api.flow.FlowEvent)</code></a> 抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a>。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>事件类型</dd>
+<dd>非空白事件类型</dd>
 </dl>
 </section>
 </li>

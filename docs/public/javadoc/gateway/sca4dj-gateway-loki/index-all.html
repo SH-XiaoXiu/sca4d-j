@@ -26,7 +26,8 @@ loadScripts(document, 'script');</script>
 <div class="top-nav" id="navbar-top"><button id="navbar-toggle-button" aria-controls="navbar-top" aria-expanded="false" aria-label="Toggle navigation links"><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span><span class="nav-bar-toggle-icon">&nbsp;</span></button>
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
-<li><a href="com/sca4d/gateway/loki/package-summary.html">Package</a></li>
+<li><a href="index.html">Overview</a></li>
+<li>Package</li>
 <li>Class</li>
 <li><a href="overview-tree.html">Tree</a></li>
 <li class="nav-bar-cell1-rev">Index</li>
@@ -48,13 +49,15 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:C">C</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:C">C</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
 <dt><a href="com/sca4d/gateway/loki/package-summary.html">com.sca4d.gateway.loki</a> - package com.sca4d.gateway.loki</dt>
 <dd>
 <div class="block">提供可选的 Loki 日志写入认证和代理自动配置。</div>
 </dd>
+<dt><a href="com/sca4d/gateway/loki/exception/package-summary.html">com.sca4d.gateway.loki.exception</a> - package com.sca4d.gateway.loki.exception</dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:F">F</h2>
 <dl class="index">
@@ -63,6 +66,18 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:G">G</h2>
 <dl class="index">
+<dt><a href="com/sca4d/gateway/loki/exception/GatewayLokiException.html" class="type-name-link" title="class in com.sca4d.gateway.loki.exception">GatewayLokiException</a> - Exception Class in <a href="com/sca4d/gateway/loki/exception/package-summary.html">com.sca4d.gateway.loki.exception</a></dt>
+<dd>
+<div class="block">Loki 日志推送的依赖故障，例如日志服务响应异常。</div>
+</dd>
+<dt><a href="com/sca4d/gateway/loki/exception/GatewayLokiException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">GatewayLokiException(String)</a> - Constructor for exception class com.sca4d.gateway.loki.exception.<a href="com/sca4d/gateway/loki/exception/GatewayLokiException.html" title="class in com.sca4d.gateway.loki.exception">GatewayLokiException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/gateway/loki/exception/GatewayLokiException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">GatewayLokiException(String, Throwable)</a> - Constructor for exception class com.sca4d.gateway.loki.exception.<a href="com/sca4d/gateway/loki/exception/GatewayLokiException.html" title="class in com.sca4d.gateway.loki.exception">GatewayLokiException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 <dt><a href="com/sca4d/gateway/loki/LokiGatewayProperties.html#getLokiOrigin()" class="member-name-link">getLokiOrigin()</a> - Method in class com.sca4d.gateway.loki.<a href="com/sca4d/gateway/loki/LokiGatewayProperties.html" title="class in com.sca4d.gateway.loki">LokiGatewayProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/gateway/loki/LokiGatewayProperties.html#getLokiPath()" class="member-name-link">getLokiPath()</a> - Method in class com.sca4d.gateway.loki.<a href="com/sca4d/gateway/loki/LokiGatewayProperties.html" title="class in com.sca4d.gateway.loki">LokiGatewayProperties</a></dt>
@@ -121,7 +136,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/gateway/loki/LokiGatewayProperties.html#validate(org.springframework.core.env.Environment)" class="member-name-link">validate(Environment)</a> - Method in class com.sca4d.gateway.loki.<a href="com/sca4d/gateway/loki/LokiGatewayProperties.html" title="class in com.sca4d.gateway.loki">LokiGatewayProperties</a></dt>
 <dd>
-<div class="block">校验并规范化启用状态下的全部配置。</div>
+<div class="block">启用时校验 Loki 配置，并把校验后的 origin、路径、账号和密码写回当前对象。</div>
 </dd>
 <dt><a href="com/sca4d/gateway/loki/LokiGatewayProperties.html#validatedLokiOrigin()" class="member-name-link">validatedLokiOrigin()</a> - Method in class com.sca4d.gateway.loki.<a href="com/sca4d/gateway/loki/LokiGatewayProperties.html" title="class in com.sca4d.gateway.loki">LokiGatewayProperties</a></dt>
 <dd>&nbsp;</dd>
@@ -130,7 +145,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/gateway/loki/LokiGatewayProperties.html#validatedUsername()" class="member-name-link">validatedUsername()</a> - Method in class com.sca4d.gateway.loki.<a href="com/sca4d/gateway/loki/LokiGatewayProperties.html" title="class in com.sca4d.gateway.loki">LokiGatewayProperties</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:C">C</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:C">C</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

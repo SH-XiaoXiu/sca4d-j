@@ -267,6 +267,10 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;nextFireAt)</span></div>
 <div class="block">按乐观锁版本完整替换规则，并保存业务层已确定的目标状态。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>规则被修改返回 true；版本不匹配或规则不存在时不修改数据并返回 false</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -279,6 +283,10 @@ loadScripts(document, 'script');</script>
  @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;nextFireAt)</span></div>
 <div class="block">按乐观锁版本修改状态和下一次触发时间。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>规则被修改返回 true；版本不匹配或规则不存在时不修改数据并返回 false</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -300,7 +308,13 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;messageId,
  @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;failureCode)</span></div>
-<div class="block">保存最新执行结果，并在同一写入中推进状态和下一次触发时间。</div>
+<div class="block">保存最新执行结果，并在同一写入中推进状态和下一次触发时间。
+
+ <p>只匹配 ACTIVE 且版本等于 expectedVersion 的规则。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>规则被推进返回 true；版本不匹配或规则已非 ACTIVE 时不修改数据并返回 false</dd>
+</dl>
 </section>
 </li>
 <li>

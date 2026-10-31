@@ -137,6 +137,22 @@ implements <a href="ErrorCode.html" title="interface in com.sca4d.core.api.error
 <div class="col-last odd-row-color">
 <div class="block">当前状态或乐观版本发生冲突。</div>
 </div>
+<div class="col-first even-row-color"><code><a href="#FLOW_EXPIRED" class="member-name-link">FLOW_EXPIRED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">流程实例已经过期。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#FLOW_ID_EXISTS" class="member-name-link">FLOW_ID_EXISTS</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">流程实例标识已经存在。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#FLOW_NOT_COMPLETED" class="member-name-link">FLOW_NOT_COMPLETED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">流程尚未完成，不能消费。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#FLOW_RESULT_CONSUMED" class="member-name-link">FLOW_RESULT_CONSUMED</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">流程结果已经消费或只能消费一次。</div>
+</div>
 <div class="col-first even-row-color"><code><a href="#IDEMPOTENCY_IN_PROGRESS" class="member-name-link">IDEMPOTENCY_IN_PROGRESS</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">同一幂等请求仍在处理中。</div>
@@ -311,6 +327,34 @@ the order they are declared.</div>
 <h3>INTERNAL</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></span>&nbsp;<span class="element-name">INTERNAL</span></div>
 <div class="block">Core 无法归类的内部失败。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="FLOW_NOT_COMPLETED">
+<h3>FLOW_NOT_COMPLETED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></span>&nbsp;<span class="element-name">FLOW_NOT_COMPLETED</span></div>
+<div class="block">流程尚未完成，不能消费。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="FLOW_EXPIRED">
+<h3>FLOW_EXPIRED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></span>&nbsp;<span class="element-name">FLOW_EXPIRED</span></div>
+<div class="block">流程实例已经过期。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="FLOW_RESULT_CONSUMED">
+<h3>FLOW_RESULT_CONSUMED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></span>&nbsp;<span class="element-name">FLOW_RESULT_CONSUMED</span></div>
+<div class="block">流程结果已经消费或只能消费一次。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="FLOW_ID_EXISTS">
+<h3>FLOW_ID_EXISTS</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></span>&nbsp;<span class="element-name">FLOW_ID_EXISTS</span></div>
+<div class="block">流程实例标识已经存在。</div>
 </section>
 </li>
 </ul>

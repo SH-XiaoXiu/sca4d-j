@@ -146,7 +146,7 @@ implements org.springframework.context.MessageSource</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMessage(org.springframework.context.MessageSourceResolvable,java.util.Locale)" class="member-name-link">getMessage</a><wbr>(@NotNull org.springframework.context.MessageSourceResolvable&nbsp;resolvable,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按 MessageSourceResolvable 中的候选键顺序读取消息；Locale 为空时使用 JVM 默认值。</div>
+<div class="block">按 `MessageSourceResolvable` 中的候选键顺序读取第一条存在的消息；Locale 为空时使用 JVM 默认值。</div>
 </div>
 </div>
 </div>
@@ -218,6 +218,8 @@ implements org.springframework.context.MessageSource</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>getMessage</code>&nbsp;in interface&nbsp;<code>org.springframework.context.MessageSource</code></dd>
+<dt>Throws:</dt>
+<dd><code>org.springframework.context.NoSuchMessageException</code> - 消息目录中找不到 `code` 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -229,10 +231,12 @@ implements org.springframework.context.MessageSource</span></div>
  @NotNull org.springframework.context.MessageSourceResolvable&nbsp;resolvable,
  @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span></div>
-<div class="block">按 MessageSourceResolvable 中的候选键顺序读取消息；Locale 为空时使用 JVM 默认值。</div>
+<div class="block">按 `MessageSourceResolvable` 中的候选键顺序读取第一条存在的消息；Locale 为空时使用 JVM 默认值。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>getMessage</code>&nbsp;in interface&nbsp;<code>org.springframework.context.MessageSource</code></dd>
+<dt>Throws:</dt>
+<dd><code>org.springframework.context.NoSuchMessageException</code> - 所有候选键都找不到消息，且 `getDefaultMessage()` 为空时抛出</dd>
 </dl>
 </section>
 </li>

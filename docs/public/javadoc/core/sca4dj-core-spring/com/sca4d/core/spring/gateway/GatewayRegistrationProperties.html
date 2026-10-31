@@ -270,7 +270,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getInstanceId</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>当前进程的可选固定实例标识</dd>
+<dd>配置中的实例标识；注册时不读取该值，实际注册使用 `InstanceProperties` 的实例标识</dd>
 </dl>
 </section>
 </li>
@@ -281,7 +281,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>instanceId</code> - 当前进程在 Gateway 注册表中的唯一标识</dd>
+<dd><code>instanceId</code> - 配置的实例标识；修改该值不会改变 `GatewayRegistrationLifecycle` 注册时使用的实例标识</dd>
 </dl>
 </section>
 </li>
@@ -336,7 +336,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getRenewInterval</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>成功注册后发送续租请求的间隔</dd>
+<dd>两次注册或续租之间的间隔；注册或续租失败后也按同一间隔重试</dd>
 </dl>
 </section>
 </li>

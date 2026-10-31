@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">VersionCallInterceptor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
-<div class="block">在 Call 中报告兼容拒绝，使审计、拒绝分类和完成处理保持统一。</div>
+<div class="block">在 Call 执行前读取 MVC 拦截器写入的版本兼容结果，兼容拒绝时在业务执行前抛出异常。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -112,7 +112,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <div class="col-first even-row-color"><code>static final com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#CODE" class="member-name-link">CODE</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">版本检查的稳定生命周期编码。</div>
+<div class="block">版本兼容检查在 CallLifecycle 中的编码，供 <a href="#order(com.sca4d.core.api.call.CallLifecycleConfiguration)"><code>order(com.sca4d.core.api.call.CallLifecycleConfiguration)</code></a> 引用排序。</div>
 </div>
 </div>
 </section>
@@ -144,7 +144,8 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#before(com.sca4d.core.api.call.CallExecution)" class="member-name-link">before</a><wbr>(@NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">在业务、幂等重放和事务执行前拒绝不兼容请求。</div>
+<div class="block">读取当前 HTTP 请求属性中的版本结果，结果为不兼容时抛出 <code>VersionCompatibilityException</code>。
+ 没有 Servlet 请求上下文时直接返回，不做检查。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
@@ -152,7 +153,8 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#order(com.sca4d.core.api.call.CallLifecycleConfiguration)" class="member-name-link">order</a><wbr>(com.sca4d.core.api.call.CallLifecycleConfiguration&nbsp;configuration)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">在权限之后、幂等重放之前检查，保留 Audit 的最外层观察。</div>
+<div class="block">把版本检查排在权限检查之后、幂等检查之前。
+ 对应参与者未注册时该约束不生效。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports</a><wbr>(@NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution)</code></div>
@@ -181,7 +183,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <section class="detail" id="CODE">
 <h3>CODE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">CODE</span></div>
-<div class="block">版本检查的稳定生命周期编码。</div>
+<div class="block">版本兼容检查在 CallLifecycle 中的编码，供 <a href="#order(com.sca4d.core.api.call.CallLifecycleConfiguration)"><code>order(com.sca4d.core.api.call.CallLifecycleConfiguration)</code></a> 引用排序。</div>
 </section>
 </li>
 </ul>
@@ -215,7 +217,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <dt>Specified by:</dt>
 <dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Participant</code></dd>
 <dt>Returns:</dt>
-<dd>生命周期编码</dd>
+<dd>版本兼容检查在 CallLifecycle 中的编码</dd>
 </dl>
 </section>
 </li>
@@ -228,7 +230,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <dt>Specified by:</dt>
 <dd><code>supports</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Participant</code></dd>
 <dt>Returns:</dt>
-<dd>HTTP 入口以外的调用不受客户端版本约束</dd>
+<dd>调用没有 operation 且方法绑定了版本矩阵时返回 true，其余调用不执行版本检查</dd>
 </dl>
 </section>
 </li>
@@ -237,7 +239,8 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <h3>before</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">before</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution)</span></div>
-<div class="block">在业务、幂等重放和事务执行前拒绝不兼容请求。</div>
+<div class="block">读取当前 HTTP 请求属性中的版本结果，结果为不兼容时抛出 <code>VersionCompatibilityException</code>。
+ 没有 Servlet 请求上下文时直接返回，不做检查。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>before</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Before</code></dd>
@@ -248,7 +251,12 @@ implements com.sca4d.core.api.call.CallLifecycle.Before</span></div>
 <section class="detail" id="order(com.sca4d.core.api.call.CallLifecycleConfiguration)">
 <h3>order</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">order</span><wbr><span class="parameters">(com.sca4d.core.api.call.CallLifecycleConfiguration&nbsp;configuration)</span></div>
-<div class="block">在权限之后、幂等重放之前检查，保留 Audit 的最外层观察。</div>
+<div class="block">把版本检查排在权限检查之后、幂等检查之前。
+ 对应参与者未注册时该约束不生效。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>configuration</code> - 当前 CallLifecycle 配置</dd>
+</dl>
 </section>
 </li>
 </ul>

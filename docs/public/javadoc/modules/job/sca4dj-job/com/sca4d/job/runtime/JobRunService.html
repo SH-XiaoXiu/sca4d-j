@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">JobRunService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。</div>
+<div class="block">创建 Job run、广播和无记录份额，领取与续租节点，保存节点和根运行结果；每个动作在独立事务中完成。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
  @NotNull com.sca4d.core.spring.json.Sca4djMapper&nbsp;objectMapper)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建带脚手架统一 JSON 映射器的 Job 运行服务。</div>
+<div class="block">创建使用脚手架 JSON 映射器的 JobRunService。</div>
 </div>
 </div>
 </section>
@@ -192,7 +192,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eligibleInstances(java.lang.String)" class="member-name-link">eligibleInstances</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilityCode)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">查询具备目标能力的在线实例。</div>
+<div class="block">查询在线且启用目标 capability 的实例。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.retry.RetryDecision</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fail(com.sca4d.job.persistence.NodeClaim,java.lang.String,java.lang.String)" class="member-name-link">fail</a><wbr>(@NotNull <a href="../persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a>&nbsp;claim,
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilitiesJson,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;leaseDuration)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">登记当前实例正在提供的能力。</div>
+<div class="block">登记当前实例启用的 capability。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renew(long,java.lang.String,java.time.Duration)" class="member-name-link">renew</a><wbr>(long&nbsp;nodeId,
@@ -281,7 +281,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
  @NotNull
  @NotNull com.sca4d.core.spring.json.Sca4djMapper&nbsp;objectMapper)</span></div>
-<div class="block">创建带脚手架统一 JSON 映射器的 Job 运行服务。</div>
+<div class="block">创建使用脚手架 JSON 映射器的 JobRunService。</div>
 </section>
 </li>
 </ul>
@@ -345,7 +345,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilitiesJson,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;leaseDuration)</span></div>
-<div class="block">登记当前实例正在提供的能力。</div>
+<div class="block">登记当前实例启用的 capability。</div>
 </section>
 </li>
 <li>
@@ -354,7 +354,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a>&gt;</span>&nbsp;<span class="element-name">eligibleInstances</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;capabilityCode)</span></div>
-<div class="block">查询具备目标能力的在线实例。</div>
+<div class="block">查询在线且启用目标 capability 的实例。</div>
 </section>
 </li>
 <li>

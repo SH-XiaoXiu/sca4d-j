@@ -80,8 +80,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><a href="../config/package-summary.html">com.sca4d.job.config</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="../runtime/package-summary.html">com.sca4d.job.runtime</a></div>
+<div class="col-first even-row-color"><a href="../exception/package-summary.html">com.sca4d.job.exception</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="../runtime/package-summary.html">com.sca4d.job.runtime</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -100,25 +102,33 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">已由目标实例领取的不保留 Run 的工作份额。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobDispatchRecord.html" title="class in com.sca4d.job.persistence">JobDispatchRecord</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobDeliveryInsert.html" title="class in com.sca4d.job.persistence">JobDeliveryInsert</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">批量插入无记录份额时单个目标实例的全部列值。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobDispatchRecord.html" title="class in com.sca4d.job.persistence">JobDispatchRecord</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">从持久化广播头读取标识及触发时的目标快照。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobDispatchRun.html" title="class in com.sca4d.job.persistence">JobDispatchRun</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobDispatchRun.html" title="class in com.sca4d.job.persistence">JobDispatchRun</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">一次广播下某个目标实例已创建的持久化 Run。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">当前在线且具备执行能力的进程实例和本次启动代次。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">当前在线且启用所需 capability 的进程实例及其本次启动代次。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">使用 MyBatis 执行 Job run、节点、依赖和尝试的单条 PostgreSQL 读写。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">按当前 App 隔离名称读写 Job 实例、广播、无记录投递、运行根记录、节点、依赖和尝试记录，隐藏 JobMapper 的 SQL 细节。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobRunNodeInsert.html" title="class in com.sca4d.job.persistence">JobRunNodeInsert</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">隐藏 Job Mapper 和 App 隔离名称，提供稳定的持久化语义。</div>
+<div class="block">批量插入运行节点时单个节点的全部列值。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

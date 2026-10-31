@@ -128,13 +128,24 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">append</a><wbr>(@NotNull com.sca4d.core.api.audit.AuditRecord&nbsp;record)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">追加一条写入后不再更新的审计行。</div>
+<div class="block">追加一条写入后不再更新的审计行，并在同一事务中写入关联资源。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendDelivery(long,com.sca4d.audit.recording.AuditMessage)" class="member-name-link">appendDelivery</a><wbr>(long&nbsp;messageId,
  @NotNull <a href="AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a>&nbsp;message)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendFrozen(com.sca4d.audit.recording.FrozenAuditEntry)" class="member-name-link">appendFrozen</a><wbr>(@NotNull <a href="FrozenAuditEntry.html" title="class in com.sca4d.audit.recording">FrozenAuditEntry</a>&nbsp;frozen)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为已冻结字段分配主键并追加单条审计行。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#associate(long,java.util.Collection)" class="member-name-link">associate</a><wbr>(long&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends com.sca4d.core.api.resource.Resource&gt;&nbsp;resources)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">幂等追加关联，不改写原审计事实；关联时间直接取原记录。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(long)" class="member-name-link">find</a><wbr>(long&nbsp;id)</code></div>
@@ -144,6 +155,19 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#page(com.sca4d.audit.query.AuditQuery)" class="member-name-link">page</a><wbr>(@NotNull <a href="../query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a>&nbsp;query)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relatesTo(long,com.sca4d.core.api.resource.Resource)" class="member-name-link">relatesTo</a><wbr>(long&nbsp;id,
+ com.sca4d.core.api.resource.Resource&nbsp;resource)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">查询快照关联，不通过当前业务归属推断。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scan(long,long,int)" class="member-name-link">scan</a><wbr>(long&nbsp;afterId,
+ long&nbsp;throughId,
+ int&nbsp;size)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按主键游标读取原始事实，用于有界历史补齐。</div>
+</div>
 </div>
 </div>
 </div>
@@ -186,10 +210,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(com.sca4d.core.api.audit.AuditRecord)">
 <h3>append</h3>
-<div class="member-signature"><span class="annotations">@AffectedRows(target="\u65b0\u589e\u5ba1\u8ba1\u8bb0\u5f55")
+<div class="member-signature"><span class="annotations">@Transactional
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">append</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.audit.AuditRecord&nbsp;record)</span></div>
-<div class="block">追加一条写入后不再更新的审计行。</div>
+<div class="block">追加一条写入后不再更新的审计行，并在同一事务中写入关联资源。
+
+ <p>审计行和关联资源是两次写入，不能使用只允许一条 DML 的 <code>@AffectedRows</code>，所以直接检查审计行的影响行数。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="appendFrozen(com.sca4d.audit.recording.FrozenAuditEntry)">
+<h3>appendFrozen</h3>
+<div class="member-signature"><span class="annotations">@Transactional
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">appendFrozen</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="FrozenAuditEntry.html" title="class in com.sca4d.audit.recording">FrozenAuditEntry</a>&nbsp;frozen)</span></div>
+<div class="block">为已冻结字段分配主键并追加单条审计行。</div>
 </section>
 </li>
 <li>
@@ -199,6 +234,31 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a>&nbsp;message)</span></div>
 <div class="block">使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="associate(long,java.util.Collection)">
+<h3>associate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">associate</span><wbr><span class="parameters">(long&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends com.sca4d.core.api.resource.Resource&gt;&nbsp;resources)</span></div>
+<div class="block">幂等追加关联，不改写原审计事实；关联时间直接取原记录。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="scan(long,long,int)">
+<h3>scan</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</span>&nbsp;<span class="element-name">scan</span><wbr><span class="parameters">(long&nbsp;afterId,
+ long&nbsp;throughId,
+ int&nbsp;size)</span></div>
+<div class="block">按主键游标读取原始事实，用于有界历史补齐。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="relatesTo(long,com.sca4d.core.api.resource.Resource)">
+<h3>relatesTo</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">relatesTo</span><wbr><span class="parameters">(long&nbsp;id,
+ com.sca4d.core.api.resource.Resource&nbsp;resource)</span></div>
+<div class="block">查询快照关联，不通过当前业务归属推断。</div>
 </section>
 </li>
 <li>

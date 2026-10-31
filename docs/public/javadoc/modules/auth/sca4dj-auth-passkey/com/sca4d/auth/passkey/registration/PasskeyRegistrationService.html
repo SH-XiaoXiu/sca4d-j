@@ -245,6 +245,11 @@ loadScripts(document, 'script');</script>
 <dd><code>name</code> - 用户为新 Credential 设置的名称</dd>
 <dt>Returns:</dt>
 <dd>数据库保存后的 Credential</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - ceremony 不存在或已消费时抛出 CEREMONY_UNAVAILABLE；ceremony 绑定的账号不一致、响应无法验证、
+                           Credential 标识重复时抛出 REGISTRATION_REJECTED；数量达到上限时抛出 CREDENTIAL_LIMIT_REACHED；
+                           账号锚点不存在时抛出 ACCOUNT_ANCHOR_NOT_FOUND</dd>
+<dd><code>com.sca4d.core.api.concurrent.exception.OptimisticLockException</code> - 数量上限的并发抢占在重试上限内仍未成功时抛出</dd>
 </dl>
 </section>
 </li>
@@ -272,6 +277,8 @@ loadScripts(document, 'script');</script>
 <dd><code>account</code> - Credential 所属账号</dd>
 <dd><code>credentialId</code> - 模块内部 Credential 标识</dd>
 <dd><code>minimumRemainingCredentials</code> - 删除后至少保留的有效 Credential 数量</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Credential 不属于该账号或已删除时抛出 CREDENTIAL_UNAVAILABLE</dd>
 </dl>
 </section>
 </li>

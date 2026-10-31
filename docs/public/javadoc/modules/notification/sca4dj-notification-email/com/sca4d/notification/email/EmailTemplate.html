@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Email Template 审计使用的稳定资源类型。</div>
+<div class="block">Email Template 写入审计记录时使用的资源类型。</div>
 </div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a></code></div>
@@ -156,7 +156,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#source(java.util.Locale)" class="member-name-link">source</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;requested)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按请求 Locale 选择模板正文：先精确匹配语言标签，再匹配语言代码相同的条目，仍找不到时返回第一个 Locale 的正文。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#templateId()" class="member-name-link">templateId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -201,7 +203,7 @@ loadScripts(document, 'script');</script>
 <h3>RESOURCE_TYPE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
-<div class="block">Email Template 审计使用的稳定资源类型。</div>
+<div class="block">Email Template 写入审计记录时使用的资源类型。</div>
 </section>
 </li>
 </ul>
@@ -279,9 +281,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></span>&nbsp;<span class="element-name">source</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;requested)</span></div>
+<div class="block">按请求 Locale 选择模板正文：先精确匹配语言标签，再匹配语言代码相同的条目，仍找不到时返回第一个 Locale 的正文。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>requested</code> - 请求使用的 Locale，不能为空</dd>
 <dt>Returns:</dt>
-<dd>按语言标签选择的模板正文来源</dd>
+<dd>选中的模板正文来源，不会返回 null</dd>
 </dl>
 </section>
 </li>

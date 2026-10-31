@@ -125,11 +125,13 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#create(com.sca4d.auth.sms.challenge.SmsCodeChallengeState)" class="member-name-link">create</a><wbr>(@NotNull <a href="SmsCodeChallengeState.html" title="class in com.sca4d.auth.sms.challenge">SmsCodeChallengeState</a>&nbsp;state)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用 Challenge 剩余有效时间新增状态。</div>
+<div class="block">使用 Challenge 剩余有效时间新增 Redis Hash 状态。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="SmsCodeChallengeState.html" title="class in com.sca4d.auth.sms.challenge">SmsCodeChallengeState</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(com.sca4d.auth.sms.SmsCodeChallengeId)" class="member-name-link">find</a><wbr>(@NotNull <a href="../SmsCodeChallengeId.html" title="class in com.sca4d.auth.sms">SmsCodeChallengeId</a>&nbsp;challengeId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取仍存在于 Redis 的 Challenge，不修改任何数据。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reserveCooldown(java.lang.String,java.time.Duration)" class="member-name-link">reserveCooldown</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetHash,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;interval)</code></div>
@@ -192,7 +194,18 @@ loadScripts(document, 'script');</script>
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="SmsCodeChallengeState.html" title="class in com.sca4d.auth.sms.challenge">SmsCodeChallengeState</a>&nbsp;state)</span></div>
-<div class="block">使用 Challenge 剩余有效时间新增状态。</div>
+<div class="block">使用 Challenge 剩余有效时间新增 Redis Hash 状态。
+
+ <p>标识已存在时直接拒绝，不覆盖原状态。方法先整体写入 Hash，再按 <code>expiresAt</code> 设置 TTL；
+ 若有效期不晚于当前时间，会删除刚写入的 Hash 并抛出过期错误。存在性检查与写入不在同一个 Redis 原子操作内，
+ 调用方应使用新生成的 UUID 作为标识。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>state</code> - 待保存的 Challenge 状态</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 标识已存在时抛出 <a href="../SmsCodeErrorCode.html#CHALLENGE_ID_CONFLICT"><code>SmsCodeErrorCode.CHALLENGE_ID_CONFLICT</code></a>；
+                           <code>expiresAt</code> 不晚于当前时间时抛出 <a href="../SmsCodeErrorCode.html#CHALLENGE_EXPIRED"><code>SmsCodeErrorCode.CHALLENGE_EXPIRED</code></a></dd>
+</dl>
 </section>
 </li>
 <li>
@@ -201,9 +214,14 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="SmsCodeChallengeState.html" title="class in com.sca4d.auth.sms.challenge">SmsCodeChallengeState</a></span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../SmsCodeChallengeId.html" title="class in com.sca4d.auth.sms">SmsCodeChallengeId</a>&nbsp;challengeId)</span></div>
+<div class="block">读取仍存在于 Redis 的 Challenge，不修改任何数据。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>challengeId</code> - Challenge 标识</dd>
 <dt>Returns:</dt>
-<dd>仍存在于 Redis 的 Challenge</dd>
+<dd>仍存在于 Redis 的 Challenge；Hash 不存在或已过 TTL 时为空</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/AuthSmsException.html" title="class in com.sca4d.auth.sms.exception">AuthSmsException</a></code> - Hash 字段缺失、为空或无法解析时抛出，表示 Redis 中的 Challenge 数据已损坏</dd>
 </dl>
 </section>
 </li>

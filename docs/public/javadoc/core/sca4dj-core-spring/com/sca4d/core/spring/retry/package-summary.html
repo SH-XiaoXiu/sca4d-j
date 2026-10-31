@@ -69,7 +69,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">com.sca4d.core.spring.retry</span></div>
 <section class="package-description" id="package-description">
-<div class="block">将共同重试契约接入 Spring 并编码可恢复规则。</div>
+<div class="block">把 Core 重试规则接入 Spring 重试执行器，并提供 RetryRule 与字符串之间的编解码。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SpringRetryExecutor.html" title="class in com.sca4d.core.spring.retry">SpringRetryExecutor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">使用 Spring Retry 执行同步重试，共同策略是次数和退避判断的唯一来源。</div>
+<div class="block">使用 Spring Retry 的重试循环执行同步操作；是否重试和等待时间由每次失败后的 `RetryPolicy` 决定。</div>
 </div>
 </div>
 </div>

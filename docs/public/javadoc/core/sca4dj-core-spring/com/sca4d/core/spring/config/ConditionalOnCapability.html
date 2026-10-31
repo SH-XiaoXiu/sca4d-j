@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 @Conditional(<a href="InstanceCapabilityCondition.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityCondition.class</a>)
 </span><span class="modifiers">public @interface </span><span class="element-name type-name-label">ConditionalOnCapability</span></div>
-<div class="block">根据实例配置启用一个功能入口；能力声明 Bean 本身不能使用此条件。</div>
+<div class="block">按 `sca4dj.instance.capabilities` 决定被标注的类或 Bean 方法是否参与容器装配；功能声明 Bean（`InstanceCapability`）本身不应使用此注解。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#value()" class="member-name-link">value</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">代码常量声明的固定能力编码。</div>
+<div class="block">功能编码，与 `sca4dj.instance.capabilities` 中的配置值按 TreeCode 比较是否相等。</div>
 </div>
 </div>
 </section>
@@ -121,7 +121,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="value()">
 <h3>value</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">value</span></div>
-<div class="block">代码常量声明的固定能力编码。</div>
+<div class="block">功能编码，与 `sca4dj.instance.capabilities` 中的配置值按 TreeCode 比较是否相等。</div>
 </section>
 </li>
 </ul>

@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PrincipalSelectionCallInterceptor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.call.CallLifecycle.Around</span></div>
-<div class="block">在统一调用生命周期内执行 CurrentPrincipal 声明的主体选择。</div>
+<div class="block">在 <code>CallLifecycle</code> 的环绕阶段执行 <a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation"><code>CurrentPrincipal</code></a> 声明的业务身份选择，并把结果写入当前 <code>Call</code>。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -158,7 +158,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Around</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync</a><wbr>(@NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution,
  com.sca4d.core.api.call.CallLifecycle.AsyncNext&nbsp;next)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">异步业务复用已经完成的主体选择，并将异步等待交给内层生命周期。</div>
+<div class="block">异步调用先执行与同步相同的业务身份选择，再把异步等待交给内层调用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;com.sca4d.core.api.name.code.TreeCode&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#before()" class="member-name-link">before</a>()</code></div>
@@ -268,10 +268,15 @@ implements com.sca4d.core.api.call.CallLifecycle.Around</span></div>
  @NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution,
  @NotNull
  com.sca4d.core.api.call.CallLifecycle.AsyncNext&nbsp;next)</span></div>
-<div class="block">异步业务复用已经完成的主体选择，并将异步等待交给内层生命周期。</div>
+<div class="block">异步调用先执行与同步相同的业务身份选择，再把异步等待交给内层调用。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>aroundAsync</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Around</code></dd>
+<dt>Parameters:</dt>
+<dd><code>execution</code> - 当前方法执行</dd>
+<dd><code>next</code> - 剩余的异步调用</dd>
+<dt>Returns:</dt>
+<dd>内层异步调用的结果</dd>
 </dl>
 </section>
 </li>

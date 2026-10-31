@@ -99,9 +99,9 @@ implements com.sca4d.core.api.storage.FileService</span></div>
 <div class="block">使用 <a href="../persistence/FileRecord.html" title="class in com.sca4d.storage.file.persistence"><code>FileRecord</code></a> 协调文件上传、正式对象读取、业务绑定和异步删除登记。
 
  <p>本服务保存文件记录并推进 <code>FileStatus</code>，不判断 App 的业务权限。调用方必须先完成目标 Resource 的授权，
- 再把已经确认的 <code>FileUse</code> 传入本服务。对象存储读写失败时，方法返回稳定的 <code>FileErrorCode</code>，不会把
+ 再把已经确认的 <code>FileUse</code> 传入本服务。对象存储读写失败时，方法返回 <code>FileErrorCode</code>，不会把
  backend、container、对象键、传输 Token 或访问地址暴露给调用方。存储实现的运行时故障转换为
- 稳定的 <code>FileErrorCode</code>；内容流读写失败仍按 <code>FileService</code> 契约抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>。</div>
+ <code>FileErrorCode</code>；内容流读写失败仍按 <code>FileService</code> 契约抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

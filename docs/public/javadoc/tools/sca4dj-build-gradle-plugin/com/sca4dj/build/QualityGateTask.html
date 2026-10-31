@@ -170,7 +170,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract org.gradle.api.file.ConfigurableFileCollection</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getProjectReports()" class="member-name-link">getProjectReports</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract org.gradle.api.provider.Property<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract org.gradle.api.provider.Property<wbr>&lt;<a href="QualityLevel.html" title="enum class in com.sca4dj.build">QualityLevel</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getQualityLevel()" class="member-name-link">getQualityLevel</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract org.gradle.api.file.ConfigurableFileCollection</code></div>
@@ -220,10 +220,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getQualityLevel()">
 <h3>getQualityLevel</h3>
 <div class="member-signature"><span class="annotations">@Input
-</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">org.gradle.api.provider.Property&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getQualityLevel</span>()</div>
+</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">org.gradle.api.provider.Property&lt;<a href="QualityLevel.html" title="enum class in com.sca4dj.build">QualityLevel</a>&gt;</span>&nbsp;<span class="element-name">getQualityLevel</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>当前项目最终采用的质量级别名称</dd>
+<dd>当前项目最终采用的质量级别</dd>
 </dl>
 </section>
 </li>
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">org.gradle.api.file.ConfigurableFileCollection</span>&nbsp;<span class="element-name">getImportedReports</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>已经按子项目自身质量级别归一化的统一 JSON 报告</dd>
+<dd>按子项目自身质量级别处理后的 JSON 报告</dd>
 </dl>
 </section>
 </li>
@@ -315,7 +315,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">org.gradle.api.file.DirectoryProperty</span>&nbsp;<span class="element-name">getOutputDirectory</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>当前项目统一报告的输出目录</dd>
+<dd>当前项目报告的输出目录</dd>
 </dl>
 </section>
 </li>

@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html#add(com.sca4d.core.api.id.Id,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,java.time.Instant)" class="member-name-link">add(Id, TreeCode, byte[], Instant)</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a></dt>
@@ -63,12 +63,15 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html#cleanup()" class="member-name-link">cleanup()</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></dt>
 <dd>
-<div class="block">分批删除保留期已经结束的 SENT 记录。</div>
+<div class="block">删除发送时间早于 clock 当前时间减去 sentRetention 的 SENT 记录，每次最多删除 cleanupBatchSize 条。
+ 只删除已经发送成功的记录，未发送或失败中的记录不受影响；没有可删除记录时不产生日志。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/config/package-summary.html">com.sca4d.messaging.config</a> - package com.sca4d.messaging.config</dt>
 <dd>
 <div class="block">装配 RabbitMQ 业务消息、Consumer 容器和 Outbox 派发。</div>
 </dd>
+<dt><a href="com/sca4d/messaging/exception/package-summary.html">com.sca4d.messaging.exception</a> - package com.sca4d.messaging.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a> - package com.sca4d.messaging.outbox</dt>
 <dd>
 <div class="block">保存并派发需要在事务提交后可靠发送的业务消息。</div>
@@ -94,7 +97,9 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html#dispatch()" class="member-name-link">dispatch()</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></dt>
 <dd>
-<div class="block">领取一批到期记录并逐条尝试发布；单条失败不阻止其他消息。</div>
+<div class="block">领取一批到期记录并逐条尝试发布。成功后写回 SENT；失败后写回下一次 availableAt 与错误摘要。
+ 单条失败只影响该记录，不中断本批次其余消息。会修改 Outbox 记录的租约、尝试次数、可用时间和状态，不抛出发布异常。
+ 结果写回失败时只记录 ERROR 并保留租约，等待租约到期后重新领取。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html#dispatch(com.sca4d.core.api.message.Message,com.sca4d.core.api.messaging.DispatchPolicy)" class="member-name-link">dispatch(Message, DispatchPolicy)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageBus</a></dt>
 <dd>&nbsp;</dd>
@@ -198,7 +203,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html#%3Cinit%3E(com.sca4d.messaging.outbox.MessageOutboxRepository,com.sca4d.messaging.rabbit.RabbitPublisher,org.springframework.transaction.support.TransactionTemplate,com.sca4d.messaging.config.MessagingProperties,java.time.Clock)" class="member-name-link">MessageOutboxDispatcher(MessageOutboxRepository, RabbitPublisher, TransactionTemplate, MessagingProperties, Clock)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></dt>
 <dd>
-<div class="block">创建保留消息级租约、退避和分批清理语义的 Outbox 操作。</div>
+<div class="block">创建按消息级租约和退避时间派发 Outbox 消息、并分批删除过期 SENT 记录的操作对象。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" class="type-name-link" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a> - Class in <a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a></dt>
 <dd>
@@ -215,6 +220,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/messaging/config/MessagingAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">MessagingAutoConfiguration()</a> - Constructor for class com.sca4d.messaging.config.<a href="com/sca4d/messaging/config/MessagingAutoConfiguration.html" title="class in com.sca4d.messaging.config">MessagingAutoConfiguration</a></dt>
 <dd>
 <div class="block">创建 Messaging 模块自动配置。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/exception/MessagingException.html" class="type-name-link" title="class in com.sca4d.messaging.exception">MessagingException</a> - Exception Class in <a href="com/sca4d/messaging/exception/package-summary.html">com.sca4d.messaging.exception</a></dt>
+<dd>
+<div class="block">消息模块的运行时故障，例如出箱记录写入后无法读取。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/exception/MessagingException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">MessagingException(String)</a> - Constructor for exception class com.sca4d.messaging.exception.<a href="com/sca4d/messaging/exception/MessagingException.html" title="class in com.sca4d.messaging.exception">MessagingException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/exception/MessagingException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">MessagingException(String, Throwable)</a> - Constructor for exception class com.sca4d.messaging.exception.<a href="com/sca4d/messaging/exception/MessagingException.html" title="class in com.sca4d.messaging.exception">MessagingException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/config/MessagingProperties.html" class="type-name-link" title="class in com.sca4d.messaging.config">MessagingProperties</a> - Class in <a href="com/sca4d/messaging/config/package-summary.html">com.sca4d.messaging.config</a></dt>
 <dd>
@@ -277,7 +294,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitMessageBus</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
 <dd>
-<div class="block">使用固定 RabbitMQ 基座实现立即、提交后和 Outbox 三种 Message 分发方式。</div>
+<div class="block">通过 RabbitPublisher 立即发布消息，或在事务提交后发布，或先写入 Outbox 表再由派发任务发布。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html#%3Cinit%3E(com.sca4d.core.api.id.IdGenerator,com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec,com.sca4d.messaging.rabbit.RabbitPublisher,com.sca4d.messaging.outbox.MessageOutboxRepository,java.time.Clock)" class="member-name-link">RabbitMessageBus(IdGenerator, RabbitMessageEnvelopeCodec, RabbitPublisher, MessageOutboxRepository, Clock)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageBus</a></dt>
 <dd>&nbsp;</dd>
@@ -305,7 +322,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#routingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">routingKey(TreeCode)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
 <dd>
-<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
+<div class="block">在消息编码前追加 `MESSAGING:ROUTE` 路由前缀；业务消息编码本身保持原值，不做改写。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
@@ -407,7 +424,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.messaging.outbox.mapper.<a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

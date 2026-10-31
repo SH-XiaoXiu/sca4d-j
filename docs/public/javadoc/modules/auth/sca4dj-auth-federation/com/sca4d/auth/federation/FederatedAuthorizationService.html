@@ -130,7 +130,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;browserBinding,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;redirectUri)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">处理 Provider callback 并保存不包含 Token 的完成资料。</div>
+<div class="block">处理 Provider callback，消费授权状态并保存不包含 Token 的完成资料。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start(java.lang.String,com.sca4d.auth.federation.FederatedAuthorizationPurpose,java.lang.String,java.net.URI)" class="member-name-link">start</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;providerCode,
@@ -138,7 +138,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;browserBinding,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;redirectUri)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">创建授权地址；redirectUri 必须是应用固定的 HTTPS callback。</div>
+<div class="block">创建授权地址并保存等待 callback 的授权状态；redirectUri 必须是应用固定的 HTTPS callback。</div>
 </div>
 </div>
 </div>
@@ -187,7 +187,18 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;browserBinding,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;redirectUri)</span></div>
-<div class="block">创建授权地址；redirectUri 必须是应用固定的 HTTPS callback。</div>
+<div class="block">创建授权地址并保存等待 callback 的授权状态；redirectUri 必须是应用固定的 HTTPS callback。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>providerCode</code> - 已启用 Provider 的编码</dd>
+<dd><code>purpose</code> - 授权用途，决定 callback 完成后可被哪个认证或绑定流程消费</dd>
+<dd><code>browserBinding</code> - 发起授权的浏览器绑定值，callback 必须携带同一值</dd>
+<dd><code>redirectUri</code> - 应用固定的 callback 地址，之后 callback 和 Token 交换必须使用同一地址</dd>
+<dt>Returns:</dt>
+<dd>Provider 授权页地址，包含 state、PKCE 和 nonce（OIDC）参数</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Provider 没有可用的协议配置时抛出 PROVIDER_UNAVAILABLE；读取 Discovery 失败时抛出 UPSTREAM_FAILED</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -204,7 +215,20 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;browserBinding,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;redirectUri)</span></div>
-<div class="block">处理 Provider callback 并保存不包含 Token 的完成资料。</div>
+<div class="block">处理 Provider callback，消费授权状态并保存不包含 Token 的完成资料。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>state</code> - 授权请求中生成的 state，只能消费一次</dd>
+<dd><code>code</code> - Provider 返回的授权码，error 存在时可为空</dd>
+<dd><code>error</code> - Provider 返回的错误码，存在时直接拒绝</dd>
+<dd><code>browserBinding</code> - 当前浏览器绑定值，必须与授权开始时一致</dd>
+<dd><code>redirectUri</code> - 当前 callback 地址，必须与授权开始时保存的地址一致</dd>
+<dt>Returns:</dt>
+<dd>完成资料的标识，之后由认证或绑定流程消费一次</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 授权状态不存在或已消费时抛出 AUTHORIZATION_UNAVAILABLE；Provider 返回错误、缺少授权码或 redirectUri 不一致时抛出 AUTHORIZATION_REJECTED；
+                           Token 交换或资料读取失败时抛出 UPSTREAM_FAILED；资料缺少 subject 或校验失败时抛出 PROFILE_INVALID</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="ClientState.Change.html" class="type-name-link" title="class in com.sca4d.core.spring.web.clientstate">ClientState.Change</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">当前调用收集到的客户端状态变化快照。</div>
+<div class="block">保存当前线程登记的客户端状态目标，按登记顺序去重。</div>
 </div>
 </div>
 </section>
@@ -136,7 +136,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#refresh(com.sca4d.core.spring.web.clientstate.ClientStateTarget)" class="member-name-link">refresh</a><wbr>(<a href="ClientStateTarget.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateTarget</a>&nbsp;target)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">标记客户端需要重新读取指定状态。</div>
+<div class="block">把状态目标记入当前线程的变化集合，同一目标重复登记只保留一次。
+ 变化保存在 ThreadLocal 中，由 ClientStateFilter 在响应结束后清理；异步线程不会继承这里的记录。</div>
 </div>
 </div>
 </div>
@@ -159,7 +160,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="refresh(com.sca4d.core.spring.web.clientstate.ClientStateTarget)">
 <h3>refresh</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">refresh</span><wbr><span class="parameters">(<a href="ClientStateTarget.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateTarget</a>&nbsp;target)</span></div>
-<div class="block">标记客户端需要重新读取指定状态。</div>
+<div class="block">把状态目标记入当前线程的变化集合，同一目标重复登记只保留一次。
+ 变化保存在 ThreadLocal 中，由 ClientStateFilter 在响应结束后清理；异步线程不会继承这里的记录。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>target</code> - 需要客户端重新读取的状态目标</dd>

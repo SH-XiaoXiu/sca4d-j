@@ -129,7 +129,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.iot.api.history.DeviceEventMessage&nbsp;event,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dataJson)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">按发生时间和 Id 写入事件；同一发生时间内也约束来源事实键唯一。</div>
+<div class="block">按发生时间和 Id 写入事件；同一发生时间内 source_event_id 不能重复。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertTelemetrySamples(java.util.List)" class="member-name-link">insertTelemetrySamples</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TimescaleTelemetrySample.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleTelemetrySample</a>&gt;&nbsp;samples)</code></div>
@@ -151,6 +151,18 @@ loadScripts(document, 'script');</script>
  int&nbsp;limit)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">分页读取按 Device、事件编码或定时规则筛选的事件。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectRecentAcknowledgements(java.util.List,int)" class="member-name-link">selectRecentAcknowledgements</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds,
+ int&nbsp;limit)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">按消息集合读取每条下行消息最近的回执。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectRecentEvents(java.util.List,int)" class="member-name-link">selectRecentEvents</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds,
+ int&nbsp;limit)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">按设备集合读取每个设备最近的事件。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="EncodedTelemetrySample.html" title="class in com.sca4d.iot.timescale.persistence">EncodedTelemetrySample</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectTelemetry(long,java.lang.String,java.time.Instant,java.time.Instant,int)" class="member-name-link">selectTelemetry</a><wbr>(long&nbsp;deviceId,
@@ -190,6 +202,28 @@ loadScripts(document, 'script');</script>
  @Param("limit")
  int&nbsp;limit)</span></div>
 <div class="block">查询 Device 一个属性在半开时间范围内的 Telemetry。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectRecentEvents(java.util.List,int)">
+<h3>selectRecentEvents</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a>&gt;</span>&nbsp;<span class="element-name">selectRecentEvents</span><wbr><span class="parameters">(@Param("deviceIds") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds,
+ @Param("limit")
+ int&nbsp;limit)</span></div>
+<div class="block">按设备集合读取每个设备最近的事件。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectRecentAcknowledgements(java.util.List,int)">
+<h3>selectRecentAcknowledgements</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a>&gt;</span>&nbsp;<span class="element-name">selectRecentAcknowledgements</span><wbr><span class="parameters">(@Param("messageIds") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds,
+ @Param("limit")
+ int&nbsp;limit)</span></div>
+<div class="block">按消息集合读取每条下行消息最近的回执。</div>
 </section>
 </li>
 <li>
@@ -259,7 +293,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.iot.api.history.DeviceEventMessage&nbsp;event,
  @Param("dataJson") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dataJson)</span></div>
-<div class="block">按发生时间和 Id 写入事件；同一发生时间内也约束来源事实键唯一。</div>
+<div class="block">按发生时间和 Id 写入事件；同一发生时间内 source_event_id 不能重复。</div>
 </section>
 </li>
 <li>

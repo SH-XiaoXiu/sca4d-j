@@ -177,6 +177,14 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></span>&nbsp;<span class="element-name">encode</span><wbr><span class="parameters">(@Nullable
  @Nullable com.sca4d.core.api.audit.AuditPayload&nbsp;payload)</span></div>
 <div class="block">把可选强类型载荷转换成可以直接写入数据库的 JSON。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>payload</code> - 待保存的载荷，为 null 时不生成结果</dd>
+<dt>Returns:</dt>
+<dd>类型、版本和脱敏后的 JSON；超过 maxPayloadBytes 时保存截断标记而不是原内容，payload 为 null 时返回 null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/AuditException.html" title="class in com.sca4d.audit.exception">AuditException</a></code> - 脱敏后的 JSON 无法序列化时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -189,6 +197,16 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json)</span></div>
 <div class="block">返回原始 JSON，并在存在对应 Codec 且内容未截断时附加强类型结果。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>type</code> - 持久化的载荷类型，<code>raw</code> 表示不使用 Codec</dd>
+<dd><code>version</code> - 持久化的载荷版本</dd>
+<dd><code>json</code> - 数据库中保存的 JSON 文本</dd>
+<dt>Returns:</dt>
+<dd>原始 JSON 与可选的强类型载荷，没有匹配 Codec 时强类型结果为 null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../exception/AuditException.html" title="class in com.sca4d.audit.exception">AuditException</a></code> - JSON 无法读取时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>

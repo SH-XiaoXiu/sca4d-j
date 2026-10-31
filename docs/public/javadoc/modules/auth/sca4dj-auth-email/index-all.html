@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/email/challenge/ConsumedEmailCodeChallenge.html#account()" class="member-name-link">account()</a> - Method in class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/ConsumedEmailCodeChallenge.html" title="class in com.sca4d.auth.email.challenge">ConsumedEmailCodeChallenge</a></dt>
@@ -60,6 +60,18 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeState.html#attemptCount()" class="member-name-link">attemptCount()</a> - Method in class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/EmailCodeChallengeState.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeState</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/email/exception/AuthEmailException.html" class="type-name-link" title="class in com.sca4d.auth.email.exception">AuthEmailException</a> - Exception Class in <a href="com/sca4d/auth/email/exception/package-summary.html">com.sca4d.auth.email.exception</a></dt>
+<dd>
+<div class="block">邮箱验证码认证的依赖或数据故障，例如 Redis 中挑战数据损坏。</div>
+</dd>
+<dt><a href="com/sca4d/auth/email/exception/AuthEmailException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">AuthEmailException(String)</a> - Constructor for exception class com.sca4d.auth.email.exception.<a href="com/sca4d/auth/email/exception/AuthEmailException.html" title="class in com.sca4d.auth.email.exception">AuthEmailException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/auth/email/exception/AuthEmailException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">AuthEmailException(String, Throwable)</a> - Constructor for exception class com.sca4d.auth.email.exception.<a href="com/sca4d/auth/email/exception/AuthEmailException.html" title="class in com.sca4d.auth.email.exception">AuthEmailException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 <dt><a href="com/sca4d/auth/email/EmailCodeAuthenticationMethod.html#authenticate(com.sca4d.core.api.identity.Account,com.sca4d.auth.email.EmailCodeProof)" class="member-name-link">authenticate(Account, EmailCodeProof)</a> - Method in class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeAuthenticationMethod.html" title="class in com.sca4d.auth.email">EmailCodeAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html#available(com.sca4d.core.api.identity.Account)" class="member-name-link">available(Account)</a> - Method in class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeService</a></dt>
@@ -73,6 +85,18 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/EmailCodeErrorCode.html#category()" class="member-name-link">category()</a> - Method in enum class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeErrorCode.html" title="enum class in com.sca4d.auth.email">EmailCodeErrorCode</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/email/EmailCodeErrorCode.html#CHALLENGE_CHANGED" class="member-name-link">CHALLENGE_CHANGED</a> - Enum constant in enum class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeErrorCode.html" title="enum class in com.sca4d.auth.email">EmailCodeErrorCode</a></dt>
+<dd>
+<div class="block">邮箱验证码挑战已变化或不可用，请重新获取。</div>
+</dd>
+<dt><a href="com/sca4d/auth/email/EmailCodeErrorCode.html#CHALLENGE_EXPIRED" class="member-name-link">CHALLENGE_EXPIRED</a> - Enum constant in enum class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeErrorCode.html" title="enum class in com.sca4d.auth.email">EmailCodeErrorCode</a></dt>
+<dd>
+<div class="block">邮箱验证码已经过期，请重新获取。</div>
+</dd>
+<dt><a href="com/sca4d/auth/email/EmailCodeErrorCode.html#CHALLENGE_ID_CONFLICT" class="member-name-link">CHALLENGE_ID_CONFLICT</a> - Enum constant in enum class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeErrorCode.html" title="enum class in com.sca4d.auth.email">EmailCodeErrorCode</a></dt>
+<dd>
+<div class="block">邮箱验证码挑战标识发生冲突，请重新获取验证码。</div>
+</dd>
 <dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#CHALLENGE_TTL" class="member-name-link">CHALLENGE_TTL</a> - Variable in class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
 <dd>
 <div class="block">Challenge 和验证码有效期。</div>
@@ -119,6 +143,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">自动装配 Email Code Challenge、认证方法和可管理设置。</div>
 </dd>
+<dt><a href="com/sca4d/auth/email/exception/package-summary.html">com.sca4d.auth.email.exception</a> - package com.sca4d.auth.email.exception</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html#consume(com.sca4d.auth.email.EmailCodeProof)" class="member-name-link">consume(EmailCodeProof)</a> - Method in class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeService</a></dt>
 <dd>
 <div class="block">单次消费 Challenge 并验证验证码。</div>
@@ -135,7 +161,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html#create(com.sca4d.auth.email.challenge.EmailCodeChallengeState)" class="member-name-link">create(EmailCodeChallengeState)</a> - Method in class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html" title="class in com.sca4d.auth.email.challenge">RedisEmailCodeChallengeStore</a></dt>
 <dd>
-<div class="block">使用 Challenge 剩余有效时间新增状态，标识冲突时拒绝覆盖。</div>
+<div class="block">使用 Challenge 剩余有效时间新增 Redis Hash 状态。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:E">E</h2>
@@ -238,7 +264,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/email/EmailCodeAuthenticationMethod.html#factorKinds()" class="member-name-link">factorKinds()</a> - Method in class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeAuthenticationMethod.html" title="class in com.sca4d.auth.email">EmailCodeAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html#find(com.sca4d.auth.email.EmailCodeChallengeId)" class="member-name-link">find(EmailCodeChallengeId)</a> - Method in class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html" title="class in com.sca4d.auth.email.challenge">RedisEmailCodeChallengeStore</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">读取仍存在于 Redis 的 Challenge，不修改任何数据。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
 <dl class="index">
@@ -365,7 +393,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeState.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/EmailCodeChallengeState.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeState</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

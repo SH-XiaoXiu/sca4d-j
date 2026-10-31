@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsProviderBinding</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">把统一通知变量绑定到一个 Provider 已审核模板，不保存业务模板正文。</div>
+<div class="block">把通知变量绑定到一个 Provider 已审核的短信模板，不保存业务模板正文。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>统一通知编码</dd>
+<dd>绑定的通知编码</dd>
 </dl>
 </section>
 </li>
@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">parameterMapping</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>Provider 参数名到统一通知变量名的不可修改映射</dd>
+<dd>Provider 参数名到通知变量名的映射，返回不可修改的视图</dd>
 </dl>
 </section>
 </li>

@@ -105,7 +105,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.core.api.data.DataValues)" class="member-name-link">MqttDownlinkFrame</a><wbr>(@NotNull com.sca4d.iot.api.message.DeviceDownlink&nbsp;message,
  @NotNull com.sca4d.core.api.data.DataValues&nbsp;values)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建协议 Pipeline 的输入帧。</div>
+</div>
 </div>
 </section>
 </li>
@@ -150,6 +152,12 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.iot.api.message.DeviceDownlink&nbsp;message,
  @NotNull
  @NotNull com.sca4d.core.api.data.DataValues&nbsp;values)</span></div>
+<div class="block">创建协议 Pipeline 的输入帧。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>message</code> - 标准下行消息，保留 messageId、目标 code 和发送尝试次数</dd>
+<dd><code>values</code> - 已经按 `DataKey` 校验并整理的下行值</dd>
+</dl>
 </section>
 </li>
 </ul>

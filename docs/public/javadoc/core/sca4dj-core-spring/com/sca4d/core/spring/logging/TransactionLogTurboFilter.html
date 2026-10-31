@@ -139,7 +139,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>ch.qos.logback.core.spi.FilterReply</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decide(ch.qos.logback.classic.Logger,org.slf4j.event.LoggingEvent)" class="member-name-link">decide</a><wbr>(ch.qos.logback.classic.Logger&nbsp;logger,
  org.slf4j.event.LoggingEvent&nbsp;event)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">处理 SLF4J fluent API 产生的提交后日志事件，逻辑与 <a href="#decide(org.slf4j.Marker,ch.qos.logback.classic.Logger,ch.qos.logback.classic.Level,java.lang.String,java.lang.Object%5B%5D,java.lang.Throwable)"><code>decide(Marker, Logger, Level, String, Object[], Throwable)</code></a> 相同。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>ch.qos.logback.core.spi.FilterReply</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decide(org.slf4j.Marker,ch.qos.logback.classic.Logger,ch.qos.logback.classic.Level,java.lang.String,java.lang.Object%5B%5D,java.lang.Throwable)" class="member-name-link">decide</a><wbr>(org.slf4j.Marker&nbsp;marker,
  ch.qos.logback.classic.Logger&nbsp;logger,
@@ -147,7 +149,10 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]&nbsp;params,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;throwable)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">处理带 <code>LogMark.AFTER_COMMIT</code> 的 Marker 日志。Marker 与其他 Marker 同时使用时抛出 IllegalArgumentException；
+ 日志被登记到当前事务后返回 DENY，因此原 logger 不会立即输出。</div>
+</div>
 </div>
 </div>
 </div>
@@ -194,9 +199,20 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]&nbsp;params,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;throwable)</span></div>
+<div class="block">处理带 <code>LogMark.AFTER_COMMIT</code> 的 Marker 日志。Marker 与其他 Marker 同时使用时抛出 IllegalArgumentException；
+ 日志被登记到当前事务后返回 DENY，因此原 logger 不会立即输出。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>decide</code>&nbsp;in class&nbsp;<code>ch.qos.logback.classic.turbo.TurboFilter</code></dd>
+<dt>Parameters:</dt>
+<dd><code>marker</code> - 日志调用携带的 Marker</dd>
+<dd><code>logger</code> - 发起日志调用的 logger</dd>
+<dd><code>level</code> - 日志级别</dd>
+<dd><code>format</code> - 日志消息模板；只用于级别探测时为空</dd>
+<dd><code>params</code> - 日志参数</dd>
+<dd><code>throwable</code> - 日志携带的异常</dd>
+<dt>Returns:</dt>
+<dd>非提交后日志返回 NEUTRAL，已登记或已被级别过滤的提交后日志返回 DENY</dd>
 </dl>
 </section>
 </li>
@@ -205,9 +221,15 @@ loadScripts(document, 'script');</script>
 <h3>decide</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">ch.qos.logback.core.spi.FilterReply</span>&nbsp;<span class="element-name">decide</span><wbr><span class="parameters">(ch.qos.logback.classic.Logger&nbsp;logger,
  org.slf4j.event.LoggingEvent&nbsp;event)</span></div>
+<div class="block">处理 SLF4J fluent API 产生的提交后日志事件，逻辑与 <a href="#decide(org.slf4j.Marker,ch.qos.logback.classic.Logger,ch.qos.logback.classic.Level,java.lang.String,java.lang.Object%5B%5D,java.lang.Throwable)"><code>decide(Marker, Logger, Level, String, Object[], Throwable)</code></a> 相同。</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code>decide</code>&nbsp;in class&nbsp;<code>ch.qos.logback.classic.turbo.TurboFilter</code></dd>
+<dt>Parameters:</dt>
+<dd><code>logger</code> - 发起日志调用的 logger</dd>
+<dd><code>event</code> - SLF4J 日志事件</dd>
+<dt>Returns:</dt>
+<dd>非提交后日志返回 NEUTRAL，已登记或已被级别过滤的提交后日志返回 DENY</dd>
 </dl>
 </section>
 </li>

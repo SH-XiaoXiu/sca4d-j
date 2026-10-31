@@ -6,6 +6,7 @@ com.sca4d.iam.base.mapper
 com.sca4d.iam.base.rbac
 com.sca4d.iam.base.user
 com.sca4d.iam.config
+com.sca4d.iam.exception
 com.sca4d.iam.identity
 com.sca4d.iam.identity.mapper
 com.sca4d.iam.rbac

@@ -120,9 +120,11 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.state.ReportedStateResult.Outcome,long)" class="member-name-link">ReportedStateResult</a><wbr>(<a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a>&nbsp;outcome,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.state.ReportedStateResult.Outcome,long)" class="member-name-link">ReportedStateResult</a><wbr>(@NotNull <a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a>&nbsp;outcome,
  long&nbsp;version)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建 reported 处理结果。</div>
+</div>
 </div>
 </section>
 </li>
@@ -137,7 +139,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outcome()" class="member-name-link">outcome</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
@@ -163,11 +165,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(com.sca4d.iot.state.ReportedStateResult.Outcome,long)">
 <h3>ReportedStateResult</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ReportedStateResult</span><wbr><span class="parameters">(<a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a>&nbsp;outcome,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ReportedStateResult</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a>&nbsp;outcome,
  long&nbsp;version)</span></div>
+<div class="block">创建 reported 处理结果。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>outcome</code> - 处理结果 @param version 当前 latest version</dd>
+<dd><code>outcome</code> - 处理结果，不能为空</dd>
+<dd><code>version</code> - 处理后的 latest version，不能为负数</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - version 为负数时抛出</dd>
 </dl>
 </section>
 </li>
@@ -182,7 +189,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="outcome()">
 <h3>outcome</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></span>&nbsp;<span class="element-name">outcome</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></span>&nbsp;<span class="element-name">outcome</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>接受、重复或较旧</dd>

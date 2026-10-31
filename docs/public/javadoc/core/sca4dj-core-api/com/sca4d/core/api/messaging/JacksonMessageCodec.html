@@ -172,6 +172,15 @@ implements <a href="MessageCodec.html" title="interface in com.sca4d.core.api.me
  @NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;json)</span></div>
 <div class="block">创建使用指定 JSON 映射器的消息编解码器。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>code</code> - 消息类型的稳定编码</dd>
+<dd><code>version</code> - 消息协议版本，必须为正数</dd>
+<dd><code>valueType</code> - 解码后的消息 Java 类型</dd>
+<dd><code>json</code> - 编解码使用的 JSON 映射器</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 协议版本不是正数时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>

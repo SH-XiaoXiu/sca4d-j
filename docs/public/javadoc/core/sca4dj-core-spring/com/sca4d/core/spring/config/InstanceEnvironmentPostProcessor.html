@@ -139,7 +139,9 @@ implements org.springframework.boot.env.EnvironmentPostProcessor, org.springfram
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#postProcessEnvironment(org.springframework.core.env.ConfigurableEnvironment,org.springframework.boot.SpringApplication)" class="member-name-link">postProcessEnvironment</a><wbr>(@NotNull org.springframework.core.env.ConfigurableEnvironment&nbsp;environment,
  @NotNull org.springframework.boot.SpringApplication&nbsp;application)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">发布 `AppName`，校验网关协议常量和 HTTP 头常量后，把它们作为最高优先级属性源加入环境。</div>
+</div>
 </div>
 </div>
 </div>
@@ -178,9 +180,18 @@ implements org.springframework.boot.env.EnvironmentPostProcessor, org.springfram
  @NotNull org.springframework.core.env.ConfigurableEnvironment&nbsp;environment,
  @NotNull
  @NotNull org.springframework.boot.SpringApplication&nbsp;application)</span></div>
+<div class="block">发布 `AppName`，校验网关协议常量和 HTTP 头常量后，把它们作为最高优先级属性源加入环境。
+
+ <p>`sca4dj.instance.id` 未配置时生成一次随机 UUID；环境中已有实例标识属性源时不再生成，保证同一进程内的解析结果一致。
+ 配置的实例标识不符合 `[A-Za-z0-9._-]{1,128}` 时抛出 `IllegalStateException`，进程不启动。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>postProcessEnvironment</code>&nbsp;in interface&nbsp;<code>org.springframework.boot.env.EnvironmentPostProcessor</code></dd>
+<dt>Parameters:</dt>
+<dd><code>environment</code> - 正在加载的 Spring 环境，属性源会被修改</dd>
+<dd><code>application</code> - 当前 Spring 应用</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 实例标识格式无效时抛出</dd>
 </dl>
 </section>
 </li>

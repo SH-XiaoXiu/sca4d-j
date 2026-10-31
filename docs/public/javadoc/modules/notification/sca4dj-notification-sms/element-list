@@ -1,3 +1,4 @@
 com.sca4d.notification.sms
 com.sca4d.notification.sms.config
+com.sca4d.notification.sms.exception
 com.sca4d.notification.sms.mapper

@@ -112,7 +112,7 @@ implements com.sca4d.notification.sms.SmsProviderClient</span></div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#TYPE" class="member-name-link">TYPE</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">数据库 Provider 使用的适配器类型。</div>
+<div class="block">数据库中 Provider 记录的类型值，选中后由本客户端调用阿里云短信 API。</div>
 </div>
 </div>
 </section>
@@ -127,7 +127,9 @@ implements com.sca4d.notification.sms.SmsProviderClient</span></div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.sms.aliyun.AliyunSmsProperties,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">AliyunSmsProviderClient</a><wbr>(@NotNull <a href="AliyunSmsProperties.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProperties</a>&nbsp;properties,
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">保存阿里云 SMS 连接配置和 JSON 映射器；两者为空时抛出 NullPointerException。</div>
+</div>
 </div>
 </section>
 </li>
@@ -179,7 +181,7 @@ implements com.sca4d.notification.sms.SmsProviderClient</span></div>
 <section class="detail" id="TYPE">
 <h3>TYPE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TYPE</span></div>
-<div class="block">数据库 Provider 使用的适配器类型。</div>
+<div class="block">数据库中 Provider 记录的类型值，选中后由本客户端调用阿里云短信 API。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -205,6 +207,12 @@ implements com.sca4d.notification.sms.SmsProviderClient</span></div>
  @NotNull <a href="AliyunSmsProperties.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProperties</a>&nbsp;properties,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</span></div>
+<div class="block">保存阿里云 SMS 连接配置和 JSON 映射器；两者为空时抛出 NullPointerException。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>properties</code> - 阿里云 AccessKey、Endpoint 和 RegionId 配置</dd>
+<dd><code>objectMapper</code> - 解析阿里云 SMS API 响应使用的 JSON 映射器</dd>
+</dl>
 </section>
 </li>
 </ul>

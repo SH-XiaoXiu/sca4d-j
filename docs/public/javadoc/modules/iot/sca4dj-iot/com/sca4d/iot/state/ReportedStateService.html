@@ -116,7 +116,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;maxReportedProperties,
  int&nbsp;maxEventsPerMessage)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建 reported 主事务服务。</div>
+<div class="block">创建 reported 处理服务；`maxReportedProperties` 和 `maxEventsPerMessage` 必须为正数，否则构造失败。</div>
 </div>
 </div>
 </section>
@@ -136,7 +136,9 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accept(com.sca4d.iot.api.Device,com.sca4d.iot.api.state.ReportedStateUpdate,java.util.List)" class="member-name-link">accept</a><wbr>(@NotNull com.sca4d.iot.api.Device&nbsp;device,
  @NotNull com.sca4d.iot.api.state.ReportedStateUpdate&nbsp;update,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.iot.api.state.ThingEventOccurrence&gt;&nbsp;events)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">校验并写入一次 reported 更新，按写入结果收敛 desired、发布 Telemetry 和离散事件。</div>
+</div>
 </div>
 </div>
 </div>
@@ -179,7 +181,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  int&nbsp;maxReportedProperties,
  int&nbsp;maxEventsPerMessage)</span></div>
-<div class="block">创建 reported 主事务服务。</div>
+<div class="block">创建 reported 处理服务；`maxReportedProperties` 和 `maxEventsPerMessage` 必须为正数，否则构造失败。</div>
 </section>
 </li>
 </ul>
@@ -201,6 +203,11 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.iot.api.state.ReportedStateUpdate&nbsp;update,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.iot.api.state.ThingEventOccurrence&gt;&nbsp;events)</span></div>
+<div class="block">校验并写入一次 reported 更新，按写入结果收敛 desired、发布 Telemetry 和离散事件。
+
+ <p>属性或事件数量超过上限、物模型未知属性、值不合规时抛出 `BusinessException(INVALID_INPUT)`；
+ Device 绑定已经切换时抛出 `BusinessException(STATE_CONFLICT)`。两种失败都发生在任何状态写入之前。
+ 结果为 OLDER 时不收敛 desired，也不发布 Telemetry；ACK、Telemetry 和事件消息都登记在本方法的事务内。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>device</code> - 连接路由已经读取的完整 Device</dd>

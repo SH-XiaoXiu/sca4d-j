@@ -110,7 +110,7 @@ implements com.sca4d.core.api.concurrent.RateLimiter</span></div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.github.bucket4j.distributed.proxy.ProxyManager)" class="member-name-link">RedisRateLimiter</a><wbr>(@NotNull io.github.bucket4j.distributed.proxy.ProxyManager&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;proxyManager)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建使用当前 App 隔离名称的共享限流器。</div>
+<div class="block">创建共享限流器。</div>
 </div>
 </div>
 </section>
@@ -154,7 +154,9 @@ implements com.sca4d.core.api.concurrent.RateLimiter</span></div>
 <h3>RedisRateLimiter</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisRateLimiter</span><wbr><span class="parameters">(@NotNull
  @NotNull io.github.bucket4j.distributed.proxy.ProxyManager&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;proxyManager)</span></div>
-<div class="block">创建使用当前 App 隔离名称的共享限流器。</div>
+<div class="block">创建共享限流器。
+
+ <p>Redis 键由 <code>RateLimitKey</code> 与额度、窗口拼接后按 <code>COLON</code> 格式生成，本类不加入 App 名称前缀。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>proxyManager</code> - Bucket4j Redis CAS 代理</dd>
@@ -179,7 +181,8 @@ implements com.sca4d.core.api.concurrent.RateLimiter</span></div>
  @NotNull com.sca4d.core.api.concurrent.RateLimit&nbsp;limit)</span></div>
 <div class="block">按业务键、额度和窗口取得共享令牌桶，并原子消耗一个令牌。
 
- <p>额度和窗口进入 Redis 键，避免同一个业务键改变配置后继续使用旧令牌桶。</div>
+ <p>额度和窗口进入 Redis 键，避免同一个业务键改变配置后继续使用旧令牌桶。Redis 或 Bucket4j 代理异常原样传播，
+ 不当作允许或拒绝处理。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>tryAcquire</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.concurrent.RateLimiter</code></dd>
@@ -188,6 +191,8 @@ implements com.sca4d.core.api.concurrent.RateLimiter</span></div>
 <dd><code>limit</code> - 令牌桶容量和完全恢复窗口</dd>
 <dt>Returns:</dt>
 <dd>是否消耗令牌以及被拒绝后的精确等待时间</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - key 或 limit 为空时抛出</dd>
 </dl>
 </section>
 </li>

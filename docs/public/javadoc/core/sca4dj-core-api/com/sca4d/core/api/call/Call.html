@@ -147,7 +147,9 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#callId()" class="member-name-link">callId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回入口或 <a href="#fork()"><code>fork()</code></a> 指定的调用标识；fork 产生的子调用标识必须与父调用不同。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fork()" class="member-name-link">fork</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -200,15 +202,15 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用已经附着声明的执行描述进入生命周期；供 Spring 适配器和高级绑定使用。</div>
+<div class="block">使用已经附着声明的执行描述同步进入生命周期；供 Spring 适配器和高级绑定使用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">执行使用稳定 TreeCode 标识的纯函数。</div>
+<div class="block">同步执行使用稳定 TreeCode 标识的纯函数。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(java.lang.String,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
@@ -216,14 +218,14 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用冒号格式字符串解析 TreeCode 后执行纯函数。</div>
+<div class="block">解析冒号格式的 TreeCode 字符串后同步执行纯函数。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(java.lang.reflect.Method,java.lang.Object%5B%5D,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">执行带 Java Method 元数据的调用。</div>
+<div class="block">执行带 Java Method 元数据的同步调用，并按生命周期参与者的顺序完成环绕处理。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(com.sca4d.core.api.call.CallExecution,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
@@ -232,12 +234,12 @@ loadScripts(document, 'script');</script>
 <div class="block">使用已经附着声明的异步执行描述进入生命周期。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">执行异步纯函数调用。</div>
+<div class="block">异步执行纯函数调用。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(java.lang.String,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
@@ -245,14 +247,14 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用冒号格式字符串解析 TreeCode 后执行异步纯函数。</div>
+<div class="block">解析冒号格式的 TreeCode 字符串后异步执行纯函数。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(java.lang.reflect.Method,java.lang.Object%5B%5D,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">执行异步 Java Method 调用。</div>
+<div class="block">异步执行 Java Method 调用；返回结果在目标 CompletionStage 完成后才由生命周期处理完成。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAuthenticationAssessed()" class="member-name-link">isAuthenticationAssessed</a>()</code></div>
@@ -287,7 +289,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startedAt()" class="member-name-link">startedAt</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回入口或 <a href="#fork()"><code>fork()</code></a> 指定的调用开始时间。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subject()" class="member-name-link">subject</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -296,7 +300,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">创建绑定生命周期执行器的系统调用。</div>
+<div class="block">使用 <a href="../identity/SystemPrincipals.html#mainPrincipal()"><code>SystemPrincipals.mainPrincipal()</code></a> 创建绑定生命周期执行器的系统调用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant,com.sca4d.core.api.identity.SystemPrincipal)" class="member-name-link">system</a><wbr>(@Nullable <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
@@ -325,7 +329,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withInvoker(com.sca4d.core.api.call.CallInvoker)" class="member-name-link">withInvoker</a><wbr>(@NotNull <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">把生命周期执行器绑定到已有入口快照；身份和权限事实保持不变。</div>
+<div class="block">把生命周期执行器绑定到当前 Call；身份和权限事实保持不变。</div>
 </div>
 </div>
 </div>
@@ -483,7 +487,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</span></div>
-<div class="block">创建绑定生命周期执行器的系统调用。</div>
+<div class="block">使用 <a href="../identity/SystemPrincipals.html#mainPrincipal()"><code>SystemPrincipals.mainPrincipal()</code></a> 创建绑定生命周期执行器的系统调用。</div>
 </section>
 </li>
 <li>
@@ -516,10 +520,17 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">执行带 Java Method 元数据的调用。</div>
+<div class="block">执行带 Java Method 元数据的同步调用，并按生命周期参与者的顺序完成环绕处理。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>method</code> - 被调用的 Java 方法，用于记录声明类和返回类型</dd>
+<dd><code>arguments</code> - 方法参数快照</dd>
+<dd><code>target</code> - 实际执行的业务函数</dd>
+<dt>Returns:</dt>
+<dd>业务函数或环绕处理重放的结果，可以为 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 业务函数或生命周期处理失败时抛出原始异常</dd>
 </dl>
 </section>
 </li>
@@ -532,10 +543,17 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">使用已经附着声明的执行描述进入生命周期；供 Spring 适配器和高级绑定使用。</div>
+<div class="block">使用已经附着声明的执行描述同步进入生命周期；供 Spring 适配器和高级绑定使用。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>execution</code> - 必须由当前 Call 创建的方法执行描述</dd>
+<dd><code>target</code> - 实际执行的业务函数</dd>
+<dt>Returns:</dt>
+<dd>业务函数或环绕处理重放的结果，可以为 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 执行描述不属于当前 Call 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 业务函数或生命周期处理失败时抛出原始异常</dd>
 </dl>
 </section>
 </li>
@@ -544,17 +562,25 @@ loadScripts(document, 'script');</script>
 <h3>invoke</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">invoke</span><wbr><span class="parameters">(@NotNull
- <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">执行使用稳定 TreeCode 标识的纯函数。</div>
+<div class="block">同步执行使用稳定 TreeCode 标识的纯函数。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operation</code> - 纯函数的 TreeCode 标识</dd>
+<dd><code>arguments</code> - 函数参数快照</dd>
+<dd><code>resultType</code> - 返回值的完整 Java 类型</dd>
+<dd><code>target</code> - 实际执行的纯函数</dd>
+<dt>Returns:</dt>
+<dd>纯函数结果，可以为 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 纯函数或生命周期处理失败时抛出原始异常</dd>
 </dl>
 </section>
 </li>
@@ -570,10 +596,18 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">使用冒号格式字符串解析 TreeCode 后执行纯函数。</div>
+<div class="block">解析冒号格式的 TreeCode 字符串后同步执行纯函数。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operation</code> - 冒号格式的 TreeCode 字符串，格式错误时由 <a href="../name/code/TreeCode.html#ofColon(java.lang.String)"><code>TreeCode.ofColon(String)</code></a> 抛出异常</dd>
+<dd><code>arguments</code> - 函数参数快照</dd>
+<dd><code>resultType</code> - 返回值的完整 Java 类型</dd>
+<dd><code>target</code> - 实际执行的纯函数</dd>
+<dt>Returns:</dt>
+<dd>纯函数结果，可以为 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 纯函数或生命周期处理失败时抛出原始异常</dd>
 </dl>
 </section>
 </li>
@@ -586,7 +620,17 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
-<div class="block">执行异步 Java Method 调用。</div>
+<div class="block">异步执行 Java Method 调用；返回结果在目标 CompletionStage 完成后才由生命周期处理完成。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>method</code> - 被调用的 Java 方法，用于记录声明类和返回类型</dd>
+<dd><code>arguments</code> - 方法参数快照</dd>
+<dd><code>target</code> - 返回业务最终结果的异步函数</dd>
+<dt>Returns:</dt>
+<dd>业务结果或环绕处理重放结果的完成阶段</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -598,6 +642,16 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
 <div class="block">使用已经附着声明的异步执行描述进入生命周期。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>execution</code> - 必须由当前 Call 创建的方法执行描述</dd>
+<dd><code>target</code> - 返回业务最终结果的异步函数</dd>
+<dt>Returns:</dt>
+<dd>业务结果或环绕处理重放结果的完成阶段</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 执行描述不属于当前 Call 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -605,13 +659,24 @@ loadScripts(document, 'script');</script>
 <h3>invokeAsync</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;</span>&nbsp;<span class="element-name">invokeAsync</span><wbr><span class="parameters">(@NotNull
- <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
-<div class="block">执行异步纯函数调用。</div>
+<div class="block">异步执行纯函数调用。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operation</code> - 纯函数的 TreeCode 标识</dd>
+<dd><code>arguments</code> - 函数参数快照</dd>
+<dd><code>resultType</code> - 返回值的完整 Java 类型</dd>
+<dd><code>target</code> - 返回函数结果的异步函数</dd>
+<dt>Returns:</dt>
+<dd>函数结果的完成阶段</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -625,7 +690,18 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
-<div class="block">使用冒号格式字符串解析 TreeCode 后执行异步纯函数。</div>
+<div class="block">解析冒号格式的 TreeCode 字符串后异步执行纯函数。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operation</code> - 冒号格式的 TreeCode 字符串，格式错误时由 <a href="../name/code/TreeCode.html#ofColon(java.lang.String)"><code>TreeCode.ofColon(String)</code></a> 抛出异常</dd>
+<dd><code>arguments</code> - 函数参数快照</dd>
+<dd><code>resultType</code> - 返回值的完整 Java 类型</dd>
+<dd><code>target</code> - 返回函数结果的异步函数</dd>
+<dt>Returns:</dt>
+<dd>函数结果的完成阶段</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 当前 Call 没有绑定 CallInvoker 时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -634,7 +710,15 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">withInvoker</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker)</span></div>
-<div class="block">把生命周期执行器绑定到已有入口快照；身份和权限事实保持不变。</div>
+<div class="block">把生命周期执行器绑定到当前 Call；身份和权限事实保持不变。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>invoker</code> - 执行生命周期的执行器，不能为空</dd>
+<dt>Returns:</dt>
+<dd>当前 Call</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 当前 Call 已经绑定另一个执行器时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -732,10 +816,7 @@ loadScripts(document, 'script');</script>
 <h3>callId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">callId</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>调用标识</dd>
-</dl>
+<div class="block">返回入口或 <a href="#fork()"><code>fork()</code></a> 指定的调用标识；fork 产生的子调用标识必须与父调用不同。</div>
 </section>
 </li>
 <li>
@@ -743,10 +824,7 @@ loadScripts(document, 'script');</script>
 <h3>startedAt</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">startedAt</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>调用开始时间</dd>
-</dl>
+<div class="block">返回入口或 <a href="#fork()"><code>fork()</code></a> 指定的调用开始时间。</div>
 </section>
 </li>
 <li>

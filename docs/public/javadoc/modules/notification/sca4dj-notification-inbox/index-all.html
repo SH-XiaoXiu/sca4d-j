@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/inbox/InboxChanged.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxChanged.html" title="class in com.sca4d.notification.inbox">InboxChanged</a></dt>
@@ -84,6 +84,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/notification/inbox/package-summary.html">com.sca4d.notification.inbox</a> - package com.sca4d.notification.inbox</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/config/package-summary.html">com.sca4d.notification.inbox.config</a> - package com.sca4d.notification.inbox.config</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/inbox/exception/package-summary.html">com.sca4d.notification.inbox.exception</a> - package com.sca4d.notification.inbox.exception</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/mapper/package-summary.html">com.sca4d.notification.inbox.mapper</a> - package com.sca4d.notification.inbox.mapper</dt>
 <dd>&nbsp;</dd>
@@ -178,7 +180,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/notification/inbox/InboxRepository.html" class="type-name-link" title="class in com.sca4d.notification.inbox">InboxRepository</a> - Class in <a href="com/sca4d/notification/inbox/package-summary.html">com.sca4d.notification.inbox</a></dt>
 <dd>
-<div class="block">隐藏站内信 Mapper、游标分页和幂等新增语义。</div>
+<div class="block">隐藏站内信 Mapper，对外提供游标分页查询和幂等新增。</div>
 </dd>
 <dt><a href="com/sca4d/notification/inbox/InboxRepository.html#%3Cinit%3E(com.sca4d.notification.inbox.mapper.InboxMessageMapper)" class="member-name-link">InboxRepository(InboxMessageMapper)</a> - Constructor for class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></dt>
 <dd>&nbsp;</dd>
@@ -210,7 +212,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" class="type-name-link" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a> - Class in <a href="com/sca4d/notification/inbox/template/package-summary.html">com.sca4d.notification.inbox.template</a></dt>
 <dd>
-<div class="block">隐藏站内信模板的 JSONB、Mapper 和影响行数语义。</div>
+<div class="block">隐藏站内信模板的 JSONB 字段、Mapper 和影响行数。</div>
 </dd>
 <dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#%3Cinit%3E(com.sca4d.notification.inbox.template.mapper.InboxTemplateMapper,com.sca4d.core.api.concurrent.VersionConditions,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">InboxTemplateRepository(InboxTemplateMapper, VersionConditions, ObjectMapper)</a> - Constructor for class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
 <dd>
@@ -257,10 +259,27 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/notification/inbox/InboxMessage.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></dt>
 <dd>&nbsp;</dd>
 </dl>
+<h2 class="title" id="I:N">N</h2>
+<dl class="index">
+<dt><a href="com/sca4d/notification/inbox/exception/NotificationInboxException.html" class="type-name-link" title="class in com.sca4d.notification.inbox.exception">NotificationInboxException</a> - Exception Class in <a href="com/sca4d/notification/inbox/exception/package-summary.html">com.sca4d.notification.inbox.exception</a></dt>
+<dd>
+<div class="block">站内信通知的依赖或数据故障，例如模板或渠道配置缺失。</div>
+</dd>
+<dt><a href="com/sca4d/notification/inbox/exception/NotificationInboxException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">NotificationInboxException(String)</a> - Constructor for exception class com.sca4d.notification.inbox.exception.<a href="com/sca4d/notification/inbox/exception/NotificationInboxException.html" title="class in com.sca4d.notification.inbox.exception">NotificationInboxException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/notification/inbox/exception/NotificationInboxException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">NotificationInboxException(String, Throwable)</a> - Constructor for exception class com.sca4d.notification.inbox.exception.<a href="com/sca4d/notification/inbox/exception/NotificationInboxException.html" title="class in com.sca4d.notification.inbox.exception">NotificationInboxException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
+</dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/inbox/InboxRepository.html#page(long,java.lang.Long,int)" class="member-name-link">page(long, Long, int)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">按标识倒序读取指定 Account 的站内信。</div>
+</dd>
 <dt><a href="com/sca4d/notification/inbox/InboxService.html#page(long,java.lang.Long,int)" class="member-name-link">page(long, Long, int)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxService.html" title="class in com.sca4d.notification.inbox">InboxService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#page(com.sca4d.core.api.query.ListRequest)" class="member-name-link">page(ListRequest)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
@@ -339,7 +358,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

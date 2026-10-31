@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Email Sender 审计使用的稳定资源类型。</div>
+<div class="block">Email Sender 写入审计记录时使用的资源类型。</div>
 </div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a></code></div>
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <h3>RESOURCE_TYPE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
-<div class="block">Email Sender 审计使用的稳定资源类型。</div>
+<div class="block">Email Sender 写入审计记录时使用的资源类型。</div>
 </section>
 </li>
 </ul>
@@ -273,7 +273,7 @@ loadScripts(document, 'script');</script>
 <dd><code>fromName</code> - 可选发件显示名</dd>
 <dd><code>replyTo</code> - 可选回复邮箱</dd>
 <dd><code>enabled</code> - 是否参与实际投递</dd>
-<dd><code>version</code> - 统一版本</dd>
+<dd><code>version</code> - 数据库中的记录版本，用于乐观锁比较</dd>
 </dl>
 </section>
 </li>

@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.audit.config"},{"l":"com.sca4d.audit.payload"},{"l":"com.sca4d.audit.query"},{"l":"com.sca4d.audit.recording"},{"l":"com.sca4d.audit.recording.mapper"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.audit.config"},{"l":"com.sca4d.audit.exception"},{"l":"com.sca4d.audit.payload"},{"l":"com.sca4d.audit.query"},{"l":"com.sca4d.audit.recording"},{"l":"com.sca4d.audit.recording.mapper"}];updateSearchResults();

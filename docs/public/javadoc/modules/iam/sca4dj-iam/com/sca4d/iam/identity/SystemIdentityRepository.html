@@ -184,7 +184,8 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>已从数据库确认的系统身份表</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 不在事务内、保留 Subject 冲突、绑定被改写或状态异常时抛出</dd>
+<dd><code><a href="../exception/IamException.html" title="class in com.sca4d.iam.exception">IamException</a></code> - 配置 ID 对应的 SYSTEM Subject 已有记录冲突时抛出，需要人工迁移后重启</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 不在事务内、Subject 类型或状态异常、配置 ID 已被占用、绑定被改写或 Principal 状态异常时抛出</dd>
 </dl>
 </section>
 </li>

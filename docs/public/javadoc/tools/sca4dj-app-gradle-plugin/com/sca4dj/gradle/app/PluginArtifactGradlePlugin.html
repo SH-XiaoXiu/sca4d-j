@@ -126,7 +126,8 @@ implements org.gradle.api.Plugin&lt;org.gradle.api.Project&gt;</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#apply(org.gradle.api.Project)" class="member-name-link">apply</a><wbr>(org.gradle.api.Project&nbsp;project)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">API 仅用于编译与测试，插件作者维护的元信息与配置资源原样打包。</div>
+<div class="block">注册 pluginApi 依赖配置并把它接入 compileOnly 与 testImplementation，同时注册 pluginJar 任务。
+ 应用后 API 不进入 runtime 依赖；pluginJar 合并 main 输出和 runtimeClasspath 中的私有依赖，遇到重复类或资源时构建失败。</div>
 </div>
 </div>
 </div>
@@ -163,10 +164,13 @@ implements org.gradle.api.Plugin&lt;org.gradle.api.Project&gt;</span></div>
 <section class="detail" id="apply(org.gradle.api.Project)">
 <h3>apply</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">apply</span><wbr><span class="parameters">(org.gradle.api.Project&nbsp;project)</span></div>
-<div class="block">API 仅用于编译与测试，插件作者维护的元信息与配置资源原样打包。</div>
+<div class="block">注册 pluginApi 依赖配置并把它接入 compileOnly 与 testImplementation，同时注册 pluginJar 任务。
+ 应用后 API 不进入 runtime 依赖；pluginJar 合并 main 输出和 runtimeClasspath 中的私有依赖，遇到重复类或资源时构建失败。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>apply</code>&nbsp;in interface&nbsp;<code>org.gradle.api.Plugin&lt;org.gradle.api.Project&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>project</code> - 应用该插件的 Gradle 项目，必须已经包含 main 源集</dd>
 </dl>
 </section>
 </li>

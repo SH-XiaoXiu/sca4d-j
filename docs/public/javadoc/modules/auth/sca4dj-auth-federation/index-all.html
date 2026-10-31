@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/federation/FederatedAccountResolution.html#account()" class="member-name-link">account()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAccountResolution.html" title="class in com.sca4d.auth.federation">FederatedAccountResolution</a></dt>
@@ -66,6 +66,18 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html#authenticate(com.sca4d.core.api.identity.Account,com.sca4d.auth.federation.FederatedProof)" class="member-name-link">authenticate(Account, FederatedProof)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html" title="class in com.sca4d.auth.federation">FederatedAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/exception/AuthFederationException.html" class="type-name-link" title="class in com.sca4d.auth.federation.exception">AuthFederationException</a> - Exception Class in <a href="com/sca4d/auth/federation/exception/package-summary.html">com.sca4d.auth.federation.exception</a></dt>
+<dd>
+<div class="block">外部身份联合认证的依赖或数据故障，例如外部服务响应或加密数据异常。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/exception/AuthFederationException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">AuthFederationException(String)</a> - Constructor for exception class com.sca4d.auth.federation.exception.<a href="com/sca4d/auth/federation/exception/AuthFederationException.html" title="class in com.sca4d.auth.federation.exception">AuthFederationException</a></dt>
+<dd>
+<div class="block">创建只带失败说明的技术异常。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/exception/AuthFederationException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">AuthFederationException(String, Throwable)</a> - Constructor for exception class com.sca4d.auth.federation.exception.<a href="com/sca4d/auth/federation/exception/AuthFederationException.html" title="class in com.sca4d.auth.federation.exception">AuthFederationException</a></dt>
+<dd>
+<div class="block">创建带失败说明和原始原因的技术异常。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedErrorCode.html#AUTHORIZATION_REJECTED" class="member-name-link">AUTHORIZATION_REJECTED</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedErrorCode.html" title="enum class in com.sca4d.auth.federation">FederatedErrorCode</a></dt>
 <dd>
 <div class="block">上游拒绝了用户授权。</div>
@@ -110,7 +122,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorizationService.html#callback(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.net.URI)" class="member-name-link">callback(String, String, String, String, URI)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorizationService.html" title="class in com.sca4d.auth.federation">FederatedAuthorizationService</a></dt>
 <dd>
-<div class="block">处理 Provider callback 并保存不包含 Token 的完成资料。</div>
+<div class="block">处理 Provider callback，消费授权状态并保存不包含 Token 的完成资料。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html#canIdentifyAccount()" class="member-name-link">canIdentifyAccount()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html" title="class in com.sca4d.auth.federation">FederatedAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
@@ -161,6 +173,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorization.html#codeVerifier()" class="member-name-link">codeVerifier()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorization.html" title="class in com.sca4d.auth.federation">FederatedAuthorization</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a> - package com.sca4d.auth.federation</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/exception/package-summary.html">com.sca4d.auth.federation.exception</a> - package com.sca4d.auth.federation.exception</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/identity/package-summary.html">com.sca4d.auth.federation.identity</a> - package com.sca4d.auth.federation.identity</dt>
 <dd>&nbsp;</dd>
@@ -509,9 +523,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">新增外部身份绑定。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#insert(java.lang.String,java.lang.String,java.lang.String,boolean,int,java.lang.String,boolean,java.lang.String,java.lang.String)" class="member-name-link">insert(String, String, String, boolean, int, String, boolean, String, String)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
+<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#insert(java.lang.String,com.sca4d.auth.federation.FederatedProviderProtocol,com.sca4d.auth.federation.FederatedProviderStatus,boolean,int,com.sca4d.auth.federation.FederatedUnlinkedIdentityAction,boolean,java.lang.String,java.lang.String)" class="member-name-link">insert(String, FederatedProviderProtocol, FederatedProviderStatus, boolean, int, FederatedUnlinkedIdentityAction, boolean, String, String)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings(long, String, String, String, byte[], String, String, String, String, String, String, String, String)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
+<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings(long, String, String, String, byte[], String, String, String, String, FederatedClientAuthentication, String, String, String)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
 <dd>
 <div class="block">写入新的协议配置。</div>
 </dd>
@@ -745,7 +759,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorizationService.html#start(java.lang.String,com.sca4d.auth.federation.FederatedAuthorizationPurpose,java.lang.String,java.net.URI)" class="member-name-link">start(String, FederatedAuthorizationPurpose, String, URI)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorizationService.html" title="class in com.sca4d.auth.federation">FederatedAuthorizationService</a></dt>
 <dd>
-<div class="block">创建授权地址；redirectUri 必须是应用固定的 HTTPS callback。</div>
+<div class="block">创建授权地址并保存等待 callback 的授权状态；redirectUri 必须是应用固定的 HTTPS callback。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProvider.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProvider.html" title="class in com.sca4d.auth.federation">FederatedProvider</a></dt>
 <dd>&nbsp;</dd>
@@ -778,9 +792,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#update(java.lang.String,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.concurrent.Version)" class="member-name-link">update(String, Patch&lt;Boolean&gt;, Patch&lt;Integer&gt;, Patch&lt;FederatedUnlinkedIdentityAction&gt;, Patch&lt;Boolean&gt;, Patch&lt;String&gt;, Patch&lt;String&gt;, Patch&lt;FederatedProviderStatus&gt;, Version)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#updateConfigurationVersion(long,com.sca4d.core.api.concurrent.Version)" class="member-name-link">updateConfigurationVersion(long, Version)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
-<dd>
-<div class="block">按 Provider 版本原子确认配置仍属于当前状态。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/identity/mapper/FederatedIdentityMapper.html#updateProfile(long,long,long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateProfile(long, long, long, Patch&lt;String&gt;, Patch&lt;String&gt;, Patch&lt;Boolean&gt;, Patch&lt;String&gt;)</a> - Method in interface com.sca4d.auth.federation.identity.mapper.<a href="com/sca4d/auth/federation/identity/mapper/FederatedIdentityMapper.html" title="interface in com.sca4d.auth.federation.identity.mapper">FederatedIdentityMapper</a></dt>
 <dd>
 <div class="block">按绑定版本刷新资料快照，不修改绑定版本。</div>
@@ -802,7 +814,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/federation/FederatedProviderService.html#validate(com.sca4d.auth.federation.FederatedProviderConfiguration)" class="member-name-link">validate(FederatedProviderConfiguration)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a></dt>
 <dd>
-<div class="block">校验协议端点、映射和授权参数。</div>
+<div class="block">校验协议端点、映射和授权参数，不读写数据库。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedClientAuthentication.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></dt>
 <dd>&nbsp;</dd>
@@ -887,7 +899,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderState</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

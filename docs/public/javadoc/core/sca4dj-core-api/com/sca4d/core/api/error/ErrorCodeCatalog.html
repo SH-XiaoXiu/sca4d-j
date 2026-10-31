@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">ErrorCodeCatalog</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;&gt;&nbsp;enumTypes)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建错误码目录。</div>
+<div class="block">校验所有错误码枚举并建立编码索引，校验通过后目录不再变化。</div>
 </div>
 </div>
 </section>
@@ -131,7 +131,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ErrorCode.html" title="interface in com.sca4d.core.api.error">ErrorCode</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadByCode(java.lang.String)" class="member-name-link">loadByCode</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按编码取得错误码。</div>
+<div class="block">按编码取得已注册的错误码。只读取内存索引，不修改目录。</div>
 </div>
 </div>
 </div>
@@ -154,10 +154,16 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;(java.util.List)">
 <h3>ErrorCodeCatalog</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ErrorCodeCatalog</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;&gt;&nbsp;enumTypes)</span></div>
-<div class="block">创建错误码目录。</div>
+<div class="block">校验所有错误码枚举并建立编码索引，校验通过后目录不再变化。
+
+ <p>校验失败时构造器不返回目录，调用方应在应用启动阶段让异常中断启动。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>enumTypes</code> - 实现 <a href="ErrorCode.html" title="interface in com.sca4d.core.api.error"><code>ErrorCode</code></a> 的错误码枚举类型</dd>
+<dd><code>enumTypes</code> - 实现 <a href="ErrorCode.html" title="interface in com.sca4d.core.api.error"><code>ErrorCode</code></a> 的错误码枚举类型，不能为 null</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - enumTypes 为 null 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 类型未声明 <a href="ErrorCodeRange.html" title="annotation interface in com.sca4d.core.api.error"><code>ErrorCodeRange</code></a>、号段起止倒置、号段与其他枚举重叠、
+     错误码不是整数文本、错误码超出号段或编码重复时抛出</dd>
 </dl>
 </section>
 </li>
@@ -173,12 +179,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="loadByCode(java.lang.String)">
 <h3>loadByCode</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ErrorCode.html" title="interface in com.sca4d.core.api.error">ErrorCode</a></span>&nbsp;<span class="element-name">loadByCode</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
-<div class="block">按编码取得错误码。</div>
+<div class="block">按编码取得已注册的错误码。只读取内存索引，不修改目录。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>code</code> - 错误编码</dd>
+<dd><code>code</code> - 错误编码，例如 <code>"1000"</code></dd>
 <dt>Returns:</dt>
-<dd>对应枚举常量</dd>
+<dd>对应的枚举常量</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 编码未在构造时注册时抛出</dd>
 </dl>
 </section>
 </li>

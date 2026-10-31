@@ -95,8 +95,8 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.error.ErrorCode</code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="PasskeyErrorCode.html" title="enum class in com.sca4d.auth.passkey">PasskeyErrorCode</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="annotations">@ErrorCodeRange(start=2500,
-                end=2599)
+<div class="type-signature"><span class="annotations">@ErrorCodeRange(start=2710,
+                end=2719)
 </span><span class="modifiers">public enum </span><span class="element-name type-name-label">PasskeyErrorCode</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="PasskeyErrorCode.html" title="enum class in com.sca4d.auth.passkey">PasskeyErrorCode</a>&gt;
 implements com.sca4d.core.api.error.ErrorCode</span></div>
@@ -121,24 +121,28 @@ implements com.sca4d.core.api.error.ErrorCode</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="#ASSERTION_REJECTED" class="member-name-link">ASSERTION_REJECTED</a></code></div>
+<div class="col-first even-row-color"><code><a href="#ACCOUNT_ANCHOR_NOT_FOUND" class="member-name-link">ACCOUNT_ANCHOR_NOT_FOUND</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Passkey 对应的账号不存在。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#ASSERTION_REJECTED" class="member-name-link">ASSERTION_REJECTED</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">WebAuthn assertion 无法验证。</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#CEREMONY_UNAVAILABLE" class="member-name-link">CEREMONY_UNAVAILABLE</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#CEREMONY_UNAVAILABLE" class="member-name-link">CEREMONY_UNAVAILABLE</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Registration 或 assertion ceremony 已过期或已经消费。</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#CREDENTIAL_LIMIT_REACHED" class="member-name-link">CREDENTIAL_LIMIT_REACHED</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#CREDENTIAL_LIMIT_REACHED" class="member-name-link">CREDENTIAL_LIMIT_REACHED</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">账号已经达到 App 配置的 Passkey Credential 上限。</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#CREDENTIAL_UNAVAILABLE" class="member-name-link">CREDENTIAL_UNAVAILABLE</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#CREDENTIAL_UNAVAILABLE" class="member-name-link">CREDENTIAL_UNAVAILABLE</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">指定 Passkey Credential 不存在或已经删除。</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#REGISTRATION_REJECTED" class="member-name-link">REGISTRATION_REJECTED</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#REGISTRATION_REJECTED" class="member-name-link">REGISTRATION_REJECTED</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">WebAuthn registration 无法验证或没有满足 discoverable 与 UV 要求。</div>
 </div>
 </div>
@@ -228,6 +232,13 @@ the order they are declared.</div>
 <h3>REGISTRATION_REJECTED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PasskeyErrorCode.html" title="enum class in com.sca4d.auth.passkey">PasskeyErrorCode</a></span>&nbsp;<span class="element-name">REGISTRATION_REJECTED</span></div>
 <div class="block">WebAuthn registration 无法验证或没有满足 discoverable 与 UV 要求。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="ACCOUNT_ANCHOR_NOT_FOUND">
+<h3>ACCOUNT_ANCHOR_NOT_FOUND</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PasskeyErrorCode.html" title="enum class in com.sca4d.auth.passkey">PasskeyErrorCode</a></span>&nbsp;<span class="element-name">ACCOUNT_ANCHOR_NOT_FOUND</span></div>
+<div class="block">Passkey 对应的账号不存在。</div>
 </section>
 </li>
 </ul>

@@ -131,11 +131,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.model.ThingModelPresentation</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadByProductVersion(java.lang.String,int)" class="member-name-link">loadByProductVersion</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;productCode,
  int&nbsp;version)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取指定 Product 版本的物模型展示结果。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.model.ThingModelPresentation</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#publish(com.sca4d.iot.api.model.ThingModel,com.sca4d.core.api.i18n.LocalizedFields)" class="member-name-link">publish</a><wbr>(@NotNull com.sca4d.iot.api.model.ThingModel&nbsp;model,
  @NotNull com.sca4d.core.api.i18n.LocalizedFields&nbsp;i18n)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">在 Product 分布式锁和事务内校验并发布物模型。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.model.ThingModelPresentation</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceI18n(java.lang.String,int,com.sca4d.core.api.i18n.LocalizedFields)" class="member-name-link">replaceI18n</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;productCode,
  int&nbsp;version,
@@ -199,9 +203,17 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.iot.api.model.ThingModel&nbsp;model,
  @NotNull
  @NotNull com.sca4d.core.api.i18n.LocalizedFields&nbsp;i18n)</span></div>
+<div class="block">在 Product 分布式锁和事务内校验并发布物模型。
+
+ <p>版本必须是当前最新版本加一且技术内容变化；与最新版本内容相同时直接返回已发布结果，不写入新记录。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>model</code> - 待发布物模型 @return 发布或幂等恢复的物模型</dd>
+<dd><code>model</code> - 待发布的技术物模型</dd>
+<dd><code>i18n</code> - 完整动态翻译，默认 Locale 必须覆盖全部展示路径</dd>
+<dt>Returns:</dt>
+<dd>新发布的物模型，或内容相同的已发布物模型</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 翻译不合法、Product 不存在、策略或协议校验失败、版本冲突，或获取锁超时时抛出</dd>
 </dl>
 </section>
 </li>
@@ -214,9 +226,15 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.model.ThingModelPresentation</span>&nbsp;<span class="element-name">loadByProductVersion</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;productCode,
  int&nbsp;version)</span></div>
+<div class="block">读取指定 Product 版本的物模型展示结果。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>productCode</code> - Product code @param version 物模型版本 @return 必须存在的物模型展示结果</dd>
+<dd><code>productCode</code> - Product code</dd>
+<dd><code>version</code> - 物模型版本</dd>
+<dt>Returns:</dt>
+<dd>找到的物模型展示结果</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 该版本不存在时抛出 THING_MODEL_NOT_FOUND</dd>
 </dl>
 </section>
 </li>

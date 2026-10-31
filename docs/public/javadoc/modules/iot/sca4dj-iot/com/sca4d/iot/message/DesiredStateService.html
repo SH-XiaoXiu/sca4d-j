@@ -135,7 +135,9 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#change(long,com.sca4d.iot.message.DesiredStateChange,java.time.Duration)" class="member-name-link">change</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="DesiredStateChange.html" title="class in com.sca4d.iot.message">DesiredStateChange</a>&nbsp;change,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;acknowledgementTimeout)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">原子修改 Device 的 desired property，并只为实际变化的 set 创建新的可靠下行消息。</div>
+</div>
 </div>
 </div>
 </div>
@@ -199,6 +201,11 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="DesiredStateChange.html" title="class in com.sca4d.iot.message">DesiredStateChange</a>&nbsp;change,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;acknowledgementTimeout)</span></div>
+<div class="block">原子修改 Device 的 desired property，并只为实际变化的 set 创建新的可靠下行消息。
+
+ <p>必须在调用方事务中执行。任一值校验失败、属性不存在或不可写时抛出 <code>BusinessException</code>，
+ 且不修改数据库。没有实际变化时不推进 desiredSequence。并发修改冲突时最多重试 8 次，仍失败则抛出
+ <code>BusinessException</code>（<a href="../IotErrorCode.html#STATE_CONFLICT"><code>IotErrorCode.STATE_CONFLICT</code></a>）。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>deviceId</code> - Device 标识</dd>

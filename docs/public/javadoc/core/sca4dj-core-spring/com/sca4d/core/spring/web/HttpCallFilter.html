@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">HttpCallFilter</span>
 <span class="extends-implements">extends org.springframework.web.filter.OncePerRequestFilter</span></div>
-<div class="block">为每次 HTTP 请求建立和清理 <code>Call</code>。</div>
+<div class="block">为 HTTP 请求建立和清理 <code>Call</code>，在同步或异步请求完成时记录访问结果。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -123,13 +123,17 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.time.Clock)" class="member-name-link">HttpCallFilter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建请求信息过滤器。</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.time.Clock)" class="member-name-link">HttpCallFilter</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.time.Clock,com.sca4d.core.api.call.CallInvoker)" class="member-name-link">HttpCallFilter</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @Nullable com.sca4d.core.api.call.CallInvoker&nbsp;invoker)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">创建使用默认慢请求阈值的请求过滤器。</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.time.Clock,com.sca4d.core.api.call.CallInvoker)" class="member-name-link">HttpCallFilter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
- com.sca4d.core.api.call.CallInvoker&nbsp;invoker)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.time.Clock,com.sca4d.core.api.call.CallInvoker,com.sca4d.core.spring.config.WebRequestProperties)" class="member-name-link">HttpCallFilter</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @Nullable com.sca4d.core.api.call.CallInvoker&nbsp;invoker,
+ @NotNull <a href="../config/WebRequestProperties.html" title="class in com.sca4d.core.spring.config">WebRequestProperties</a>&nbsp;properties)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -145,10 +149,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)" class="member-name-link">doFilterInternal</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;request,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)" class="member-name-link">doFilterInternal</a><wbr>(@NonNull jakarta.servlet.http.HttpServletRequest&nbsp;request,
  @NonNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  @NonNull jakarta.servlet.FilterChain&nbsp;filterChain)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为本次请求建立 Call：请求头 X-Call-Id 符合 <code>[A-Za-z0-9._-]{1,128}</code> 时沿用，否则生成 UUID；
+ 随后把 callId 写入响应头和 MDC，并把 CallHolder 绑定到当前线程。
+ 无论同步还是异步启动，finally 都会清理 CallHolder 与 MDC；未启动异步时在 finally 中记录请求结果，已启动异步时由 AsyncListener 在完成事件中记录。</div>
+</div>
 </div>
 </div>
 </div>
@@ -175,19 +183,39 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.time.Clock)">
 <h3>HttpCallFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HttpCallFilter</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
-<div class="block">创建请求信息过滤器。</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HttpCallFilter</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>clock</code> - 创建调用开始时间使用的时钟</dd>
+<dd><code>clock</code> - 创建调用开始时间使用的时钟；慢请求计时使用单调时钟</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.time.Clock,com.sca4d.core.api.call.CallInvoker)">
 <h3>HttpCallFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HttpCallFilter</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
- com.sca4d.core.api.call.CallInvoker&nbsp;invoker)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HttpCallFilter</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @Nullable
+ @Nullable com.sca4d.core.api.call.CallInvoker&nbsp;invoker)</span></div>
+<div class="block">创建使用默认慢请求阈值的请求过滤器。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.time.Clock,com.sca4d.core.api.call.CallInvoker,com.sca4d.core.spring.config.WebRequestProperties)">
+<h3>HttpCallFilter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HttpCallFilter</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @Nullable
+ @Nullable com.sca4d.core.api.call.CallInvoker&nbsp;invoker,
+ @NotNull
+ @NotNull <a href="../config/WebRequestProperties.html" title="class in com.sca4d.core.spring.config">WebRequestProperties</a>&nbsp;properties)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>clock</code> - 创建 Call 开始时间使用的时钟</dd>
+<dd><code>invoker</code> - 可选的调用执行器</dd>
+<dd><code>properties</code> - 启动时绑定的全服务请求配置</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -201,11 +229,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)">
 <h3>doFilterInternal</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">doFilterInternal</span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;request,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">doFilterInternal</span><wbr><span class="parameters">(@NonNull jakarta.servlet.http.HttpServletRequest&nbsp;request,
  @NonNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  @NonNull jakarta.servlet.FilterChain&nbsp;filterChain)</span>
                          throws <span class="exceptions">jakarta.servlet.ServletException,
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">为本次请求建立 Call：请求头 X-Call-Id 符合 <code>[A-Za-z0-9._-]{1,128}</code> 时沿用，否则生成 UUID；
+ 随后把 callId 写入响应头和 MDC，并把 CallHolder 绑定到当前线程。
+ 无论同步还是异步启动，finally 都会清理 CallHolder 与 MDC；未启动异步时在 finally 中记录请求结果，已启动异步时由 AsyncListener 在完成事件中记录。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>doFilterInternal</code>&nbsp;in class&nbsp;<code>org.springframework.web.filter.OncePerRequestFilter</code></dd>

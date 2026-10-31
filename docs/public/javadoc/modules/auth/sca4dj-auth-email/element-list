@@ -1,3 +1,4 @@
 com.sca4d.auth.email
 com.sca4d.auth.email.challenge
 com.sca4d.auth.email.config
+com.sca4d.auth.email.exception

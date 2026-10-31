@@ -133,6 +133,15 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <div class="col-last even-row-color">
 <div class="block">安装每种方式唯一的记录器，校验应用默认方式存在。</div>
 </div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.util.List,com.sca4d.core.api.annotation.Audit.Mode,com.sca4d.core.api.audit.AuditResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,java.time.Clock,java.util.List)" class="member-name-link">AuditCallInterceptor</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AuditRecorder.html" title="interface in com.sca4d.core.api.audit">AuditRecorder</a>&gt;&nbsp;recorders,
+ <a href="../annotation/Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a>&nbsp;defaultMode,
+ @NotNull <a href="AuditResolverLookup.html" title="interface in com.sca4d.core.api.audit">AuditResolverLookup</a>&nbsp;resolverLookup,
+ @NotNull <a href="../call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a>&nbsp;expressionResolver,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AuditResourceCollector.html" title="interface in com.sca4d.core.api.audit">AuditResourceCollector</a>&gt;&nbsp;resourceCollectors)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">安装可选的业务关联收集器；收集结果与显式登记的执行快照合并。</div>
+</div>
 </div>
 </section>
 </li>
@@ -225,6 +234,24 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <dd><code>resolverLookup</code> - 审计目标解析器和 payload 工厂查找入口</dd>
 <dd><code>clock</code> - 审计发生时间使用的时钟</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(java.util.List,com.sca4d.core.api.annotation.Audit.Mode,com.sca4d.core.api.audit.AuditResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,java.time.Clock,java.util.List)">
+<h3>AuditCallInterceptor</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AuditCallInterceptor</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="AuditRecorder.html" title="interface in com.sca4d.core.api.audit">AuditRecorder</a>&gt;&nbsp;recorders,
+ @NotNull
+ <a href="../annotation/Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a>&nbsp;defaultMode,
+ @NotNull
+ @NotNull <a href="AuditResolverLookup.html" title="interface in com.sca4d.core.api.audit">AuditResolverLookup</a>&nbsp;resolverLookup,
+ @NotNull
+ @NotNull <a href="../call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a>&nbsp;expressionResolver,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AuditResourceCollector.html" title="interface in com.sca4d.core.api.audit">AuditResourceCollector</a>&gt;&nbsp;resourceCollectors)</span></div>
+<div class="block">安装可选的业务关联收集器；收集结果与显式登记的执行快照合并。</div>
 </section>
 </li>
 </ul>

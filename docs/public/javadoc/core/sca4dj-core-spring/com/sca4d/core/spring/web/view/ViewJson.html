@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>已修改同一个根对象的当前 ViewJson</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - 值无法序列化或路径中间值不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - 值无法序列化或路径中间值不是对象时抛出</dd>
 </dl>
 </section>
 </li>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>当前 ViewJson</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - 值无法序列化或路径中间值不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - 值无法序列化或路径中间值不是对象时抛出</dd>
 </dl>
 </section>
 </li>
@@ -265,7 +265,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>已同步删除结果的当前 ViewJson</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - 路径中间值不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - 路径中间值不是对象时抛出</dd>
 </dl>
 </section>
 </li>
@@ -286,7 +286,7 @@ loadScripts(document, 'script');</script>
 <dd>已同步重命名结果的当前 ViewJson</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 来源和目标路径互为前缀时抛出</dd>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - 路径中间值不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - 路径中间值不是对象时抛出</dd>
 </dl>
 </section>
 </li>
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>已同步合并结果的当前 ViewJson</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - 值无法序列化或序列化结果不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - 值无法序列化或序列化结果不是对象时抛出</dd>
 </dl>
 </section>
 </li>
@@ -320,7 +320,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>已同步合并结果的当前 ViewJson</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - JSON 语法无效或解析结果不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - JSON 语法无效或解析结果不是对象时抛出</dd>
 </dl>
 </section>
 </li>
@@ -340,7 +340,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>action 执行完成后的当前 ViewJson</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - 当前值、目标值或编辑结果不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - 当前值、目标值或编辑结果不是对象时抛出</dd>
 </dl>
 </section>
 </li>
@@ -360,7 +360,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>路径缺失时保持不变，否则返回已写回数组的当前 ViewJson</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.data.DataAssertionException</code> - 目标不是数组或路径中间值不是对象时抛出</dd>
+<dd><code>com.sca4d.core.api.data.exception.DataAssertionException</code> - 目标不是数组或路径中间值不是对象时抛出</dd>
 </dl>
 </section>
 </li>

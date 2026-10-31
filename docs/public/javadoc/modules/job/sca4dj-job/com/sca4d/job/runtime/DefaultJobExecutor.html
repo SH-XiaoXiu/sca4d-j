@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DefaultJobExecutor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.job.JobExecutor</span></div>
-<div class="block">使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。</div>
+<div class="block">通过 JobRunService 把持久化 Job 写入数据库并查询其运行结果；无记录 DirectJob 在本实例直接执行，或投递到目标实例的短期份额。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

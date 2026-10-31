@@ -205,6 +205,9 @@ implements org.springframework.web.method.support.HandlerMethodArgumentResolver<
 <dd><code>binderFactory</code> - 数据绑定工厂</dd>
 <dt>Returns:</dt>
 <dd>注解对应的身份对象、标识或允许的空值</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 当前线程没有 Call，或参数类型与注解不匹配、nullable 的 primitive long 声明错误时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 身份未确定且注解未允许空值时抛出 AUTHENTICATION_REQUIRED</dd>
 </dl>
 </section>
 </li>

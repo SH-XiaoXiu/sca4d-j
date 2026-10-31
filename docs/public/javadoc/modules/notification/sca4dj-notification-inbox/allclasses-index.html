@@ -50,7 +50,7 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
@@ -81,7 +81,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">隐藏站内信 Mapper、游标分页和幂等新增语义。</div>
+<div class="block">隐藏站内信 Mapper，对外提供游标分页查询和幂等新增。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxService.html" title="class in com.sca4d.notification.inbox">InboxService</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -101,14 +101,18 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">隐藏站内信模板的 JSONB、Mapper 和影响行数语义。</div>
+<div class="block">隐藏站内信模板的 JSONB 字段、Mapper 和影响行数。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Inbox Template Mapper 从数据库读取的 JSON 文本状态。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/RenderedInboxMessage.html" title="class in com.sca4d.notification.inbox.template">RenderedInboxMessage</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/notification/inbox/exception/NotificationInboxException.html" title="class in com.sca4d.notification.inbox.exception">NotificationInboxException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="block">站内信通知的依赖或数据故障，例如模板或渠道配置缺失。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/RenderedInboxMessage.html" title="class in com.sca4d.notification.inbox.template">RenderedInboxMessage</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存站内信模板生成的纯文本标题、纯文本正文和安全 HTML 正文。</div>
 </div>
 </div>

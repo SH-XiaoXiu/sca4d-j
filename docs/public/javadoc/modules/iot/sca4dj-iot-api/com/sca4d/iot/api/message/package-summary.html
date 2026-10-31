@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="AcknowledgementPolicy.html" title="interface in com.sca4d.iot.api.message">AcknowledgementPolicy</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">根据标准下行消息、当前状态和统一 ACK 判断业务结果。</div>
+<div class="block">根据下行消息、当前状态和设备 ACK 判断业务结果。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -112,6 +112,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">请求检查一个标准 Device 下行消息的指定发送尝试是否等待 ACK 超时。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="DeviceDispatchAdmission.html" title="interface in com.sca4d.iot.api.message">DeviceDispatchAdmission</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">在发送事务中检查共享传输资源是否允许本次尝试；延后不会消耗发送次数或 ACK 等待时间。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DeviceDispatchDecision.html" title="class in com.sca4d.iot.api.message">DeviceDispatchDecision</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">以互斥的允许、延后或拒绝结果控制发送，不把资源排队当作设备失败。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -127,7 +135,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab3"><a href="DeviceDownlinkStatus.html" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkStatus</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab3">
-<div class="block">表示标准设备下行消息的持久化生命周期。</div>
+<div class="block">表示标准设备下行消息在数据库中依次经过的状态。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="DeviceTransport.html" title="interface in com.sca4d.iot.api.message">DeviceTransport</a>&lt;P extends <a href="../protocol/DeviceProtocol.html" title="interface in com.sca4d.iot.api.protocol">DeviceProtocol</a>&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
@@ -151,7 +159,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">声明 IoT 模块发布和消费的稳定消息类型。</div>
+<div class="block">声明 IoT 模块发布和消费的消息类型。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RetryDecision.html" title="class in com.sca4d.iot.api.message">RetryDecision</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

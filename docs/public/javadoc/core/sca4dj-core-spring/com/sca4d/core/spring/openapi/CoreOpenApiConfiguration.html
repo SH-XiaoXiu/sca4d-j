@@ -170,7 +170,7 @@ loadScripts(document, 'script');</script>
 <div class="block">创建应用的 OpenAPI 基础定义。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>environment</code> - 应用名称配置；不使用中间件隔离前缀作为对外名称</dd>
+<dd><code>environment</code> - 读取 spring.application.name 作为文档标题前缀，未配置时使用 Sca4d-J</dd>
 <dt>Returns:</dt>
 <dd>包含 Bearer 认证方案的 OpenAPI 定义</dd>
 </dl>
