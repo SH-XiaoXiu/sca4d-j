@@ -134,7 +134,6 @@ public class OperationCatalogView {
                     children);
         }
 
-
         /**
          * 返回 Operation 编码。
          * @return Operation 编码

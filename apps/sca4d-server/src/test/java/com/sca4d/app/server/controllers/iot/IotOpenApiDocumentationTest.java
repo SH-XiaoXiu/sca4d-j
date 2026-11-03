@@ -10,8 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.app.server.service.IotApplicationService;
-import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.openapi.web.OpenApiRouteCatalog;
 import com.sca4d.openapi.web.OpenApiRouteDefinition;

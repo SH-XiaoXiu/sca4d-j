@@ -70,8 +70,8 @@ class AppMessageCatalogContractTest {
                         new SystemOperations(),
                         new IotOperations()),
                 java.util.stream.Stream.concat(
-                                OperationAxes.standard().stream(),
-                                java.util.stream.Stream.of(RbacGrantable.GRANTABLE))
+                        OperationAxes.standard().stream(),
+                        java.util.stream.Stream.of(RbacGrantable.GRANTABLE))
                         .toList());
         assertMessageKeysPresent(
                 messages,

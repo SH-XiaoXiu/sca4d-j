@@ -73,12 +73,15 @@ public class SystemOperations implements OperationModule {
         return OperationNode.root(
                 ROOT,
                 900,
-                group("AUDIT", 100, OperationNode.leaf(
-                        Action.READ,
+                group(
+                        "AUDIT",
                         100,
-                        OperationAxes.Intent.READ,
-                        OperationAxes.Nature.FUNCTION,
-                        GRANTABLE)),
+                        OperationNode.leaf(
+                                Action.READ,
+                                100,
+                                OperationAxes.Intent.READ,
+                                OperationAxes.Nature.FUNCTION,
+                                GRANTABLE)),
                 group("SETTINGS", 200, leaf(Action.READ, 100), leaf(Action.MANAGE, 200)),
                 group("DICTIONARIES", 300, leaf(Action.READ, 100), leaf(Action.MANAGE, 200)),
                 group("EMAIL", 400, leaf(Action.READ, 100), leaf(Action.MANAGE, 200)),

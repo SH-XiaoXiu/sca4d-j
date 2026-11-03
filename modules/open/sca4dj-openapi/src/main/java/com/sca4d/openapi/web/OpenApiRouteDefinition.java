@@ -72,6 +72,8 @@ public class OpenApiRouteDefinition {
             "permits",
             "non-sealed");
 
+    private final @NotNull OperationCode operation;
+
     private final @NotNull RequestMethod method;
 
     private final @NotNull String path;
@@ -79,8 +81,6 @@ public class OpenApiRouteDefinition {
     private final @NotNull String toolGroup;
 
     private final @NotNull String toolName;
-
-    private final @NotNull OperationCode operation;
 
     /**
      * 创建与声明方式无关的 OpenAPI 路由定义。
