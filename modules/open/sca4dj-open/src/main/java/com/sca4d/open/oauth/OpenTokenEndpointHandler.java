@@ -10,7 +10,7 @@ import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.EstablishedSession;
 import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.iam.identity.IdentityService;
 import com.sca4d.open.client.OpenClient;
 import com.sca4d.open.client.OpenClientService;
@@ -130,7 +130,7 @@ public class OpenTokenEndpointHandler {
 
         // 建立 Application Session，并按应用配置签发现有 Session Token 或独立 Open JWT。
         EstablishedSession established = sessions.establish(account, List.of(verified.authentication()));
-        List<TreeCode> operations = clients.operations(client.clientId());
+        List<OperationCode> operations = clients.operations(client.clientId());
         String scope = operations.stream().map(code -> code.format(COLON)).collect(Collectors.joining(" "));
         OpenTokenResponse response;
         if (jwtTokens.enabled()) {

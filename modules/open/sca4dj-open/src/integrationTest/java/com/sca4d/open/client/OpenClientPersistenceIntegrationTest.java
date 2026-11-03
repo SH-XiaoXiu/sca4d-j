@@ -11,7 +11,7 @@ import com.sca4d.auth.sharedsecret.SharedSecretCredentialMapper;
 import com.sca4d.auth.sharedsecret.SharedSecretCredentialRepository;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -59,9 +59,9 @@ import javax.sql.DataSource;
 @Testcontainers
 class OpenClientPersistenceIntegrationTest {
 
-    private static final TreeCode READ = TreeCode.ofColon("TEST:READ");
+    private static final OperationCode READ = new OperationCode("TEST:READ");
 
-    private static final TreeCode WRITE = TreeCode.ofColon("TEST:WRITE");
+    private static final OperationCode WRITE = new OperationCode("TEST:WRITE");
 
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
@@ -232,12 +232,12 @@ class OpenClientPersistenceIntegrationTest {
     @Test
     @DisplayName("超过一个批次的完整授权保存及跨批次失败整体回滚")
     void batchesPreserveTheCompleteSelection() {
-        List<TreeCode> operations = IntStream.range(0, 1001)
-                .mapToObj(i -> TreeCode.ofColon("TEST:OPERATION_" + i))
+        List<OperationCode> operations = IntStream.range(0, 1001)
+                .mapToObj(i -> new OperationCode("TEST:OPERATION_" + i))
                 .toList();
         clients.create(new OpenClient("client-b", 102, "批量 Client", OpenClientStatus.ACTIVE), operations);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);
-        List<TreeCode> invalid = new ArrayList<>(operations.subList(0, 1000));
+        List<OperationCode> invalid = new ArrayList<>(operations.subList(0, 1000));
         invalid.add(operations.getFirst());
         assertThatThrownBy(() -> clients.replaceOperations("client-b", invalid)).isInstanceOf(RuntimeException.class);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);

@@ -149,7 +149,7 @@ public class OpenApiRouteCatalog implements SmartInitializingSingleton {
         }
         Method concrete = concreteMethod(Objects.requireNonNull(method, "Controller 方法不能为空"));
         OpenApiRouteDefinition checked = Objects.requireNonNull(definition, "OpenAPI 路由定义不能为空");
-        Operation operation = operations.actionByCode(checked.operation()).operation();
+        Operation operation = operations.leafByCode(checked.operation()).operation();
         validatePermissionAnnotation(concrete, operation);
         MethodKey key = MethodKey.of(concrete);
         if (pending.putIfAbsent(key, checked) != null) {

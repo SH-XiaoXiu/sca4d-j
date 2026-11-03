@@ -127,8 +127,8 @@ implements <a href="OpenClientOperationChecker.html" title="interface in com.sca
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">verifyAllowed</a><wbr>(@NotNull com.sca4d.core.api.call.Call&nbsp;call,
- @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;operation)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.OperationCode)" class="member-name-link">verifyAllowed</a><wbr>(@NotNull com.sca4d.core.api.call.Call&nbsp;call,
+ @NotNull com.sca4d.core.api.permission.OperationCode&nbsp;operation)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 </div>
@@ -166,16 +166,16 @@ implements <a href="OpenClientOperationChecker.html" title="interface in com.sca
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)">
+<section class="detail" id="verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.OperationCode)">
 <h3>verifyAllowed</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">verifyAllowed</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.call.Call&nbsp;call,
  @NotNull
- @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;operation)</span></div>
+ @NotNull com.sca4d.core.api.permission.OperationCode&nbsp;operation)</span></div>
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="OpenClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)">verifyAllowed</a></code>&nbsp;in interface&nbsp;<code><a href="OpenClientOperationChecker.html" title="interface in com.sca4d.open.client">OpenClientOperationChecker</a></code></dd>
+<dd><code><a href="OpenClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.OperationCode)">verifyAllowed</a></code>&nbsp;in interface&nbsp;<code><a href="OpenClientOperationChecker.html" title="interface in com.sca4d.open.client">OpenClientOperationChecker</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>call</code> - 当前已经完成认证的调用</dd>
 <dd><code>operation</code> - 业务 Operation 编码</dd>

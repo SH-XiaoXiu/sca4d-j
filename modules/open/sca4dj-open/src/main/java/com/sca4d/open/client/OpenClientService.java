@@ -9,7 +9,7 @@ import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.utils.TextUtils;
@@ -74,7 +74,7 @@ public class OpenClientService {
             @NotNull Collection<String> requestedOperations,
             @NotNull String method) {
         Session checkedCreator = Objects.requireNonNull(creator, "创建者 Session 不能为空");
-        LinkedHashSet<TreeCode> allowed = validateOperations(checkedCreator, requestedOperations);
+        LinkedHashSet<OperationCode> allowed = validateOperations(checkedCreator, requestedOperations);
         String checkedMethod = requireMethod(method);
         Subject subject = identities.createSubject(SubjectType.APPLICATION);
         Account account = identities.createAccount(subject.subjectId(), REALM);
@@ -125,7 +125,7 @@ public class OpenClientService {
      * 判断 Client 是否有效且已经开放指定 Operation。
      */
     @Transactional(readOnly = true)
-    public boolean allows(@NotNull String clientId, @NotNull TreeCode operation) {
+    public boolean allows(@NotNull String clientId, @NotNull OperationCode operation) {
         OpenClient client = loadByClientId(clientId);
         return client.active() && clients.hasOperation(client.clientId(), operation);
     }
@@ -135,7 +135,7 @@ public class OpenClientService {
      */
     @Transactional(readOnly = true)
     @CheckReturnValue
-    public @NotNull List<@NotNull TreeCode> operations(@NotNull String clientId) {
+    public @NotNull List<@NotNull OperationCode> operations(@NotNull String clientId) {
         OpenClient client = loadByClientId(clientId);
         return clients.findOperations(client.clientId());
     }
@@ -148,7 +148,7 @@ public class OpenClientService {
             @NotNull Session editor,
             @NotNull String clientId,
             @NotNull Collection<String> requestedOperations) {
-        LinkedHashSet<TreeCode> allowed = validateOperations(
+        LinkedHashSet<OperationCode> allowed = validateOperations(
                 Objects.requireNonNull(editor, "编辑者 Session 不能为空"),
                 requestedOperations);
         clients.replaceOperations(clientId, allowed);
@@ -162,10 +162,10 @@ public class OpenClientService {
         clients.updateStatus(clientId, status);
     }
 
-    private LinkedHashSet<TreeCode> validateOperations(Session creator, Collection<String> requestedOperations) {
-        LinkedHashSet<TreeCode> result = new LinkedHashSet<>();
+    private LinkedHashSet<OperationCode> validateOperations(Session creator, Collection<String> requestedOperations) {
+        LinkedHashSet<OperationCode> result = new LinkedHashSet<>();
         for (String code : Objects.requireNonNull(requestedOperations, "Operation 列表不能为空")) {
-            Operation operation = operations.actionByCode(TextUtils.requireText(code, "Operation")).operation();
+            Operation operation = operations.leafByCode(TextUtils.requireText(code, "Operation")).operation();
             if (creator.principals()
                     .stream()
                     .noneMatch(principal -> creator.grants(principal.principalId(), operation))) {

@@ -5,7 +5,7 @@ import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.SubjectType;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class OpenClientOperationCheckerImpl implements OpenClientOperationChecke
 
     /** 拒绝停用、未知或未开放目标 Operation 的 Client。 */
     @Override
-    public void verifyAllowed(@NotNull Call call, @NotNull TreeCode operation) {
+    public void verifyAllowed(@NotNull Call call, @NotNull OperationCode operation) {
         Call checkedCall = Objects.requireNonNull(call, "调用不能为空");
         if (!checkedCall.subject()
                 .map(subject -> subject.type() == SubjectType.APPLICATION)

@@ -3,7 +3,7 @@ package com.sca4d.openapi.web;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.setting.ConfiguredConstants;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -26,14 +26,14 @@ class OpenApiRouteDefinitionTest {
                 "/openapi/devices/{deviceId}",
                 "iot",
                 "getDevice",
-                TreeCode.ofColon("iot:devices:read"));
+                new OperationCode("iot:devices:read"));
 
         assertThat(definition.method()).isEqualTo(RequestMethod.GET);
         assertThat(definition.path()).isEqualTo("/openapi/devices/{deviceId}");
         assertThat(definition.toolGroup()).isEqualTo("iot");
         assertThat(definition.toolName()).isEqualTo("getDevice");
         assertThat(definition.openApiOperationId()).isEqualTo("iotGetDevice");
-        assertThat(definition.operation()).isEqualTo(TreeCode.ofColon("IOT:DEVICES:READ"));
+        assertThat(definition.operation()).isEqualTo(new OperationCode("IOT:DEVICES:READ"));
     }
 
     @Test
@@ -46,7 +46,7 @@ class OpenApiRouteDefinitionTest {
                                 "/devices/{deviceId}",
                                 "iot",
                                 "getDevice",
-                                TreeCode.ofColon("iot:devices:read")))
+                                new OperationCode("iot:devices:read")))
                 .withMessageContaining("必须以 /openapi/");
     }
 }

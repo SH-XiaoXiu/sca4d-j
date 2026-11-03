@@ -1,6 +1,6 @@
 package com.sca4d.openapi.web;
 
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -80,7 +80,7 @@ public class OpenApiRouteDefinition {
 
     private final @NotNull String toolName;
 
-    private final @NotNull TreeCode operation;
+    private final @NotNull OperationCode operation;
 
     /**
      * 创建与声明方式无关的 OpenAPI 路由定义。
@@ -96,7 +96,7 @@ public class OpenApiRouteDefinition {
             @NotNull String path,
             @NotNull String toolGroup,
             @NotNull String toolName,
-            @NotNull TreeCode operation) {
+            @NotNull OperationCode operation) {
         this.method = requireMethod(method);
         this.path = requirePath(path);
         this.toolGroup = requireJavaIdentifier(toolGroup, "OpenAPI Tool 分组");
@@ -130,7 +130,7 @@ public class OpenApiRouteDefinition {
     }
 
     /** @return Client 开放检查使用的 Operation 编码 */
-    public @NotNull TreeCode operation() {
+    public @NotNull OperationCode operation() {
         return operation;
     }
 

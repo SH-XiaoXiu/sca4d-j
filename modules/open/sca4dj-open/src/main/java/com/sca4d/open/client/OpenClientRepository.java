@@ -1,6 +1,6 @@
 package com.sca4d.open.client;
 
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
@@ -30,7 +30,7 @@ public class OpenClientRepository {
 
     /** 原子保存 Client 及完整 Operation 选择，关系写入失败时 Client 也回滚。 */
     @Transactional
-    public void create(@NotNull OpenClient client, @NotNull Collection<TreeCode> operations) {
+    public void create(@NotNull OpenClient client, @NotNull Collection<OperationCode> operations) {
         OpenClient checked = Objects.requireNonNull(client, "Open Client 不能为空");
         AffectedRowCounts.requireSingle(
                 mapper.insertClient(checked.clientId(), checked.accountId(), checked.displayName(), checked.status()),
@@ -57,7 +57,7 @@ public class OpenClientRepository {
 
     /** 判断 Client 是否开放一个 Operation。 */
     @Transactional(readOnly = true)
-    public boolean hasOperation(@NotNull String clientId, @NotNull TreeCode operation) {
+    public boolean hasOperation(@NotNull String clientId, @NotNull OperationCode operation) {
         return !mapper.selectOperations(
                 TextUtils.requireText(clientId, "Client ID"),
                 Objects.requireNonNull(operation, "Operation 不能为空"))
@@ -66,18 +66,15 @@ public class OpenClientRepository {
 
     /** 读取 Client 当前开放的全部 Operation。 */
     @Transactional(readOnly = true)
-    public @NotNull List<@NotNull TreeCode> findOperations(@NotNull String clientId) {
-        return mapper.selectOperations(TextUtils.requireText(clientId, "Client ID"), null)
-                .stream()
-                .map(TreeCode::ofColon)
-                .toList();
+    public @NotNull List<@NotNull OperationCode> findOperations(@NotNull String clientId) {
+        return mapper.selectOperations(TextUtils.requireText(clientId, "Client ID"), null);
     }
 
     /** 锁定 Client 后原子替换完整 Operation 列表；空集合清空，失败保留原关系。 */
     @Transactional
-    public void replaceOperations(@NotNull String clientId, @NotNull Collection<TreeCode> operations) {
+    public void replaceOperations(@NotNull String clientId, @NotNull Collection<OperationCode> operations) {
         String checkedClientId = TextUtils.requireText(clientId, "Client ID");
-        List<TreeCode> checkedOperations = Objects.requireNonNull(operations, "Operation 列表不能为空")
+        List<OperationCode> checkedOperations = Objects.requireNonNull(operations, "Operation 列表不能为空")
                 .stream()
                 .map(operation -> Objects.requireNonNull(operation, "Operation 不能为空"))
                 .toList();

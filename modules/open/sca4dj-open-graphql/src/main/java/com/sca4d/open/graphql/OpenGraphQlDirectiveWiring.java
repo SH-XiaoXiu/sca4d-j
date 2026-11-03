@@ -3,7 +3,7 @@ package com.sca4d.open.graphql;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.error.exception.BusinessException;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.open.client.OpenClientOperationChecker;
@@ -36,7 +36,7 @@ public class OpenGraphQlDirectiveWiring implements SchemaDirectiveWiring {
     public @NotNull GraphQLFieldDefinition onField(
             @NotNull SchemaDirectiveWiringEnvironment<GraphQLFieldDefinition> environment) {
         String operation = operation(environment);
-        TreeCode code = operations.actionByCode(operation).operation().code();
+        OperationCode code = operations.leafByCode(new OperationCode(operation)).operation().code();
         DataFetcher<?> delegate = environment.getFieldDataFetcher();
         environment.setFieldDataFetcher(data -> fetch(delegate, data, code));
         return environment.getElement();
@@ -45,7 +45,7 @@ public class OpenGraphQlDirectiveWiring implements SchemaDirectiveWiring {
     private Object fetch(
             DataFetcher<?> delegate,
             DataFetchingEnvironment environment,
-            TreeCode operation) throws Exception {
+            OperationCode operation) throws Exception {
         Call call = CallHolder.currentOrNull();
         if (call == null) {
             throw new BusinessException(CoreErrorCode.AUTHENTICATION_REQUIRED);

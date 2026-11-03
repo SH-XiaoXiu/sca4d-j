@@ -1,6 +1,6 @@
 package com.sca4d.openapi.web;
 
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.aop.support.AopUtils;
@@ -54,6 +54,6 @@ public final class OpenApiRouteAnnotationRegistrar implements OpenApiRouteRegist
                 annotation.path()[0],
                 annotation.toolGroup(),
                 annotation.toolName(),
-                TreeCode.ofColon(annotation.operation()));
+                new OperationCode(annotation.operation()));
     }
 }

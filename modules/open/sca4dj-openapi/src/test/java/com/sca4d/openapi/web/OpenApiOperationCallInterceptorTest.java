@@ -13,7 +13,7 @@ import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.open.client.OpenClientOperationChecker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,7 @@ class OpenApiOperationCallInterceptorTest {
 
     @BeforeEach
     void registerRoute() {
-        when(route.operation()).thenReturn(TreeCode.ofColon("test:openapi"));
+        when(route.operation()).thenReturn(new OperationCode("test:openapi"));
         when(routes.find(RouteHandler.class, method)).thenReturn(Optional.of(route));
     }
 
@@ -50,7 +50,7 @@ class OpenApiOperationCallInterceptorTest {
 
         interceptor.before(execution);
 
-        verify(checker).verifyAllowed(call, TreeCode.ofColon("test:openapi"));
+        verify(checker).verifyAllowed(call, new OperationCode("test:openapi"));
     }
 
     @Test

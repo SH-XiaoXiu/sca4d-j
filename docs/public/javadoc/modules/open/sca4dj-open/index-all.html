@@ -68,7 +68,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">注册 POST 认证路径，路径冲突时阻止应用启动。</div>
 </dd>
-<dt><a href="com/sca4d/open/client/OpenClientService.html#allows(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allows(String, TreeCode)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientService.html" title="class in com.sca4d.open.client">OpenClientService</a></dt>
+<dt><a href="com/sca4d/open/client/OpenClientService.html#allows(java.lang.String,com.sca4d.core.api.permission.OperationCode)" class="member-name-link">allows(String, OperationCode)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientService.html" title="class in com.sca4d.open.client">OpenClientService</a></dt>
 <dd>
 <div class="block">判断 Client 是否有效且已经开放指定 Operation。</div>
 </dd>
@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据当前 Session 创建 Application Client。</div>
 </dd>
-<dt><a href="com/sca4d/open/client/OpenClientRepository.html#create(com.sca4d.open.client.OpenClient,java.util.Collection)" class="member-name-link">create(OpenClient, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientRepository.html" title="class in com.sca4d.open.client">OpenClientRepository</a></dt>
+<dt><a href="com/sca4d/open/client/OpenClientRepository.html#create(com.sca4d.open.client.OpenClient,java.util.Collection)" class="member-name-link">create(OpenClient, Collection&lt;OperationCode&gt;)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientRepository.html" title="class in com.sca4d.open.client">OpenClientRepository</a></dt>
 <dd>
 <div class="block">原子保存 Client 及完整 Operation 选择，关系写入失败时 Client 也回滚。</div>
 </dd>
@@ -180,7 +180,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
-<dt><a href="com/sca4d/open/client/OpenClientRepository.html#hasOperation(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">hasOperation(String, TreeCode)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientRepository.html" title="class in com.sca4d.open.client">OpenClientRepository</a></dt>
+<dt><a href="com/sca4d/open/client/OpenClientRepository.html#hasOperation(java.lang.String,com.sca4d.core.api.permission.OperationCode)" class="member-name-link">hasOperation(String, OperationCode)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientRepository.html" title="class in com.sca4d.open.client">OpenClientRepository</a></dt>
 <dd>
 <div class="block">判断 Client 是否开放一个 Operation。</div>
 </dd>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">插入 Client 与 IAM Account 的稳定绑定。</div>
 </dd>
-<dt><a href="com/sca4d/open/client/mapper/OpenClientMapper.html#insertOperations(java.lang.String,java.util.List)" class="member-name-link">insertOperations(String, List&lt;TreeCode&gt;)</a> - Method in interface com.sca4d.open.client.mapper.<a href="com/sca4d/open/client/mapper/OpenClientMapper.html" title="interface in com.sca4d.open.client.mapper">OpenClientMapper</a></dt>
+<dt><a href="com/sca4d/open/client/mapper/OpenClientMapper.html#insertOperations(java.lang.String,java.util.List)" class="member-name-link">insertOperations(String, List&lt;OperationCode&gt;)</a> - Method in interface com.sca4d.open.client.mapper.<a href="com/sca4d/open/client/mapper/OpenClientMapper.html" title="interface in com.sca4d.open.client.mapper">OpenClientMapper</a></dt>
 <dd>
 <div class="block">插入一个非空批次的 Operation 关系，返回实际新增数。</div>
 </dd>
@@ -377,7 +377,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">替换 Client 的 Operation 列表，仍要求当前 Session 拥有目标权限。</div>
 </dd>
-<dt><a href="com/sca4d/open/client/OpenClientRepository.html#replaceOperations(java.lang.String,java.util.Collection)" class="member-name-link">replaceOperations(String, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientRepository.html" title="class in com.sca4d.open.client">OpenClientRepository</a></dt>
+<dt><a href="com/sca4d/open/client/OpenClientRepository.html#replaceOperations(java.lang.String,java.util.Collection)" class="member-name-link">replaceOperations(String, Collection&lt;OperationCode&gt;)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientRepository.html" title="class in com.sca4d.open.client">OpenClientRepository</a></dt>
 <dd>
 <div class="block">锁定 Client 后原子替换完整 Operation 列表；空集合清空，失败保留原关系。</div>
 </dd>
@@ -400,7 +400,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/open/client/mapper/OpenClientMapper.html#selectClient(java.lang.String,java.lang.Long,boolean)" class="member-name-link">selectClient(String, Long, boolean)</a> - Method in interface com.sca4d.open.client.mapper.<a href="com/sca4d/open/client/mapper/OpenClientMapper.html" title="interface in com.sca4d.open.client.mapper">OpenClientMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/open/client/mapper/OpenClientMapper.html#selectOperations(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">selectOperations(String, TreeCode)</a> - Method in interface com.sca4d.open.client.mapper.<a href="com/sca4d/open/client/mapper/OpenClientMapper.html" title="interface in com.sca4d.open.client.mapper">OpenClientMapper</a></dt>
+<dt><a href="com/sca4d/open/client/mapper/OpenClientMapper.html#selectOperations(java.lang.String,com.sca4d.core.api.permission.OperationCode)" class="member-name-link">selectOperations(String, OperationCode)</a> - Method in interface com.sca4d.open.client.mapper.<a href="com/sca4d/open/client/mapper/OpenClientMapper.html" title="interface in com.sca4d.open.client.mapper">OpenClientMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/open/config/OpenProperties.Jwt.html#setAccessTtl(java.time.Duration)" class="member-name-link">setAccessTtl(Duration)</a> - Method in class com.sca4d.open.config.<a href="com/sca4d/open/config/OpenProperties.Jwt.html" title="class in com.sca4d.open.config">OpenProperties.Jwt</a></dt>
 <dd>&nbsp;</dd>
@@ -450,11 +450,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
-<dt><a href="com/sca4d/open/client/OpenClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in interface com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientOperationChecker.html" title="interface in com.sca4d.open.client">OpenClientOperationChecker</a></dt>
+<dt><a href="com/sca4d/open/client/OpenClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.OperationCode)" class="member-name-link">verifyAllowed(Call, OperationCode)</a> - Method in interface com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientOperationChecker.html" title="interface in com.sca4d.open.client">OpenClientOperationChecker</a></dt>
 <dd>
 <div class="block">检查当前调用是否可以执行 Operation。</div>
 </dd>
-<dt><a href="com/sca4d/open/client/OpenClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientOperationCheckerImpl.html" title="class in com.sca4d.open.client">OpenClientOperationCheckerImpl</a></dt>
+<dt><a href="com/sca4d/open/client/OpenClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.OperationCode)" class="member-name-link">verifyAllowed(Call, OperationCode)</a> - Method in class com.sca4d.open.client.<a href="com/sca4d/open/client/OpenClientOperationCheckerImpl.html" title="class in com.sca4d.open.client">OpenClientOperationCheckerImpl</a></dt>
 <dd>
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 </dd>

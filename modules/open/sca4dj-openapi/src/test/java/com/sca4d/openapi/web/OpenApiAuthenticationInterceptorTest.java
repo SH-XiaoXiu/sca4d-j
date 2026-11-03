@@ -65,7 +65,7 @@ class OpenApiAuthenticationInterceptorTest {
     @BeforeEach
     void registerRoute() {
         OpenApiRouteDefinition route = mock(OpenApiRouteDefinition.class);
-        when(route.operation()).thenReturn(com.sca4d.core.api.name.code.TreeCode.ofColon("test:openapi"));
+        when(route.operation()).thenReturn(new com.sca4d.core.api.permission.OperationCode("test:openapi"));
         when(routes.find(any(HandlerMethod.class))).thenReturn(Optional.of(route));
     }
 

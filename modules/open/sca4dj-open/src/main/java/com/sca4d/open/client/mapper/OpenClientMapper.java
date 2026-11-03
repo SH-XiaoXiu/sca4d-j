@@ -1,6 +1,6 @@
 package com.sca4d.open.client.mapper;
 
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.open.client.OpenClient;
 import com.sca4d.open.client.OpenClientStatus;
@@ -32,9 +32,9 @@ public interface OpenClientMapper {
     /** @return Client 的全部或指定 Operation，按编码排序 */
     @CheckReturnValue
     @NotNull
-    List<String> selectOperations(
+    List<OperationCode> selectOperations(
             @Param("clientId") @NotNull String clientId,
-            @Param("operation") @Nullable TreeCode operation);
+            @Param("operation") @Nullable OperationCode operation);
 
     /** 删除 Client 当前完整 Operation 关系。 */
     int deleteOperations(@Param("clientId") @NotNull String clientId);
@@ -43,7 +43,7 @@ public interface OpenClientMapper {
     @CheckReturnValue
     int insertOperations(
             @Param("clientId") @NotNull String clientId,
-            @Param("operations") @NotNull List<TreeCode> operations);
+            @Param("operations") @NotNull List<OperationCode> operations);
 
     /** 执行 Client 状态字段的明确写入意图。 */
     @CheckReturnValue

@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.session.SessionService;
 import com.sca4d.auth.sharedsecret.SharedSecretAuthenticationMethod;
 import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.iam.identity.IdentityService;
@@ -172,9 +172,9 @@ class OpenApiSpringdocRuntimeTest {
         @Bean
         OperationCatalog operationCatalog() {
             OperationCatalog operations = mock(OperationCatalog.class);
-            OperationNode.OperationAction action = mock(OperationNode.OperationAction.class);
-            when(action.operation()).thenReturn(new com.sca4d.core.api.permission.Operation("iot:devices:read"));
-            when(operations.actionByCode(any(TreeCode.class))).thenReturn(action);
+            OperationNode.Leaf leaf = mock(OperationNode.Leaf.class);
+            when(leaf.operation()).thenReturn(new com.sca4d.core.api.permission.Operation("iot:devices:read"));
+            when(operations.leafByCode(any(OperationCode.class))).thenReturn(leaf);
             return operations;
         }
 
@@ -189,7 +189,7 @@ class OpenApiSpringdocRuntimeTest {
                             "/openapi/devices/{deviceId}",
                             "iot",
                             "getDevice",
-                            TreeCode.ofColon("iot:devices:read")),
+                            new OperationCode("iot:devices:read")),
                     String.class);
         }
 
