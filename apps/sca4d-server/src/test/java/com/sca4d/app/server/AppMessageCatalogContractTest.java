@@ -13,6 +13,7 @@ import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.error.ErrorCode;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.MessageCatalog;
+import com.sca4d.core.api.permission.OperationAxes;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.core.api.storage.FileErrorCode;
@@ -21,6 +22,7 @@ import com.sca4d.core.spring.web.HttpErrorCode;
 import com.sca4d.iam.base.rbac.PlatformOperations;
 import com.sca4d.iam.identity.IamErrorCode;
 import com.sca4d.iam.rbac.RbacErrorCode;
+import com.sca4d.iam.rbac.RbacGrantable;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.notification.email.EmailNotificationErrorCode;
@@ -66,13 +68,17 @@ class AppMessageCatalogContractTest {
                 List.of(
                         new PlatformOperations(),
                         new SystemOperations(),
-                        new IotOperations()));
+                        new IotOperations()),
+                java.util.stream.Stream.concat(
+                                OperationAxes.standard().stream(),
+                                java.util.stream.Stream.of(RbacGrantable.GRANTABLE))
+                        .toList());
         assertMessageKeysPresent(
                 messages,
                 catalog.tree()
                         .stream()
                         .flatMap(AppMessageCatalogContractTest::nodes)
-                        .map(OperationNode::nameKey)
+                        .map(node -> node.display().nameKey())
                         .toList());
     }
 

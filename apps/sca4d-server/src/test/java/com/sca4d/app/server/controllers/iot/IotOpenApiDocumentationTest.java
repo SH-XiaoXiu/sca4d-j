@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.app.server.service.IotApplicationService;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.openapi.web.OpenApiRouteCatalog;
@@ -165,10 +165,10 @@ class IotOpenApiDocumentationTest {
         @Bean
         OperationCatalog operationCatalog() {
             OperationCatalog operations = mock(OperationCatalog.class);
-            OperationNode.OperationAction action = mock(OperationNode.OperationAction.class);
-            when(action.operation())
+            OperationNode.Leaf leaf = mock(OperationNode.Leaf.class);
+            when(leaf.operation())
                     .thenReturn(new com.sca4d.core.api.permission.Operation("iot:devices:read"));
-            when(operations.actionByCode(any(TreeCode.class))).thenReturn(action);
+            when(operations.leafByCode(any(OperationCode.class))).thenReturn(leaf);
             return operations;
         }
 
@@ -183,7 +183,7 @@ class IotOpenApiDocumentationTest {
                             "/openapi/iot/devices/{deviceId}",
                             "iot",
                             "getDevice",
-                            TreeCode.ofColon("iot:devices:read")),
+                            new OperationCode("iot:devices:read")),
                     long.class);
         }
 
