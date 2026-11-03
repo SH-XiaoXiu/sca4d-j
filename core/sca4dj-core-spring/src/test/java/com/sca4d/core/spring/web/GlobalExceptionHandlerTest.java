@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
@@ -40,12 +41,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证 GlobalExceptionHandler 把业务异常、限流、版本前置条件失败和乐观锁冲突转换为 HTTP 状态与 ApiResponse，并区分 JSON 与 text/event-stream 的响应体策略。 */
+/** 验证 GlobalExceptionHandler 把业务异常、限流、版本前置条件失败和乐观锁冲突转换为 HTTP 状态与 ApiResponse，并按路由 produces 和 Accept 区分 JSON 错误体与只返回状态的响应（事件流、图片）。 */
 class GlobalExceptionHandlerTest {
 
     private final GlobalExceptionHandler handler = new GlobalExceptionHandler(localizer());
 
-    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new EventStreamController())
+    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new EventStreamController(), new BinaryController())
             .setControllerAdvice(handler)
             .build();
 
@@ -193,6 +194,36 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    @DisplayName("Returns Business Status Without Media Negotiation Failure On An Image Only Route")
+    void returnsBusinessStatusWithoutMediaNegotiationFailureOnImageOnlyRoute() throws Exception {
+        // 路由只生成图片：即使 Accept 是通配，也不能写 JSON 错误体。
+        mockMvc.perform(get("/test-binary/image-only").accept(MediaType.ALL))
+                .andExpect(status().isConflict())
+                .andExpect(content().string(""));
+        mockMvc.perform(get("/test-binary/image-only").accept(MediaType.IMAGE_PNG))
+                .andExpect(status().isConflict())
+                .andExpect(content().string(""));
+    }
+
+    @Test
+    @DisplayName("Returns Structured Json Error On A Route Producing Both Image And Json")
+    void returnsStructuredJsonErrorOnImageAndJsonRoute() throws Exception {
+        mockMvc.perform(get("/test-binary/image-or-json").accept(MediaType.IMAGE_PNG, MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(CoreErrorCode.CONFLICT.code()))
+                .andExpect(jsonPath("$.message").value("当前状态已经发生变化"));
+    }
+
+    @Test
+    @DisplayName("Returns Status Only When Accept Excludes Json On An Image And Json Route")
+    void returnsStatusOnlyWhenAcceptExcludesJsonOnImageAndJsonRoute() throws Exception {
+        mockMvc.perform(get("/test-binary/image-or-json").accept(MediaType.IMAGE_PNG))
+                .andExpect(status().isConflict())
+                .andExpect(content().string(""));
+    }
+
+    @Test
     @DisplayName("Maps Version Precondition Failure To Precondition Failed")
     void mapsVersionPreconditionFailureToPreconditionFailed() {
         MockHttpServletRequest request = new MockHttpServletRequest("PATCH", "/accounts/1");
@@ -232,6 +263,24 @@ class GlobalExceptionHandlerTest {
                 new LocaleCatalog(List.of(zhCn), zhCn),
                 (key, locale, arguments) -> Optional.ofNullable(messages.get(key))
                         .map(pattern -> new MessageFormat(pattern, locale).format(arguments)));
+    }
+
+    /** 提供真实 Spring MVC 图片映射，用于验证非 JSON 路由抛出业务异常时的媒体协商。 */
+    @RestController
+    private static class BinaryController {
+
+        /** 只声明图片，并抛出冲突业务异常。 */
+        @GetMapping(value = "/test-binary/image-only", produces = MediaType.IMAGE_PNG_VALUE)
+        private byte[] imageOnly() {
+            throw new BusinessException(CoreErrorCode.CONFLICT);
+        }
+
+        /** 声明图片和 JSON，并抛出冲突业务异常。 */
+        @GetMapping(value = "/test-binary/image-or-json", produces = {MediaType.IMAGE_PNG_VALUE,
+                MediaType.APPLICATION_JSON_VALUE})
+        private byte[] imageOrJson() {
+            throw new BusinessException(CoreErrorCode.CONFLICT);
+        }
     }
 
     /** 提供真实 Spring MVC 事件流映射，用于验证异常响应媒体协商。 */

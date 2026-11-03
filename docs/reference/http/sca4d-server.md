@@ -599,7 +599,7 @@ App 在一个事务中创建 Subject、Account、Principal、用户名标识、�
 
 删除不能用于当前管理员自己的 Account 或受保护 ROOT Account。IAM 完成这些保护规则后才首次终止目标 Session 并修改数据；失败时 Password、TOTP、Passkey、认证设置和资料保持不变。Account、登录标识和认证 Credential 元数据改为 `DISABLED + deleted = 1`；Account-Principal 关系、认证设置、Password/TOTP secret、Passkey 模块账号数据和未完成 TOTP enrollment 物理删除。未删除记录的局部唯一索引使原用户名可以重新注册。
 
-Subject 还有其他未删除 Account 时保留 Subject；删除最后一个 Account 时逻辑删除 Subject。Principal 还有其他未删除 Account 时保留 Principal、资料、角色和 ACL；否则 Principal 与 `platform_user_profile` 逻辑删除，资料邮箱与手机号清空，展示名称改为「已删除账号」，角色关系和 ACL 物理删除。事务提交后再次终止目标 Account Session。在线 Session 立即失效；已经签发的普通离线 JWT 仍按最长五分钟 TTL 到期。
+Subject 还有其他未删除 Account 时保留 Subject；删除最后一个 Account 时逻辑删除 Subject。Principal 还有其他未删除 Account 时保留 Principal、资料、角色和 ACL；否则 Principal 与 `platform_user_profile` 逻辑删除，资料邮箱与手机号清空，展示名称改为 `Deleted account`，角色关系和 ACL 物理删除。事务提交后再次终止目标 Account Session。在线 Session 立即失效；已经签发的普通离线 JWT 仍按最长五分钟 TTL 到期。
 
 ### 分配角色
 
@@ -651,11 +651,11 @@ Subject 还有其他未删除 Account 时保留 Subject；删除最后一个 Acc
 
 `GET /platform/roles/{roleId}/accounts` 使用 `assigned=true|false` 选择已分配账号或候选账号，并接受账号列表相同的 `search`、`status`、`page` 和 `size`。`PATCH` 请求体使用 `addAccountIds` 和 `removeAccountIds` 两个数组；同一 Account 不能同时添加和移除。服务端一次批量读取 Account 与 PlatformPrincipal 关系，并原子修改目标角色，不覆盖这些 Principal 的其他角色。受保护关系不能移除；没有实际变化的关系不递增角色集合版本。
 
-角色 permission 资源返回 `roleId` 和 `permissionCodes`，当前 `Version` 只通过强 ETag 返回。替换请求使用同名数组；只有目录中的可授予 ACTION 可以保存，未知编码、分组节点和内部通配值使整个请求失败。`ROOT` 固定使用内部全量选择符，不能替换 permission；`DEFAULT` 的初始 permission 为空，管理员可以替换为具体 ACTION。
+角色 permission 资源返回 `roleId` 和 `permissionCodes`，当前 `Version` 只通过强 ETag 返回。替换请求使用同名数组；只有目录中的可授予叶子可以保存，未知编码、分组节点和内部通配值使整个请求失败。`ROOT` 固定使用内部全量选择符，不能替换 permission；`DEFAULT` 的初始 permission 为空，管理员可以替换为具体叶子。
 
 一个角色的多语言字段、状态、permission 和删除共同使用 `platform_role.version`。任一修改成功都把这个值加一，所以从角色详情、完整 i18n 或 permission 资源取得的 ETag 可以用于下一次角色修改，但其中任一资源先发生变化都会使旧 ETag 失效。Principal 的角色集合使用独立 `Version`，不与角色自身的 `Version` 混用。
 
-`GET /system/permissions` 返回 `tree`、扁平可授予 `items` 和 `total`。每个节点包含 `code`、`parentCode`、本地化 `name`、`nameKey`、`type`、`grantable`、`sortOrder` 和 `children`。`MODULE` 与 `RESOURCE` 只用于分组，只有 `ACTION` 可以授予角色。
+`GET /system/permissions` 返回 `tree`、扁平可授予 `items` 和 `total`。每个节点包含 `code`、`parentCode`、本地化 `name`、`nameKey`、`type`、`grantable`、`sortOrder` 和 `children`。`type` 为 `GROUP` 的节点只用于分组，可以嵌套任意层；只有 `type` 为 `LEAF` 的节点可以授予角色。
 
 ## IoT Product 与 Device
 

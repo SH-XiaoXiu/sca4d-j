@@ -113,7 +113,8 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ApiResponseAdvice.html" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 <code>@ETag</code> 时写入强 ETag。</div>
+<div class="block">在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 <code>@ETag</code> 时写入强 ETag，
+ 并在 Controller 没有设置 <code>Cache-Control</code> 时补上 <code>no-store</code>。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="BearerToken.html" title="class in com.sca4d.core.spring.web">BearerToken</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -137,7 +138,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派。</div>
+<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派和 Servlet 容器的错误分派。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -179,8 +180,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的预提交条件。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ResponseETagContractValidator.html" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RequiredOperationDeclarationVerifier.html" title="class in com.sca4d.core.spring.web">RequiredOperationDeclarationVerifier</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">在应用启动时检查 Controller 上 <code>RequirePermission</code> 声明的固定 Operation 都存在于 <code>OperationCatalog</code>。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ResponseETagContractValidator.html" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">在应用启动时校验 Controller 返回的顶层响应数据 ETag 声明。</div>
 </div>
 </div>

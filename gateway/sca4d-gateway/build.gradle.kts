@@ -30,6 +30,7 @@ dependencies {
     compileOnly(libs.spotbugs.annotations)
     implementation(libs.slf4j.api)
     implementation(libs.spring.boot.starter.actuator)
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     implementation(libs.spring.cloud.starter.gateway.server.webflux)
     implementation(libs.spring.cloud.starter.loadbalancer)
     runtimeOnly(project(":gateway:sca4dj-gateway-loki"))

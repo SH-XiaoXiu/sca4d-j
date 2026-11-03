@@ -115,7 +115,7 @@ public class HttpCallFilter extends OncePerRequestFilter {
         if (idempotencyKey != null)
             inputs.put(IdempotencyKey.INPUT, idempotencyKey);
         Call call = new Call(invoker, callId, clock.instant(), inputs.build(), null);
-        RequestTiming timing = new RequestTiming(callId, http.method(), http.path(), startedNanos, response);
+        RequestTiming timing = new RequestTiming(call, callId, http.method(), http.path(), startedNanos, response);
         response.setHeader(HttpConstants.CALL_ID_HEADER, callId);
         try {
             CallHolder.set(call);
@@ -166,6 +166,8 @@ public class HttpCallFilter extends OncePerRequestFilter {
 
     /** 保存一次 HTTP 请求的计时快照，并跨异步周期只输出一次最终慢请求日志。 */
     private class RequestTiming implements AsyncListener {
+        private final @NotNull Call call;
+
         private final @NotNull HttpServletResponse initialResponse;
 
         private final @NotNull String callId;
@@ -185,11 +187,13 @@ public class HttpCallFilter extends OncePerRequestFilter {
         private @NotNull Map<String, String> loggingContext = Map.of();
 
         private RequestTiming(
+                @NotNull Call call,
                 @NotNull String callId,
                 @NotNull String method,
                 @NotNull String path,
                 long startedNanos,
                 @NotNull HttpServletResponse initialResponse) {
+            this.call = Objects.requireNonNull(call, "Call 不能为空");
             this.callId = callId;
             this.method = method;
             this.path = path;
@@ -229,6 +233,7 @@ public class HttpCallFilter extends OncePerRequestFilter {
             try {
                 if (asyncStarted)
                     MDC.setContextMap(loggingContext);
+                restoreIdentityMdc();
                 MDC.put(CALL_ID_MDC, callId);
                 long durationMs = TimeUnit.NANOSECONDS.toMillis(durationNanos);
                 if (durationNanos >= slowRequestThresholdNanos) {
@@ -257,6 +262,17 @@ public class HttpCallFilter extends OncePerRequestFilter {
                 else
                     MDC.setContextMap(previousContext);
             }
+        }
+
+        /**
+         * Controller 完成回调会先清理 IdentityMdcInterceptor 写入的 MDC；完成日志仍需使用本次 Call 的最终身份。
+         * 这里从 Call 恢复上下文，只在输出完成日志期间生效，finally 会恢复调用线程原有上下文。
+         */
+        private void restoreIdentityMdc() {
+            call.session().ifPresent(session -> MDC.put("sessionId", session.id().toString()));
+            call.subject().ifPresent(subject -> MDC.put("subjectId", Long.toString(subject.subjectId())));
+            call.account().ifPresent(account -> MDC.put("accountId", Long.toString(account.accountId())));
+            call.principal().ifPresent(principal -> MDC.put("principalId", Long.toString(principal.principalId())));
         }
 
         @Override

@@ -52,7 +52,7 @@
 
 注销使用 `DELETE /api/sessions/current`。该接口要求不透明 Session Token，JWT 模式下使用 `sessionToken`。
 
-请求绑定和响应转换位于 `AuthenticationController`、`PasswordLoginRequest` 与 `LoginResultView`，登录流程位于 `PlatformLoginService`。其他认证方法的路由见[登录与 Session 接口](/reference/http/sca4d-server#登录、verification-与-session)。
+请求绑定和响应转换位于 `CommonAuthenticationController`、`PasswordLoginRequest` 与 `LoginResultView`，登录流程位于 `PlatformLoginService`。其他认证方法的路由见[登录与 Session 接口](/reference/http/sca4d-server#登录、verification-与-session)。
 
 ### 2. 为敏感操作完成 verification
 

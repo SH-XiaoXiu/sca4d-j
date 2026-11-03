@@ -20,8 +20,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.InvalidMediaTypeException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -33,8 +35,10 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -43,6 +47,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -52,6 +57,10 @@ import java.util.Objects;
  * 将业务异常和 Spring MVC 请求异常转换为携带错误码与消息参数的 {@link ApiResponse}。
  *
  * <p>业务异常保留模块声明的错误码和消息参数。未分类的服务端异常只向客户端返回固定安全文案，完整原因仅写入服务端日志。
+ *
+ * <p>只有当前路由声明的 produces 和请求 Accept 头都允许 JSON 时才写 ApiResponse 错误体。只生成事件流、图片或文件的路由
+ * 以及 Accept 不含 JSON 的请求，只得到原来的 HTTP 状态和响应头；声明了图片和 JSON 两种类型的路由，
+ * 在请求同时接受 JSON 时仍返回 ApiResponse 错误体。
  */
 @RestControllerAdvice
 @Hidden
@@ -72,7 +81,7 @@ public class GlobalExceptionHandler {
 
     /**
      * 把 Call 中记录的版本兼容拒绝转换为 ApiResponse 错误，HTTP 状态取自错误码。
-     * 错误消息按当前请求的 Locale 生成；SSE 请求只返回状态码，不返回 JSON。
+     * 错误消息按当前请求的 Locale 生成；路由或 Accept 不接受 JSON 时只返回状态码，不返回 JSON 错误体。
      *
      * @param exception 版本兼容拒绝异常，携带错误码和判定结果
      * @param request 当前 HTTP 请求
@@ -118,7 +127,7 @@ public class GlobalExceptionHandler {
      *
      * @param exception 携带模块错误码的业务异常
      * @param request 当前 HTTP 请求
-     * @return 错误分类对应的 HTTP 响应；SSE 请求只返回状态码
+     * @return 错误分类对应的 HTTP 响应；不接受 JSON 的请求只返回状态码
      */
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Object>> business(
@@ -154,7 +163,7 @@ public class GlobalExceptionHandler {
      *
      * @param exception 携带剩余等待秒数的限流异常
      * @param request 当前 HTTP 请求
-     * @return 429、`Retry-After` 和固定限流错误；SSE 请求不返回 JSON
+     * @return 429、`Retry-After` 和固定限流错误；不接受 JSON 的请求不返回 JSON 错误体
      */
     @ExceptionHandler(RateLimitExceededException.class)
     public ResponseEntity<ApiResponse<Object>> rateLimited(
@@ -181,7 +190,7 @@ public class GlobalExceptionHandler {
      *
      * @param exception 携带建议等待秒数的幂等处理中异常
      * @param request 当前 HTTP 请求
-     * @return 409、`Retry-After` 和固定幂等错误；SSE 请求不返回 JSON
+     * @return 409、`Retry-After` 和固定幂等错误；不接受 JSON 的请求不返回 JSON 错误体
      */
     @ExceptionHandler(IdempotencyInProgressException.class)
     public ResponseEntity<ApiResponse<Object>> idempotencyInProgress(
@@ -534,7 +543,10 @@ public class GlobalExceptionHandler {
                 request);
     }
 
-    /** 为事件流返回空错误响应，为普通 HTTP API 返回固定 JSON 错误。 */
+    /**
+     * 路由和 Accept 都允许 JSON 时返回固定 JSON 错误；否则（事件流、图片、文件等）只返回已设置的状态和响应头，
+     * 不再写响应体，避免 Spring 因找不到可接受的表示而在异常处理中再抛 {@link HttpMediaTypeNotAcceptableException}。
+     */
     private <T> ResponseEntity<ApiResponse<T>> failure(
             ResponseEntity.BodyBuilder response,
             ErrorCode errorCode,
@@ -542,7 +554,8 @@ public class GlobalExceptionHandler {
             List<Object> arguments,
             @Nullable T data,
             HttpServletRequest request) {
-        if (expectsEventStream(request)) {
+        if (!acceptsJson(request)) {
+            LOG.trace("当前路由或 Accept 不接受 JSON，错误只返回状态和响应头 | request={}", requestLine(request));
             return response.build();
         }
         String message = localize(messageKey, arguments);
@@ -611,45 +624,81 @@ public class GlobalExceptionHandler {
         };
     }
 
-    /** 判断当前 Handler 或明确的 Accept 约束是否只生成 SSE。 */
-    private boolean expectsEventStream(HttpServletRequest request) {
-        Object producible = request.getAttribute(HandlerMapping.PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE);
-        if (producible instanceof Collection<?> values && !values.isEmpty()) {
-            return onlyEventStream(
-                    values.stream()
-                            .filter(MediaType.class::isInstance)
-                            .map(MediaType.class::cast)
-                            .toList());
+    /**
+     * 判断当前路由和 Accept 头是否都允许返回 JSON 错误体。
+     *
+     * <p>判定表（“路由”指被选中 Handler 声明的 produces，没有声明表示不限制）：
+     *
+     * <pre>
+     * 路由 produces                 Accept                                  结果
+     * 未声明，或含 JSON 兼容类型    缺失、无法解析，或含 q&gt;0 的 JSON 兼容范围  返回 JSON 错误体
+     * 只有图片、文件、事件流等类型  任意                                      只返回状态和响应头
+     * 任意                          只有 JSON 不兼容的范围（如 image/png）    只返回状态和响应头
+     * </pre>
+     */
+    private boolean acceptsJson(HttpServletRequest request) {
+        List<MediaType> producible = producibleMediaTypes(request);
+        if (!producible.isEmpty()
+                && producible.stream().noneMatch(type -> type.isCompatibleWith(MediaType.APPLICATION_JSON))) {
+            return false;
         }
         String accept = request.getHeader(HttpHeaders.ACCEPT);
-        if (accept == null) {
-            return false;
+        if (accept == null || accept.isBlank()) {
+            return true;
         }
         try {
-            return onlyEventStream(MediaType.parseMediaTypes(accept));
+            return MediaType.parseMediaTypes(accept)
+                    .stream()
+                    .anyMatch(
+                            range -> range.getQualityValue() > 0
+                                    && range.isCompatibleWith(MediaType.APPLICATION_JSON));
         } catch (IllegalArgumentException ignored) {
-            // Accept 头格式无法解析时按非事件流处理，继续返回 JSON 错误体。
-            return false;
+            // Accept 头格式无法解析时按接受 JSON 处理，继续返回 JSON 错误体。
+            return true;
         }
     }
 
-    /** 判断媒体类型集合是否明确包含事件流且不包含其他具体响应类型。 */
-    private boolean onlyEventStream(List<MediaType> mediaTypes) {
-        boolean eventStream = false;
-        for (MediaType mediaType : mediaTypes) {
-            if (mediaType.getQualityValue() <= 0 || mediaType.isWildcardType()) {
+    /**
+     * 返回被选中 Handler 声明的 produces；没有声明或无法确定时返回空列表。
+     *
+     * <p>Spring MVC 在调用 {@code @ExceptionHandler} 之前会移除请求上的 {@code PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE}，
+     * 因此优先读取该属性（直接调用本类方法或 Spring 未移除时存在），否则读取最佳匹配 Handler 方法上的
+     * {@link RequestMapping#produces()}，方法上没有声明时读取类上的声明，与 Spring 合并映射条件的规则一致。
+     * 以 {@code !} 开头的排除项和无法解析的值被忽略。
+     */
+    private List<MediaType> producibleMediaTypes(HttpServletRequest request) {
+        Object producible = request.getAttribute(HandlerMapping.PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE);
+        if (producible instanceof Collection<?> values && !values.isEmpty()) {
+            return values.stream()
+                    .filter(MediaType.class::isInstance)
+                    .map(MediaType.class::cast)
+                    .toList();
+        }
+        if (!(request.getAttribute(HandlerMapping.BEST_MATCHING_HANDLER_ATTRIBUTE) instanceof HandlerMethod handler)) {
+            return List.of();
+        }
+        RequestMapping methodMapping = AnnotatedElementUtils.findMergedAnnotation(
+                handler.getMethod(),
+                RequestMapping.class);
+        String[] produces = methodMapping == null ? new String[0] : methodMapping.produces();
+        if (produces.length == 0) {
+            RequestMapping typeMapping = AnnotatedElementUtils.findMergedAnnotation(
+                    handler.getBeanType(),
+                    RequestMapping.class);
+            produces = typeMapping == null ? new String[0] : typeMapping.produces();
+        }
+        List<MediaType> result = new ArrayList<>();
+        for (String value : produces) {
+            if (value.startsWith("!")) {
                 continue;
             }
-            if (!MediaType.TEXT_EVENT_STREAM.getType().equals(mediaType.getType())) {
-                return false;
-            }
-            if (MediaType.TEXT_EVENT_STREAM.getSubtype().equals(mediaType.getSubtype())) {
-                eventStream = true;
-            } else if (!mediaType.isWildcardSubtype()) {
-                return false;
+            try {
+                result.add(MediaType.parseMediaType(value));
+            } catch (InvalidMediaTypeException ignored) {
+                // 含占位符等无法在此解析的声明不参与判断，按未声明处理。
             }
         }
-        return eventStream;
+        return result;
     }
 
     /** 生成日志用的请求行，包含方法、URI 和请求参数名称；参数值不写入日志。 */

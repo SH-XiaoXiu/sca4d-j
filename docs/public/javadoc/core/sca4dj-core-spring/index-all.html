@@ -114,6 +114,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">清理当前请求写入的身份标识。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/web/RequiredOperationDeclarationVerifier.html#afterSingletonsInstantiated()" class="member-name-link">afterSingletonsInstantiated()</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequiredOperationDeclarationVerifier.html" title="class in com.sca4d.core.spring.web">RequiredOperationDeclarationVerifier</a></dt>
+<dd>
+<div class="block">逐个检查全部处理方法的 Operation 声明。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/ResponseETagContractValidator.html#afterSingletonsInstantiated()" class="member-name-link">afterSingletonsInstantiated()</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ResponseETagContractValidator.html" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a></dt>
 <dd>
 <div class="block">校验所有顶层 <code>ApiResponse.data</code> 具体类型，声明错误时阻止应用启动。</div>
@@ -152,7 +156,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponseAdvice.html" class="type-name-link" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a> - Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
 <dd>
-<div class="block">在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 <code>@ETag</code> 时写入强 ETag。</div>
+<div class="block">在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 <code>@ETag</code> 时写入强 ETag，
+ 并在 Controller 没有设置 <code>Cache-Control</code> 时补上 <code>no-store</code>。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponseAdvice.html#%3Cinit%3E()" class="member-name-link">ApiResponseAdvice()</a> - Constructor for class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponseAdvice.html" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a></dt>
 <dd>&nbsp;</dd>
@@ -473,7 +478,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html#clientVersion(com.sca4d.core.api.version.exception.VersionCompatibilityException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">clientVersion(VersionCompatibilityException, HttpServletRequest)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html" title="class in com.sca4d.core.spring.web">GlobalExceptionHandler</a></dt>
 <dd>
 <div class="block">把 Call 中记录的版本兼容拒绝转换为 ApiResponse 错误，HTTP 状态取自错误码。
- 错误消息按当前请求的 Locale 生成；SSE 请求只返回状态码，不返回 JSON。</div>
+ 错误消息按当前请求的 Locale 生成；路由或 Accept 不接受 JSON 时只返回状态码，不返回 JSON 错误体。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/version/ClientVersionResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.version">ClientVersionResolver</a> - Class in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
 <dd>
@@ -1417,7 +1422,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a> - Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
 <dd>
-<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派。</div>
+<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派和 Servlet 容器的错误分派。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html#%3Cinit%3E()" class="member-name-link">HttpCallHandlerInterceptor()</a> - Constructor for class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></dt>
 <dd>&nbsp;</dd>
@@ -2117,7 +2122,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)" class="member-name-link">preHandle(HttpServletRequest, HttpServletResponse, Object)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></dt>
 <dd>
-<div class="block">处理初次请求，或者允许 Spring MVC 完成异步结果和断开连接分派。</div>
+<div class="block">处理初次请求；异步分派和 Servlet 容器的错误分派直接放行，不再执行子类的请求阶段处理。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/IfMatchInterceptor.html#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)" class="member-name-link">preHandle(HttpServletRequest, HttpServletResponse, Object)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/IfMatchInterceptor.html" title="class in com.sca4d.core.spring.web">IfMatchInterceptor</a></dt>
 <dd>
@@ -2363,6 +2368,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/RequestVersionConditions.html#%3Cinit%3E()" class="member-name-link">RequestVersionConditions()</a> - Constructor for class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/web/RequiredOperationDeclarationVerifier.html" class="type-name-link" title="class in com.sca4d.core.spring.web">RequiredOperationDeclarationVerifier</a> - Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
+<dd>
+<div class="block">在应用启动时检查 Controller 上 <code>RequirePermission</code> 声明的固定 Operation 都存在于 <code>OperationCatalog</code>。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/RequiredOperationDeclarationVerifier.html#%3Cinit%3E(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,com.sca4d.core.api.permission.OperationCatalog)" class="member-name-link">RequiredOperationDeclarationVerifier(RequestMappingHandlerMapping, OperationCatalog)</a> - Constructor for class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequiredOperationDeclarationVerifier.html" title="class in com.sca4d.core.spring.web">RequiredOperationDeclarationVerifier</a></dt>
+<dd>
+<div class="block">创建 Operation 声明校验器。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/HttpConstants.html#reserved(java.lang.String)" class="member-name-link">reserved(String)</a> - Static method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
 <dd>
 <div class="block">返回名称是否已经由 HTTP 协议或 Core 的条件请求使用。</div>

@@ -4,6 +4,11 @@
   <Match class="com.sca4dj.build.Sca4djBuildMapping">
     <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
   </Match>
+  <!-- View、Request、Response 是 Jackson 序列化或绑定的数据载体，生命周期止于单次请求，不作为共享可变状态传递。 -->
+  <Match>
+    <Class name="~.*(View|Request|Response)(\$.*)?"/>
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+  </Match>
   <!-- 构造器参数校验允许直接抛出异常，不检查基于终结器攻击模型的 CT_CONSTRUCTOR_THROW。 -->
   <Match>
     <Bug pattern="CT_CONSTRUCTOR_THROW"/>

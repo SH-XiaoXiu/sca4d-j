@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -85,6 +86,56 @@ class ApiResponseAdviceTest {
         assertThat(responseBody.getTimestamp()).isNull();
         assertThat(new ObjectMapper().findAndRegisterModules().writeValueAsString(responseBody))
                 .doesNotContain("callId", "timestamp");
+    }
+
+    @Test
+    @DisplayName("发布 ETag 的响应默认禁止缓存，避免条件请求命中已变化的正文")
+    void publishedEtagDefaultsToNoStore() throws Exception {
+        MockHttpServletResponse servletResponse = new MockHttpServletResponse();
+
+        write(ApiResponse.ok(new VersionedBody(7)), servletResponse);
+
+        assertThat(servletResponse.getHeader("ETag")).isEqualTo("\"7\"");
+        assertThat(servletResponse.getHeader("Cache-Control")).isEqualTo("no-store");
+    }
+
+    @Test
+    @DisplayName("Controller 已设置 Cache-Control 时保持原值")
+    void keepsExplicitCacheControlWhenEtagIsPublished() throws Exception {
+        MockHttpServletResponse servletResponse = new MockHttpServletResponse();
+        ApiResponse<VersionedBody> responseBody = ApiResponse.ok(new VersionedBody(7));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setCacheControl("private, max-age=60");
+        responseBody.restoreResponse(null, headers);
+
+        write(responseBody, servletResponse);
+
+        assertThat(servletResponse.getHeader("Cache-Control")).isEqualTo("private, max-age=60");
+    }
+
+    @Test
+    @DisplayName("没有 ETag 的响应不增加 Cache-Control")
+    void responseWithoutEtagKeepsCacheControlUnset() throws Exception {
+        MockHttpServletResponse servletResponse = new MockHttpServletResponse();
+
+        write(ApiResponse.ok("resource"), servletResponse);
+
+        assertThat(servletResponse.getHeader("ETag")).isNull();
+        assertThat(servletResponse.getHeader("Cache-Control")).isNull();
+    }
+
+    private void write(ApiResponse<?> responseBody, MockHttpServletResponse servletResponse) throws Exception {
+        ServletServerHttpResponse response = new ServletServerHttpResponse(servletResponse);
+        new ApiResponseAdvice().beforeBodyWrite(
+                responseBody,
+                new MethodParameter(
+                        getClass().getDeclaredMethod("write", ApiResponse.class, MockHttpServletResponse.class),
+                        -1),
+                MediaType.APPLICATION_JSON,
+                MappingJackson2HttpMessageConverter.class,
+                new ServletServerHttpRequest(new MockHttpServletRequest("GET", "/resources/7")),
+                response);
+        response.flush();
     }
 
     /** 提供带固定版本号的测试响应体，ETag 由 @ETag 标注的 revision() 返回值生成。 */

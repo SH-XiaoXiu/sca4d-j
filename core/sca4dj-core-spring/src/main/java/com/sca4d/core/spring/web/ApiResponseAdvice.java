@@ -3,6 +3,7 @@ package com.sca4d.core.spring.web;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ETag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,10 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-/** 在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 {@code @ETag} 时写入强 ETag。 */
+/**
+ * 在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头；成功响应的 data 声明了 {@code @ETag} 时写入强 ETag，
+ * 并在 Controller 没有设置 {@code Cache-Control} 时补上 {@code no-store}。
+ */
 @ControllerAdvice
 public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
@@ -52,6 +56,10 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
                                         .setETag(ETag.create(version.toString()).formattedTag()));
                 if (response.getHeaders().getFirst(HttpHeaders.ETAG) != null) {
                     apiResponse.omitDynamicMetadata();
+                    // ETag 只用于 If-Match；不让浏览器把它当缓存校验值，否则 304 会让客户端沿用已变化的旧正文。
+                    if (response.getHeaders().getCacheControl() == null) {
+                        response.getHeaders().setCacheControl(CacheControl.noStore());
+                    }
                 }
             }
         }

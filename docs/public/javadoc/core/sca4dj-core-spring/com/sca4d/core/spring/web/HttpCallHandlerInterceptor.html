@@ -100,7 +100,10 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">HttpCallHandlerInterceptor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.springframework.web.servlet.HandlerInterceptor</span></div>
-<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派。</div>
+<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派和 Servlet 容器的错误分派。
+
+ <p>错误分派（<code>DispatcherType.ERROR</code>，例如转发到 `/error`）发生在容器重新分配的线程上，该线程没有
+ 建立 `Call`；子类不会在错误分派中被调用，也不会读取 `CallHolder`。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -135,7 +138,7 @@ implements org.springframework.web.servlet.HandlerInterceptor</span></div>
  @NotNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">处理初次请求，或者允许 Spring MVC 完成异步结果和断开连接分派。</div>
+<div class="block">处理初次请求；异步分派和 Servlet 容器的错误分派直接放行，不再执行子类的请求阶段处理。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall</a><wbr>(@NotNull jakarta.servlet.http.HttpServletRequest&nbsp;request,
@@ -188,7 +191,7 @@ implements org.springframework.web.servlet.HandlerInterceptor</span></div>
  @NotNull jakarta.servlet.http.HttpServletResponse&nbsp;response,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler)</span></div>
-<div class="block">处理初次请求，或者允许 Spring MVC 完成异步结果和断开连接分派。</div>
+<div class="block">处理初次请求；异步分派和 Servlet 容器的错误分派直接放行，不再执行子类的请求阶段处理。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>preHandle</code>&nbsp;in interface&nbsp;<code>org.springframework.web.servlet.HandlerInterceptor</code></dd>
@@ -197,9 +200,9 @@ implements org.springframework.web.servlet.HandlerInterceptor</span></div>
 <dd><code>response</code> - 当前 HTTP 响应</dd>
 <dd><code>handler</code> - Spring MVC 已选择的 Handler</dd>
 <dt>Returns:</dt>
-<dd>异步分派或子类允许请求继续时为 <code>true</code></dd>
+<dd>异步分派、错误分派或子类允许请求继续时为 <code>true</code></dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 需要执行请求阶段处理但当前线程没有 `Call` 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 初次请求需要执行请求阶段处理但当前线程没有 `Call` 时抛出</dd>
 </dl>
 </section>
 </li>

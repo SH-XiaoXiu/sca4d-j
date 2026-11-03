@@ -16,7 +16,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.time.Instant;
 
-/** 验证 HttpCallHandlerInterceptor 在普通请求中把当前 Call 传给子类的 preHandleWithCall，在 Spring MVC ASYNC 重新分派时直接放行而不调用子类。 */
+/** 验证 HttpCallHandlerInterceptor 在普通请求中把当前 Call 传给子类的 preHandleWithCall，在 Spring MVC ASYNC 重新分派和容器 ERROR 分派时直接放行而不调用子类。 */
 class HttpCallHandlerInterceptorTest {
 
     @AfterEach
@@ -46,6 +46,18 @@ class HttpCallHandlerInterceptorTest {
         RecordingInterceptor interceptor = new RecordingInterceptor();
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/events");
         request.setDispatcherType(DispatcherType.ASYNC);
+
+        assertThat(interceptor.preHandle(request, new MockHttpServletResponse(), new Object())).isTrue();
+        assertThat(interceptor.call).isNull();
+    }
+
+    @Test
+    @DisplayName("Skips A Container Error Dispatch Without Reading The Call Holder")
+    void skipsAContainerErrorDispatchWithoutReadingTheCallHolder() {
+        // 错误分派线程没有 Call：CallHolder 为空时若被读取会抛出 IllegalStateException。
+        RecordingInterceptor interceptor = new RecordingInterceptor();
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/error");
+        request.setDispatcherType(DispatcherType.ERROR);
 
         assertThat(interceptor.preHandle(request, new MockHttpServletResponse(), new Object())).isTrue();
         assertThat(interceptor.call).isNull();

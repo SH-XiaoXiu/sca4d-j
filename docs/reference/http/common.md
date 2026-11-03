@@ -82,7 +82,11 @@ sequenceDiagram
 
 `responseStatus` 和 `responseHeaders` 只用于生成 HTTP 响应，不进入 JSON。幂等存储同时保存成功结果的 HTTP 状态和响应头；重放时恢复首次执行的状态、Location 和 ETag，不把这些元数据退化成默认 200。`HttpCallFilter` 始终为当前请求写入 `X-Call-Id`，重放结果不能用首次执行的 `callId` 覆盖它。Controller 只返回 `ApiResponse`；稳定 View 的 `@ETag` 方法决定是否发布强 ETag，`ApiResponse` 不再提供手工传入 Version 的正文重载。
 
-响应包含随当前 Session、Principal 或权限变化的数据时，Controller 对 `ApiResponse` 调用 `noStore()`。它只增加 `Cache-Control: no-store`，不改变 JSON、权限判断、Session 或服务端缓存，也不能把动态响应变成合法的版本化表示。在线状态、短期 URL、账号展示资料和权限结果不得仅凭另一个业务行 Version 发布强 ETag；角色自身 i18n、permission 等稳定子资源分别发布自己的 ETag。
+强 ETag 只用于 `If-Match` 防止并发覆盖，不是缓存校验值。浏览器保存带 ETag 的响应后，会在下次请求自动带 `If-None-Match`；ETag 没变就得到 304 并沿用旧正文。如果响应里有不随该 Version 变化的字段（例如计划详情中的最近一次测试），客户端就会一直看到旧数据。因此 `ApiResponseAdvice` 在响应发布 ETag 且 Controller 没有设置 `Cache-Control` 时，自动写入 `Cache-Control: no-store`，让浏览器不保存响应，也就不会发出 `If-None-Match`。`no-cache` 不能代替它，因为 `no-cache` 仍会发送 `If-None-Match`。应用代码为带 ETag 的响应不需要再调用 `noStore()`。
+
+`@ETag` 的 Version 仍须覆盖顶层 data 的全部可观察字段；在线状态、短期 URL、账号展示资料和权限结果不得仅凭另一个业务行 Version 发布强 ETag。角色自身 i18n、permission 等稳定子资源分别发布自己的 ETag。
+
+没有 ETag 的响应，浏览器没有校验值，不会被 304 命中，不需要为此加缓存头。响应包含令牌、二维码、一次性票据、短期 URL、随当前 Session、Principal 或权限变化的数据时，Controller 对 `ApiResponse` 调用 `noStore()`。它只增加 `Cache-Control: no-store`，不改变 JSON、权限判断、Session 或服务端缓存，也不能把动态响应变成合法的版本化表示。
 
 `no-store` 只约束浏览器和 HTTP 中间缓存。前端状态容器仍须在 Session 切换时删除旧数据；Redis 等服务端缓存仍按各自的失效规则处理。
 
@@ -256,7 +260,7 @@ ClientStateResponseAdvice 在序列化响应前写入该响应头；请求结束
 
 映射到 `text/event-stream` Handler 的请求在建连前失败时，只返回 HTTP 状态和必要响应头，不返回 ApiResponse JSON。这避免在尚未建立的 SSE 连接中混入普通 JSON 文档，或让 JSON Converter 尝试写入事件流。业务异常、输入校验、限流和未分类服务端异常都遵守该规则；例如无效 Realtime Token 返回 401 和空响应体，限流拒绝返回 429、`Retry-After` 和空响应体。`ClientStateFilter` 仍会为尚未提交的空响应写入 `X-Client-State-Refresh`。
 
-异常处理器优先读取 Handler 声明的可生产媒体类型。Handler 信息不存在时，只有 `Accept` 明确包含 `text/event-stream` 且没有其他具体响应类型，才按事件流返回空错误体；普通 JSON Handler 不会因为 `Accept` 同时列出多个格式而丢失错误内容。
+异常处理器同时检查路由和请求：路由声明的 `produces` 不含 JSON 兼容类型（事件流、图片、文件等），或者 `Accept` 没有 `q` 大于 0 的 JSON 兼容范围（`application/json`、`application/*`、`*/*`）时，只返回原来的 HTTP 状态和必要响应头，不再尝试写 ApiResponse，避免 Spring 因找不到可接受的表示而在错误处理中再次失败。路由没有声明 `produces`，或同时声明了图片和 JSON 且 `Accept` 接受 JSON 时，返回 ApiResponse JSON 错误体；普通 JSON Handler 不会因为 `Accept` 同时列出多个格式而丢失错误内容。`Accept` 缺失或无法解析时按接受 JSON 处理。
 
 SSE 连接建立后的事件、心跳、超时和断开方式由具体 SSE 路由说明。不能用普通 JSON 错误结构解释已经开始输出的事件流。
 
