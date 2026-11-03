@@ -21,11 +21,11 @@
 ## 基本规则
 
 1. 业务失败必须携带稳定错误码。业务路径不得用 `IllegalArgumentException` 或 `IllegalStateException` 表达业务拒绝，否则 HTTP 层只能给出通用 400 或 500，调用方无法区分原因。
-2. 错误码由模块声明为实现 `ErrorCode` 的枚举，并登记在该模块的号段内。错误码的分类决定 HTTP 状态，不在异常类里另行指定。
+2. 错误码由模块声明为实现 `ErrorCode` 的枚举，枚举用 `@ErrorCodeRange` 声明自己的整数号段，每个错误码是该号段内的整数文本。`ErrorCodeCatalog` 在启动时拒绝缺少号段、编码不是整数、编码越界、编码重复和号段重叠。错误码的 `ErrorCategory` 决定 HTTP 状态，不在异常类里另行指定。
 3. 能用 `BusinessException` 和错误码表达的失败，不新建异常类。
 4. 异常类名以 `Exception` 结尾。不使用 `Failure`、`Fault`、`Wrapped*`、`*Holder` 等后缀或名称。`java.lang.Error` 及其子类只表示 JVM 级错误，项目代码不新建 `Error` 子类。
 5. 新增技术异常继承 `RuntimeException`，不继承 `BusinessException`。技术异常不映射为 4xx；需要区分类型时，使用模块级基类，例如 `PaymentClientException`。
-6. 异常类放在所属模块的 `exception` 子包中。错误码枚举保持现有位置，不随异常类迁移。
+6. 异常类放在抛出它的领域包中，与它所属的领域类型在一起，例如 `PaymentClientException` 放在 `payment` 包，不建 `exception` 子包，见 [03 命名、类型与代码结构](/standards/03_code-structure)。错误码枚举同样放在所属的领域包。
 7. 包装异常时必须保留原始异常作为 cause。不得只保留 `getMessage()`。
 8. 异常文案面向开发者，写明失败条件和涉及对象。HTTP 响应只返回错误码和国际化消息，不返回异常文本、SQL、凭据或第三方完整响应。
 9. 业务拒绝的判断放在拥有该状态的领域对象或服务中，拒绝时抛出 `BusinessException`。例如 `Order` 的支付判断应抛出带 `CONFLICT` 错误码的 `BusinessException`，而不是 `IllegalStateException`。
@@ -63,5 +63,4 @@
 ## 文档与测试
 
 - 公开方法的 `@throws` 写明每种异常的准确条件，规则见 [08](/standards/08_comments-and-logging)。
-- 新增错误码必须有至少一个测试覆盖其 HTTP 映射或调用方可见的结果。
 - 改变既有异常类型的行为，需要同时更新测试和调用方的处理逻辑。

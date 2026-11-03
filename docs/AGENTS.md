@@ -8,7 +8,7 @@
 
 - `index.md`、`home/`：项目介绍、分布式单体、项目结构、身份、权限、认证和 IoT 概念。
 - `tutorials/`：完成具体任务的操作方法，共 16 篇。内容按任务顺序组织，章节形式由操作本身决定。
-- `standards/`：工程原则、结构、分层、命名、Java、持久化、数据库、前端、注释日志、构建、插件、测试、评审、文档，共 14 篇。
+- `standards/`：工程原则、结构、命名、Java、持久化、数据库、前端、注释日志、构建、测试、评审、文档、异常，共 13 篇，另有 `index.md`。
 - `reference/`：Java API 入口、HTTP 通用契约、Sca4d Server HTTP API 和运行配置。
 - `requirements/`：业务需求与实现设计。
 - `ai-collaboration/`：任务准备、方案确认、修改和验收方法。

@@ -1,106 +1,32 @@
 # 05 SQL 与持久化
 
-持久化代码应把业务决定、数据读写方式和 SQL 执行分开。分层的价值在于让调用方少理解一组下层细节，而不是增加固定数量的类。查询要保持范围与数量有界；写入要把竞争条件放进数据库原子操作，并明确失败结果。
+持久化代码把业务决定、数据读写方式和 SQL 分开，每一层只让调用方少理解一组下层细节。查询的范围和数量要有界；写入要把竞争条件放进数据库的原子操作，并明确失败结果。
 
-## 抽象梯度与封装梯度
+## 持久化各层
 
-抽象梯度描述每层选取什么信息来表达同一业务操作：Mapper 表达数据库列与条件，Repository 表达数据读取、写入及竞争结果，Service 表达业务动作与规则。向上调用时，数据库细节减少，业务含义增加。三层各自回答的问题不同；增加一个同名转发类不会提高抽象层次。
+Mapper、Repository 和 Service 都是封装：每一层依赖下一层的行为，把它换成更上层的含义（见 [01 工程设计原则](/standards/01_principles)，各层职责见 [02 功能归属与调用关系](/standards/02_architecture)）。本页只说明持久化相关的两层怎么写。
 
-封装梯度描述每层怎样管理自己负责的细节：Mapper 收住 SQL 与字段映射，Repository 收住行模型、组合读写和数据库结果解释，Service 收住业务状态变化、事务和副作用顺序。上一层依赖下一层公开的操作与结果，不自行接管下一层的细节。封装程度由实际所有权和访问方式决定，不能用类或调用层数衡量。
-
-| 位置 | 使用的语言 | 自己处理的内容 |
-| --- | --- | --- |
-| Service | 业务动作与业务规则 | 状态、权限、事务和副作用顺序 |
-| Repository | 数据操作及其结果 | 聚合加载、行模型转换和持久化冲突 |
-| Mapper 或数据库适配器 | SQL 读写结构 | 字段、条件、锁和行映射 |
-
-以下三个片段取自同一个账号目录实现，省略类定义和 import。这个实现的 Mapper 检查账号 ID 与删除状态，没有版本列；后文的版本 SQL 是另一种适用条件的示意，不能混作同一段实现。
-
-```java
-@Transactional
-public @NotNull AccountEntry changeStatus(
-        @NotNull Long accountId,
-        @NotNull IdentityStatus status,
-        @NotNull Long currentAccountId) {
-    AccountEntry current = loadById(accountId);
-    IdentityStatus checkedStatus = Objects.requireNonNull(status, "Account 状态不能为空");
-    if (checkedStatus == IdentityStatus.DISABLED) {
-        if (current.accountId().equals(Objects.requireNonNull(currentAccountId, "当前 Account 标识不能为空"))) {
-            throw new BusinessException(IamErrorCode.CURRENT_ACCOUNT);
-        }
-        if (current.protectedRoot()) {
-            throw new BusinessException(IamErrorCode.PROTECTED_ACCOUNT);
-        }
-    }
-    if (current.status() == checkedStatus) {
-        return current;
-    }
-    repository.updateStatus(current.accountId(), checkedStatus);
-    AccountEntry updated = loadById(current.accountId());
-    if (checkedStatus == IdentityStatus.DISABLED && sessions != null) {
-        sessions.terminateAccount(updated.accountId(), SessionTerminationReason.IDENTITY_UNAVAILABLE);
-    }
-    LOG.info(
-            "Account 状态已修改 | accountId={} previousStatus={} status={}",
-            updated.accountId(),
-            current.status().value(),
-            updated.status().value());
-    return updated;
-}
-```
-
-Repository 的单行检查与 Mapper XML 分别如下：
-
-```java
-@AffectedRows(target = "Account 状态")
-void updateStatus(@NotNull Long accountId, @NotNull IdentityStatus status) {
-    mapper.updateAccountStatus(accountId, status);
-}
-```
+以修改 Account 状态为例。Mapper 的 XML 只写一条 SQL：
 
 ```xml
 <update id="updateAccountStatus">
-    UPDATE iam_account
-    SET status = #{status}
-    WHERE id = #{accountId} AND deleted = 0
+    UPDATE iam_account SET status = #{status}
+    WHERE id = #{id} AND deleted = 0
 </update>
 ```
 
-业务操作判断当前账号和受保护账号不能停用；Repository 使用已有的影响行检查机制要求单行写入；Mapper 只表达数据库条件。`@AffectedRows` 是这一实现采用的机制，标准要求的是写入结果有负责解释的位置，不要求所有项目使用同一注解。
-
-这个例子还包含另一个需要单独判断的结果：`terminateAccount` 修改会话系统，数据库事务回滚不会自动恢复已终止的 Session；方法内 `LOG.info` 发生在事务提交前，也不能证明最终提交成功。以上代码用于说明分层职责，不作为跨系统原子性或提交后日志的示范。
-
-Controller 不直接编排 Repository 写入。Service 不直接依赖 Mapper，也不解释数据库影响行数。Repository 不把数据库行、分页实现或框架类型原样暴露给业务调用方。只有一层确实转换了职责，才保留这一层；没有数据访问的流程不创建空的 Repository 和 Mapper。
-
-一个 Repository 方法可以只执行一条 SQL。它仍应提供调用方需要的稳定含义，例如检查写入结果、转换行模型、统一访问范围或隔离数据库异常。方法数量和名称相似只能提示审查，不能代替逐项判断。
-
-一个账号目录实现提供了三种不同的数据操作。下表只说明职责怎样形成，不把具体类名或注解当作所有项目都要采用的规则：
-
-| Repository 方法 | 数据库操作 | 它向调用方增加的含义 |
-| --- | --- | --- |
-| `findRoleAccounts(...)` | 分别查询命中总数和当前页记录 | 返回包含总数与页数据的 `Page` |
-| `loadByIds(...)` | 按批次查询账号 | 拒绝重复或缺失的账号，并按 ID 返回完整结果 |
-| `updateStatus(...)` | 执行一条状态更新 | 检查预期的一行确实写入；调用方不处理影响行数 |
-
-`findRoleAccounts(...)` 的核心语句如下；`checked` 和 `checkedRoleId` 是此前已经校验的入参：
+Mapper 接口返回修改行数 `int`。Repository 把行数解释为「目标存在并已修改」：
 
 ```java
-long total = mapper.countAccounts(
-        principalType, checked.search(), checked.status(), checkedRoleId, assigned);
-List<AccountEntry> items = total == 0
-        ? List.of()
-        : List.copyOf(mapper.selectAccounts(
-                principalType,
-                checked.search(),
-                checked.status(),
-                checkedRoleId,
-                assigned,
-                checked.offset(),
-                checked.page().size()));
-return new Page<>(items, checked.page(), total);
+@CheckReturnValue
+boolean updateAccountStatus(@NotNull Long id, @NotNull IdentityStatus status) {
+    return AffectedRowCounts.changed(mapper.updateAccountStatus(id, status), "修改账号状态");
+}
 ```
 
-第三种方法即使只调用一次 Mapper，也承担了写入结果的解释。相反，一个 Repository 方法若把相同参数传给 Mapper，再原样返回数据库行或影响行数，调用方仍需理解 SQL 结果，单独加这一层没有解决问题。示例中的状态更新没有要求所有对象都增加版本列；并发条件取决于该对象实际需要保护的写入。
+`IdentityService.changeAccountStatus(...)` 根据返回的 `boolean`，在目标不存在时抛出 `BusinessException`。这个方法的语义是后写覆盖（Javadoc 中明确写明），所以 SQL 只检查 ID 和删除标记，没有版本条件。需要避免并发覆盖的写入见下文「写入与部分更新」。
+
+Controller 不依赖 Repository 或 Mapper，Service 不依赖 Mapper，也不解释影响行数。一层如果只是把相同的参数传给下一层、再原样返回数据库行或影响行数，调用方仍要理解 SQL 的结果，这一层应当删除。一个 Repository 方法即使只执行一条 SQL，也要为调用方增加含义，例如检查写入结果、转换行类型、统一访问范围或隔离数据库异常。没有数据库访问的流程，不创建空的 Repository 和 Mapper。
 
 ## SQL 查询与写入
 
@@ -200,13 +126,37 @@ for (Long accountId : accountIds) {
 
 例如，创建订单与登记待发布消息可以在同一数据库事务中完成；事务回滚时两者都不存在。登记成功只表示消息等待发布，消息代理确认后才表示发布完成。若直接在事务内调用代理，数据库回滚与代理已接收之间可能留下无法由原事务撤销的部分成功。
 
-## 并发机制的选择
+## 并发
 
-数据库约束保护单行与唯一性；条件更新和版本检查处理并发写入；幂等键处理可重放请求；分布式锁保护必须跨事务串行的资源和副作用；限流约束请求频率。选择机制时先写明竞争对象、失败结果和恢复方式，不把这些机制互相替代。
+并发问题的本质是：多个请求或多个实例同时操作同一份数据，结果取决于谁先谁后。设计时先回答三件事：竞争的对象是什么，输掉的一方怎么办（失败、重试、等待或无变化），以及怎样恢复。机制按它们解决的问题选择，而不是先选一个机制再套用：
 
-单条 SQL 可以原子领取候选并返回已更新记录时，优先把状态、版本和租约条件放进该 SQL。需要在同一事务中清理多张关联表或保持跨语句一致时，可以用 `FOR UPDATE SKIP LOCKED` 等行锁协调并发执行者；应说明锁顺序、批量上限及失败回滚。锁的选择取决于哪些操作必须共同完成，以及数据库条件能否决定竞争结果。
+| 要避免的问题 | 机制 | 竞争结果由谁决定 |
+| --- | --- | --- |
+| 同一份事实被写入两次 | 唯一约束 | 数据库的唯一索引 |
+| 同一个请求被重放 | 幂等键 | 幂等键上的唯一约束或状态 |
+| 覆盖了别人刚做的修改 | 条件更新、版本检查 | `UPDATE` 的 `WHERE` 条件 |
+| 多个执行者领取同一个任务 | 带状态和租约条件的原子更新 | 同一条 SQL |
+| 跨事务串行执行，或保护外部副作用 | 分布式锁 | 锁服务 |
+| 同一事务内要对同一批行执行多条语句 | 行锁 | 数据库的行锁 |
+| 请求太频繁 | 限流 | 计数器 |
 
-下面的 SQL 只示意待发送消息的 `PENDING` 分支。实际投递还要处理失败重试和租约到期，但候选读取与写入条件必须保持一致：
+顺序也是选择的优先级：数据库条件能决定竞争结果时，不使用锁；只有条件无法表达，才依次考虑分布式锁和行锁。这些机制解决的问题不同，不能互相替代。
+
+### 唯一约束与幂等
+
+唯一约束保证并发的两次写入最终只有一次成功，Repository 把约束失败转换成明确的冲突结果，见 [06 数据库](/standards/06_database)。幂等键用来识别被重放的请求：同一个键第二次到达时，返回第一次的结果，或者在第一次仍在处理时返回等待信息。定时任务、消息消费和重试都可能重复执行，代码要写明重复执行的结果、租约到期后由谁接管，以及节点退出后未完成的工作怎样处理。
+
+### 条件更新与版本
+
+目标 ID、需要保护的当前状态和版本，放进同一条 `UPDATE`，见上文「写入与部分更新」。
+
+HTTP `If-Match` 适用于调用方基于已读取的稳定资源快照进行编辑，且过期写入可能覆盖重要新内容的流程。状态命令、追加记录和允许后写覆盖的字段 Patch 通常依靠服务端当前状态、唯一约束或原子条件。是否使用 ETag 取决于资源和交互约定，不由数据库是否有版本列自动决定。
+
+例如，用户读取一份完整配置后修改并提交整份内容，另一个人先改动配置时，旧快照可能覆盖新值。这个编辑流程需要让客户端提交版本条件，并在冲突后重新读取与确认。将一条通知标记为已读则由服务端判断当前状态并执行条件更新；表中即使有版本列，也不因此要求页面先读取 ETag。
+
+### 原子领取
+
+多个实例领取同一批待处理记录时，如果状态、版本和租约条件可以写进一条 SQL，由这条 SQL 决定谁领到。下面的 SQL 只示意待发送消息的 `PENDING` 分支，实际投递还要处理失败重试和租约到期，候选读取与写入条件必须保持一致：
 
 ```sql
 WITH candidate AS MATERIALIZED (
@@ -229,9 +179,17 @@ WITH candidate AS MATERIALIZED (
 SELECT message_id FROM leased;
 ```
 
-两个实例可以读到同一候选；只有满足当前版本和状态条件的实例取得 `RETURNING` 结果。这里的一条 SQL 已决定竞争结果，候选读取不需要额外加 `FOR UPDATE`。
+两个实例可以读到同一个候选，只有满足当前版本和状态条件的实例取得 `RETURNING` 结果。这一条 SQL 已经决定了竞争结果，候选读取不需要加 `FOR UPDATE`。
 
-清理任务历史使用多个 SQL，操作范围不同。以下代码取自一个现有的 Repository 方法，省略类定义和 import；它在同一事务中锁定有界的根记录，按关系顺序删除子记录，最后核对根记录删除数量：
+### 分布式锁
+
+条件更新和唯一约束无法覆盖整个业务动作时，才使用分布式锁，例如需要串行执行的事务提交，加上提交后的外部操作。锁的键由稳定的资源标识构造；持锁后重新读取状态，再做判断。数据库条件和唯一约束已经足以产生明确的竞争结果时，不再叠加锁。
+
+### 行锁
+
+行锁是最后的选择，只用于必须在同一个事务中对同一批行执行多条语句，而单条 SQL 无法表达的场景。使用时要写明锁的顺序、批量上限和失败回滚。
+
+清理 Job 运行历史就是这样的场景：要在同一事务中锁定一批根记录，再按关系顺序删除它们的子记录，最后核对根记录的删除数量。以下代码取自现有的 Repository 方法，省略类定义和 import：
 
 ```java
 @Transactional
@@ -256,7 +214,7 @@ public int deleteSucceededRunsBefore(@NotNull Instant completedBefore, int limit
 }
 ```
 
-对应的 Mapper XML 使用实际的应用隔离、状态和截止时间条件：
+对应的 Mapper XML 使用应用隔离、状态和截止时间条件：
 
 ```xml
 <select id="selectExpiredRunIdsForUpdate" resultType="long">
@@ -268,18 +226,31 @@ public int deleteSucceededRunsBefore(@NotNull Instant completedBefore, int limit
 </select>
 ```
 
-这段清理过程依赖多条删除语句共同提交或回滚。行锁让并发实例领取不同的根记录；它解决的问题与前一例的单条条件更新不同，不能从其中一个例子推出「所有领取都加锁」或「所有领取都不用锁」。
-
-分布式锁应以稳定资源标识构造键，覆盖需要串行的事务提交和外部操作；持锁后重新读取状态。数据库条件和唯一约束已经足以产生明确竞争结果时，不叠加锁。定时任务、消息消费和重试必须考虑重复执行、租约到期、节点退出与接管。
-
-HTTP `If-Match` 适用于调用方基于已读取的稳定资源快照进行编辑，且过期写入可能覆盖重要新内容的流程。状态命令、追加记录和允许后写覆盖的字段 Patch 通常依靠服务端当前状态、唯一约束或原子条件。是否使用 ETag 取决于资源和交互约定，不由数据库是否有版本列自动决定。
-
-例如，用户读取一份完整配置后修改并提交整份内容，另一个人先改动配置时，旧快照可能覆盖新值。这个编辑流程需要让客户端提交版本条件，并在冲突后重新读取与确认。将一条通知标记为已读则由服务端判断当前状态并执行条件更新；表中即使有版本列，也不因此要求页面先读取 ETag。
+多条删除语句要么一起提交，要么一起回滚，`FOR UPDATE SKIP LOCKED` 让并发的实例领取不同的根记录。它和上一节的原子领取解决的问题不同，不能由其中一个例子推出「所有领取都加锁」或「所有领取都不用锁」。
 
 ## 缓存
 
-缓存值应能从权威数据重新生成。Key 必须包含影响结果的租户、身份、语言或其他查询条件。写入与失效时机应避免回滚后错误清理，或允许旧值在事务提交前重新回填。
+缓存是性能优化手段，也是同一个事实的另一份副本（见 [01 工程设计原则](/standards/01_principles) 的「数据」一节）。先让逻辑正确，确有性能问题再加入。缓存值必须能从权威数据重新生成，写入、读取、失效三件事都要由代码明确负责。
 
-本地缓存只用于允许实例间短时间不一致的数据。缓存 Value 发生不兼容变化时，使用新名称、Key 版本或明确的旧值读取策略。权限、额度、唯一性和状态机判断不能只依赖单实例缓存。
+### 为什么大多数场景不直接使用 `@Cacheable`
 
-例如，事务内修改账号状态后立即删缓存，另一个请求可能在事务提交前从数据库读到旧状态并重新填入缓存。提交后失效可以避免这一顺序；若要求事务提交与通知其他实例可靠衔接，还需要消息或持久任务记录失效动作。
+`@Cacheable` 的做法是：用方法参数生成 Key，命中就直接返回，未命中就执行方法并保存返回值。它适合参数完全决定结果、数据很少变化、允许短时间读到旧值的方法，例如读取一份外部提供的只读配置。大部分业务不满足这几个条件：
+
+- **失效的方向相反。** 注解按 Key 失效，业务变化却是从另一端来的。角色的权限变了，要失效的是「拥有这个角色的所有 Principal 的缓存」，注解只能按 Key 逐个删除，或者 `allEntries` 全部清空。项目里的 `RbacPermissionCache.evict(...)` 接收的是受影响的 RBAC 范围和 Principal 集合，精确删除，这是业务关系决定的，注解无法表达。
+- **回填会和失效交错。** 请求 A 未命中，读到数据库中的旧值；这时另一个请求修改数据并失效缓存；A 随后把旧值写回缓存，旧值就一直留在里面。`@Cacheable` 没有「读取之后发生过失效，则不回填」的机制。`RbacPermissionCache.find(...)` 在返回命中项的同时返回修订号，`put(...)` 只回填读取后没有发生失效的坐标，就是为了防止这种情况。
+- **一次读取多个对象。** 权限查询一次要读取多个 Principal。注解把整个参数集合当作一个 Key，只能整批命中或整批未命中，不能逐个命中、只回源缺失的部分。
+- **「没有」也是结果。** 一个 Principal 没有任何授权，是数据库确认的事实，应当缓存，否则每次都要回源。`@Cacheable` 默认遇到 `null` 的处理取决于缓存配置，调用方无法区分「没有缓存」和「缓存了空结果」。`RbacPermissionCache.put(...)` 明确说明保存空授权结果。
+- **事务提交的时机看不出来。** 在事务内修改数据后立刻失效缓存，另一个请求可能在提交前读到旧数据并重新填入。注解是否在提交后才执行，取决于代理的顺序和缓存管理器的配置，业务代码里看不出来，也无法用测试稳定地验证。
+- **行为被隐藏。** 注解依靠代理生效，同一个类内部的调用不经过代理，缓存静默失效；调用者看不到方法里有缓存读写。这与「事务、锁和外部操作的位置要能从主流程里看出来」的原则冲突，见 [04 Java 与 Spring](/standards/04_java-and-spring)。
+
+因此，项目没有使用 `@Cacheable`，权限缓存是一个明确的接口 `RbacPermissionCache`，由 `RbacService` 在回源前后读写，实现有 `RedisRbacPermissionCache`，也可以关闭为 `NoOpRbacPermissionCache`。使用 `@Cacheable` 前，先逐条确认：参数是否完全决定结果、变化是否可以只靠过期时间处理、读到旧值是否可以接受。有任何一条不成立，就写显式的缓存接口。
+
+### 缓存的写法
+
+- Key 必须包含所有影响结果的条件：租户、RBAC 范围、身份、语言等。漏掉一个，就会把一个人的结果返回给另一个人；
+- 失效和回填的顺序要写明，避免回滚之后误删，或旧值在事务提交前被重新填入；
+- 本地缓存只用于允许实例之间短时间不一致的数据；
+- 缓存的 Value 发生不兼容变化时，使用新的名称、Key 版本，或明确的旧值读取策略；
+- 权限、额度、唯一性和状态机的判断不能只依赖单实例缓存。
+
+例如，事务内修改账号状态后立即删缓存，另一个请求可能在提交前从数据库读到旧状态并重新填入缓存。提交后失效可以避免这一顺序；要求事务提交与通知其他实例可靠衔接时，还需要消息或持久任务记录失效动作。
