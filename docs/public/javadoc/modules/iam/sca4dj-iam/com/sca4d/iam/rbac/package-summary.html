@@ -117,11 +117,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionSelectionRegistry.html" title="class in com.sca4d.iam.rbac">PermissionSelectionRegistry</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">根据各 Operation 模块的领域行为构建并查找 RBAC 权限选择规则。</div>
+<div class="block">根据 Operation 叶子的可授予领域属性构建并查找 RBAC 权限选择规则。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="PermissionSelections.html" title="class in com.sca4d.iam.rbac">PermissionSelections</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">校验可由管理 API 保存的 ACTION 编码，并把内部全量选择符展开为具体 <code>Operation</code>。</div>
+<div class="block">校验可由管理 API 保存的叶子编码，并把内部全量选择符展开为具体 <code>Operation</code>。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -147,9 +147,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">表示通用 RBAC 操作的固定失败类型。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RbacOperationModule.html" title="interface in com.sca4d.iam.rbac">RbacOperationModule</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">声明一个 Operation 模块可以把自己的具体 Operation 授予哪些 RBAC 领域。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RbacGrantable.html" title="class in com.sca4d.iam.rbac">RbacGrantable</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">声明 Operation 叶子可以授予哪些 <a href="RbacDomain.html" title="class in com.sca4d.iam.rbac"><code>RbacDomain</code></a>。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="RbacPermissionCache.html" title="interface in com.sca4d.iam.rbac">RbacPermissionCache</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
@@ -193,7 +193,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="RolePermissions.html" title="class in com.sca4d.iam.rbac">RolePermissions</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">保存角色以及已经展开为具体 ACTION 的 Operation。</div>
+<div class="block">保存角色以及已经展开为具体叶子的 Operation。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab3"><a href="RoleStatus.html" title="enum class in com.sca4d.iam.rbac">RoleStatus</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab3">

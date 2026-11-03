@@ -26,7 +26,7 @@ RBAC 管理稳定职责。一条 permission 表示角色可以执行哪个 Opera
 
 各领域实现 [RbacRepository](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/rbac/RbacRepository.html)，并用 [RbacDomain](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/rbac/RbacDomain.html) 声明自己负责的 Repository 和权限目录。
 
-业务 Operation 模块实现 RbacOperationModule。PermissionSelectionRegistry 自动汇总每个领域允许保存的具体 Operation。同一 Operation 可以进入多个领域。同一模块也可以按 Operation 返回不同结果。
+业务 Operation 模块在叶子上声明 `GRANTABLE:<domain>` 属性。PermissionSelectionRegistry 自动汇总每个领域允许保存的具体 Operation。同一 Operation 可以进入多个领域。同一模块的不同叶子可以声明不同的领域。
 
 一次角色、角色权限或 Principal 角色关系操作，还必须传入 [RbacScope](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/rbac/RbacScope.html)。领域只有一套角色时，使用全局范围。同一领域按 Workspace 等业务对象分别保存角色时，使用领域加业务对象数字标识。
 
@@ -134,7 +134,7 @@ ABAC 的示例见[权限开发规则](/capabilities/identity-access/permission-d
 ## 扩展方式
 
 - 新的 RBAC 领域：实现 RbacRepository 并注册为 Spring Bean。`IamAutoConfiguration` 以 `List<RbacRepository>` 收集。同领域重复等问题在启动时失败。
-- 可授予的 Operation：实现 RbacOperationModule，见 [Operation 与权限声明](/capabilities/identity-access/operation-declaration)。
+- 可授予的 Operation：在叶子上声明 `GRANTABLE:<domain>`，见 [Operation 与权限声明](/capabilities/identity-access/operation-declaration)。
 - 新的 ACL 资源：实现 AclRepository 并注册为 Spring Bean。`IamAutoConfiguration` 以 `List<AclRepository>` 收集。跨领域重复、空类型以及 `operation` 冲突，在启动时失败。
 - 缓存：没有提供 `RbacPermissionCache` Bean 时，`IamAutoConfiguration` 使用 `@ConditionalOnMissingBean(RbacPermissionCache.class)` 提供不保存授权结果的空实现。
 - ABAC：实现 PermissionPolicy 并注册为 Spring Bean，由 `CorePermissionConfiguration` 以 `List<PermissionPolicy>` 收集。

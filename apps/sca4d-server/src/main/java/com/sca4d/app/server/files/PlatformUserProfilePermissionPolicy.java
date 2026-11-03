@@ -51,7 +51,7 @@ public class PlatformUserProfilePermissionPolicy implements PermissionPolicy {
         // 资料所属 Principal 可以申请自己的头像；账号管理员可以为其他 Platform 用户资料申请头像。
         long currentPrincipalId = call.principal().orElseThrow().principalId();
         boolean allowed = targetPrincipalId == currentPrincipalId
-                || call.grants(new Operation(PlatformOperations.ACCOUNTS_MANAGE));
+                || call.grants(new Operation(PlatformOperations.ACCOUNTS_UPDATE));
         return allowed
                 ? PermissionDecision.allow()
                 : PermissionDecision.deny("当前 Principal 不能写入目标用户资料");

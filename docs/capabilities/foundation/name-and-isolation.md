@@ -25,8 +25,34 @@ App 隔离前缀由进程启动时发布的 App 名称决定。测试中使用 `
 | `AppIsolationAutoConfiguration` | 读取 `spring.application.name`，注册 Bean `sca4djAppName` 并发布 App 名称 | 发布之后修改 App 名称 |
 | `Key` | 继承 `Name`，`format` 输出带 App 前缀的完整键，`parse` 检查并移除前缀 | 决定业务编码本身 |
 | `Code` | 继承 `Name`，`format` 只输出逻辑编码 | 添加 App 前缀 |
+| `TreeCode` | 继承 `Code`，提供 `child`、`append`、`isUnder` 等层级操作 | 限定节点数量或字符数 |
+| `Attribute` | 继承 `TreeCode`，表示对象携带的一个固定属性值，拒绝通配节点和超过 128 字符的编码 | 判断属性属于哪条轴 |
+| `OperationCode` | 继承 `TreeCode`，表示一个 Operation 的固定编码，至少两个节点、不超过 128 字符，通配节点只能在最后一段 | 表示资源类型、Permission 动作或属性 |
+| `Display` | 保存被声明对象的名称消息键和说明消息键；`Display.of(prefix, code)` 按 `Code` 推导，`Display.of(nameKey)` 直接指定 | 保存文本，参与对象身份判断 |
+| `AttributeAxis` | 保存一个轴根 `Attribute` 和取值约束 `AttributeConstraint`；`contains(attribute)` 在属性是轴根的严格后代时返回 `true` | 检查某个对象是否满足约束，检查由使用属性的对象完成 |
 
 `Code` 保持业务编码的稳定形式。`NameJacksonModule` 的源码注释也说明，只有 `Key` 按 App 隔离输出。
+
+### Display
+
+`Display` 回答被声明对象在界面上叫什么、怎么解释，身份仍由对象的 `Code` 决定。它只保存两个国际化消息键，文本由调用方按当前语言从 i18n 资源查找。
+
+- 说明消息键固定为名称消息键加 `.description`。
+- `Display.of(prefix, code)` 按 `Code` 推导名称消息键：前缀加编码每个节点的小写形式，`_` 换成 `-`，通配节点 `*` 写成 `all`，用 `.` 连接。例如前缀 `order` 与 `ORDERS:INVOICE_LINES:READ` 得到 `order.orders.invoice-lines.read`。
+- `Display.of(nameKey)` 用于推导结果与已有资源键不一致的例外。
+- `Display` 的相等性比较运行时类型和名称消息键。
+
+Operation 目录的使用见 [Operation 与权限声明](/capabilities/identity-access/operation-declaration)。
+
+### Attribute 与 Tag
+
+`Attribute` 是用于业务判断的固定事实，例如 Operation 的读写意图。它可以出现在 `if` 判断中，由对象的 `has`、`hasUnder` 等方法判断。属性值位于某条属性轴的轴根之下，Operation 目录预先登记 `INTENT`、`NATURE`、`RISK` 和 `VISIBILITY` 四条标准轴，轴的声明和校验见 [Operation 与权限声明](/capabilities/identity-access/operation-declaration)。
+
+`Attribute` 继承 `TreeCode`，但相等性按运行时类型比较。与它节点相同的 `TreeCode` 不相等，`Attribute` 的 `equals` 对该 `TreeCode` 返回 `false`。需要只比较节点时使用 `sameCode`。`Attribute` 的 `child`、`append` 返回 `Attribute`，不会退回 `TreeCode`。
+
+`OperationCode` 与 `Attribute` 采用同样的类型规则：相等性按运行时类型比较，`child`、`append` 返回 `OperationCode`。它的使用见 [Operation 与权限声明](/capabilities/identity-access/operation-declaration)。
+
+Tag 是另一个概念：用于分组、检索、筛选和展示的标签，可以有多个，但不参与 `if` 判断。当前没有 Tag 类型或 API，只有 `Attribute`。
 
 `Name` 的隔离结果是新的不可变对象。对已经隔离的对象再次调用 `isolate`，返回同一个对象，不会重复添加前缀。
 
@@ -72,6 +98,7 @@ flowchart TB
 | `AppName.normalize` | 包含允许字符以外的字符 | `IllegalArgumentException` |
 | `AppName.current` | 发布 App 名称之前调用 | `IllegalStateException` |
 | `AppName.publish` | 进程中已发布另一个名称 | `IllegalStateException`；重复发布相同名称允许 |
+| `Attribute` 构造 | 编码含通配节点 `*`，或冒号格式文本超过 128 字符 | `IllegalArgumentException`，消息为「Attribute 必须是最多 128 字符的固定编码」 |
 | `Key.parse` | 字符串不以当前 App 前缀开头 | `IllegalArgumentException`，消息为「Key 的 App 隔离前缀不匹配」 |
 | `Key.fromSegments` | 动态文本段的 `V_` 编码与解码结果不一致 | `IllegalArgumentException`，消息为「Key 动态文本编码无效」 |
 | `KeyRedisSerializer.deserialize` | 同槽标记无效，或反序列化后重新输出的文本与输入不同 | `IllegalArgumentException` |

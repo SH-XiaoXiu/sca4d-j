@@ -90,13 +90,13 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.permission.OperationModule</code>, <code>com.sca4d.iam.rbac.RbacOperationModule</code></dd>
+<dd><code>com.sca4d.core.api.permission.OperationModule</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Component
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">IotOperations</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
+implements com.sca4d.core.api.permission.OperationModule</span></div>
 <div class="block">声明 Sca4d Server 的 IoT Product、Device 和设备操作权限。</div>
 </section>
 <section class="summary">
@@ -110,7 +110,7 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.permission.OperationCode</code></div>
 <div class="col-second even-row-color"><code><a href="#DEVICES_MANAGE" class="member-name-link">DEVICES_MANAGE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -118,7 +118,7 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <div class="col-last odd-row-color">
 <div class="block">创建、修改、启停 Device 和管理凭据。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.permission.OperationCode</code></div>
 <div class="col-second even-row-color"><code><a href="#DEVICES_OPERATE" class="member-name-link">DEVICES_OPERATE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -126,7 +126,7 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <div class="col-last odd-row-color">
 <div class="block">修改 desired state 和提交 command。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.permission.OperationCode</code></div>
 <div class="col-second even-row-color"><code><a href="#DEVICES_READ" class="member-name-link">DEVICES_READ</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -134,7 +134,7 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <div class="col-last odd-row-color">
 <div class="block">读取 Device、连接、状态和历史。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.permission.OperationCode</code></div>
 <div class="col-second even-row-color"><code><a href="#PRODUCTS_MANAGE" class="member-name-link">PRODUCTS_MANAGE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -142,7 +142,7 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <div class="col-last odd-row-color">
 <div class="block">创建、修改和启停 Product，并发布物模型。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.permission.OperationCode</code></div>
 <div class="col-second even-row-color"><code><a href="#PRODUCTS_READ" class="member-name-link">PRODUCTS_READ</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -177,21 +177,15 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;@NotNull com.sca4d.iam.rbac.RbacDomain&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#domains()" class="member-name-link">domains</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.permission.OperationNode.Module</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operationTree()" class="member-name-link">operationTree</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.permission.OperationNode.Group</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operationTree()" class="member-name-link">operationTree</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.sca4d.iam.rbac.RbacOperationModule">Methods inherited from interface&nbsp;com.sca4d.iam.rbac.RbacOperationModule</h3>
-<code>canGrant</code></div>
 </section>
 </li>
 </ul>
@@ -287,35 +281,35 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <section class="detail" id="PRODUCTS_READ">
 <h3>PRODUCTS_READ</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">PRODUCTS_READ</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.permission.OperationCode</span>&nbsp;<span class="element-name">PRODUCTS_READ</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="PRODUCTS_MANAGE">
 <h3>PRODUCTS_MANAGE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">PRODUCTS_MANAGE</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.permission.OperationCode</span>&nbsp;<span class="element-name">PRODUCTS_MANAGE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEVICES_READ">
 <h3>DEVICES_READ</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">DEVICES_READ</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.permission.OperationCode</span>&nbsp;<span class="element-name">DEVICES_READ</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEVICES_MANAGE">
 <h3>DEVICES_MANAGE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">DEVICES_MANAGE</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.permission.OperationCode</span>&nbsp;<span class="element-name">DEVICES_MANAGE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEVICES_OPERATE">
 <h3>DEVICES_OPERATE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">DEVICES_OPERATE</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.permission.OperationCode</span>&nbsp;<span class="element-name">DEVICES_OPERATE</span></div>
 </section>
 </li>
 </ul>
@@ -345,23 +339,12 @@ implements com.sca4d.iam.rbac.RbacOperationModule</span></div>
 <h3>operationTree</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.permission.OperationNode.Module</span>&nbsp;<span class="element-name">operationTree</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.permission.OperationNode.Group</span>&nbsp;<span class="element-name">operationTree</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>operationTree</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.permission.OperationModule</code></dd>
 <dt>Returns:</dt>
 <dd>IoT 模块、Product 和 Device 三层 Operation 目录</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="domains()">
-<h3>domains</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull com.sca4d.iam.rbac.RbacDomain&gt;</span>&nbsp;<span class="element-name">domains</span>()</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code>domains</code>&nbsp;in interface&nbsp;<code>com.sca4d.iam.rbac.RbacOperationModule</code></dd>
 </dl>
 </section>
 </li>

@@ -112,7 +112,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#ROOT" class="member-name-link">ROOT</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">拥有 Operation Catalog 中全部 ACTION 的内置角色编码。</div>
+<div class="block">拥有 Operation Catalog 中全部叶子的内置角色编码。</div>
 </div>
 </div>
 </section>
@@ -171,9 +171,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PlatformRoleDetails.html" title="class in com.sca4d.iam.base.rbac">PlatformRoleDetails</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createRole(java.lang.String,com.sca4d.core.api.i18n.LocalizedFields,java.util.Collection)" class="member-name-link">createRole</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
  @NotNull com.sca4d.core.api.i18n.LocalizedFields&nbsp;i18n,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.OperationCode&gt;&nbsp;operationCodes)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">创建自定义 Platform 角色并保存初始 ACTION。</div>
+<div class="block">创建自定义 Platform 角色并保存初始叶子。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deleteRole(java.lang.Long)" class="member-name-link">deleteRole</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;roleId)</code></div>
@@ -189,6 +189,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPrincipalIds(com.sca4d.iam.rbac.PrincipalGrantQuery)" class="member-name-link">findPrincipalIds</a><wbr>(@NotNull <a href="../../rbac/PrincipalGrantQuery.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery</a>&nbsp;query)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">筛选通过 Platform 启用角色获得全部或任一指定 Operation 的 Principal。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPrincipalIdsHoldingAll(com.sca4d.core.api.permission.OperationCode...)" class="member-name-link">findPrincipalIdsHoldingAll</a><wbr>(@NotNull com.sca4d.core.api.permission.OperationCode...&nbsp;operationCodes)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">反查通过 Platform 启用角色获得全部指定 Operation 的 Principal；没有可枚举的候选时使用。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPrincipalIdsHoldingAny(com.sca4d.core.api.permission.OperationCode...)" class="member-name-link">findPrincipalIdsHoldingAny</a><wbr>(@NotNull com.sca4d.core.api.permission.OperationCode...&nbsp;operationCodes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">反查通过 Platform 启用角色获得任一指定 Operation 的 Principal；没有可枚举的候选时使用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../rbac/PrincipalRoles.html" title="class in com.sca4d.iam.rbac">PrincipalRoles</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPrincipalRoles(java.lang.Long)" class="member-name-link">findPrincipalRoles</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId)</code></div>
@@ -236,9 +246,9 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../rbac/RolePermissions.html" title="class in com.sca4d.iam.rbac">RolePermissions</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceRolePermissions(java.lang.Long,java.util.Collection)" class="member-name-link">replaceRolePermissions</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;roleId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.OperationCode&gt;&nbsp;operationCodes)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">原子替换 Platform 角色的具体 ACTION。</div>
+<div class="block">原子替换 Platform 角色的具体叶子。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revokeAllRoles(java.lang.Long)" class="member-name-link">revokeAllRoles</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId)</code></div>
@@ -289,7 +299,7 @@ loadScripts(document, 'script');</script>
 <h3>ROOT</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ROOT</span></div>
-<div class="block">拥有 Operation Catalog 中全部 ACTION 的内置角色编码。</div>
+<div class="block">拥有 Operation Catalog 中全部叶子的内置角色编码。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -393,13 +403,13 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull com.sca4d.core.api.i18n.LocalizedFields&nbsp;i18n,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</span></div>
-<div class="block">创建自定义 Platform 角色并保存初始 ACTION。</div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.OperationCode&gt;&nbsp;operationCodes)</span></div>
+<div class="block">创建自定义 Platform 角色并保存初始叶子。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>code</code> - 唯一且创建后不可修改的角色编码</dd>
 <dd><code>i18n</code> - 角色完整多语言字段</dd>
-<dd><code>operationCodes</code> - Operation Catalog 中声明的 ACTION 编码</dd>
+<dd><code>operationCodes</code> - Operation Catalog 中声明的叶子编码</dd>
 <dt>Returns:</dt>
 <dd>新建角色及具体 Operation</dd>
 </dl>
@@ -481,12 +491,12 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../rbac/RolePermissions.html" title="class in com.sca4d.iam.rbac">RolePermissions</a></span>&nbsp;<span class="element-name">replaceRolePermissions</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;roleId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</span></div>
-<div class="block">原子替换 Platform 角色的具体 ACTION。</div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.OperationCode&gt;&nbsp;operationCodes)</span></div>
+<div class="block">原子替换 Platform 角色的具体叶子。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>roleId</code> - 角色标识</dd>
-<dd><code>operationCodes</code> - Operation Catalog 中声明的 ACTION 编码</dd>
+<dd><code>operationCodes</code> - Operation Catalog 中声明的叶子编码</dd>
 <dt>Returns:</dt>
 <dd>修改后的角色及具体 Operation</dd>
 </dl>
@@ -617,6 +627,38 @@ loadScripts(document, 'script');</script>
 <dd><code>query</code> - 有界 PlatformPrincipal 标识和 Operation 匹配方式</dd>
 <dt>Returns:</dt>
 <dd>保持查询标识顺序的匹配子集</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="findPrincipalIdsHoldingAll(com.sca4d.core.api.permission.OperationCode...)">
+<h3>findPrincipalIdsHoldingAll</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">findPrincipalIdsHoldingAll</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.permission.OperationCode...&nbsp;operationCodes)</span></div>
+<div class="block">反查通过 Platform 启用角色获得全部指定 Operation 的 Principal；没有可枚举的候选时使用。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operationCodes</code> - 需要同时获得的 Operation 常量；至少包含一个编码</dd>
+<dt>Returns:</dt>
+<dd>按标识排序的 Principal</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="findPrincipalIdsHoldingAny(com.sca4d.core.api.permission.OperationCode...)">
+<h3>findPrincipalIdsHoldingAny</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">findPrincipalIdsHoldingAny</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.permission.OperationCode...&nbsp;operationCodes)</span></div>
+<div class="block">反查通过 Platform 启用角色获得任一指定 Operation 的 Principal；没有可枚举的候选时使用。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operationCodes</code> - 至少获得其中一个的 Operation 常量；至少包含一个编码</dd>
+<dt>Returns:</dt>
+<dd>按标识排序的 Principal</dd>
 </dl>
 </section>
 </li>

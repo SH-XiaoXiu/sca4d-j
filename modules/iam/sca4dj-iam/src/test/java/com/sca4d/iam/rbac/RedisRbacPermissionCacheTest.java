@@ -7,10 +7,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.name.Display;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.permission.Operation;
+import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.OperationNode;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,6 @@ import org.springframework.data.redis.core.script.RedisScript;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** 验证 Redis RBAC 权限缓存的范围隔离、空授权和修订号失效行为。 */
@@ -118,7 +119,7 @@ class RedisRbacPermissionCacheTest {
                 lookup,
                 Map.of(
                         FIRST_SCOPE,
-                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("PROJECTS:ITEMS:READ")))));
+                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("CATALOG:ITEMS:READ")))));
         List<Key> originalKeys = List.copyOf(lastReadKeys);
 
         RedisRbacPermissionCache reordered = new RedisRbacPermissionCache(
@@ -130,7 +131,7 @@ class RedisRbacPermissionCacheTest {
         assertThat(lastReadKeys).isEqualTo(originalKeys);
         assertThat(cached.cachedSelectors().get(FIRST_SCOPE).get(PRINCIPAL_ID))
                 .extracting(PermissionSelector::value)
-                .containsExactly("PROJECTS:ITEMS:READ");
+                .containsExactly("CATALOG:ITEMS:READ");
     }
 
     @Test
@@ -142,7 +143,7 @@ class RedisRbacPermissionCacheTest {
                 lookup,
                 Map.of(
                         FIRST_SCOPE,
-                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("PROJECTS:ITEMS:READ")))));
+                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("CATALOG:ITEMS:READ")))));
         List<Key> originalKeys = List.copyOf(lastReadKeys);
 
         RedisRbacPermissionCache expanded = new RedisRbacPermissionCache(
@@ -204,37 +205,30 @@ class RedisRbacPermissionCacheTest {
 
     /** 创建把指定动作全部授予测试 RBAC 领域的权限选择规则。 */
     private static PermissionSelectionRegistry permissionSelections(TreeCode... actions) {
-        OperationNode.ActionDeclaration[] declarations = Arrays.stream(actions)
-                .map(action -> OperationNode.action(action, "operation.projects.items.action", 100))
-                .toArray(OperationNode.ActionDeclaration[]::new);
-        RbacOperationModule module = new RbacOperationModule() {
+        OperationNode.Declaration[] declarations = Arrays.stream(actions)
+                .map(
+                        action -> OperationNode.leaf(
+                                new Action(action),
+                                Display.of("operation.catalog.items.action"),
+                                100,
+                                RbacGrantable.of(DOMAIN)))
+                .toArray(OperationNode.Declaration[]::new);
+        OperationModule module = new OperationModule() {
             @Override
-            public OperationNode.@NotNull Module operationTree() {
-                return OperationNode.module(
-                        TreeCode.ofSegment("PROJECTS"),
-                        "operation.projects",
+            public OperationNode.@NotNull Group operationTree() {
+                return OperationNode.root(
+                        TreeCode.ofSegment("CATALOG"),
+                        Display.of("operation.catalog"),
                         100,
-                        OperationNode.resource(
+                        OperationNode.group(
                                 TreeCode.ofSegment("ITEMS"),
-                                "operation.projects.items",
+                                Display.of("operation.catalog.items"),
                                 100,
                                 declarations));
             }
 
-            @Override
-            public @NotNull Set<@NotNull RbacDomain> domains() {
-                return Set.of(DOMAIN);
-            }
-
-            @Override
-            public boolean canGrant(
-                    @NotNull RbacDomain domain,
-                    @NotNull Operation operation) {
-                return DOMAIN.equals(domain);
-            }
         };
         return new PermissionSelectionRegistry(
-                new OperationCatalog(List.of(module)),
-                List.of(module));
+                new OperationCatalog(List.of(module), List.of(RbacGrantable.GRANTABLE)));
     }
 }

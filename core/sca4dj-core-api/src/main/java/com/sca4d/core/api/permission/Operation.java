@@ -25,31 +25,30 @@ public class Operation implements Resource {
      */
     public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("CORE/OPERATIONS");
 
-    private final @NotNull TreeCode code;
+    private final @NotNull OperationCode code;
 
     /**
      * 创建操作资源。
      *
-     * @param value 非空白操作键
+     * @param value 冒号分隔的操作键，规则见 {@link OperationCode#OperationCode(String)}
      * @throws NullPointerException     value 为 {@code null} 时抛出
-     * @throws IllegalArgumentException value 为空白时抛出
+     * @throws IllegalArgumentException value 不是合法操作编码时抛出
      */
     public Operation(@NotNull String value) {
-        this(TreeCode.ofColon(value));
+        this(new OperationCode(value));
     }
 
     /**
      * 创建使用已经规范化操作编码的操作资源。
      */
-    public Operation(@NotNull TreeCode code) {
-        TreeCode checked = Objects.requireNonNull(code, "操作编码不能为空");
-        this.code = checked;
+    public Operation(@NotNull OperationCode code) {
+        this.code = Objects.requireNonNull(code, "操作编码不能为空");
     }
 
     /**
-     * @return 已规范化的操作 TreeCode
+     * @return 已规范化的操作编码
      */
-    public @NotNull TreeCode code() {
+    public @NotNull OperationCode code() {
         return code;
     }
 

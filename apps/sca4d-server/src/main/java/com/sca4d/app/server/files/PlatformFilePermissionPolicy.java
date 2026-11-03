@@ -88,7 +88,7 @@ public class PlatformFilePermissionPolicy implements PermissionPolicy {
         if (Action.WRITE.equals(permission.action())) {
             boolean uploaderMatches = file.uploaderPrincipalId() == currentPrincipalId;
             boolean targetAllowed = targetPrincipalId == currentPrincipalId
-                    || call.grants(new Operation(PlatformOperations.ACCOUNTS_MANAGE));
+                    || call.grants(new Operation(PlatformOperations.ACCOUNTS_UPDATE));
             return uploaderMatches && targetAllowed
                     ? PermissionDecision.allow()
                     : PermissionDecision.deny("当前身份不能完成目标文件上传");

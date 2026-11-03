@@ -5,7 +5,7 @@ import com.sca4d.app.server.iot.IotOperations;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.authentication.AuthTokenMode;
 import com.sca4d.core.api.authentication.RequireSessionToken;
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.setting.value.SettingValues;
 import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.iot.api.IotCapabilities;
@@ -57,7 +57,7 @@ public class Sca4dOpenApiConfiguration {
                         "/openapi/iot/devices/{deviceId}",
                         "iot",
                         "getDevice",
-                        TreeCode.ofColon(IotOperations.DEVICES_READ_VALUE)),
+                        new OperationCode(IotOperations.DEVICES_READ_VALUE)),
                 long.class);
     }
 

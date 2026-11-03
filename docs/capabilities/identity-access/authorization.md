@@ -85,30 +85,30 @@ sequenceDiagram
 
 ## Operation Catalog 负责什么
 
-[OperationCatalog](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/permission/OperationCatalog.html) 收集各业务 [OperationModule](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/permission/OperationModule.html)，生成固定的 `MODULE -> RESOURCE -> ACTION` 三层目录。
+[OperationCatalog](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/permission/OperationCatalog.html) 收集各业务 [OperationModule](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/permission/OperationModule.html)，生成由分组（Group）和叶子（Leaf）组成的目录树，深度不限。
 
-MODULE 编码是模块唯一锚点。模块声明局部 RESOURCE 和 ACTION 段，`OperationNode.module(...)` 在建立聚合时展开完整编码。例如，`workspaces`、`documents`、`read` 生成 `workspaces:documents:read`。因此，不同模块可以自然复用 `documents:read` 局部结构。
+根分组的编码是模块唯一锚点。模块声明各层分组的局部段和叶子的动词，`OperationNode.root(...)` 在建立聚合时展开完整编码。例如，根分组 `workspaces`、分组 `documents`、动词 `read` 生成 `workspaces:documents:read`。因此，不同模块可以自然复用 `documents:read` 局部结构。一个分组下可以同时有子分组和叶子，叶子的最后一段是动词。
 
 ```mermaid
 flowchart TD
-    Module[MODULE<br/>platform]
-    ResourceA[RESOURCE<br/>platform:roles]
-    ResourceB[RESOURCE<br/>platform:principal-roles]
-    Read[ACTION<br/>platform:roles:read]
-    Manage[ACTION<br/>platform:roles:manage]
-    PrincipalRead[ACTION<br/>platform:principal-roles:read]
-    PrincipalManage[ACTION<br/>platform:principal-roles:manage]
-    Module --> ResourceA --> Read
-    ResourceA --> Manage
-    Module --> ResourceB --> PrincipalRead
-    ResourceB --> PrincipalManage
+    Root[Group<br/>platform]
+    GroupA[Group<br/>platform:roles]
+    GroupB[Group<br/>platform:principal-roles]
+    Read[Leaf<br/>platform:roles:read]
+    Manage[Leaf<br/>platform:roles:manage]
+    PrincipalRead[Leaf<br/>platform:principal-roles:read]
+    PrincipalManage[Leaf<br/>platform:principal-roles:manage]
+    Root --> GroupA --> Read
+    GroupA --> Manage
+    Root --> GroupB --> PrincipalRead
+    GroupB --> PrincipalManage
 ```
 
-目录负责校验和组织应用注册的全部 Operation。只有 ACTION 可以授予角色。MODULE 和 RESOURCE 只组织和展示目录。ACTION 节点直接包含对应 Operation，不再建立另一种扁平目录项类型。
+目录负责校验和组织应用注册的全部 Operation。只有叶子可以授予角色。分组只组织和展示目录。叶子节点直接包含对应 Operation，不再建立另一种扁平目录项类型。
 
 Catalog 不保存角色，不认识 RBAC 领域，也不判断当前主体是否拥有 Operation。
 
-IAM 的 [RbacOperationModule](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/rbac/RbacOperationModule.html) 由同一个业务模块声明 Operation 可以授予哪些 RbacDomain。PermissionSelectionRegistry 据此生成每个领域的 PermissionSelections。
+IAM 的 [RbacGrantable](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/rbac/RbacGrantable.html) 让叶子声明自己可以授予哪些 RbacDomain。PermissionSelectionRegistry 据此生成每个领域的 PermissionSelections。
 
 `GET /system/permissions?domain=<RbacDomain 名称>` 使用对应领域的选择规则，从同一棵 Catalog 中筛出该领域的 Operation。未提供 `domain` 时，默认 `PLATFORM`。该路由由示例 App 的 `OperationController` 提供，不属于 Core。
 
@@ -188,11 +188,13 @@ Repository 使用范围时，仍然负责构造一次数据库操作。不能先
 
 ### 声明 Operation 目录
 
-模块实现 `OperationModule`，用 `OperationNode.module(...)` 声明 MODULE、RESOURCE 与 ACTION 的局部段。
+模块实现 `OperationModule`，用 `OperationNode.root(...)` 声明根分组、分组与叶子的局部段。
 下面的声明展开为 `workspaces:documents:read` 与 `workspaces:documents:write`。
 
 ```java
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.permission.OperationAxes;
 import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.OperationNode;
 import org.springframework.stereotype.Component;
@@ -201,17 +203,19 @@ import org.springframework.stereotype.Component;
 public class WorkspaceOperationModule implements OperationModule {
 
     @Override
-    public OperationNode.Module operationTree() {
-        return OperationNode.module(
+    public OperationNode.Group operationTree() {
+        return OperationNode.root(
                 TreeCode.ofSegment("workspaces"),
-                "operation.workspaces",
                 30,
-                OperationNode.resource(
+                OperationNode.group(
                         TreeCode.ofSegment("documents"),
-                        "operation.workspaces.documents",
                         10,
-                        OperationNode.action(TreeCode.ofSegment("read"), "operation.read", 10),
-                        OperationNode.action(TreeCode.ofSegment("write"), "operation.write", 20)));
+                        OperationNode.leaf(
+                                Action.READ, 10,
+                                OperationAxes.Intent.READ, OperationAxes.Nature.FUNCTION),
+                        OperationNode.leaf(
+                                Action.WRITE, 20,
+                                OperationAxes.Intent.UPDATE, OperationAxes.Nature.FUNCTION)));
     }
 }
 ```
@@ -316,8 +320,8 @@ public class DocumentRepository {
 | 扩展点 | 应用提供 | 发现与校验 |
 |---|---|---|
 | 业务对象权限 | 实现 `PermissionPolicy` 的 Bean | Core Spring 以 `List<PermissionPolicy>` 注入 `PermissionAssessment`。每项 Permission 在调用时必须恰好有一个策略的 `supports(...)` 返回 `true`，否则抛出 IllegalStateException |
-| Operation 目录 | 实现 `OperationModule` 的 Bean | Core Spring 以 `List<OperationModule>` 注入 `OperationCatalog`。编码重复时，`OperationNode.module(...)` 抛出 IllegalArgumentException |
-| 可授予的 RBAC 领域 | 实现 `RbacOperationModule` 的 Bean，由 `domains()` 声明领域，必要时重写 `canGrant(...)` | IAM 以 `List<RbacOperationModule>` 注入 `PermissionSelectionRegistry`，`domains()` 为空时抛出 IllegalStateException |
+| Operation 目录 | 实现 `OperationModule` 的 Bean | Core Spring 以 `List<OperationModule>` 注入 `OperationCatalog`。编码重复时，`OperationNode.root(...)` 或 `OperationCatalog` 构造抛出 IllegalArgumentException |
+| 可授予的 RBAC 领域 | 叶子声明 `RbacGrantable.of(domain)` 生成的 `GRANTABLE:<domain>` 属性 | IAM 以 `OperationCatalog` 构造 `PermissionSelectionRegistry`，叶子没有声明任何领域时抛出 IllegalStateException |
 
 ## 不能从当前设计推出的内容
 

@@ -2,8 +2,8 @@ package com.sca4d.iam.rbac;
 
 import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 校验并修改具体 {@link RbacScope} 中的角色、权限和 Principal 角色关系。
@@ -100,7 +102,7 @@ public class RbacService {
     public @NotNull RolePermissions createRole(
             @NotNull RbacScope scope,
             @NotNull String code,
-            @NotNull Collection<@NotNull TreeCode> permissionCodes) {
+            @NotNull Collection<@NotNull OperationCode> permissionCodes) {
         RbacScope checkedScope = Objects.requireNonNull(scope, "RBAC 范围不能为空");
         String checkedCode = validateRoleCode(code);
         PermissionSelections selections = permissionSelections.selection(checkedScope.domain());
@@ -187,7 +189,7 @@ public class RbacService {
     public @NotNull RolePermissions replaceRolePermissions(
             @NotNull RbacScope scope,
             @NotNull Long roleId,
-            @NotNull Collection<@NotNull TreeCode> permissionCodes) {
+            @NotNull Collection<@NotNull OperationCode> permissionCodes) {
         RbacScope checkedScope = Objects.requireNonNull(scope, "RBAC 范围不能为空");
         RbacRepository repository = repository(checkedScope);
         Role current = loadRoleById(checkedScope, roleId);
@@ -376,6 +378,93 @@ public class RbacService {
                 checkedScope,
                 checkedQuery.principalIds().size(),
                 requiredOperations.size(),
+                matched.size());
+        return Collections.unmodifiableSet(matched);
+    }
+
+    /**
+     * 反查在同一角色空间中通过启用角色获得全部指定 Operation 的 Principal。
+     *
+     * <p>调用方没有可枚举的候选 Principal 时使用本方法；已有候选时仍使用
+     * {@link #findPrincipalIds(RbacScope, PrincipalGrantQuery)}，它复用授权缓存。
+     * 多个角色贡献的 Operation 会在 Principal 上合并后再判断。
+     *
+     * @param scope         角色空间
+     * @param operationCodes 需要同时获得的 Operation 常量；至少包含一个编码
+     * @return 按标识排序的 Principal；没有匹配者时为空
+     * @throws BusinessException 任一 Operation 不属于当前 RBAC 领域时抛出
+     */
+    @CheckReturnValue
+    @Transactional(readOnly = true)
+    public @NotNull @Unmodifiable Set<@NotNull Long> findPrincipalIdsHoldingAll(
+            @NotNull RbacScope scope,
+            @NotNull OperationCode... operationCodes) {
+        return findPrincipalIdsHolding(scope, true, operationCodes);
+    }
+
+    /**
+     * 反查在同一角色空间中通过启用角色获得任一指定 Operation 的 Principal。
+     *
+     * @param scope         角色空间
+     * @param operationCodes 至少获得其中一个的 Operation 常量；至少包含一个编码
+     * @return 按标识排序的 Principal；没有匹配者时为空
+     * @throws BusinessException 任一 Operation 不属于当前 RBAC 领域时抛出
+     * @see #findPrincipalIdsHoldingAll(RbacScope, OperationCode...)
+     */
+    @CheckReturnValue
+    @Transactional(readOnly = true)
+    public @NotNull @Unmodifiable Set<@NotNull Long> findPrincipalIdsHoldingAny(
+            @NotNull RbacScope scope,
+            @NotNull OperationCode... operationCodes) {
+        return findPrincipalIdsHolding(scope, false, operationCodes);
+    }
+
+    /**
+     * 先找出贡献了所需 Operation 的启用角色，再合并这些角色的使用者所得的 Operation 判断匹配。
+     * 读取量只与角色数和命中角色的使用者数相关，不随空间内全部 Principal 增长。
+     */
+    private @NotNull Set<Long> findPrincipalIdsHolding(
+            @NotNull RbacScope scope,
+            boolean matchAll,
+            @NotNull OperationCode... operationCodes) {
+        RbacScope checkedScope = Objects.requireNonNull(scope, "RBAC 范围不能为空");
+        OperationCode[] checkedCodes = Objects.requireNonNull(operationCodes, "Operation 编码不能为空");
+        if (checkedCodes.length == 0) {
+            throw new IllegalArgumentException("Principal 授权反查至少需要一个 Operation");
+        }
+        PermissionSelections selections = permissionSelections.selection(checkedScope.domain());
+        // 与 findPrincipalIds 使用同一套领域校验，并展开 Operation 的依赖。
+        Set<Operation> required = new LinkedHashSet<>(
+                selections.expand(
+                        selections.validateGrantableOperations(
+                                Arrays.stream(checkedCodes).map(Operation::new).toList())));
+        RbacRepository repository = repository(checkedScope);
+        Map<Long, Set<Operation>> heldByPrincipal = new LinkedHashMap<>();
+        for (Role role : repository.findRoles(checkedScope)) {
+            if (role.status() != RoleStatus.ACTIVE) {
+                continue;
+            }
+            Set<Operation> contributed = new HashSet<>(
+                    selections.expand(repository.findPermissionSelectors(checkedScope, role.roleId())));
+            contributed.retainAll(required);
+            if (contributed.isEmpty()) {
+                continue;
+            }
+            for (Long principalId : repository.findRolePrincipalIds(checkedScope, role.roleId())) {
+                heldByPrincipal.computeIfAbsent(principalId, ignored -> new HashSet<>()).addAll(contributed);
+            }
+        }
+        TreeSet<Long> matched = new TreeSet<>();
+        heldByPrincipal.forEach((principalId, held) -> {
+            if (matchAll ? held.containsAll(required) : !held.isEmpty()) {
+                matched.add(principalId);
+            }
+        });
+        LOG.debug(
+                "Principal 授权反查完成 | scope={} operationCount={} matchAll={} matchedCount={}",
+                checkedScope,
+                required.size(),
+                matchAll,
                 matched.size());
         return Collections.unmodifiableSet(matched);
     }

@@ -10,6 +10,7 @@ import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.AccountIdentifierType;
+import com.sca4d.core.api.name.code.AttributeAxis;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.spring.json.Sca4djJson;
@@ -54,7 +55,7 @@ import com.sca4d.iam.identity.mapper.SystemIdentityMapper;
 import com.sca4d.iam.rbac.NoOpRbacPermissionCache;
 import com.sca4d.iam.rbac.PermissionSelectionRegistry;
 import com.sca4d.iam.rbac.RbacDomain;
-import com.sca4d.iam.rbac.RbacOperationModule;
+import com.sca4d.iam.rbac.RbacGrantable;
 import com.sca4d.iam.rbac.RbacPermissionCache;
 import com.sca4d.iam.rbac.RbacRepository;
 import com.sca4d.iam.rbac.RbacRepositoryRegistry;
@@ -340,13 +341,18 @@ public class IamAutoConfiguration {
         return new PlatformAccountLifecycleRepository(mapper, principalTypes.principalType(PlatformPrincipal.class));
     }
 
-    /** 创建由各模块领域行为生成的 RBAC 权限选择规则注册表。 */
+    /** 登记 {@link RbacGrantable#GRANTABLE} 轴，Operation 叶子据此声明可以授予的 RBAC 领域。 */
     @Bean
     @NotNull
-    PermissionSelectionRegistry permissionSelectionRegistry(
-            @NotNull OperationCatalog catalog,
-            @NotNull List<@NotNull RbacOperationModule> modules) {
-        return new PermissionSelectionRegistry(catalog, modules);
+    AttributeAxis grantableAxis() {
+        return RbacGrantable.GRANTABLE;
+    }
+
+    /** 创建由 Operation 叶子的 {@code GRANTABLE} 属性生成的 RBAC 权限选择规则注册表。 */
+    @Bean
+    @NotNull
+    PermissionSelectionRegistry permissionSelectionRegistry(@NotNull OperationCatalog catalog) {
+        return new PermissionSelectionRegistry(catalog);
     }
 
     /** 应用没有安装 Redis 时使用不保存授权结果的实现。 */

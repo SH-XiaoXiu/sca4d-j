@@ -1,7 +1,7 @@
 package com.sca4d.iam.rbac;
 
-import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
+import com.sca4d.core.api.permission.OperationCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -110,7 +110,7 @@ public class PrincipalGrantQuery {
          * @throws IllegalStateException 已经声明任一匹配条件时抛出
          */
         @Contract(value = "_ -> this", mutates = "this")
-        public @NotNull Builder allOf(@NotNull TreeCode... operationCodes) {
+        public @NotNull Builder allOf(@NotNull OperationCode... operationCodes) {
             setOperations(true, operationCodes);
             return this;
         }
@@ -123,7 +123,7 @@ public class PrincipalGrantQuery {
          * @throws IllegalStateException 已经声明全部匹配条件时抛出
          */
         @Contract(value = "_ -> this", mutates = "this")
-        public @NotNull Builder anyOf(@NotNull TreeCode... operationCodes) {
+        public @NotNull Builder anyOf(@NotNull OperationCode... operationCodes) {
             setOperations(false, operationCodes);
             return this;
         }
@@ -143,16 +143,16 @@ public class PrincipalGrantQuery {
         /**
          * 校验并保存唯一一种 Operation 匹配方式。
          */
-        private void setOperations(boolean all, @NotNull TreeCode... operationCodes) {
+        private void setOperations(boolean all, @NotNull OperationCode... operationCodes) {
             if (operations != null) {
                 throw new IllegalStateException("Principal 授权查询只能声明一种 Operation 匹配方式");
             }
-            TreeCode[] source = Objects.requireNonNull(operationCodes, "Operation 编码不能为空");
+            OperationCode[] source = Objects.requireNonNull(operationCodes, "Operation 编码不能为空");
             if (source.length == 0) {
                 throw new IllegalArgumentException("Principal 授权查询至少需要一个 Operation");
             }
             LinkedHashSet<Operation> unique = new LinkedHashSet<>();
-            for (TreeCode code : source) {
+            for (OperationCode code : source) {
                 unique.add(new Operation(Objects.requireNonNull(code, "Operation 编码不能为空")));
             }
             this.operations = List.copyOf(unique);

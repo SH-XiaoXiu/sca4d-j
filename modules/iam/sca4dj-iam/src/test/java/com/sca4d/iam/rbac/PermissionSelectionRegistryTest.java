@@ -4,18 +4,18 @@ import static com.sca4d.core.api.name.NameFormat.COLON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.sca4d.core.api.error.exception.BusinessException;
+import com.sca4d.core.api.name.Display;
+import com.sca4d.core.api.name.code.Attribute;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
-import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.OperationNode;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Set;
 
 class PermissionSelectionRegistryTest {
 
@@ -24,98 +24,90 @@ class PermissionSelectionRegistryTest {
     private static final RbacDomain PROJECT = new RbacDomain("PROJECT");
 
     @Test
-    @DisplayName("Builds Domain Selections From Module Behavior")
-    void buildsDomainSelectionsFromModuleBehavior() {
-        RbacOperationModule module = projectModule();
-        PermissionSelectionRegistry registry = new PermissionSelectionRegistry(
-                new OperationCatalog(List.of(module)),
-                List.of(module));
+    @DisplayName("Builds Domain Selections From Leaf Grantable Attributes")
+    void buildsDomainSelectionsFromLeafGrantableAttributes() {
+        PermissionSelectionRegistry registry = new PermissionSelectionRegistry(projectCatalog());
 
         assertThat(registry.selection(PLATFORM).operations())
                 .extracting(operation -> operation.code().format(COLON))
-                .containsExactly("PROJECTS:ITEMS:READ");
+                .containsExactly("CATALOG:ITEMS:READ");
         assertThat(registry.selection(PROJECT).operations())
                 .extracting(operation -> operation.code().format(COLON))
-                .containsExactly("PROJECTS:ITEMS:MANAGE", "PROJECTS:ITEMS:READ");
+                .containsExactly("CATALOG:ITEMS:MANAGE", "CATALOG:ITEMS:READ");
         assertThat(registry.domains()).containsExactlyInAnyOrder(PLATFORM, PROJECT);
     }
 
     @Test
-    @DisplayName("Rejects Catalog Module Without Rbac Domain Behavior")
-    void rejectsCatalogModuleWithoutRbacDomainBehavior() {
-        OperationModule module = PermissionSelectionRegistryTest::tree;
+    @DisplayName("Rejects Internal Selector And Malformed Text From Role Management API")
+    void rejectsInternalSelectorAndMalformedTextFromRoleManagementApi() {
+        PermissionSelectionRegistry registry = new PermissionSelectionRegistry(projectCatalog());
+        PermissionSelections selections = registry.selection(PROJECT);
 
-        assertThatThrownBy(
-                () -> new PermissionSelectionRegistry(
-                        new OperationCatalog(List.of(module)),
-                        List.of()))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("missing=[PROJECTS]");
+        for (String text : List.of("*", "CATALOG", "CATALOG:*:READ", "CATALOG:ITEMS:UNKNOWN")) {
+            assertThatThrownBy(() -> selections.validateGrantable(List.of(text)))
+                    .isInstanceOfSatisfying(
+                            BusinessException.class,
+                            exception -> assertThat(exception.errorCode()).isEqualTo(RbacErrorCode.OPERATION_INVALID));
+        }
+        assertThat(selections.validateGrantable(List.of("catalog:items:read")))
+                .containsExactly(new PermissionSelector("CATALOG:ITEMS:READ"));
     }
 
     @Test
-    @DisplayName("Rejects Operation That Cannot Be Granted To Any Declared Domain")
-    void rejectsOperationThatCannotBeGrantedToAnyDeclaredDomain() {
-        RbacOperationModule module = new RbacOperationModule() {
-            @Override
-            public OperationNode.@NotNull Module operationTree() {
-                return tree();
-            }
+    @DisplayName("Rejects Leaf Without Grantable Domain")
+    void rejectsLeafWithoutGrantableDomain() {
+        OperationModule module = () -> tree(new Attribute[0], new Attribute[0]);
 
-            @Override
-            public @NotNull Set<@NotNull RbacDomain> domains() {
-                return Set.of(PLATFORM);
-            }
-
-            @Override
-            public boolean canGrant(@NotNull RbacDomain domain, @NotNull Operation operation) {
-                return false;
-            }
-        };
-
-        assertThatThrownBy(
-                () -> new PermissionSelectionRegistry(
-                        new OperationCatalog(List.of(module)),
-                        List.of(module)))
+        assertThatThrownBy(() -> new PermissionSelectionRegistry(catalog(module)))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("不能授予");
+                .hasMessageContaining("没有声明任何可授予的 RBAC 领域");
+    }
+
+    @Test
+    @DisplayName("Rejects Grantable Attribute That Is Not A Single Domain Value")
+    void rejectsGrantableAttributeThatIsNotSingleDomainValue() {
+        Attribute nested = RbacGrantable.of(PLATFORM).child("SCOPE");
+        OperationModule module = () -> tree(new Attribute[] {RbacGrantable.of(PLATFORM)}, new Attribute[] {nested});
+
+        assertThatThrownBy(() -> new PermissionSelectionRegistry(catalog(module)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("GRANTABLE:<domain>");
     }
 
     /**
-     * @return 同时向 Platform 和 Project 提供不同 Operation 的测试模块
+     * @return READ 叶子授予 Platform 和 Project 域、MANAGE 叶子只授予 Project 域的测试目录
      */
-    private static RbacOperationModule projectModule() {
-        return new RbacOperationModule() {
-            @Override
-            public OperationNode.@NotNull Module operationTree() {
-                return tree();
-            }
+    private static OperationCatalog projectCatalog() {
+        OperationModule module = () -> tree(
+                new Attribute[] {RbacGrantable.of(PROJECT)},
+                new Attribute[] {RbacGrantable.of(PLATFORM), RbacGrantable.of(PROJECT)});
+        return catalog(module);
+    }
 
-            @Override
-            public @NotNull Set<@NotNull RbacDomain> domains() {
-                return Set.of(PLATFORM, PROJECT);
-            }
-
-            @Override
-            public boolean canGrant(@NotNull RbacDomain domain, @NotNull Operation operation) {
-                return PROJECT.equals(domain) || operation.code().format(COLON).endsWith(":READ");
-            }
-        };
+    private static OperationCatalog catalog(OperationModule module) {
+        return new OperationCatalog(List.of(module), List.of(RbacGrantable.GRANTABLE));
     }
 
     /**
+     * @param manageAttributes MANAGE 叶子声明的属性
+     * @param readAttributes READ 叶子声明的属性
      * @return 包含 read 和 manage 的测试 Operation 树
      */
-    private static OperationNode.Module tree() {
-        return OperationNode.module(
-                TreeCode.ofSegment("PROJECTS"),
-                "operation.projects",
+    private static OperationNode.Group tree(Attribute[] manageAttributes, Attribute[] readAttributes) {
+        return OperationNode.root(
+                TreeCode.ofSegment("CATALOG"),
+                Display.of("operation.catalog"),
                 100,
-                OperationNode.resource(
+                OperationNode.group(
                         TreeCode.ofSegment("ITEMS"),
-                        "operation.projects.items",
+                        Display.of("operation.catalog.items"),
                         100,
-                        OperationNode.action(Action.MANAGE.code(), "operation.projects.items.manage", 200),
-                        OperationNode.action(Action.READ.code(), "operation.projects.items.read", 100)));
+                        OperationNode.leaf(
+                                Action.MANAGE,
+                                Display.of("operation.catalog.items.manage"),
+                                200,
+                                manageAttributes),
+                        OperationNode
+                                .leaf(Action.READ, Display.of("operation.catalog.items.read"), 100, readAttributes)));
     }
 }

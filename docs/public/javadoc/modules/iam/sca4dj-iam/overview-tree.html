@@ -110,7 +110,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" class="type-name-link" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a> (implements com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a>)</li>
 <li class="circle">com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformBootstrapService.html" class="type-name-link" title="class in com.sca4d.iam.base.rbac">PlatformBootstrapService</a></li>
 <li class="circle">com.sca4d.iam.base.<a href="com/sca4d/iam/base/PlatformIdentityService.html" class="type-name-link" title="class in com.sca4d.iam.base">PlatformIdentityService</a></li>
-<li class="circle">com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" class="type-name-link" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a> (implements com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacOperationModule.html" title="interface in com.sca4d.iam.rbac">RbacOperationModule</a>)</li>
+<li class="circle">com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" class="type-name-link" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a> (implements com.sca4d.core.api.permission.OperationModule)</li>
 <li class="circle">com.sca4d.iam.base.<a href="com/sca4d/iam/base/PlatformPrincipal.html" class="type-name-link" title="class in com.sca4d.iam.base">PlatformPrincipal</a> (implements com.sca4d.core.api.identity.Principal)</li>
 <li class="circle">com.sca4d.iam.base.<a href="com/sca4d/iam/base/PlatformPrincipalCodec.html" class="type-name-link" title="class in com.sca4d.iam.base">PlatformPrincipalCodec</a> (implements com.sca4d.core.api.authentication.principalsession.PrincipalCodec&lt;P&gt;)</li>
 <li class="circle">com.sca4d.iam.base.<a href="com/sca4d/iam/base/PlatformPrincipalLoader.html" class="type-name-link" title="class in com.sca4d.iam.base">PlatformPrincipalLoader</a> (implements com.sca4d.core.api.authentication.principalsession.PrincipalLoader)</li>
@@ -130,6 +130,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/PrincipalQuery.Builder.html" class="type-name-link" title="class in com.sca4d.iam.identity">PrincipalQuery.Builder</a></li>
 <li class="circle">com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PrincipalRoles.html" class="type-name-link" title="class in com.sca4d.iam.rbac">PrincipalRoles</a></li>
 <li class="circle">com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/PrincipalTypes.html" class="type-name-link" title="class in com.sca4d.iam.identity">PrincipalTypes</a></li>
+<li class="circle">com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacGrantable.html" class="type-name-link" title="class in com.sca4d.iam.rbac">RbacGrantable</a></li>
 <li class="circle">com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacPermissionCacheLookup.html" class="type-name-link" title="class in com.sca4d.iam.rbac">RbacPermissionCacheLookup</a></li>
 <li class="circle">com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacRepositoryRegistry.html" class="type-name-link" title="class in com.sca4d.iam.rbac">RbacRepositoryRegistry</a></li>
 <li class="circle">com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacScope.html" class="type-name-link" title="class in com.sca4d.iam.rbac">RbacScope</a></li>
@@ -168,11 +169,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/AccountIdentifierNormalizer.html" class="type-name-link" title="interface in com.sca4d.iam.identity">AccountIdentifierNormalizer</a></li>
 <li class="circle">com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" class="type-name-link" title="interface in com.sca4d.iam.acl">AclRepository</a></li>
 <li class="circle">com.sca4d.iam.identity.mapper.<a href="com/sca4d/iam/identity/mapper/IdentityMapper.html" class="type-name-link" title="interface in com.sca4d.iam.identity.mapper">IdentityMapper</a></li>
-<li class="circle">com.sca4d.core.api.permission.OperationModule
-<ul>
-<li class="circle">com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacOperationModule.html" class="type-name-link" title="interface in com.sca4d.iam.rbac">RbacOperationModule</a></li>
-</ul>
-</li>
 <li class="circle">com.sca4d.iam.base.mapper.<a href="com/sca4d/iam/base/mapper/PlatformAccountMapper.html" class="type-name-link" title="interface in com.sca4d.iam.base.mapper">PlatformAccountMapper</a></li>
 <li class="circle">com.sca4d.iam.base.mapper.<a href="com/sca4d/iam/base/mapper/PlatformAclMapper.html" class="type-name-link" title="interface in com.sca4d.iam.base.mapper">PlatformAclMapper</a></li>
 <li class="circle">com.sca4d.iam.base.mapper.<a href="com/sca4d/iam/base/mapper/PlatformRbacMapper.html" class="type-name-link" title="interface in com.sca4d.iam.base.mapper">PlatformRbacMapper</a></li>

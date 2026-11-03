@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">OperationCatalog</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">收集业务模块的 Operation 聚合，并提供完整目录、ACTION 索引和子集投影。</div>
+<div class="block">收集业务模块的 Operation 目录，并提供完整目录、叶子索引和子集投影。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -103,9 +103,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Collection)" class="member-name-link">OperationCatalog</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull <a href="OperationModule.html" title="interface in com.sca4d.core.api.permission">OperationModule</a>&gt;&nbsp;modules)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Collection,java.util.Collection)" class="member-name-link">OperationCatalog</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull <a href="OperationModule.html" title="interface in com.sca4d.core.api.permission">OperationModule</a>&gt;&nbsp;modules,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull <a href="../name/code/AttributeAxis.html" title="class in com.sca4d.core.api.name.code">AttributeAxis</a>&gt;&nbsp;axes)</code></div>
 <div class="col-last even-row-color">
-<div class="block">收集并校验应用安装的 Operation 模块。</div>
+<div class="block">收集并校验应用安装的 Operation 模块和属性轴。</div>
 </div>
 </div>
 </section>
@@ -121,37 +122,46 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#action(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">action</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;code)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../name/code/AttributeAxis.html" title="class in com.sca4d.core.api.name.code">AttributeAxis</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#axes()" class="member-name-link">axes</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#action(java.lang.String)" class="member-name-link">action</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actionByCode(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">actionByCode</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;code)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actionByCode(java.lang.String)" class="member-name-link">actionByCode</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actions()" class="member-name-link">actions</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actions(java.util.Collection)" class="member-name-link">actions</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Operation.html" title="class in com.sca4d.core.api.permission">Operation</a>&gt;&nbsp;operations)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fingerprint()" class="member-name-link">fingerprint</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回指定 Operation 对应的 ACTION，并保持 Catalog 目录顺序。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fingerprint()" class="member-name-link">fingerprint</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">具体 Operation 编码集合的稳定指纹。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tree()" class="member-name-link">tree</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leaf(com.sca4d.core.api.permission.OperationCode)" class="member-name-link">leaf</a><wbr>(@NotNull <a href="OperationCode.html" title="class in com.sca4d.core.api.permission">OperationCode</a>&nbsp;code)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leaf(java.lang.String)" class="member-name-link">leaf</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tree(java.util.Collection)" class="member-name-link">tree</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Operation.html" title="class in com.sca4d.core.api.permission">Operation</a>&gt;&nbsp;operations)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leafByCode(com.sca4d.core.api.permission.OperationCode)" class="member-name-link">leafByCode</a><wbr>(@NotNull <a href="OperationCode.html" title="class in com.sca4d.core.api.permission">OperationCode</a>&nbsp;code)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leafByCode(java.lang.String)" class="member-name-link">leafByCode</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leaves()" class="member-name-link">leaves</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leaves(java.util.Collection)" class="member-name-link">leaves</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Operation.html" title="class in com.sca4d.core.api.permission">Operation</a>&gt;&nbsp;operations)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回指定 Operation 对应的叶子，并保持 Catalog 目录顺序。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leavesUnder(com.sca4d.core.api.name.code.Attribute)" class="member-name-link">leavesUnder</a><wbr>(@NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a>&nbsp;attribute)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leavesWith(com.sca4d.core.api.name.code.Attribute)" class="member-name-link">leavesWith</a><wbr>(@NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a>&nbsp;attribute)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tree()" class="member-name-link">tree</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tree(java.util.Collection)" class="member-name-link">tree</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Operation.html" title="class in com.sca4d.core.api.permission">Operation</a>&gt;&nbsp;operations)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回只包含指定 Operation 的目录投影。</div>
 </div>
 </div>
@@ -172,16 +182,22 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.Collection)">
+<section class="detail" id="&lt;init&gt;(java.util.Collection,java.util.Collection)">
 <h3>OperationCatalog</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">OperationCatalog</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull <a href="OperationModule.html" title="interface in com.sca4d.core.api.permission">OperationModule</a>&gt;&nbsp;modules)</span></div>
-<div class="block">收集并校验应用安装的 Operation 模块。</div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull <a href="OperationModule.html" title="interface in com.sca4d.core.api.permission">OperationModule</a>&gt;&nbsp;modules,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull <a href="../name/code/AttributeAxis.html" title="class in com.sca4d.core.api.name.code">AttributeAxis</a>&gt;&nbsp;axes)</span></div>
+<div class="block">收集并校验应用安装的 Operation 模块和属性轴。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>modules</code> - 业务模块 Operation 聚合</dd>
+<dd><code>modules</code> - 业务模块 Operation 目录</dd>
+<dd><code>axes</code> - 应用登记的属性轴；没有属性时传空集合</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 模块锚点或任意完整节点编码重复时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 任意完整节点编码重复（包括不同模块的根分组锚点相同）、轴根重复或嵌套、
+                                  叶子属性不在任何登记轴下、或叶子违反 <a href="../name/code/AttributeConstraint.html#REQUIRED_EXCLUSIVE"><code>AttributeConstraint.REQUIRED_EXCLUSIVE</code></a>
+                                  轴的取值约束、叶子依赖不存在的叶子、依赖自身或依赖成环时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 模块、轴或其集合为 <code>null</code> 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -197,10 +213,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="tree()">
 <h3>tree</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a>&gt;</span>&nbsp;<span class="element-name">tree</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a>&gt;</span>&nbsp;<span class="element-name">tree</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>按模块和节点排序的完整不可变 Operation 树</dd>
+<dd>按排序值、再按编码排列根分组的完整不可变 Operation 树，每一层子节点同样按此规则排列</dd>
 </dl>
 </section>
 </li>
@@ -209,27 +225,68 @@ loadScripts(document, 'script');</script>
 <h3>tree</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a>&gt;</span>&nbsp;<span class="element-name">tree</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a>&gt;</span>&nbsp;<span class="element-name">tree</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Operation.html" title="class in com.sca4d.core.api.permission">Operation</a>&gt;&nbsp;operations)</span></div>
 <div class="block">返回只包含指定 Operation 的目录投影。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>operations</code> - 必须全部来自当前 Catalog 的具体 Operation</dd>
 <dt>Returns:</dt>
-<dd>自动移除空 RESOURCE 和 MODULE 后的不可变树</dd>
+<dd>自动移除没有匹配叶子的分组（任意深度）后的不可变树，顺序与 <a href="#tree()"><code>tree()</code></a> 一致</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 包含当前 Catalog 未声明的 Operation 时抛出</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="actions()">
-<h3>actions</h3>
+<section class="detail" id="leaves()">
+<h3>leaves</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</span>&nbsp;<span class="element-name">actions</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</span>&nbsp;<span class="element-name">leaves</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>按目录顺序排列的全部不可变 ACTION</dd>
+<dd>按深度优先目录顺序排列的全部不可变叶子</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="axes()">
+<h3>axes</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../name/code/AttributeAxis.html" title="class in com.sca4d.core.api.name.code">AttributeAxis</a>&gt;</span>&nbsp;<span class="element-name">axes</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>应用登记的属性轴，保持传入顺序</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="leavesWith(com.sca4d.core.api.name.code.Attribute)">
+<h3>leavesWith</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</span>&nbsp;<span class="element-name">leavesWith</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a>&nbsp;attribute)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>attribute</code> - 属性值</dd>
+<dt>Returns:</dt>
+<dd>声明时携带与该值完全相同属性的叶子，保持 Catalog 目录顺序</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="leavesUnder(com.sca4d.core.api.name.code.Attribute)">
+<h3>leavesUnder</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</span>&nbsp;<span class="element-name">leavesUnder</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a>&nbsp;attribute)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>attribute</code> - 属性值或属性根</dd>
+<dt>Returns:</dt>
+<dd>声明时携带该属性或其任一后代的叶子，保持 Catalog 目录顺序</dd>
 </dl>
 </section>
 </li>
@@ -240,7 +297,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">fingerprint</span>()</div>
 <div class="block">具体 Operation 编码集合的稳定指纹。
 
- <p>显示名称、翻译键、排序值和模块登记顺序不参与计算；新增、删除或修改具体 Operation 编码会改变结果。</div>
+ <p>显示名称、翻译键、排序值、属性、叶子依赖、分组层级和模块登记顺序不参与计算；新增、删除或修改具体 Operation 编码会改变结果。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>SHA-256 摘要的 Base64URL 无填充文本</dd>
@@ -248,70 +305,76 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="actions(java.util.Collection)">
-<h3>actions</h3>
+<section class="detail" id="leaves(java.util.Collection)">
+<h3>leaves</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</span>&nbsp;<span class="element-name">actions</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</span>&nbsp;<span class="element-name">leaves</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="Operation.html" title="class in com.sca4d.core.api.permission">Operation</a>&gt;&nbsp;operations)</span></div>
-<div class="block">返回指定 Operation 对应的 ACTION，并保持 Catalog 目录顺序。</div>
+<div class="block">返回指定 Operation 对应的叶子，并保持 Catalog 目录顺序。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>operations</code> - 必须全部来自当前 Catalog 的具体 Operation</dd>
 <dt>Returns:</dt>
-<dd>不可变 ACTION 列表</dd>
+<dd>不可变叶子列表</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 包含当前 Catalog 未声明的 Operation 时抛出</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="action(java.lang.String)">
-<h3>action</h3>
+<section class="detail" id="leaf(java.lang.String)">
+<h3>leaf</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</span>&nbsp;<span class="element-name">action</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</span>&nbsp;<span class="element-name">leaf</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>匹配的 ACTION；编码不存在时为空</dd>
+<dd>匹配的叶子；编码不存在时为空</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="action(com.sca4d.core.api.name.code.TreeCode)">
-<h3>action</h3>
+<section class="detail" id="leaf(com.sca4d.core.api.permission.OperationCode)">
+<h3>leaf</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a>&gt;</span>&nbsp;<span class="element-name">action</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;code)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a>&gt;</span>&nbsp;<span class="element-name">leaf</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="OperationCode.html" title="class in com.sca4d.core.api.permission">OperationCode</a>&nbsp;code)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>匹配的 ACTION；编码不存在时为空</dd>
+<dd>匹配的叶子；编码不存在时为空</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="actionByCode(java.lang.String)">
-<h3>actionByCode</h3>
+<section class="detail" id="leafByCode(java.lang.String)">
+<h3>leafByCode</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></span>&nbsp;<span class="element-name">actionByCode</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></span>&nbsp;<span class="element-name">leafByCode</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>必须存在且可以直接授权的 ACTION</dd>
+<dd>必须存在且可以直接授权的叶子</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 编码不是合法 Operation 编码，或当前 Catalog 没有该叶子时抛出</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="actionByCode(com.sca4d.core.api.name.code.TreeCode)">
-<h3>actionByCode</h3>
+<section class="detail" id="leafByCode(com.sca4d.core.api.permission.OperationCode)">
+<h3>leafByCode</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></span>&nbsp;<span class="element-name">actionByCode</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;code)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></span>&nbsp;<span class="element-name">leafByCode</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="OperationCode.html" title="class in com.sca4d.core.api.permission">OperationCode</a>&nbsp;code)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>必须存在且可以直接授权的 ACTION</dd>
+<dd>必须存在且可以直接授权的叶子</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 当前 Catalog 没有该叶子时抛出</dd>
 </dl>
 </section>
 </li>

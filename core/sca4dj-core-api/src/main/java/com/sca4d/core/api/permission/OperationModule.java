@@ -8,8 +8,8 @@ public interface OperationModule {
     /**
      * 返回以当前模块唯一编码为根的 Operation 目录。
      *
-     * @return 已经展开完整编码的 MODULE 根节点
+     * @return 已经展开完整编码的根分组，由 {@link OperationNode#root} 创建
      */
     @NotNull
-    OperationNode.Module operationTree();
+    OperationNode.Group operationTree();
 }

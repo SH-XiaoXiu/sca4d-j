@@ -3,6 +3,7 @@ package com.sca4d.core.spring.config;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.i18n.TextLocalizer;
+import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.identity.PrincipalSelectionInterceptor;
 import com.sca4d.core.spring.web.ApiResponseAdvice;
@@ -16,6 +17,7 @@ import com.sca4d.core.spring.web.ListParametersArgumentResolver;
 import com.sca4d.core.spring.web.PageRequestArgumentResolver;
 import com.sca4d.core.spring.web.RequestVersionConditionFilter;
 import com.sca4d.core.spring.web.RequestVersionConditions;
+import com.sca4d.core.spring.web.RequiredOperationDeclarationVerifier;
 import com.sca4d.core.spring.web.ResponseETagContractValidator;
 import com.sca4d.core.spring.web.annotation.IfMatch;
 import com.sca4d.core.spring.web.clientstate.ClientStateFilter;
@@ -117,6 +119,19 @@ class CoreWebMvcConfiguration {
     ResponseETagContractValidator responseETagContractValidator(
             @Qualifier("requestMappingHandlerMapping") RequestMappingHandlerMapping mappings) {
         return new ResponseETagContractValidator(mappings);
+    }
+
+    /**
+     * @param mappings 应用实际注册的 Spring MVC 路由
+     * @param catalog 应用安装的完整 Operation 目录
+     * @return 启动时检查 Controller 权限声明的校验器
+     */
+    @Bean
+    @ConditionalOnBean(RequestMappingHandlerMapping.class)
+    RequiredOperationDeclarationVerifier requiredOperationDeclarationVerifier(
+            @Qualifier("requestMappingHandlerMapping") RequestMappingHandlerMapping mappings,
+            OperationCatalog catalog) {
+        return new RequiredOperationDeclarationVerifier(mappings, catalog);
     }
 
     /**

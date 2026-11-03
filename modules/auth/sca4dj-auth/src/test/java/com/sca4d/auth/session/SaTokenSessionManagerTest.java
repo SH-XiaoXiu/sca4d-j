@@ -50,7 +50,7 @@ class SaTokenSessionManagerTest {
     @Mock
     private RedisSessionTokenIndex tokenIndex;
 
-    private final OperationCatalog operations = new OperationCatalog(List.of());
+    private final OperationCatalog operations = new OperationCatalog(List.of(), List.of());
 
     private SaTokenSessionManager sessions;
 

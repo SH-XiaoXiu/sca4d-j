@@ -131,7 +131,7 @@ IfMatchInterceptor 只负责解析请求头。CallLifecycleAdvisor 只把条件�
 
 调用注解可以直接从方法参数取值。审计在执行结果确定后，还可以从返回值取值。
 
-Core API 的 CallValueResolver 接收表达式和 CallExecution。SPICallValueResolver 继承 `CallValueResolver<Object>`，标记由集成层注入的默认实现。
+Core API 的 `CallValueResolver` 接收 `CallExecution`，由应用读取参数并返回注解需要的值。`SPICallValueResolver` 继承 `CallValueResolver<Object>`，另外提供接收表达式的入口，由集成层实现表达式求值。
 
 Core Spring 通过 SpelCallValueResolver Bean 实现 SpEL。应用提供自己的 SPICallValueResolver Bean 时，替换默认实现。Core API 不依赖 Spring 或 SpEL 类型。
 
@@ -199,6 +199,8 @@ Spring MVC 的异步 Controller 会在初次 `REQUEST` 返回后清理 Call 和�
 
 [HttpCallHandlerInterceptor](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html) 和 [IfMatchInterceptor](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/IfMatchInterceptor.html) 对全部 `ASYNC` 分派跳过请求阶段处理。认证、Principal 选择、权限判断和 `If-Match` 解析，必须由最初的 `REQUEST` 分派完成。
 
+`HttpCallHandlerInterceptor` 还会跳过 Servlet 容器的 `ERROR` 分派（例如转发到 `/error`）。该分派同样发生在没有 Call 的线程上，不会读取 `CallHolder`。
+
 具体应用不能使用 `AsyncContext.dispatch(path)`，把异步分派作为另一个 Controller 的业务入口。
 
 ## 示例
@@ -236,18 +238,22 @@ public class DocumentPublishService {
 命中已保存的幂等结果时，不执行 `markPublished`，CallOutcome 为 `REPLAYED`。
 `WorkspaceMemberSelection` 由应用实现 `PrincipalSelection`。
 
-需要根据多个参数判断归属时，改用 `resolver`，由应用实现 `CallValueResolver`。
+需要业务查询或根据多个参数判断归属时，使用 `resolver`。`AbstractCallValueResolver<T>` 提供 `argument(execution, index, type)` 和 `longArgument(execution, index)`，统一检查参数位置和类型；索引从 0 开始，参数缺失、为空或类型错误会抛出 `IllegalStateException`。
+
+只有一个权限资源时，继承 `SingleResourceResolver` 并实现 `resolveResource`。基类把资源包装为集合，也实现 `AuditTargetResolver`，同一个实现类可以用于 `@RequirePermission(resolver = ...)` 和 `@Audit(targetResolver = ...)`。例如解析器返回一个文档资源引用，权限入口得到包含该引用的集合，审计入口得到该引用本身。
 
 ```java
-public class DocumentOwnerResolver implements CallValueResolver<Collection<Resource>> {
+public class DocumentOwnerResolver extends SingleResourceResolver {
 
     @Override
-    public Collection<Resource> resolve(CallExecution execution) {
-        long documentId = (Long) execution.arguments()[1];
-        return List.of(new Resource.Ref("WORKSPACE/DOCUMENTS", Long.toString(documentId)));
+    protected Resource resolveResource(CallExecution execution) {
+        long documentId = longArgument(execution, 1);
+        return new Resource.Ref("WORKSPACE/DOCUMENTS", Long.toString(documentId));
     }
 }
 ```
+
+审计在业务执行后解析目标。删除操作应覆盖 `resolve(AuditInvocation)`，从参数构造资源引用，避免重新查询已删除实体。创建操作需要返回结果中的新 ID，不能直接套用上述参数示例。涉及多个授权目标的操作，例如同时检查移动前后的目录，应继承 `AbstractCallValueResolver<Collection<Resource>>`，明确返回所有待校验资源。
 
 声明为 `@RequirePermission(resolver = DocumentOwnerResolver.class, action = Action.WRITE_VALUE)`。
 `resolver` 与 `operation`、`resource` 三选一，动态资源必须明确填写 `action`。

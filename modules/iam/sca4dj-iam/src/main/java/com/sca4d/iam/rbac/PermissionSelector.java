@@ -2,7 +2,7 @@ package com.sca4d.iam.rbac;
 
 import static com.sca4d.core.api.name.NameFormat.COLON;
 
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,17 +14,18 @@ import java.util.Objects;
  */
 @SuppressWarnings("ClassCanBeRecord")
 public class PermissionSelector {
+
     /**
-     * 表示 Operation Catalog 当前全部 ACTION 的内部选择符。
+     * 表示 Operation Catalog 当前全部叶子的内部选择符。
      */
     public static final @NotNull PermissionSelector ALL = new PermissionSelector("*");
 
-    private final @Nullable TreeCode code;
+    private final @Nullable OperationCode code;
 
     /**
      * 创建 RBAC 权限选择符。
      *
-     * @param value 具体 ACTION 编码或内部 {@code "*"} 值
+     * @param value 具体叶子编码或内部 {@code "*"} 值
      */
     public PermissionSelector(@NotNull String value) {
         String checked = Objects.requireNonNull(value, "权限选择符不能为空");
@@ -35,13 +36,13 @@ public class PermissionSelector {
         if (checked.isBlank() || checked.length() > 256) {
             throw new IllegalArgumentException("权限选择符必须为 1 到 256 个字符");
         }
-        this.code = TreeCode.ofColon(checked);
+        this.code = new OperationCode(checked);
     }
 
     /**
-     * 创建使用已经规范化 Operation TreeCode 的选择符。
+     * 创建使用已经规范化 {@link OperationCode} 的选择符。
      */
-    public PermissionSelector(@NotNull TreeCode code) {
+    public PermissionSelector(@NotNull OperationCode code) {
         this.code = Objects.requireNonNull(code, "权限选择符不能为空");
     }
 
@@ -52,12 +53,12 @@ public class PermissionSelector {
      */
     @Contract(pure = true)
     public @NotNull String value() {
-        TreeCode selected = code;
+        OperationCode selected = code;
         return selected == null ? "*" : selected.format(COLON);
     }
 
     /**
-     * @return 选择符是否表示当前 Catalog 的全部 ACTION
+     * @return 选择符是否表示当前 Catalog 的全部叶子
      */
     @Contract(pure = true)
     public boolean isAll() {
@@ -65,10 +66,10 @@ public class PermissionSelector {
     }
 
     /**
-     * @return 具体选择符的 Operation TreeCode；全量选择符没有具体编码
+     * @return 具体选择符的 {@link OperationCode}；全量选择符没有具体编码
      */
     @Contract(pure = true)
-    public @NotNull TreeCode code() {
+    public @NotNull OperationCode code() {
         if (code == null) {
             throw new IllegalStateException("全量权限选择符没有具体 Operation 编码");
         }

@@ -19,7 +19,7 @@ public enum RbacErrorCode implements ErrorCode {
     ROLE_IN_USE("2703", ErrorCategory.CONFLICT, "error.rbac.role-in-use"),
     /** 请求试图修改内置角色受保护的状态或关系。 */
     BUILT_IN_ROLE_PROTECTED("2704", ErrorCategory.CONFLICT, "error.rbac.built-in-role-protected"),
-    /** Operation 未声明、重复、不是 ACTION 或为内部选择符。 */
+    /** Operation 未声明、重复、不是叶子或为内部选择符。 */
     OPERATION_INVALID("2705", ErrorCategory.VALIDATION, "error.rbac.operation-invalid"),
     /** Principal 角色重复或包含其他 Repository 的角色。 */
     PRINCIPAL_ROLE_INVALID("2706", ErrorCategory.VALIDATION, "error.rbac.principal-role-invalid");

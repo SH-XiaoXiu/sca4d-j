@@ -88,9 +88,33 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">表示能够被权限判断和审计的固定业务入口（Operation）。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationCatalog.html" title="class in com.sca4d.core.api.permission">OperationCatalog</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationAxes.html" title="class in com.sca4d.core.api.permission">OperationAxes</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">收集业务模块的 Operation 聚合，并提供完整目录、ACTION 索引和子集投影。</div>
+<div class="block">列出 Operation 叶子的标准属性轴 <code>INTENT</code>、<code>NATURE</code>、<code>RISK</code> 和 <code>VISIBILITY</code>，以及它们的常用属性值。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationAxes.Intent.html" title="class in com.sca4d.core.api.permission">OperationAxes.Intent</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block"><a href="OperationAxes.html#INTENT"><code>OperationAxes.INTENT</code></a> 轴的常用值。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationAxes.Nature.html" title="class in com.sca4d.core.api.permission">OperationAxes.Nature</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block"><a href="OperationAxes.html#NATURE"><code>OperationAxes.NATURE</code></a> 轴的常用值。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationAxes.Risk.html" title="class in com.sca4d.core.api.permission">OperationAxes.Risk</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block"><a href="OperationAxes.html#RISK"><code>OperationAxes.RISK</code></a> 轴的通用值；只和某个应用有关的风险值由该应用在 <code>RISK</code> 下自行定义。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationAxes.Visibility.html" title="class in com.sca4d.core.api.permission">OperationAxes.Visibility</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block"><a href="OperationAxes.html#VISIBILITY"><code>OperationAxes.VISIBILITY</code></a> 轴的值。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationCatalog.html" title="class in com.sca4d.core.api.permission">OperationCatalog</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">收集业务模块的 Operation 目录，并提供完整目录、叶子索引和子集投影。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationCode.html" title="class in com.sca4d.core.api.permission">OperationCode</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">表示一个 <a href="Operation.html" title="class in com.sca4d.core.api.permission"><code>Operation</code></a> 的固定编码，例如 <code>ORDERS:INVOICES:READ</code>。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="OperationModule.html" title="interface in com.sca4d.core.api.permission">OperationModule</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
@@ -98,62 +122,59 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationNode.html" title="class in com.sca4d.core.api.permission">OperationNode</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">表示模块、业务资源或可授予 Operation 构成的固定三层目录节点。</div>
+<div class="block">表示 Operation 目录中的一个节点：包含子节点的 <a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission"><code>OperationNode.Group</code></a>，或可以授予 Principal 的 <a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission"><code>OperationNode.Leaf</code></a>。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationNode.ActionDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ActionDeclaration</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">RESOURCE 工厂使用的局部 ACTION 声明，不参与最终目录。</div>
+<div class="block">局部节点声明，由 <a href="OperationNode.html#group(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)"><code>OperationNode.group(TreeCode, int, Declaration...)</code></a>、
+ <a href="OperationNode.html#leaf(com.sca4d.core.api.permission.Action,int,com.sca4d.core.api.name.code.Attribute...)"><code>OperationNode.leaf(Action, int, Attribute...)</code></a> 和 <a href="OperationNode.html#wildcardLeaf(int,com.sca4d.core.api.name.code.Attribute...)"><code>OperationNode.wildcardLeaf(int, Attribute...)</code></a> 创建（另有带 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 的重载）。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">表示一个业务模块及完整 RESOURCE 目录。</div>
+<div class="block">表示目录中的一个分组，直接子节点可以是子分组、叶子或两者混合，深度不限。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">表示目录中可以直接授予 Principal 的固定 Operation。</div>
+<div class="block">表示目录中可以直接授予 Principal 的固定 Operation，授权动作固定为 <a href="Action.html#INVOKE"><code>Action.INVOKE</code></a>。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationNode.Resource.html" title="class in com.sca4d.core.api.permission">OperationNode.Resource</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">表示一个 MODULE 内的业务资源分组及完整 ACTION 目录。</div>
+<div class="block">叶子声明，展开时把动词追加到父分组编码后。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OperationNode.ResourceDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ResourceDeclaration</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">MODULE 工厂使用的局部 RESOURCE 声明，不参与最终目录。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">表示 Operation 目录节点是包含子节点的分组，还是可以授予的叶子。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">
-<div class="block">表示 Operation 目录节点在固定三层结构中的职责。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Permission.html" title="class in com.sca4d.core.api.permission">Permission</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Permission.html" title="class in com.sca4d.core.api.permission">Permission</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">表示对一个资源执行一个动作的完整权限（Permission）。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PermissionAssessment.html" title="class in com.sca4d.core.api.permission">PermissionAssessment</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionAssessment.html" title="class in com.sca4d.core.api.permission">PermissionAssessment</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">按唯一策略认领规则执行权限判断（Permission Assessment）。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">解析 `@RequirePermission`，执行权限判断，并登记必须由 Repository 消费的资源范围。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">表示权限策略作出的允许或拒绝判定（Permission Decision）。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PermissionPolicy.html" title="interface in com.sca4d.core.api.permission">PermissionPolicy</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="PermissionPolicy.html" title="interface in com.sca4d.core.api.permission">PermissionPolicy</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">对自己认领的资源作出权限判定的策略（Permission Policy）。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">表示一次允许判定可以作用的业务资源子集（Resource Scope）。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ResourceScopeRequirement.html" title="class in com.sca4d.core.api.permission">ResourceScopeRequirement</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ResourceScopeRequirement.html" title="class in com.sca4d.core.api.permission">ResourceScopeRequirement</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存一次方法执行必须由 Repository 消费的权限资源范围。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SessionOperationPermissionPolicy.html" title="class in com.sca4d.core.api.permission">SessionOperationPermissionPolicy</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SessionOperationPermissionPolicy.html" title="class in com.sca4d.core.api.permission">SessionOperationPermissionPolicy</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">使用当前调用绑定的 Session 静态资源判断固定操作（Session Operation Permission Policy）。</div>
 </div>
 </div>

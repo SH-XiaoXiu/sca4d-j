@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public enum </span><span class="element-name type-name-label">OperationNodeType</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a>&gt;</span></div>
-<div class="block">表示 Operation 目录节点在固定三层结构中的职责。</div>
+<div class="block">表示 Operation 目录节点是包含子节点的分组，还是可以授予的叶子。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -118,17 +118,13 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="#ACTION" class="member-name-link">ACTION</a></code></div>
+<div class="col-first even-row-color"><code><a href="#GROUP" class="member-name-link">GROUP</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">可以授予 Principal 的具体动作。</div>
+<div class="block">目录中的分组，直接子节点可以是子分组、叶子或两者混合，深度不限。</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#MODULE" class="member-name-link">MODULE</a></code></div>
+<div class="col-first odd-row-color"><code><a href="#LEAF" class="member-name-link">LEAF</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Operation 目录的顶层业务模块。</div>
-</div>
-<div class="col-first even-row-color"><code><a href="#RESOURCE" class="member-name-link">RESOURCE</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">模块内被操作的业务资源分组。</div>
+<div class="block">可以授予 Principal 的具体 Operation，没有子节点。</div>
 </div>
 </div>
 </section>
@@ -181,24 +177,17 @@ the order they are declared.</div>
 <h2>Enum Constant Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="MODULE">
-<h3>MODULE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></span>&nbsp;<span class="element-name">MODULE</span></div>
-<div class="block">Operation 目录的顶层业务模块。</div>
+<section class="detail" id="GROUP">
+<h3>GROUP</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></span>&nbsp;<span class="element-name">GROUP</span></div>
+<div class="block">目录中的分组，直接子节点可以是子分组、叶子或两者混合，深度不限。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="RESOURCE">
-<h3>RESOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></span>&nbsp;<span class="element-name">RESOURCE</span></div>
-<div class="block">模块内被操作的业务资源分组。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="ACTION">
-<h3>ACTION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></span>&nbsp;<span class="element-name">ACTION</span></div>
-<div class="block">可以授予 Principal 的具体动作。</div>
+<section class="detail" id="LEAF">
+<h3>LEAF</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></span>&nbsp;<span class="element-name">LEAF</span></div>
+<div class="block">可以授予 Principal 的具体 Operation，没有子节点。</div>
 </section>
 </li>
 </ul>
@@ -248,7 +237,7 @@ not permitted.)</div>
 <div class="block">返回当前节点是否可以授予 Principal。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>仅 ACTION 返回 <code>true</code></dd>
+<dd>仅 LEAF 返回 <code>true</code></dd>
 </dl>
 </section>
 </li>

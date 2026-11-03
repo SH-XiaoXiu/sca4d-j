@@ -1036,8 +1036,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Property.html#displayNameText()" class="member-name-link">displayNameText()</a> - Method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotThingModelView.Property.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Property</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#domains()" class="member-name-link">domains()</a> - Method in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
-<dt><a href="com/sca4d/app/server/iot/IotOperations.html#domains()" class="member-name-link">domains()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceDataController.html#downlinks(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">downlinks(long, PageRequest)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceDataController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceDataController</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -1653,7 +1651,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotOpenApiController.html#get(long)" class="member-name-link">get(long)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotOpenApiController.html" title="class in com.sca4d.app.server.controllers.iot">IotOpenApiController</a></dt>
 <dd>
-<div class="block">读取指定 IoT Device 的公开资料、连接标识和启停状态。</div>
+<div class="block">按 Device 标识读取公开资料、连接标识和启停状态。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotProductController.html#get(long)" class="member-name-link">get(long)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotProductController.html" title="class in com.sca4d.app.server.controllers.iot">IotProductController</a></dt>
 <dd>&nbsp;</dd>
@@ -2291,7 +2289,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/OperationCatalogView.html#getItems()" class="member-name-link">getItems()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/OperationCatalogView.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView</a></dt>
 <dd>
-<div class="block">返回可授予的扁平 ACTION 列表。</div>
+<div class="block">返回可授予的扁平叶子列表。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/view/FederatedProviderSettingsView.html#getJwksEndpoint()" class="member-name-link">getJwksEndpoint()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/FederatedProviderSettingsView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderSettingsView</a></dt>
 <dd>&nbsp;</dd>
@@ -2925,7 +2923,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/OperationCatalogView.html#getTotal()" class="member-name-link">getTotal()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/OperationCatalogView.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView</a></dt>
 <dd>
-<div class="block">返回可授予 ACTION 总数。</div>
+<div class="block">返回可授予叶子总数。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/view/PasskeyCredentialView.html#getTransports()" class="member-name-link">getTransports()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a></dt>
 <dd>&nbsp;</dd>
@@ -3448,7 +3446,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotOpenApiController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers.iot">IotOpenApiController</a> - Class in <a href="com/sca4d/app/server/controllers/iot/package-summary.html">com.sca4d.app.server.controllers.iot</a></dt>
 <dd>
-<div class="block">声明具体应用对第三方 OpenAPI Client 公开的 IoT Tool 路由。</div>
+<div class="block">提供具体应用向第三方程序公开的 IoT Tool。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotOpenApiController.html#%3Cinit%3E(com.sca4d.app.server.service.IotApplicationService)" class="member-name-link">IotOpenApiController(IotApplicationService)</a> - Constructor for class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotOpenApiController.html" title="class in com.sca4d.app.server.controllers.iot">IotOpenApiController</a></dt>
 <dd>
@@ -4058,11 +4056,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/system/view/OperationCatalogView.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">OperationCatalogView</a> - Class in <a href="com/sca4d/app/server/system/view/package-summary.html">com.sca4d.app.server.system.view</a></dt>
 <dd>
-<div class="block">返回完整示例 App 的 Operation 目录树、扁平 ACTION 列表和总数。</div>
+<div class="block">返回完整示例 App 的 Operation 目录树、扁平叶子列表和总数。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/system/view/OperationCatalogView.Node.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">OperationCatalogView.Node</a> - Class in <a href="com/sca4d/app/server/system/view/package-summary.html">com.sca4d.app.server.system.view</a></dt>
 <dd>
-<div class="block">Operation 目录中的树节点或扁平 ACTION。</div>
+<div class="block">Operation 目录中的树节点或扁平叶子。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/OperationController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">OperationController</a> - Class in <a href="com/sca4d/app/server/controllers/package-summary.html">com.sca4d.app.server.controllers</a></dt>
 <dd>
@@ -5051,11 +5049,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/Sca4dOpenApiConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server">Sca4dOpenApiConfiguration</a> - Class in <a href="com/sca4d/app/server/package-summary.html">com.sca4d.app.server</a></dt>
 <dd>
-<div class="block">使用完整示例自己的名称、版本和作者声明 OpenAPI 文档。</div>
+<div class="block">为具体应用的 OpenAPI 文档设置名称、版本和联系人。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/Sca4dOpenApiConfiguration.html#%3Cinit%3E()" class="member-name-link">Sca4dOpenApiConfiguration()</a> - Constructor for class com.sca4d.app.server.<a href="com/sca4d/app/server/Sca4dOpenApiConfiguration.html" title="class in com.sca4d.app.server">Sca4dOpenApiConfiguration</a></dt>
 <dd>
-<div class="block">创建完整示例的 OpenAPI 配置。</div>
+<div class="block">创建具体应用的 OpenAPI 配置。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a> - Class in <a href="com/sca4d/app/server/plugin/package-summary.html">com.sca4d.app.server.plugin</a></dt>
 <dd>

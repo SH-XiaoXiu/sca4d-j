@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.List;
 import java.util.Objects;
 
-/** 保存角色以及已经展开为具体 ACTION 的 Operation。 */
+/** 保存角色以及已经展开为具体叶子的 Operation。 */
 @SuppressWarnings("ClassCanBeRecord")
 public class RolePermissions {
 
@@ -20,7 +20,7 @@ public class RolePermissions {
      * 创建角色 Operation 结果。
      *
      * @param role 当前角色
-     * @param operations 已展开的具体 ACTION
+     * @param operations 已展开的具体叶子
      */
     public RolePermissions(@NotNull Role role, @NotNull List<@NotNull Operation> operations) {
         this.role = Objects.requireNonNull(role, "角色不能为空");
@@ -38,7 +38,7 @@ public class RolePermissions {
     }
 
     /**
-     * 展开后的具体 ACTION。
+     * 展开后的具体叶子。
      *
      * @return 不包含内部选择符的不可修改列表
      */

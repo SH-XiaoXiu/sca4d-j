@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PermissionSelections</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">校验可由管理 API 保存的 ACTION 编码，并把内部全量选择符展开为具体 <code>Operation</code>。</div>
+<div class="block">校验可由管理 API 保存的叶子编码，并把内部全量选择符展开为具体 <code>Operation</code>。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final @NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a></code></div>
 <div class="col-second even-row-color"><code><a href="#ALL" class="member-name-link">ALL</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">数据库内部表示 Catalog 当前全部 ACTION 的选择符。</div>
+<div class="block">数据库内部表示 Catalog 当前全部叶子的选择符。</div>
 </div>
 </div>
 </section>
@@ -158,17 +158,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateGrantable(java.util.Collection)" class="member-name-link">validateGrantable</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;operationCodes)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">校验管理 API 提交的 ACTION 编码。</div>
+<div class="block">校验管理 API 提交的叶子编码。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateGrantableCodes(java.util.Collection)" class="member-name-link">validateGrantableCodes</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateGrantableCodes(java.util.Collection)" class="member-name-link">validateGrantableCodes</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.OperationCode&gt;&nbsp;operationCodes)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">校验已经在字符串边界解析完成的 Operation TreeCode。</div>
+<div class="block">校验已经在字符串边界解析完成的 <code>OperationCode</code>。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateGrantableOperations(java.util.Collection)" class="member-name-link">validateGrantableOperations</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.Operation&gt;&nbsp;operations)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">校验已经由代码层保存的 Operation，不把 TreeCode 转回字符串。</div>
+<div class="block">校验代码中直接给出的 <code>Operation</code>，不经过字符串解析。</div>
 </div>
 </div>
 </div>
@@ -192,7 +192,7 @@ loadScripts(document, 'script');</script>
 <h3>ALL</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a></span>&nbsp;<span class="element-name">ALL</span></div>
-<div class="block">数据库内部表示 Catalog 当前全部 ACTION 的选择符。</div>
+<div class="block">数据库内部表示 Catalog 当前全部叶子的选择符。</div>
 </section>
 </li>
 </ul>
@@ -273,14 +273,14 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</span>&nbsp;<span class="element-name">validateGrantable</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;operationCodes)</span></div>
-<div class="block">校验管理 API 提交的 ACTION 编码。</div>
+<div class="block">校验管理 API 提交的叶子编码。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>operationCodes</code> - 待保存编码</dd>
 <dt>Returns:</dt>
 <dd>保持提交顺序的不可变编码列表</dd>
 <dt>Throws:</dt>
-<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 编码重复、未声明或为内部全量选择符时抛出</dd>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 文本不是合法 <code>OperationCode</code>（含内部全量选择符 <code>"*"</code>）、编码重复或未声明时抛出</dd>
 </dl>
 </section>
 </li>
@@ -290,8 +290,17 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</span>&nbsp;<span class="element-name">validateGrantableCodes</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</span></div>
-<div class="block">校验已经在字符串边界解析完成的 Operation TreeCode。</div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.OperationCode&gt;&nbsp;operationCodes)</span></div>
+<div class="block">校验已经在字符串边界解析完成的 <code>OperationCode</code>。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operationCodes</code> - 待保存的叶子编码，不能含 <code>null</code></dd>
+<dt>Returns:</dt>
+<dd>保持提交顺序、去重后的选择符列表</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 编码重复或不是本领域允许的叶子时抛出，错误码为 <a href="RbacErrorCode.html#OPERATION_INVALID"><code>RbacErrorCode.OPERATION_INVALID</code></a></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一编码为 <code>null</code> 时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -301,7 +310,16 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</span>&nbsp;<span class="element-name">validateGrantableOperations</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.Operation&gt;&nbsp;operations)</span></div>
-<div class="block">校验已经由代码层保存的 Operation，不把 TreeCode 转回字符串。</div>
+<div class="block">校验代码中直接给出的 <code>Operation</code>，不经过字符串解析。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>operations</code> - 待保存的具体 Operation，不能含 <code>null</code></dd>
+<dt>Returns:</dt>
+<dd>保持提交顺序、去重后的选择符列表</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - Operation 重复或不是本领域允许的叶子时抛出，错误码为 <a href="RbacErrorCode.html#OPERATION_INVALID"><code>RbacErrorCode.OPERATION_INVALID</code></a></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一 Operation 为 <code>null</code> 时抛出</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -318,7 +336,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>去重并按编码排序的具体 Operation；结果永远不包含 <code>Operation("*")</code></dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 数据库包含 Catalog 未声明的具体 ACTION 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 数据库包含 Catalog 未声明的具体叶子时抛出</dd>
 </dl>
 </section>
 </li>

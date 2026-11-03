@@ -119,6 +119,11 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
+<li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/AbstractCallValueResolver.html" class="type-name-link" title="class in com.sca4d.core.api.call">AbstractCallValueResolver</a>&lt;T&gt; (implements com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;T&gt;)
+<ul>
+<li class="circle">com.sca4d.core.api.resource.<a href="com/sca4d/core/api/resource/SingleResourceResolver.html" class="type-name-link" title="class in com.sca4d.core.api.resource">SingleResourceResolver</a> (implements com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditTargetResolver.html" title="interface in com.sca4d.core.api.audit">AuditTargetResolver</a>)</li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/Account.html" class="type-name-link" title="class in com.sca4d.core.api.identity">Account</a> (implements com.sca4d.core.api.resource.<a href="com/sca4d/core/api/resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>)</li>
 <li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Action.html" class="type-name-link" title="class in com.sca4d.core.api.permission">Action</a></li>
 <li class="circle">com.sca4d.core.api.persistence.<a href="com/sca4d/core/api/persistence/AffectedRowCounts.html" class="type-name-link" title="class in com.sca4d.core.api.persistence">AffectedRowCounts</a></li>
@@ -129,6 +134,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiTarget.html" class="type-name-link" title="class in com.sca4d.core.api.plugin">ApiTarget</a></li>
 <li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" class="type-name-link" title="class in com.sca4d.core.api.version">ApplicationVersion</a></li>
 <li class="circle">com.sca4d.core.api.isolation.<a href="com/sca4d/core/api/isolation/AppName.html" class="type-name-link" title="class in com.sca4d.core.api.isolation">AppName</a></li>
+<li class="circle">com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/AttributeAxis.html" class="type-name-link" title="class in com.sca4d.core.api.name.code">AttributeAxis</a></li>
 <li class="circle">com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditActor.html" class="type-name-link" title="class in com.sca4d.core.api.audit">AuditActor</a></li>
 <li class="circle">com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a> (implements com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a>)</li>
 <li class="circle">com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditInvocation.html" class="type-name-link" title="class in com.sca4d.core.api.audit">AuditInvocation</a></li>
@@ -178,6 +184,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.dictionary.<a href="com/sca4d/core/api/dictionary/DictionaryOption.html" class="type-name-link" title="class in com.sca4d.core.api.dictionary">DictionaryOption</a></li>
 <li class="circle">com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/DispatchPolicy.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">DispatchPolicy</a></li>
 <li class="circle">com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/DispatchReceipt.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">DispatchReceipt</a></li>
+<li class="circle">com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Display.html" class="type-name-link" title="class in com.sca4d.core.api.name">Display</a></li>
 <li class="circle">com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" class="type-name-link" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;T,<wbr>R&gt;</li>
 <li class="circle">com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" class="type-name-link" title="class in com.sca4d.core.api.condition">DnfExpression</a>&lt;T,<wbr>R&gt;</li>
 <li class="circle">com.sca4d.core.api.utils.<a href="com/sca4d/core/api/utils/DurationUtils.html" class="type-name-link" title="class in com.sca4d.core.api.utils">DurationUtils</a></li>
@@ -261,9 +268,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/AccountIdentifierType.html" class="type-name-link" title="class in com.sca4d.core.api.identity">AccountIdentifierType</a></li>
 <li class="circle">com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/TreeCode.html" class="type-name-link" title="class in com.sca4d.core.api.name.code">TreeCode</a>
 <ul>
+<li class="circle">com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/Attribute.html" class="type-name-link" title="class in com.sca4d.core.api.name.code">Attribute</a></li>
 <li class="circle">com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationActionCode.html" class="type-name-link" title="class in com.sca4d.core.api.authentication">AuthenticationActionCode</a></li>
 <li class="circle">com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayCallbackCode.html" class="type-name-link" title="class in com.sca4d.core.api.gateway">GatewayCallbackCode</a></li>
 <li class="circle">com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobKey.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobKey</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationCode.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationCode</a></li>
 <li class="circle">com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ScheduleKey.html" class="type-name-link" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a></li>
 </ul>
 </li>
@@ -293,16 +302,23 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Operation.html" class="type-name-link" title="class in com.sca4d.core.api.permission">Operation</a> (implements com.sca4d.core.api.resource.<a href="com/sca4d/core/api/resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>)</li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationAxes.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationAxes</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationAxes.Intent.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationAxes.Intent</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationAxes.Nature.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationAxes.Nature</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationAxes.Risk.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationAxes.Risk</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationAxes.Visibility.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationAxes.Visibility</a></li>
 <li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationCatalog.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationCatalog</a></li>
 <li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode</a>
 <ul>
-<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.Module.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Module</a></li>
-<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.OperationAction.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></li>
-<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.Resource.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Resource</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.Group.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.Leaf.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></li>
 </ul>
 </li>
-<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.ActionDeclaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.ActionDeclaration</a></li>
-<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.ResourceDeclaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.ResourceDeclaration</a></li>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.Declaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a>
+<ul>
+<li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.LeafDeclaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.api.query.<a href="com/sca4d/core/api/query/Page.html" class="type-name-link" title="class in com.sca4d.core.api.query">Page</a>&lt;T&gt;</li>
 <li class="circle">com.sca4d.core.api.query.<a href="com/sca4d/core/api/query/PageRequest.html" class="type-name-link" title="class in com.sca4d.core.api.query">PageRequest</a></li>
 <li class="circle">com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/ParallelResults.html" class="type-name-link" title="class in com.sca4d.core.api.job">ParallelResults</a>&lt;L,<wbr>R&gt;</li>
@@ -610,6 +626,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
 <ul>
 <li class="circle">com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiKind.html" class="type-name-link" title="enum class in com.sca4d.core.api.plugin">ApiKind</a></li>
+<li class="circle">com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/AttributeConstraint.html" class="type-name-link" title="enum class in com.sca4d.core.api.name.code">AttributeConstraint</a></li>
 <li class="circle">com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Audit.Mode.html" class="type-name-link" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></li>
 <li class="circle">com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditResult.html" class="type-name-link" title="enum class in com.sca4d.core.api.audit">AuditResult</a> (implements com.sca4d.core.api.enums.<a href="com/sca4d/core/api/enums/BaseEnum.html" title="interface in com.sca4d.core.api.enums">BaseEnum</a>)</li>
 <li class="circle">com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationFactorKind.html" class="type-name-link" title="enum class in com.sca4d.core.api.authentication">AuthenticationFactorKind</a></li>

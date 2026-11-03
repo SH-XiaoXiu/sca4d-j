@@ -10,6 +10,7 @@ import com.sca4d.core.api.i18n.LocalizedFieldsSchema;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.iam.base.PlatformAccountDirectoryRepository;
@@ -59,7 +60,7 @@ public class PlatformRbacService {
     private static final int MAX_ROLE_CODE_LENGTH = 128;
 
     /**
-     * 拥有 Operation Catalog 中全部 ACTION 的内置角色编码。
+     * 拥有 Operation Catalog 中全部叶子的内置角色编码。
      */
     public static final @NotNull String ROOT = "ROOT";
 
@@ -148,18 +149,18 @@ public class PlatformRbacService {
     }
 
     /**
-     * 创建自定义 Platform 角色并保存初始 ACTION。
+     * 创建自定义 Platform 角色并保存初始叶子。
      *
      * @param code           唯一且创建后不可修改的角色编码
      * @param i18n           角色完整多语言字段
-     * @param operationCodes Operation Catalog 中声明的 ACTION 编码
+     * @param operationCodes Operation Catalog 中声明的叶子编码
      * @return 新建角色及具体 Operation
      */
     @CheckReturnValue
     public @NotNull PlatformRoleDetails createRole(
             @NotNull String code,
             @NotNull LocalizedFields i18n,
-            @NotNull Collection<@NotNull TreeCode> operationCodes) {
+            @NotNull Collection<@NotNull OperationCode> operationCodes) {
         String checkedCode = validateRoleCode(code);
         LocalizedFields checkedI18n = validateI18n(i18n);
         List<PermissionSelector> selectors = permissionSelections
@@ -239,16 +240,16 @@ public class PlatformRbacService {
     }
 
     /**
-     * 原子替换 Platform 角色的具体 ACTION。
+     * 原子替换 Platform 角色的具体叶子。
      *
      * @param roleId         角色标识
-     * @param operationCodes Operation Catalog 中声明的 ACTION 编码
+     * @param operationCodes Operation Catalog 中声明的叶子编码
      * @return 修改后的角色及具体 Operation
      */
     @CheckReturnValue
     public @NotNull RolePermissions replaceRolePermissions(
             @NotNull Long roleId,
-            @NotNull Collection<@NotNull TreeCode> operationCodes) {
+            @NotNull Collection<@NotNull OperationCode> operationCodes) {
         return write(
                 roleLock(roleId),
                 () -> rbac.replaceRolePermissions(
@@ -397,6 +398,30 @@ public class PlatformRbacService {
     }
 
     /**
+     * 反查通过 Platform 启用角色获得全部指定 Operation 的 Principal；没有可枚举的候选时使用。
+     *
+     * @param operationCodes 需要同时获得的 Operation 常量；至少包含一个编码
+     * @return 按标识排序的 Principal
+     */
+    @CheckReturnValue
+    public @NotNull @Unmodifiable Set<@NotNull Long> findPrincipalIdsHoldingAll(
+            @NotNull OperationCode... operationCodes) {
+        return rbac.findPrincipalIdsHoldingAll(PlatformRbacRepository.PLATFORM, operationCodes);
+    }
+
+    /**
+     * 反查通过 Platform 启用角色获得任一指定 Operation 的 Principal；没有可枚举的候选时使用。
+     *
+     * @param operationCodes 至少获得其中一个的 Operation 常量；至少包含一个编码
+     * @return 按标识排序的 Principal
+     */
+    @CheckReturnValue
+    public @NotNull @Unmodifiable Set<@NotNull Long> findPrincipalIdsHoldingAny(
+            @NotNull OperationCode... operationCodes) {
+        return rbac.findPrincipalIdsHoldingAny(PlatformRbacRepository.PLATFORM, operationCodes);
+    }
+
+    /**
      * 确保 {@link #ROOT} 和 {@link #DEFAULT} 存在。
      *
      * <p>{@code ROOT} 固定保存 {@code "*"}，{@code DEFAULT} 只在首次创建时使用空 Operation 集合。
@@ -476,7 +501,7 @@ public class PlatformRbacService {
      * 返回同一 Platform 角色全部修改操作共用的分布式锁键。
      */
     private static @NotNull LockKey roleLock(@NotNull Long roleId) {
-        return new LockKey(TreeCode.of("IAM:RBAC:ROLE"), Objects.requireNonNull(roleId, "角色标识不能为空").longValue());
+        return new LockKey(TreeCode.of("IAM:RBAC:ROLE"), Objects.requireNonNull(roleId, "角色标识不能为空"));
     }
 
     /**
@@ -485,7 +510,7 @@ public class PlatformRbacService {
     private static @NotNull LockKey principalLock(@NotNull Long principalId) {
         return new LockKey(
                 TreeCode.of("IAM:RBAC:PRINCIPAL"),
-                Objects.requireNonNull(principalId, "PlatformPrincipal 标识不能为空").longValue());
+                Objects.requireNonNull(principalId, "PlatformPrincipal 标识不能为空"));
     }
 
     /**

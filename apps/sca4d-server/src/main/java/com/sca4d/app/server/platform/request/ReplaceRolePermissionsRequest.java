@@ -1,6 +1,6 @@
 package com.sca4d.app.server.platform.request;
 
-import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.spring.validation.Req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -33,8 +33,8 @@ public class ReplaceRolePermissionsRequest {
     }
 
     /** @return 已校验并规范化的新 ACTION 编码 */
-    public @NotNull @Unmodifiable List<@NotNull TreeCode> getPermissionCodeTrees() {
-        return getPermissionCodes().stream().map(TreeCode::ofColon).toList();
+    public @NotNull @Unmodifiable List<@NotNull OperationCode> getPermissionCodeTrees() {
+        return getPermissionCodes().stream().map(OperationCode::new).toList();
     }
 
     /**

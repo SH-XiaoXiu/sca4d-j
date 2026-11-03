@@ -75,7 +75,7 @@ public interface PlatformRbacMapper {
      * 查询 Platform 角色保存的 Operation 选择符。
      *
      * @param roleId 角色标识
-     * @return 按编码排序的具体 ACTION 编码或内部 {@code "*"} 选择符
+     * @return 按编码排序的具体叶子编码或内部 {@code "*"} 选择符
      */
     @CheckReturnValue
     @NotNull
@@ -94,7 +94,7 @@ public interface PlatformRbacMapper {
      * 批量新增角色 Operation 选择符。
      *
      * @param roleId 角色标识
-     * @param permissionSelectors 具体 ACTION 编码或内部 {@code "*"} 选择符
+     * @param permissionSelectors 具体叶子编码或内部 {@code "*"} 选择符
      * @return 新增行数
      */
     int insertPlatformPermissionSelectors(

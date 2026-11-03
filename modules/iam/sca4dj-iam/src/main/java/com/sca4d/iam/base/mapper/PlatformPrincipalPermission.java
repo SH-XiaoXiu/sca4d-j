@@ -17,7 +17,7 @@ public class PlatformPrincipalPermission {
      * 创建 Principal Operation 查询结果。
      *
      * @param principalId PlatformPrincipal 标识
-     * @param permissionSelector 具体 ACTION 编码或内部 {@code "*"} 选择符
+     * @param permissionSelector 具体叶子编码或内部 {@code "*"} 选择符
      */
     public PlatformPrincipalPermission(
             @NotNull Long principalId,
@@ -39,7 +39,7 @@ public class PlatformPrincipalPermission {
     /**
      * 角色保存的 Operation 选择符。
      *
-     * @return 具体 ACTION 编码或内部 {@code "*"} 选择符
+     * @return 具体叶子编码或内部 {@code "*"} 选择符
      */
     @Contract(pure = true)
     public @NotNull String permissionSelector() {

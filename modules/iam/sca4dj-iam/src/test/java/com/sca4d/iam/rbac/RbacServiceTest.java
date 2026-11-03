@@ -16,10 +16,13 @@ import static org.mockito.Mockito.when;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.name.Display;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationCode;
+import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.iam.base.rbac.PlatformRbacRepository;
 import com.sca4d.iam.base.rbac.PlatformRbacService;
@@ -82,37 +85,37 @@ class RbacServiceTest {
             });
             return new RbacPermissionCacheLookup(Map.of(), revisions);
         });
-        RbacOperationModule operationModule = new RbacOperationModule() {
+        OperationModule operationModule = new OperationModule() {
             @Override
-            public OperationNode.@NotNull Module operationTree() {
-                return OperationNode.module(
+            public OperationNode.@NotNull Group operationTree() {
+                return OperationNode.root(
                         TreeCode.ofSegment("TEST"),
-                        "operation.test",
+                        Display.of("operation.test"),
                         100,
-                        OperationNode.resource(
+                        OperationNode.group(
                                 TreeCode.ofSegment("ITEMS"),
-                                "operation.test.items",
+                                Display.of("operation.test.items"),
                                 100,
-                                OperationNode.action(
-                                        Action.READ.code(),
-                                        "operation.test.items.read",
-                                        100),
-                                OperationNode.action(
-                                        Action.MANAGE.code(),
-                                        "operation.test.items.manage",
-                                        200)));
+                                OperationNode.leaf(
+                                        Action.READ,
+                                        Display.of("operation.test.items.read"),
+                                        100,
+                                        RbacGrantable.of(PLATFORM_DOMAIN)),
+                                OperationNode.leaf(
+                                        Action.MANAGE,
+                                        Display.of("operation.test.items.manage"),
+                                        200,
+                                        RbacGrantable.of(PLATFORM_DOMAIN))));
             }
 
-            @Override
-            public @NotNull Set<@NotNull RbacDomain> domains() {
-                return Set.of(PLATFORM_DOMAIN);
-            }
         };
-        OperationCatalog operationCatalog = new OperationCatalog(List.of(operationModule));
+        OperationCatalog operationCatalog = new OperationCatalog(
+                List.of(operationModule),
+                List.of(RbacGrantable.GRANTABLE));
         rbac = new RbacService(
                 new RbacRepositoryRegistry(List.of(repository)),
                 new RbacSessionInvalidationRegistry(List.of(invalidation)),
-                new PermissionSelectionRegistry(operationCatalog, List.of(operationModule)),
+                new PermissionSelectionRegistry(operationCatalog),
                 permissionCache,
                 () -> Id.of(30L));
     }
@@ -125,17 +128,6 @@ class RbacServiceTest {
 
         assertThat(rbac.findRoles(RbacScope.global(new RbacDomain("platform"))))
                 .containsExactly(role);
-    }
-
-    @Test
-    @DisplayName("Rejects Internal Selector From Role Management API")
-    void rejectsInternalSelectorFromRoleManagementApi() {
-        assertBusinessFailure(
-                () -> rbac.createRole(PLATFORM, "ADMIN", List.of(TreeCode.ofSegment("*"))),
-                RbacErrorCode.OPERATION_INVALID);
-
-        verify(repository, never())
-                .createRole(any(), any(), anyString(), any(), anyBoolean(), anyCollection());
     }
 
     @Test
@@ -234,16 +226,59 @@ class RbacServiceTest {
                 rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID))
-                                .allOf(TreeCode.ofColon("TEST:ITEMS:READ"), TreeCode.ofColon("TEST:ITEMS:MANAGE"))
+                                .allOf(new OperationCode("TEST:ITEMS:READ"), new OperationCode("TEST:ITEMS:MANAGE"))
                                 .build()))
                 .containsExactly(PRINCIPAL_ID);
         assertThat(
                 rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID))
-                                .anyOf(TreeCode.ofColon("TEST:ITEMS:MANAGE"))
+                                .anyOf(new OperationCode("TEST:ITEMS:MANAGE"))
                                 .build()))
                 .containsExactly(PRINCIPAL_ID);
+    }
+
+    @Test
+    @DisplayName("Finds Principals Holding Operations Through Active Roles Without Candidates")
+    void findsPrincipalsHoldingOperationsThroughActiveRoles() {
+        Role reader = role(31L, "READER", false);
+        Role manager = role(32L, "MANAGER", false);
+        Role disabled = new Role(
+                33L,
+                PLATFORM,
+                "DISABLED_MANAGER",
+                RoleStatus.DISABLED,
+                false,
+                Instant.parse("2026-07-23T00:00:00Z"),
+                Instant.parse("2026-07-23T00:00:00Z"),
+                reader.version());
+        when(repository.findRoles(PLATFORM)).thenReturn(List.of(reader, manager, disabled));
+        when(repository.findPermissionSelectors(PLATFORM, 31L))
+                .thenReturn(List.of(new PermissionSelector("TEST:ITEMS:READ")));
+        when(repository.findPermissionSelectors(PLATFORM, 32L))
+                .thenReturn(List.of(new PermissionSelector("TEST:ITEMS:MANAGE")));
+        when(repository.findRolePrincipalIds(PLATFORM, 31L)).thenReturn(List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID));
+        when(repository.findRolePrincipalIds(PLATFORM, 32L)).thenReturn(List.of(PRINCIPAL_ID));
+
+        OperationCode read = new OperationCode("TEST:ITEMS:READ");
+        OperationCode manage = new OperationCode("TEST:ITEMS:MANAGE");
+        // 两个角色贡献的 Operation 在同一 Principal 上合并后才满足 allOf。
+        assertThat(rbac.findPrincipalIdsHoldingAll(PLATFORM, read, manage)).containsExactly(PRINCIPAL_ID);
+        assertThat(rbac.findPrincipalIdsHoldingAny(PLATFORM, read))
+                .containsExactly(PRINCIPAL_ID, SECOND_PRINCIPAL_ID);
+        // 停用角色不读取使用者，也不贡献 Operation。
+        verify(repository, never()).findRolePrincipalIds(PLATFORM, 33L);
+        verify(repository, never()).findPermissionSelectors(PLATFORM, 33L);
+    }
+
+    @Test
+    @DisplayName("Rejects Holder Query Operations Outside The Scope Domain")
+    void rejectsHolderQueryOperationsOutsideTheScopeDomain() {
+        assertBusinessFailure(
+                () -> rbac.findPrincipalIdsHoldingAll(PLATFORM, new OperationCode("OTHER:ITEMS:READ")),
+                RbacErrorCode.OPERATION_INVALID);
+
+        verify(repository, never()).findRoles(any(RbacScope.class));
     }
 
     @Test
@@ -253,7 +288,7 @@ class RbacServiceTest {
                 () -> rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID))
-                                .allOf(TreeCode.ofColon("OTHER:ITEMS:READ"))
+                                .allOf(new OperationCode("OTHER:ITEMS:READ"))
                                 .build()),
                 RbacErrorCode.OPERATION_INVALID);
 
@@ -322,7 +357,7 @@ class RbacServiceTest {
                 () -> rbac.replaceRolePermissions(
                         PLATFORM,
                         ROOT_ID,
-                        List.of(TreeCode.ofColon("TEST:ITEMS:READ"))),
+                        List.of(new OperationCode("TEST:ITEMS:READ"))),
                 RbacErrorCode.BUILT_IN_ROLE_PROTECTED);
     }
 
@@ -345,7 +380,7 @@ class RbacServiceTest {
                 rbac.replaceRolePermissions(
                         PLATFORM,
                         DEFAULT_ID,
-                        List.of(TreeCode.ofColon("TEST:ITEMS:READ")))
+                        List.of(new OperationCode("TEST:ITEMS:READ")))
                         .operations())
                 .extracting(operation -> operation.code().format(COLON))
                 .containsExactly("TEST:ITEMS:READ");

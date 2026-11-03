@@ -13,6 +13,7 @@ import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
@@ -177,6 +178,11 @@ public class CoreMyBatisAutoConfiguration {
                             TreeCode.class,
                             JdbcType.VARCHAR,
                             new TreeCodeTypeHandler());
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            OperationCode.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(OperationCode::new, value -> value.format(COLON)));
             configuration.getTypeHandlerRegistry()
                     .register(
                             Name.class,

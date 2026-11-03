@@ -46,7 +46,7 @@ class CallTest {
         Call parent = new Call("parent", STARTED_AT);
         parent.authenticate(session(identity, Set.of()));
         parent.selectPrincipal(identity.principal);
-        Permission read = new Permission(new Operation(TreeCode.of("TEST/READ")), Action.INVOKE);
+        Permission read = new Permission(new Operation("TEST:READ"), Action.INVOKE);
         parent.recordPermissionDecision(read, PermissionDecision.allow());
         DataKey<String> task = DataKey.of("task", String.class);
         Call child = parent.fork("child", STARTED_AT, DataValues.builder().put(task, "work").build(), read.resource());

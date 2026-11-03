@@ -190,7 +190,7 @@ Set<Long> active = identities.findPrincipalIds(
                 .build());
 ```
 
-需要继续按角色授权筛选时，把 IAM 查询结果交给 [PrincipalGrantQuery](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/rbac/PrincipalGrantQuery.html)。Operation 使用各模块声明的 `TreeCode` 常量，例如 `PlatformOperations.ROLES_READ`。`allOf(...)` 要求同时拥有全部 Operation，`anyOf(...)` 要求至少拥有其中一个，两者不能同时声明。`RbacService.findPrincipalIds(scope, query)` 在指定的 RbacScope 中查询，并拒绝不属于目标 RBAC 领域目录的编码。
+需要继续按角色授权筛选时，把 IAM 查询结果交给 [PrincipalGrantQuery](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/rbac/PrincipalGrantQuery.html)。Operation 使用各模块声明的 `OperationCode` 常量，例如 `PlatformOperations.ROLES_READ`。`allOf(...)` 要求同时拥有全部 Operation，`anyOf(...)` 要求至少拥有其中一个，两者不能同时声明。`RbacService.findPrincipalIds(scope, query)` 在指定的 RbacScope 中查询，并拒绝不属于目标 RBAC 领域目录的编码。
 
 ```java
 Set<Long> eligible = rbacService.findPrincipalIds(
@@ -201,6 +201,8 @@ Set<Long> eligible = rbacService.findPrincipalIds(
 ```
 
 这两个 Query 只接受模块公开的领域条件，不接受表名、列名、任意谓词或跨模块 JOIN。查询必须从明确的 Principal ID 集合开始。
+
+业务没有可枚举的候选集合、需要先知道“谁拥有某组授权”时，使用 `RbacService.findPrincipalIdsHoldingAll(scope, codes...)` 或 `findPrincipalIdsHoldingAny(scope, codes...)`。它们只读取启用角色及其使用者，多个角色贡献的 Operation 在同一 Principal 上合并后再判断；不读取授权缓存。得到的 Principal 仍要交给业务模块读取资料，并按需用 `IdentityService` 过滤状态。
 
 需要搜索业务资料或分页读取完整列表时，由拥有该资料的业务模块查询自己的表，再把候选 ID 交给 IAM 和 RBAC 筛选。
 
@@ -339,7 +341,7 @@ IAM 的扩展点由 `IamAutoConfiguration` 以 `List<T>` 方式收集。应用�
 | `AccountIdentifierNormalizer` | `IdentityService` 构造时收集 `List<AccountIdentifierNormalizer>` | 同一 `type()` 出现多个实现时抛出 `IllegalStateException` |
 | `PrincipalCodec` | IAM 配置收集 `List<PrincipalCodec<?>>` | `type()` 与 `valueType()` 不能重复 |
 | `SessionIdentityLoader`、`PrincipalLoader` | Auth 在建立 Session 时遍历全部实现 | 匹配数量不符合上文规则时，SessionService 拒绝建立 Session |
-| `RbacOperationModule` | `PermissionSelectionRegistry` 收集 `List<RbacOperationModule>` | 与 `OperationCatalog` 不一致时启动失败 |
+| `GRANTABLE:<domain>` 属性 | `PermissionSelectionRegistry` 读取 `OperationCatalog` 叶子上的属性 | 叶子没有声明任何可授予领域时启动失败 |
 | `RbacPermissionCache` | `@ConditionalOnMissingBean(RbacPermissionCache.class)` 提供空实现 | 应用或 Redis 配置提供实现后，空实现不再生效 |
 
 ## 包结构

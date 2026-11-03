@@ -4,6 +4,8 @@ import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.annotation.RequirePermissions;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.SPICallValueResolver;
+import com.sca4d.core.api.name.code.AttributeAxis;
+import com.sca4d.core.api.permission.OperationAxes;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.PermissionAssessment;
@@ -13,6 +15,7 @@ import com.sca4d.core.api.permission.SessionOperationPermissionPolicy;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.permission.CurrentResourceScope;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Role;
@@ -41,13 +44,40 @@ class CorePermissionConfiguration {
         return new PermissionAssessment(policies);
     }
 
+    /** @return {@link OperationAxes#INTENT}；每个 Operation 叶子必须声明一个意图 */
+    @Bean
+    AttributeAxis intentAxis() {
+        return OperationAxes.INTENT;
+    }
+
+    /** @return {@link OperationAxes#NATURE}；每个 Operation 叶子必须声明一个性质 */
+    @Bean
+    AttributeAxis natureAxis() {
+        return OperationAxes.NATURE;
+    }
+
+    /** @return {@link OperationAxes#RISK}；Operation 叶子按需声明风险 */
+    @Bean
+    AttributeAxis riskAxis() {
+        return OperationAxes.RISK;
+    }
+
+    /** @return {@link OperationAxes#VISIBILITY}；Operation 叶子按需声明是否列入授权编辑器目录 */
+    @Bean
+    AttributeAxis visibilityAxis() {
+        return OperationAxes.VISIBILITY;
+    }
+
     /**
      * @param modules 各业务模块声明的 Operation 目录
-     * @return 完成结构校验和排序的 Operation 目录
+     * @param axes    容器中全部 {@link AttributeAxis} Bean，包含 Core 登记的标准轴和应用自己登记的轴
+     * @return 完成结构和属性校验、排序的 Operation 目录
      */
     @Bean
-    OperationCatalog operationCatalog(@NotNull List<@NotNull OperationModule> modules) {
-        return new OperationCatalog(modules);
+    OperationCatalog operationCatalog(
+            @NotNull List<@NotNull OperationModule> modules,
+            @NotNull ObjectProvider<@NotNull AttributeAxis> axes) {
+        return new OperationCatalog(modules, axes.orderedStream().toList());
     }
 
     /** @param permissionAssessment 权限策略入口 @param resolverLookup 调用值解析器目录 @return 权限调用前评估器 */

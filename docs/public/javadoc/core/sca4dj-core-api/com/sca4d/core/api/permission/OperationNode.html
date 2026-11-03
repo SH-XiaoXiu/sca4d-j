@@ -90,12 +90,19 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a></code>, <code><a href="OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></code>, <code><a href="OperationNode.Resource.html" title="class in com.sca4d.core.api.permission">OperationNode.Resource</a></code></dd>
+<dd><code><a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></code>, <code><a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">OperationNode</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">表示模块、业务资源或可授予 Operation 构成的固定三层目录节点。</div>
+<div class="block">表示 Operation 目录中的一个节点：包含子节点的 <a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission"><code>OperationNode.Group</code></a>，或可以授予 Principal 的 <a href="OperationNode.Leaf.html" title="class in com.sca4d.core.api.permission"><code>OperationNode.Leaf</code></a>。
+
+ <p>目录深度不限。分组可以同时包含子分组和叶子，例如 <code>ORDERS</code> 下既有分组 <code>ORDERS:INVOICES</code>，
+ 也可以直接有叶子 <code>ORDERS:EXPORT</code>。叶子编码的最后一段是动词（<a href="Action.html" title="class in com.sca4d.core.api.permission"><code>Action</code></a>），例如
+ <code>ORDERS:INVOICES:READ</code> 的动词是 <code>READ</code>。编码总长度受 <a href="OperationCode.html" title="class in com.sca4d.core.api.permission"><code>OperationCode</code></a> 的 128 字符限制。
+
+ <p>目录通过 <a href="#root(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)"><code>root(TreeCode, int, Declaration...)</code></a> 声明。声明里只写相对父分组的局部段，
+ 完整编码由父分组编码依次追加得到，调用方不需要手写完整编码。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,29 +116,25 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="OperationNode.ActionDeclaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.ActionDeclaration</a></code></div>
+<div class="col-second even-row-color"><code><a href="OperationNode.Declaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">RESOURCE 工厂使用的局部 ACTION 声明，不参与最终目录。</div>
+<div class="block">局部节点声明，由 <a href="#group(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)"><code>group(TreeCode, int, Declaration...)</code></a>、
+ <a href="#leaf(com.sca4d.core.api.permission.Action,int,com.sca4d.core.api.name.code.Attribute...)"><code>leaf(Action, int, Attribute...)</code></a> 和 <a href="#wildcardLeaf(int,com.sca4d.core.api.name.code.Attribute...)"><code>wildcardLeaf(int, Attribute...)</code></a> 创建（另有带 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 的重载）。</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="OperationNode.Module.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Module</a></code></div>
+<div class="col-second odd-row-color"><code><a href="OperationNode.Group.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">表示一个业务模块及完整 RESOURCE 目录。</div>
+<div class="block">表示目录中的一个分组，直接子节点可以是子分组、叶子或两者混合，深度不限。</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="OperationNode.OperationAction.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></code></div>
+<div class="col-second even-row-color"><code><a href="OperationNode.Leaf.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Leaf</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">表示目录中可以直接授予 Principal 的固定 Operation。</div>
+<div class="block">表示目录中可以直接授予 Principal 的固定 Operation，授权动作固定为 <a href="Action.html#INVOKE"><code>Action.INVOKE</code></a>。</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="OperationNode.Resource.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.Resource</a></code></div>
+<div class="col-second odd-row-color"><code><a href="OperationNode.LeafDeclaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">表示一个 MODULE 内的业务资源分组及完整 ACTION 目录。</div>
-</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="OperationNode.ResourceDeclaration.html" class="type-name-link" title="class in com.sca4d.core.api.permission">OperationNode.ResourceDeclaration</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">MODULE 工厂使用的局部 RESOURCE 声明，不参与最终目录。</div>
+<div class="block">叶子声明，展开时把动词追加到父分组编码后。</div>
 </div>
 </div>
 </section>
@@ -147,47 +150,82 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.ActionDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ActionDeclaration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#action(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int)" class="member-name-link">action</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nameKey,
- int&nbsp;sortOrder)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">声明 RESOURCE 下的一个局部动作段。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;? extends @NotNull <a href="OperationNode.html" title="class in com.sca4d.core.api.permission">OperationNode</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#children()" class="member-name-link">children</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;? extends @NotNull <a href="OperationNode.html" title="class in com.sca4d.core.api.permission">OperationNode</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#children()" class="member-name-link">children</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final @NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#display()" class="member-name-link">display</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#module(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int,com.sca4d.core.api.permission.OperationNode.ResourceDeclaration...)" class="member-name-link">module</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;anchor,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nameKey,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#group(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)" class="member-name-link">group</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
  int&nbsp;sortOrder,
- @NotNull <a href="OperationNode.ResourceDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ResourceDeclaration</a> @NotNull ...&nbsp;resources)</code></div>
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">使用模块锚点展开全部局部资源段和动作段。</div>
+<div class="block">声明父分组下的一个子分组，<a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 按完整编码推导。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nameKey()" class="member-name-link">nameKey</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#group(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.Display,int,com.sca4d.core.api.permission.OperationNode.Declaration...)" class="member-name-link">group</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
+ @NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">声明父分组下的一个子分组，并指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#leaf(com.sca4d.core.api.permission.Action,int,com.sca4d.core.api.name.code.Attribute...)" class="member-name-link">leaf</a><wbr>(@NotNull <a href="Action.html" title="class in com.sca4d.core.api.permission">Action</a>&nbsp;verb,
+ int&nbsp;sortOrder,
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">声明父分组下的一个叶子，叶子编码是父分组编码加上动词，<a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 按完整编码推导。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#leaf(com.sca4d.core.api.permission.Action,com.sca4d.core.api.name.Display,int,com.sca4d.core.api.name.code.Attribute...)" class="member-name-link">leaf</a><wbr>(@NotNull <a href="Action.html" title="class in com.sca4d.core.api.permission">Action</a>&nbsp;verb,
+ @NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">声明父分组下的一个叶子，并指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final @Nullable <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parentCode()" class="member-name-link">parentCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.ResourceDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ResourceDeclaration</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#resource(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int,com.sca4d.core.api.permission.OperationNode.ActionDeclaration...)" class="member-name-link">resource</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nameKey,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#root(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)" class="member-name-link">root</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;anchor,
  int&nbsp;sortOrder,
- @NotNull <a href="OperationNode.ActionDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ActionDeclaration</a> @NotNull ...&nbsp;actions)</code></div>
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">声明 MODULE 下的一个局部资源段。</div>
+<div class="block">使用锚点展开整棵目录，锚点是目录根分组的编码，也是其下全部编码的前缀。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sortOrder()" class="member-name-link">sortOrder</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#root(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.Display,int,com.sca4d.core.api.permission.OperationNode.Declaration...)" class="member-name-link">root</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;anchor,
+ @Nullable <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">使用锚点展开整棵目录，并为根分组指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sortOrder()" class="member-name-link">sortOrder</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#wildcardLeaf(int,com.sca4d.core.api.name.code.Attribute...)" class="member-name-link">wildcardLeaf</a><wbr>(int&nbsp;sortOrder,
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">声明父分组下的通配叶子，叶子编码是父分组编码加上最后一段 <code>*</code>，<a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 按完整编码推导。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#wildcardLeaf(com.sca4d.core.api.name.Display,int,com.sca4d.core.api.name.code.Attribute...)" class="member-name-link">wildcardLeaf</a><wbr>(@NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">声明父分组下的通配叶子，并指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+</div>
 </div>
 </div>
 </div>
@@ -206,77 +244,215 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="module(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int,com.sca4d.core.api.permission.OperationNode.ResourceDeclaration...)">
-<h3>module</h3>
-<div class="member-signature"><span class="annotations">@CheckReturnValue
-@Contract("_, _, _, _ -&gt; new")
-@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.Module.html" title="class in com.sca4d.core.api.permission">OperationNode.Module</a></span>&nbsp;<span class="element-name">module</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;anchor,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nameKey,
- int&nbsp;sortOrder,
- @NotNull
- @NotNull <a href="OperationNode.ResourceDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ResourceDeclaration</a> @NotNull ...&nbsp;resources)</span></div>
-<div class="block">使用模块锚点展开全部局部资源段和动作段。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>anchor</code> - 模块唯一编码和完整 Operation 前缀</dd>
-<dd><code>nameKey</code> - 模块名称消息键</dd>
-<dd><code>sortOrder</code> - 模块排序值</dd>
-<dd><code>resources</code> - 局部 RESOURCE 声明</dd>
-<dt>Returns:</dt>
-<dd>只包含完整编码节点的 MODULE 聚合</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 锚点不是单段编码、锚点含通配符、RESOURCE 或 ACTION 编码重复时抛出</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一 RESOURCE 声明为 <code>null</code> 时抛出</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="resource(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int,com.sca4d.core.api.permission.OperationNode.ActionDeclaration...)">
-<h3>resource</h3>
-<div class="member-signature"><span class="annotations">@CheckReturnValue
-@Contract("_, _, _, _ -&gt; new")
-@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.ResourceDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ResourceDeclaration</a></span>&nbsp;<span class="element-name">resource</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nameKey,
- int&nbsp;sortOrder,
- @NotNull
- @NotNull <a href="OperationNode.ActionDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ActionDeclaration</a> @NotNull ...&nbsp;actions)</span></div>
-<div class="block">声明 MODULE 下的一个局部资源段。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>segment</code> - 不包含模块锚点的资源段</dd>
-<dd><code>nameKey</code> - 资源名称消息键</dd>
-<dd><code>sortOrder</code> - 资源排序值</dd>
-<dd><code>actions</code> - 局部 ACTION 声明</dd>
-<dt>Returns:</dt>
-<dd>只能传给 <a href="#module(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int,com.sca4d.core.api.permission.OperationNode.ResourceDeclaration...)"><code>module(TreeCode, String, int, ResourceDeclaration...)</code></a> 的资源声明</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="action(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int)">
-<h3>action</h3>
+<section class="detail" id="root(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)">
+<h3>root</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Contract("_, _, _ -&gt; new")
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.ActionDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.ActionDeclaration</a></span>&nbsp;<span class="element-name">action</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></span>&nbsp;<span class="element-name">root</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;anchor,
+ int&nbsp;sortOrder,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nameKey,
- int&nbsp;sortOrder)</span></div>
-<div class="block">声明 RESOURCE 下的一个局部动作段。</div>
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</span></div>
+<div class="block">使用锚点展开整棵目录，锚点是目录根分组的编码，也是其下全部编码的前缀。
+
+ <p>根分组的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 按 <code>DISPLAY_PREFIX</code> 和锚点推导。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>segment</code> - 不包含模块和资源前缀的动作段</dd>
-<dd><code>nameKey</code> - 动作名称消息键</dd>
-<dd><code>sortOrder</code> - 动作排序值</dd>
+<dd><code>anchor</code> - 根分组的单节点编码，例如 <code>ORDERS</code>，不能是通配符 <code>*</code></dd>
+<dd><code>sortOrder</code> - 根分组在 <a href="OperationCatalog.html" title="class in com.sca4d.core.api.permission"><code>OperationCatalog</code></a> 根分组之间的排序值</dd>
+<dd><code>children</code> - 根分组的直接子声明，可以是分组、叶子或两者混合；没有子声明时得到空分组</dd>
 <dt>Returns:</dt>
-<dd>只能传给 <a href="#resource(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int,com.sca4d.core.api.permission.OperationNode.ActionDeclaration...)"><code>resource(TreeCode, String, int, ActionDeclaration...)</code></a> 的动作声明</dd>
+<dd>已经展开完整编码的根分组，<a href="#parentCode()"><code>parentCode()</code></a> 为空</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 锚点不是单节点、锚点是通配符，或同一父分组下有两个子节点的完整编码相同时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一子声明为 <code>null</code> 时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="root(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.Display,int,com.sca4d.core.api.permission.OperationNode.Declaration...)">
+<h3>root</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@Contract("_, _, _, _ -&gt; new")
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.Group.html" title="class in com.sca4d.core.api.permission">OperationNode.Group</a></span>&nbsp;<span class="element-name">root</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;anchor,
+ @Nullable
+ @Nullable <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</span></div>
+<div class="block">使用锚点展开整棵目录，并为根分组指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>anchor</code> - 根分组的单节点编码，例如 <code>ORDERS</code>，不能是通配符 <code>*</code></dd>
+<dd><code>display</code> - 根分组显示；为 <code>null</code> 时按编码推导</dd>
+<dd><code>sortOrder</code> - 根分组在 <a href="OperationCatalog.html" title="class in com.sca4d.core.api.permission"><code>OperationCatalog</code></a> 根分组之间的排序值</dd>
+<dd><code>children</code> - 根分组的直接子声明，可以是分组、叶子或两者混合；没有子声明时得到空分组</dd>
+<dt>Returns:</dt>
+<dd>已经展开完整编码的根分组，<a href="#parentCode()"><code>parentCode()</code></a> 为空</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 锚点不是单节点、锚点是通配符，或同一父分组下有两个子节点的完整编码相同时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一子声明为 <code>null</code> 时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="group(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)">
+<h3>group</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@Contract("_, _, _ -&gt; new")
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a></span>&nbsp;<span class="element-name">group</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
+ int&nbsp;sortOrder,
+ @NotNull
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</span></div>
+<div class="block">声明父分组下的一个子分组，<a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 按完整编码推导。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>segment</code> - 不含父分组前缀的单节点编码，例如 <code>INVOICES</code>，不能是通配符 <code>*</code></dd>
+<dd><code>sortOrder</code> - 分组在同一父分组的子节点中的排序值</dd>
+<dd><code>children</code> - 子分组的直接子声明，可以是分组、叶子或两者混合</dd>
+<dt>Returns:</dt>
+<dd>只能传给 <a href="#root(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)"><code>root(TreeCode, int, Declaration...)</code></a> 或另一个分组的声明</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - segment 不是单节点或是通配符时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一子声明为 <code>null</code> 时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="group(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.Display,int,com.sca4d.core.api.permission.OperationNode.Declaration...)">
+<h3>group</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@Contract("_, _, _, _ -&gt; new")
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a></span>&nbsp;<span class="element-name">group</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;segment,
+ @NotNull
+ @NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull
+ @NotNull <a href="OperationNode.Declaration.html" title="class in com.sca4d.core.api.permission">OperationNode.Declaration</a> @NotNull ...&nbsp;children)</span></div>
+<div class="block">声明父分组下的一个子分组，并指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>segment</code> - 不含父分组前缀的单节点编码，例如 <code>INVOICES</code>，不能是通配符 <code>*</code></dd>
+<dd><code>display</code> - 分组显示</dd>
+<dd><code>sortOrder</code> - 分组在同一父分组的子节点中的排序值</dd>
+<dd><code>children</code> - 子分组的直接子声明，可以是分组、叶子或两者混合</dd>
+<dt>Returns:</dt>
+<dd>只能传给 <a href="#root(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)"><code>root(TreeCode, int, Declaration...)</code></a> 或另一个分组的声明</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - segment 不是单节点或是通配符时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 显示或任一子声明为 <code>null</code> 时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="leaf(com.sca4d.core.api.permission.Action,int,com.sca4d.core.api.name.code.Attribute...)">
+<h3>leaf</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@Contract("_, _, _ -&gt; new")
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></span>&nbsp;<span class="element-name">leaf</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Action.html" title="class in com.sca4d.core.api.permission">Action</a>&nbsp;verb,
+ int&nbsp;sortOrder,
+ @NotNull
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</span></div>
+<div class="block">声明父分组下的一个叶子，叶子编码是父分组编码加上动词，<a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 按完整编码推导。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>verb</code> - 叶子编码的最后一段，例如 <a href="Action.html#READ"><code>Action.READ</code></a>；动词集合是开放的，业务可以自定义</dd>
+<dd><code>sortOrder</code> - 叶子在同一父分组的子节点中的排序值</dd>
+<dd><code>attributes</code> - 叶子携带的属性；不携带时省略。属性是否落在已登记的轴下，由 <a href="OperationCatalog.html" title="class in com.sca4d.core.api.permission"><code>OperationCatalog</code></a> 构造时逐个叶子检查</dd>
+<dt>Returns:</dt>
+<dd>可以继续调用 <a href="OperationNode.LeafDeclaration.html#requires(com.sca4d.core.api.permission.OperationCode...)"><code>OperationNode.LeafDeclaration.requires(OperationCode...)</code></a> 声明依赖，也可以直接传给
+         <a href="#root(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)"><code>root(TreeCode, int, Declaration...)</code></a> 或分组的声明</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 同一属性重复声明时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 动词或任一属性为 <code>null</code> 时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="leaf(com.sca4d.core.api.permission.Action,com.sca4d.core.api.name.Display,int,com.sca4d.core.api.name.code.Attribute...)">
+<h3>leaf</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@Contract("_, _, _, _ -&gt; new")
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></span>&nbsp;<span class="element-name">leaf</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Action.html" title="class in com.sca4d.core.api.permission">Action</a>&nbsp;verb,
+ @NotNull
+ @NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</span></div>
+<div class="block">声明父分组下的一个叶子，并指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>verb</code> - 叶子编码的最后一段，例如 <a href="Action.html#READ"><code>Action.READ</code></a></dd>
+<dd><code>display</code> - 叶子显示</dd>
+<dd><code>sortOrder</code> - 叶子在同一父分组的子节点中的排序值</dd>
+<dd><code>attributes</code> - 叶子携带的属性；不携带时省略</dd>
+<dt>Returns:</dt>
+<dd>可以继续调用 <a href="OperationNode.LeafDeclaration.html#requires(com.sca4d.core.api.permission.OperationCode...)"><code>OperationNode.LeafDeclaration.requires(OperationCode...)</code></a> 声明依赖</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 同一属性重复声明时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 动词、显示或任一属性为 <code>null</code> 时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="wildcardLeaf(int,com.sca4d.core.api.name.code.Attribute...)">
+<h3>wildcardLeaf</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@Contract("_, _ -&gt; new")
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></span>&nbsp;<span class="element-name">wildcardLeaf</span><wbr><span class="parameters">(int&nbsp;sortOrder,
+ @NotNull
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</span></div>
+<div class="block">声明父分组下的通配叶子，叶子编码是父分组编码加上最后一段 <code>*</code>，<a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a> 按完整编码推导。
+
+ <p>通配叶子表示父分组范围内的全部访问入口，例如 <code>CATALOG:ACCESS:*</code>。通配符只能由本方法声明，
+ <a href="Action.html" title="class in com.sca4d.core.api.permission"><code>Action</code></a> 本身不接受 <code>*</code>。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>sortOrder</code> - 叶子在同一父分组的子节点中的排序值</dd>
+<dd><code>attributes</code> - 叶子携带的属性；不携带时省略</dd>
+<dt>Returns:</dt>
+<dd>可以继续调用 <a href="OperationNode.LeafDeclaration.html#requires(com.sca4d.core.api.permission.OperationCode...)"><code>OperationNode.LeafDeclaration.requires(OperationCode...)</code></a> 声明依赖，也可以直接传给
+         <a href="#root(com.sca4d.core.api.name.code.TreeCode,int,com.sca4d.core.api.permission.OperationNode.Declaration...)"><code>root(TreeCode, int, Declaration...)</code></a> 或分组的声明</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 同一属性重复声明时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 任一属性为 <code>null</code> 时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="wildcardLeaf(com.sca4d.core.api.name.Display,int,com.sca4d.core.api.name.code.Attribute...)">
+<h3>wildcardLeaf</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@Contract("_, _, _ -&gt; new")
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="OperationNode.LeafDeclaration.html" title="class in com.sca4d.core.api.permission">OperationNode.LeafDeclaration</a></span>&nbsp;<span class="element-name">wildcardLeaf</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a>&nbsp;display,
+ int&nbsp;sortOrder,
+ @NotNull
+ @NotNull <a href="../name/code/Attribute.html" title="class in com.sca4d.core.api.name.code">Attribute</a> @NotNull ...&nbsp;attributes)</span></div>
+<div class="block">声明父分组下的通配叶子，并指定与编码推导结果不同的 <a href="../name/Display.html" title="class in com.sca4d.core.api.name"><code>Display</code></a>。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>display</code> - 叶子显示</dd>
+<dd><code>sortOrder</code> - 叶子在同一父分组的子节点中的排序值</dd>
+<dd><code>attributes</code> - 叶子携带的属性；不携带时省略</dd>
+<dt>Returns:</dt>
+<dd>可以继续调用 <a href="OperationNode.LeafDeclaration.html#requires(com.sca4d.core.api.permission.OperationCode...)"><code>OperationNode.LeafDeclaration.requires(OperationCode...)</code></a> 声明依赖</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 同一属性重复声明时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - 显示或任一属性为 <code>null</code> 时抛出</dd>
 </dl>
 </section>
 </li>
@@ -284,10 +460,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>节点的完整编码</dd>
+<dd>节点的完整编码；分组是 <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code"><code>TreeCode</code></a>，叶子覆盖为 <a href="OperationCode.html" title="class in com.sca4d.core.api.permission"><code>OperationCode</code></a></dd>
 </dl>
 </section>
 </li>
@@ -298,18 +474,18 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@Nullable <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">parentCode</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>父节点完整编码；MODULE 返回空</dd>
+<dd>父分组的完整编码；根分组返回空</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="nameKey()">
-<h3>nameKey</h3>
+<section class="detail" id="display()">
+<h3>display</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">nameKey</span>()</div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull <a href="../name/Display.html" title="class in com.sca4d.core.api.name">Display</a></span>&nbsp;<span class="element-name">display</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>节点名称消息键</dd>
+<dd>节点的名称消息键和说明消息键</dd>
 </dl>
 </section>
 </li>
@@ -319,7 +495,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sortOrder</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>节点在同级目录中的排序值</dd>
+<dd>节点在同一父分组的子节点中的排序值，根分组之间也按它排序</dd>
 </dl>
 </section>
 </li>
@@ -341,7 +517,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull <a href="OperationNode.html" title="class in com.sca4d.core.api.permission">OperationNode</a>&gt;</span>&nbsp;<span class="element-name">children</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>类型正确且不可变的直接子节点</dd>
+<dd>类型正确且不可变的直接子节点；叶子为空</dd>
 </dl>
 </section>
 </li>

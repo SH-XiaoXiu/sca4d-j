@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">OperationCatalogView</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">返回完整示例 App 的 Operation 目录树、扁平 ACTION 列表和总数。</div>
+<div class="block">返回完整示例 App 的 Operation 目录树、扁平叶子列表和总数。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="OperationCatalogView.Node.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">OperationCatalogView.Node</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Operation 目录中的树节点或扁平 ACTION。</div>
+<div class="block">Operation 目录中的树节点或扁平叶子。</div>
 </div>
 </div>
 </section>
@@ -131,12 +131,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="OperationCatalogView.Node.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView.Node</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getItems()" class="member-name-link">getItems</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回可授予的扁平 ACTION 列表。</div>
+<div class="block">返回可授予的扁平叶子列表。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTotal()" class="member-name-link">getTotal</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回可授予 ACTION 总数。</div>
+<div class="block">返回可授予叶子总数。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="OperationCatalogView.Node.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView.Node</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTree()" class="member-name-link">getTree</a>()</code></div>
@@ -193,10 +193,10 @@ loadScripts(document, 'script');</script>
 <h3>getItems</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="OperationCatalogView.Node.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView.Node</a>&gt;</span>&nbsp;<span class="element-name">getItems</span>()</div>
-<div class="block">返回可授予的扁平 ACTION 列表。</div>
+<div class="block">返回可授予的扁平叶子列表。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>可授予的扁平 ACTION 列表</dd>
+<dd>可授予的扁平叶子 列表</dd>
 </dl>
 </section>
 </li>
@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getTotal()">
 <h3>getTotal</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getTotal</span>()</div>
-<div class="block">返回可授予 ACTION 总数。</div>
+<div class="block">返回可授予叶子总数。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>可授予 ACTION 总数</dd>

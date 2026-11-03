@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.List;
 import java.util.Objects;
 
-/** 返回完整示例 App 的 Operation 目录树、扁平 ACTION 列表和总数。 */
+/** 返回完整示例 App 的 Operation 目录树、扁平叶子列表和总数。 */
 @Schema(name = "PermissionCatalog")
 @SuppressWarnings("unused") // Jackson 与 BaseView 通过 getter 和 @Localize source 读取响应字段。
 public class OperationCatalogView {
@@ -53,7 +53,7 @@ public class OperationCatalogView {
                 .stream()
                 .map(node -> Node.from(node, null))
                 .toList();
-        List<@NotNull Node> items = checked.actions().stream().map(Node::from).toList();
+        List<@NotNull Node> items = checked.leaves().stream().map(leaf -> Node.from(leaf, leaf.parentCode())).toList();
         return new OperationCatalogView(tree, items);
     }
 
@@ -66,22 +66,22 @@ public class OperationCatalogView {
     }
 
     /**
-     * 返回可授予的扁平 ACTION 列表。
-     * @return 可授予的扁平 ACTION 列表
+     * 返回可授予的扁平叶子列表。
+     * @return 可授予的扁平叶子 列表
      */
     public @NotNull @Unmodifiable List<@NotNull Node> getItems() {
         return items;
     }
 
     /**
-     * 返回可授予 ACTION 总数。
+     * 返回可授予叶子总数。
      * @return 可授予 ACTION 总数
      */
     public int getTotal() {
         return total;
     }
 
-    /** Operation 目录中的树节点或扁平 ACTION。 */
+    /** Operation 目录中的树节点或扁平叶子。 */
     public static class Node extends BaseView {
 
         private final @NotNull List<@NotNull Node> children;
@@ -128,22 +128,12 @@ public class OperationCatalogView {
             return new Node(
                     node.code().format(COLON),
                     parentCode == null ? null : parentCode.format(COLON),
-                    node.nameKey(),
+                    node.display().nameKey(),
                     node.type(),
                     node.sortOrder(),
                     children);
         }
 
-        private static @NotNull Node from(@NotNull OperationNode.OperationAction item) {
-            TreeCode parentCode = item.parentCode();
-            return new Node(
-                    item.code().format(COLON),
-                    parentCode == null ? null : parentCode.format(COLON),
-                    item.nameKey(),
-                    OperationNodeType.ACTION,
-                    item.sortOrder(),
-                    List.of());
-        }
 
         /**
          * 返回 Operation 编码。

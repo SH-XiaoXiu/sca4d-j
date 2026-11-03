@@ -50,42 +50,47 @@ public final class WorkspaceMemberPrincipal implements Principal {
 
 ### 2. 声明 Operation 目录
 
-在应用的操作目录中声明稳定编码。角色只能授予目录中的动作节点。下面的 `RbacDomain` 名称由具体应用定义。
+在应用的操作目录中声明稳定编码。角色只能授予目录中的叶子节点。下面的 `RbacDomain` 名称由具体应用定义。
 
 ```java
 @Component
-public final class WorkspaceOperations implements RbacOperationModule {
+public final class WorkspaceOperations implements OperationModule {
 
     public static final String DOCUMENTS_READ_VALUE = "WORKSPACE:DOCUMENTS:READ";
 
     public static final String DOCUMENTS_WRITE_VALUE = "WORKSPACE:DOCUMENTS:WRITE";
 
-    private static final TreeCode MODULE = TreeCode.ofSegment("WORKSPACE");
+    public static final OperationCode DOCUMENTS_READ = new OperationCode(DOCUMENTS_READ_VALUE);
 
-    private static final TreeCode DOCUMENTS = TreeCode.ofSegment("DOCUMENTS");
+    public static final OperationCode DOCUMENTS_WRITE = new OperationCode(DOCUMENTS_WRITE_VALUE);
+
+    private static final RbacDomain WORKSPACE_DOMAIN = new RbacDomain("WORKSPACE"); // 领域名称由具体应用定义
+
+    private static final TreeCode ROOT = TreeCode.ofSegment(DOCUMENTS_READ.nodes().get(0));
+
+    private static final TreeCode DOCUMENTS = TreeCode.ofSegment(DOCUMENTS_READ.nodes().get(1));
 
     @Override
-    public OperationNode.Module operationTree() {
-        return OperationNode.module(
-                MODULE,
-                "operation.workspace",
+    public OperationNode.Group operationTree() {
+        return OperationNode.root(
+                ROOT,
                 100,
-                OperationNode.resource(
+                OperationNode.group(
                         DOCUMENTS,
-                        "operation.workspace.documents",
                         100,
-                        OperationNode.action(Action.READ.code(), "operation.workspace.documents.read", 100),
-                        OperationNode.action(Action.WRITE.code(), "operation.workspace.documents.write", 200)));
-    }
-
-    @Override
-    public Set<RbacDomain> domains() {
-        return Set.of(new RbacDomain("WORKSPACE")); // 领域名称由具体应用定义
+                        OperationNode.leaf(
+                                Action.READ, 100,
+                                OperationAxes.Intent.READ, OperationAxes.Nature.FUNCTION,
+                                RbacGrantable.of(WORKSPACE_DOMAIN)),
+                        OperationNode.leaf(
+                                Action.WRITE, 200,
+                                OperationAxes.Intent.UPDATE, OperationAxes.Nature.FUNCTION,
+                                RbacGrantable.of(WORKSPACE_DOMAIN))));
     }
 }
 ```
 
-编码由模块、资源和动作三段以冒号连接。`SystemOperations` 与 `IotOperations` 是同一写法的参考。
+每个叶子必须声明一个 `INTENT` 值和一个 `NATURE` 值，脚手架已经登记这两条轴；`RbacGrantable.of(domain)` 声明叶子可以授予的 RBAC 领域，没有声明的叶子不能授予任何角色，见 [Operation 与权限声明](/capabilities/identity-access/operation-declaration)。编码由根分组、分组和动词以冒号连接，分组可以继续嵌套，最后一段是动词。`X_VALUE` 字符串供注解使用，是唯一手写的编码；代码里传递的 `OperationCode` 常量和目录中的根分组、分组段都由它得到。应用启动时会检查 `@RequirePermission` 的 `operation` 文本都在目录中，详见 [Operation 与权限声明](/capabilities/identity-access/operation-declaration)。
 
 ### 3. 选择当前 Principal
 

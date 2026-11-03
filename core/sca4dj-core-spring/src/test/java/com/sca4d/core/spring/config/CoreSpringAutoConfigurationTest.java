@@ -13,8 +13,15 @@ import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.IdentityCallInterceptor;
+import com.sca4d.core.api.name.Display;
+import com.sca4d.core.api.name.code.Attribute;
+import com.sca4d.core.api.name.code.AttributeAxis;
+import com.sca4d.core.api.name.code.AttributeConstraint;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.permission.OperationAxes;
 import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.core.spring.id.SnowflakeIdGenerator;
@@ -171,27 +178,74 @@ class CoreSpringAutoConfigurationTest {
     @Test
     @DisplayName("Collects Application Operation Modules")
     void collectsApplicationOperationModules() {
-        OperationModule module = () -> OperationNode.module(
-                TreeCode.ofSegment("PLATFORM"),
-                "operation.platform",
-                10,
-                OperationNode.resource(
-                        TreeCode.ofSegment("ROLES"),
-                        "operation.platform.roles",
-                        10,
-                        OperationNode.action(
-                                TreeCode.ofSegment("READ"),
-                                "operation.platform.roles.read",
-                                10)));
+        OperationModule module = attributedModule(OperationAxes.Intent.READ, OperationAxes.Nature.FUNCTION);
 
         contextRunner
                 .withBean(OperationModule.class, () -> module)
                 .run(context -> {
                     assertThat(context).hasNotFailed();
-                    assertThat(context.getBean(OperationCatalog.class).actions())
-                            .extracting(OperationNode.OperationAction::code)
-                            .containsExactly(TreeCode.ofColon("PLATFORM:ROLES:READ"));
+                    assertThat(context.getBean(OperationCatalog.class).leaves())
+                            .extracting(OperationNode.Leaf::code)
+                            .containsExactly(new OperationCode("PLATFORM:ROLES:READ"));
                 });
+    }
+
+    @Test
+    @DisplayName("Registers Application Attribute Axis Beans After The Standard Axes")
+    void registersAttributeAxisBeans() {
+        Attribute channel = new Attribute("CHANNEL");
+        AttributeAxis axis = new AttributeAxis(channel, AttributeConstraint.OPTIONAL);
+        OperationModule module = attributedModule(
+                OperationAxes.Intent.READ,
+                OperationAxes.Nature.FUNCTION,
+                channel.child("WEB"));
+
+        contextRunner
+                .withBean(OperationModule.class, () -> module)
+                .withBean("channelAxis", AttributeAxis.class, () -> axis)
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    OperationCatalog catalog = context.getBean(OperationCatalog.class);
+                    assertThat(catalog.axes()).contains(axis);
+                    assertThat(catalog.axes()).containsAll(OperationAxes.standard());
+                    assertThat(catalog.leavesWith(channel.child("WEB")))
+                            .extracting(OperationNode.Leaf::code)
+                            .containsExactly(new OperationCode("PLATFORM:ROLES:READ"));
+                });
+    }
+
+    @Test
+    @DisplayName("Registers Standard Axes By Default And Requires Intent And Nature On Every Leaf")
+    void registersStandardAxesByDefault() {
+        OperationModule complete = attributedModule(OperationAxes.Intent.READ, OperationAxes.Nature.FUNCTION);
+        OperationModule withoutNature = attributedModule(OperationAxes.Intent.READ);
+
+        contextRunner
+                .withBean(OperationModule.class, () -> complete)
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    assertThat(context.getBean(OperationCatalog.class).axes()).isEqualTo(OperationAxes.standard());
+                });
+        contextRunner
+                .withBean(OperationModule.class, () -> withoutNature)
+                .run(context -> assertThat(context).hasFailed());
+    }
+
+    /** @return 声明 {@code PLATFORM:ROLES:READ} 并携带给定属性的测试模块 */
+    private static OperationModule attributedModule(Attribute... attributes) {
+        return () -> OperationNode.root(
+                TreeCode.ofSegment("PLATFORM"),
+                Display.of("operation.platform"),
+                10,
+                OperationNode.group(
+                        TreeCode.ofSegment("ROLES"),
+                        Display.of("operation.platform.roles"),
+                        10,
+                        OperationNode.leaf(
+                                Action.READ,
+                                Display.of("operation.platform.roles.read"),
+                                10,
+                                attributes)));
     }
 
     @Test

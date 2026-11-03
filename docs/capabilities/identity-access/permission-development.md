@@ -6,11 +6,11 @@
 
 Controller 和消息处理方法使用的操作，必须进入 OperationCatalog。
 
-新增编码使用 `<module>:<resource>:<action>` 格式。MODULE 锚点在应用中唯一。RESOURCE 和 ACTION 使用局部段，由 `OperationNode.module(...)` 展开为完整编码。
+新增编码由根分组锚点、任意层分组段和最后一段动词组成，例如 `<anchor>:<group>:<verb>`，分组可以继续嵌套。根分组锚点在应用中唯一。分组段和动词使用局部段，由 `OperationNode.root(...)` 展开为完整编码，总长度不超过 128 字符。
 
-完整编译期常量由同一组模块、资源和 `Action` 段组成，并放在所属的 OperationModule 实现中。Controller 不得手写同义编码。
+完整编译期常量由同一组根分组、分组和 `Action` 段组成，并放在所属的 OperationModule 实现中。Controller 不得手写同义编码。
 
-只有 `OperationNode.OperationAction` 才能直接授予角色。一个模块参与 RBAC 时，实现 RbacOperationModule，明确回答自己的 Operation 能否授予指定的 RbacDomain。不得在 Controller 或角色页面另建领域白名单。
+只有 `OperationNode.Leaf` 才能直接授予角色。叶子用 `RbacGrantable.of(domain)` 声明 `GRANTABLE:<domain>` 属性，写明自己可以授予哪些 RbacDomain。不得在 Controller 或角色页面另建领域白名单。
 
 ## 操作与资源访问
 
@@ -49,7 +49,7 @@ SYSTEM Principal 的固定 Operation 检查必须拒绝。业务 Policy 可以�
 ## 验收要求
 
 - OperationCatalogTest 覆盖锚点展开、跨模块局部码复用、重复完整编码、非法段和领域 Operation 子集的筛选。
-- PermissionSelectionRegistryTest 覆盖模块领域声明、同模块不同 Operation 的领域差异和无可授予领域的启动失败。
+- PermissionSelectionRegistryTest 覆盖叶子的 `GRANTABLE` 声明、同模块不同叶子的领域差异和无可授予领域的启动失败。
 - 未登记 operation、未知资源类型和不支持的 Action 的启动校验，以及普通 Session、SYSTEM 拒绝 operation、业务 Policy 允许 SYSTEM 的调用期判断：源码中未定义对应的 ResourceCatalogBootstrapTest 与 AccessAspectTest，需要时另行新增。
 - HTTP 路由或 View 改动后，从当前应用重新生成 OpenAPI，并运行管理端 `pnpm api:check`。
 

@@ -179,7 +179,7 @@ public class PlatformRbacRepository implements RbacRepository {
      * @param i18n 已按 Platform 角色 schema 校验的完整多语言字段
      * @param status 初始状态
      * @param builtIn 是否为内置角色
-     * @param permissionSelectors 初始具体 ACTION 编码或内部全量选择符
+     * @param permissionSelectors 初始具体叶子编码或内部全量选择符
      * @return 写入后的 Platform 角色详情
      */
     @CheckReturnValue

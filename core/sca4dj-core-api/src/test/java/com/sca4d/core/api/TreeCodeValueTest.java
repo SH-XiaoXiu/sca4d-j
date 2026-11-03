@@ -40,11 +40,11 @@ class TreeCodeValueTest {
 
     @Test
     void hierarchyQueriesAndAppendWorkWithoutAChosenFormat() {
-        TreeCode code = TreeCode.of("PROJECTS.GROUPS.TESTS.READ");
-        assertTrue(code.hasNode(TreeCode.of("groups/tests")));
-        assertTrue(code.isUnder(TreeCode.of("PROJECTS:GROUPS")));
-        assertFalse(code.isUnder(TreeCode.of("PROJECTS:GROUP")));
-        assertFalse(code.hasNode(TreeCode.of("PROJECTS:READ")));
+        TreeCode code = TreeCode.of("ORDERS.INVOICES.ITEMS.READ");
+        assertTrue(code.hasNode(TreeCode.of("invoices/items")));
+        assertTrue(code.isUnder(TreeCode.of("ORDERS:INVOICES")));
+        assertFalse(code.isUnder(TreeCode.of("ORDERS:INVOICE")));
+        assertFalse(code.hasNode(TreeCode.of("ORDERS:READ")));
         assertEquals(TreeCode.of("ROOT:CHILD"), TreeCode.of("ROOT").child("CHILD"));
         assertEquals(TreeCode.of("ROOT:A:B"), TreeCode.of("ROOT").append(TreeCode.of("A/B")));
         assertThrows(IllegalArgumentException.class, () -> code.child(TreeCode.of("A:B")));

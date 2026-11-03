@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PermissionSelectionRegistry</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">根据各 Operation 模块的领域行为构建并查找 RBAC 权限选择规则。</div>
+<div class="block">根据 Operation 叶子的可授予领域属性构建并查找 RBAC 权限选择规则。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -103,10 +103,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.permission.OperationCatalog,java.util.List)" class="member-name-link">PermissionSelectionRegistry</a><wbr>(@NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;catalog,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull <a href="RbacOperationModule.html" title="interface in com.sca4d.iam.rbac">RbacOperationModule</a>&gt;&nbsp;modules)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.permission.OperationCatalog)" class="member-name-link">PermissionSelectionRegistry</a><wbr>(@NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;catalog)</code></div>
 <div class="col-last even-row-color">
-<div class="block">为每个模块声明的 RBAC 领域构建唯一权限选择规则。</div>
+<div class="block">按叶子声明的 <a href="RbacGrantable.html#GRANTABLE"><code>RbacGrantable.GRANTABLE</code></a> 属性，为每个出现的 RBAC 领域构建唯一权限选择规则。</div>
 </div>
 </div>
 </section>
@@ -148,19 +147,16 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.permission.OperationCatalog,java.util.List)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.permission.OperationCatalog)">
 <h3>PermissionSelectionRegistry</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PermissionSelectionRegistry</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;catalog,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull <a href="RbacOperationModule.html" title="interface in com.sca4d.iam.rbac">RbacOperationModule</a>&gt;&nbsp;modules)</span></div>
-<div class="block">为每个模块声明的 RBAC 领域构建唯一权限选择规则。</div>
+ @NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;catalog)</span></div>
+<div class="block">按叶子声明的 <a href="RbacGrantable.html#GRANTABLE"><code>RbacGrantable.GRANTABLE</code></a> 属性，为每个出现的 RBAC 领域构建唯一权限选择规则。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>catalog</code> - 应用已经安装的完整 Operation Catalog</dd>
-<dd><code>modules</code> - 同时声明 Operation 树和 RBAC 领域行为的模块</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 模块缺失、锚点重复、领域为空或 ACTION 不能授予任何领域时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 叶子没有声明任何可授予领域，或 <code>GRANTABLE</code> 属性形式不正确时抛出</dd>
 </dl>
 </section>
 </li>
