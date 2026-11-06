@@ -116,6 +116,8 @@ public class DocumentChangeNotifier {
 `DocumentChanged` 只携带 Workspace 和 Document 标识，由具体应用定义。
 页面收到后重新调用 HTTP API，不把权威状态放进实时事件。
 
+浏览器信封中的 Java `long` 和 `Long` 值（包括嵌套对象和数组）统一编码为十进制字符串，避免 JavaScript `JSON.parse` 舍入大整数。客户端应保留这些字段为字符串；`int`、布尔值和其他 JSON 类型保持原类型。
+
 `publish` 要求调用方选择 `DispatchPolicy`。
 有活跃事务时使用 `afterCommit()`。
 没有事务时使用 `immediate()`。
