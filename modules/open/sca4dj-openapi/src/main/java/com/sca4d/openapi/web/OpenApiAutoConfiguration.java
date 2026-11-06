@@ -9,6 +9,8 @@ import com.sca4d.open.auth.OpenAuthenticationService;
 import com.sca4d.open.client.OpenClientOperationChecker;
 import com.sca4d.open.client.OpenClientService;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -36,9 +38,9 @@ public class OpenApiAutoConfiguration {
     /** 创建并发布应用登记的 OpenAPI 路由目录。 */
     @Bean
     OpenApiRouteCatalog openApiRouteCatalog(
-            RequestMappingHandlerMapping mappings,
+            @Qualifier("requestMappingHandlerMapping") ObjectProvider<RequestMappingHandlerMapping> mappings,
             OperationCatalog operations,
-            org.springframework.beans.factory.ObjectProvider<OpenApiRouteRegistrar> registrars) {
+            ObjectProvider<OpenApiRouteRegistrar> registrars) {
         return new OpenApiRouteCatalog(mappings, operations, registrars);
     }
 

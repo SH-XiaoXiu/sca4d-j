@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * 保存启动期校验完成的 OpenAPI 路由元数据，为 HTTP、Call 和 Springdoc 提供同一份查询快照。
@@ -30,7 +31,7 @@ public class OpenApiRouteCatalog implements SmartInitializingSingleton {
 
     private final @NotNull OperationCatalog operations;
 
-    private final @NotNull RequestMappingHandlerMapping mappings;
+    private final @NotNull Supplier<@NotNull RequestMappingHandlerMapping> mappings;
 
     private final Map<MethodKey, OpenApiRouteDefinition> pending = new LinkedHashMap<>();
 
@@ -49,7 +50,27 @@ public class OpenApiRouteCatalog implements SmartInitializingSingleton {
             @NotNull RequestMappingHandlerMapping mappings,
             @NotNull OperationCatalog operations,
             @NotNull ObjectProvider<OpenApiRouteRegistrar> registrars) {
-        this.mappings = Objects.requireNonNull(mappings, "Spring MVC 映射不能为空");
+        RequestMappingHandlerMapping checked = Objects.requireNonNull(mappings, "Spring MVC 映射不能为空");
+        this.mappings = () -> checked;
+        this.operations = Objects.requireNonNull(operations, "Operation 目录不能为空");
+        this.registrars = Objects.requireNonNull(registrars, "OpenAPI 路由注册器不能为空")
+                .orderedStream()
+                .toList();
+    }
+
+    /**
+     * 延迟获取 Spring MVC 映射，避免 OpenAPI 路由目录在 MVC 完成注册前触发映射 Bean 初始化。
+     *
+     * @param mappings Spring MVC 映射提供器
+     * @param operations 已安装且完成结构校验的 Operation 目录
+     * @param registrars 注解适配器和具体应用提供的注册器
+     */
+    public OpenApiRouteCatalog(
+            @NotNull ObjectProvider<RequestMappingHandlerMapping> mappings,
+            @NotNull OperationCatalog operations,
+            @NotNull ObjectProvider<OpenApiRouteRegistrar> registrars) {
+        ObjectProvider<RequestMappingHandlerMapping> provider = Objects.requireNonNull(mappings, "Spring MVC 映射不能为空");
+        this.mappings = provider::getObject;
         this.operations = Objects.requireNonNull(operations, "Operation 目录不能为空");
         this.registrars = Objects.requireNonNull(registrars, "OpenAPI 路由注册器不能为空")
                 .orderedStream()
@@ -61,7 +82,8 @@ public class OpenApiRouteCatalog implements SmartInitializingSingleton {
             @NotNull RequestMappingHandlerMapping mappings,
             @NotNull OperationCatalog operations,
             @NotNull List<? extends OpenApiRouteRegistrar> registrars) {
-        this.mappings = Objects.requireNonNull(mappings, "Spring MVC 映射不能为空");
+        RequestMappingHandlerMapping checked = Objects.requireNonNull(mappings, "Spring MVC 映射不能为空");
+        this.mappings = () -> checked;
         this.operations = Objects.requireNonNull(operations, "Operation 目录不能为空");
         this.registrars = List.copyOf(Objects.requireNonNull(registrars, "OpenAPI 路由注册器不能为空"));
     }
@@ -183,7 +205,7 @@ public class OpenApiRouteCatalog implements SmartInitializingSingleton {
 
     private Map<MethodKey, HandlerMethod> handlerMethods() {
         Map<MethodKey, HandlerMethod> result = new LinkedHashMap<>();
-        for (HandlerMethod handler : mappings.getHandlerMethods().values()) {
+        for (HandlerMethod handler : mappings.get().getHandlerMethods().values()) {
             result.put(MethodKey.of(handler.getBeanType(), handler.getMethod()), handler);
         }
         return result;
