@@ -12,6 +12,7 @@ import com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableExc
 import com.sca4d.core.api.permission.OperationCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +97,25 @@ public class SaTokenSessionManager {
             @NotNull Session session,
             @NotNull Duration ttl,
             long expectedGeneration) {
+        return establish(session, ttl, expectedGeneration, null);
+    }
+
+    /**
+     * 创建 Sa-Token 登录状态并登记设备或客户端名称，其余行为与三参数方法相同。
+     *
+     * @param session 已经完成身份和 Resource 装载的 Session
+     * @param ttl Token 和 Token-Session 有效期
+     * @param expectedGeneration 身份和 Resource 装载前读取到的 Account Session 失效代次
+     * @param device 登录所用的设备或客户端名称，写入 Sa-Token 登录设备；为空或空白时不登记
+     * @return 新建在线 Session 的不透明 Token
+     * @throws SessionIdentityUnavailableException Account 在装载期间被失效，此时不返回 Token
+     */
+    @CheckReturnValue
+    public @NotNull String establish(
+            @NotNull Session session,
+            @NotNull Duration ttl,
+            long expectedGeneration,
+            @Nullable String device) {
         Session checked = Objects.requireNonNull(session, "Session 不能为空");
         Duration checkedTtl = Objects.requireNonNull(ttl, "Session 有效期不能为空");
         long accountId = checked.account().accountId();
@@ -104,9 +124,11 @@ public class SaTokenSessionManager {
         }
 
         // 先由 Sa-Token 创建 Token-Session，再写入编码后的 Core Session 和代次。
-        stpLogic.login(
-                accountId,
-                SaLoginParameter.create().setTimeout(checkedTtl.toSeconds()));
+        SaLoginParameter parameter = SaLoginParameter.create().setTimeout(checkedTtl.toSeconds());
+        if (device != null && !device.isBlank()) {
+            parameter.setDevice(device.strip());
+        }
+        stpLogic.login(accountId, parameter);
         try {
             String tokenValue = Objects.requireNonNull(stpLogic.getTokenValue(), "Sa-Token 未生成 Token");
             SaSession tokenSession = stpLogic.getTokenSession();
@@ -211,6 +233,19 @@ public class SaTokenSessionManager {
     public @NotNull Optional<Session> current(@NotNull SessionId sessionId) {
         return tokenIndex.find(Objects.requireNonNull(sessionId, "Session 标识不能为空"))
                 .flatMap(this::current);
+    }
+
+    /**
+     * 读取 Session 建立时登记的设备或客户端名称。
+     *
+     * @param sessionId Session 标识
+     * @return 已登记的名称；索引不存在、Token 已失效或没有登记时为空
+     */
+    @CheckReturnValue
+    public @NotNull Optional<String> device(@NotNull SessionId sessionId) {
+        return tokenIndex.find(Objects.requireNonNull(sessionId, "Session 标识不能为空"))
+                .map(stpLogic::getLoginDeviceByToken)
+                .filter(device -> !device.isBlank());
     }
 
     /**

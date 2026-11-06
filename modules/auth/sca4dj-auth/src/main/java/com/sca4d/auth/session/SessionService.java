@@ -24,6 +24,7 @@ import com.sca4d.core.api.identity.Principal;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,9 +108,31 @@ public class SessionService implements SessionLifecycle {
      *                                             Sa-Token 登录状态已由 {@code SaTokenSessionManager} 清理
      */
     @CheckReturnValue
+    @Override
     public @NotNull EstablishedSession establish(
             @NotNull Account account,
             @NotNull List<Authentication> authentications) {
+        return establish(account, authentications, null);
+    }
+
+    /**
+     * 使用至少一条成功认证建立 Session 并登记设备或客户端名称。
+     *
+     * @param account 已认证账号
+     * @param authentications 登录步骤接受的认证记录
+     * @param device 登录所用的设备或客户端名称，写入 Sa-Token 登录设备；为空时不登记
+     * @return 新 Session 及当前 Token 模式需要返回的 Token
+     * @throws IllegalArgumentException 认证列表为空或包含其他账号的记录时抛出
+     * @throws SessionIdentityUnavailableException 身份、Principal 或 Resource 装载期间 Account 失效代次发生变化，
+     *                                             {@code sessions.establish} 拒绝建立 Session 时抛出；此时不签发 Token，
+     *                                             Sa-Token 登录状态已由 {@code SaTokenSessionManager} 清理
+     */
+    @CheckReturnValue
+    @Override
+    public @NotNull EstablishedSession establish(
+            @NotNull Account account,
+            @NotNull List<Authentication> authentications,
+            @Nullable String device) {
         Account checkedAccount = Objects.requireNonNull(account, "已认证账号不能为空");
         List<Authentication> checkedAuthentications = List.copyOf(Objects.requireNonNull(authentications, "认证记录不能为空"));
         if (checkedAuthentications.isEmpty()) {
@@ -138,7 +161,7 @@ public class SessionService implements SessionLifecycle {
                 resourceIds.load(loadedPrincipals),
                 now,
                 now.plus(sessionTtl));
-        String backingSessionToken = sessions.establish(session, sessionTtl, generation);
+        String backingSessionToken = sessions.establish(session, sessionTtl, generation, device);
         try {
             EstablishedSession establishment = new EstablishedSession(
                     tokenProjection.issue(session, backingSessionToken),
@@ -187,6 +210,13 @@ public class SessionService implements SessionLifecycle {
     @CheckReturnValue
     public @NotNull Optional<Session> resolve(@NotNull SessionId sessionId) {
         return sessions.current(Objects.requireNonNull(sessionId, "Session 标识不能为空"));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @CheckReturnValue
+    public @NotNull Optional<String> device(@NotNull SessionId sessionId) {
+        return sessions.device(Objects.requireNonNull(sessionId, "Session 标识不能为空"));
     }
 
     /**

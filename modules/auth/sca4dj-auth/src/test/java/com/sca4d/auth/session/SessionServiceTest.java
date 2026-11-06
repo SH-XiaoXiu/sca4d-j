@@ -3,6 +3,7 @@ package com.sca4d.auth.session;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -112,7 +113,7 @@ class SessionServiceTest {
         Account account = account();
         SaTokenSessionManager sessions = mock(SaTokenSessionManager.class);
         when(sessions.currentGeneration(account.accountId())).thenReturn(7L);
-        when(sessions.establish(any(), any(), ArgumentMatchers.eq(7L)))
+        when(sessions.establish(any(), any(), ArgumentMatchers.eq(7L), isNull()))
                 .thenReturn("session-token");
         JwtSessionProjection projection = mock(JwtSessionProjection.class);
         when(projection.issue(any(), ArgumentMatchers.eq("session-token")))
@@ -139,6 +140,8 @@ class SessionServiceTest {
                 .authentications();
 
         var establishment = service.establish(account, authentications);
+
+        verify(sessions).establish(any(), any(), ArgumentMatchers.eq(7L), isNull());
 
         assertThat(establishment.session().account()).isEqualTo(account);
         assertThat(establishment.session().authentications()).containsExactlyElementsOf(authentications);

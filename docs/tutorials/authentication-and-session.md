@@ -134,6 +134,8 @@ Challenge 的有效期、重发间隔和最大错误次数由三项 SystemSettin
 
 具体应用完成登录认证后，把 Account 和成功的 Authentication 列表交给 `SessionLifecycle.establish(...)`。`sca4dj-auth` 会重新读取 Subject 和 Account，并调用应用注册的 Loader，建立同一份权威 Session。
 
+登录入口可以把设备或客户端名称作为 `SessionLifecycle.establish(account, authentications, device)` 的第三个参数传入。支持该能力的实现会把名称登记到在线 Session，之后可以按 `SessionId` 调用 `SessionLifecycle.device(...)` 读取；没有实现设备记录的旧实现仍可使用两参数方法。
+
 使用 `PrincipalLoader` 完整装载数量较少、请求经常直接读取的 Principal。使用 `PrincipalIdLoader` 保存同一种类型的大量 Principal ID。本例中一个 Account 加入很多工作区，而每次请求只选择一个 WorkspaceMemberPrincipal，因此选用后者。
 
 两种方式可以同时使用，但同一个 Principal ID 在整个 Session 中只能出现一次。

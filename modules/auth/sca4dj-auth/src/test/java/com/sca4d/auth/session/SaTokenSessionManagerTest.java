@@ -313,6 +313,17 @@ class SaTokenSessionManagerTest {
     }
 
     @Test
+    @DisplayName("Reads The Device Registered On A Session")
+    void readsTheRegisteredDevice() {
+        Session session = SessionTestFixture.session(
+                SessionTestFixture.NOW.plusSeconds(3600));
+        when(tokenIndex.find(session.id())).thenReturn(Optional.of("token-value"));
+        when(stpLogic.getLoginDeviceByToken("token-value")).thenReturn("enterprise-workspace");
+
+        assertThat(sessions.device(session.id())).contains("enterprise-workspace");
+    }
+
+    @Test
     @DisplayName("Terminates The Backing Session Only Once For Repeated Logout")
     void terminatesTheBackingSessionOnlyOnceForRepeatedLogout() {
         Session session = SessionTestFixture.session(
