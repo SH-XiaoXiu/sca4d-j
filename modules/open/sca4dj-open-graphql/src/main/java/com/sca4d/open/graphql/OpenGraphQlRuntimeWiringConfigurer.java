@@ -42,7 +42,7 @@ public class OpenGraphQlRuntimeWiringConfigurer implements RuntimeWiringConfigur
         }
         requireOperations("Query");
         requireOperations("Mutation");
-        wiring.directiveWiring(new OpenGraphQlDirectiveWiring(operations, checker));
+        wiring.directive("openOperation", new OpenGraphQlDirectiveWiring(operations, checker));
     }
 
     private void requireOperations(String typeName) {

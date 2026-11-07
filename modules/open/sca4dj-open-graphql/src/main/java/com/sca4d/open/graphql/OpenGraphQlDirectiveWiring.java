@@ -55,7 +55,7 @@ public class OpenGraphQlDirectiveWiring implements SchemaDirectiveWiring {
     }
 
     private static String operation(SchemaDirectiveWiringEnvironment<GraphQLFieldDefinition> environment) {
-        Object value = environment.getDirective().getArgument("operation").getArgumentValue().getValue();
+        Object value = environment.getAppliedDirective().getArgument("operation").getValue();
         if (!(value instanceof String text) || text.isBlank()) {
             throw new IllegalStateException("@openOperation 的 operation 必须是非空字符串");
         }
