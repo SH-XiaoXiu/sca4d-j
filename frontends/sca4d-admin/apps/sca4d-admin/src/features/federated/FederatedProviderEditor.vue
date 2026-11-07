@@ -49,11 +49,13 @@ const providerForm = reactive({
   clientAuthentication: 'CLIENT_SECRET_BASIC' as
     | 'CLIENT_SECRET_BASIC'
     | 'CLIENT_SECRET_POST'
-    | 'NONE',
+    | 'CLIENT_SECRET_SIGNED_JWT'
+    | 'ONE',
   clientId: '',
   clientSecret: '',
   code: '',
   displayOrder: 0,
+  driver: '',
   iconReference: '',
   issuer: '',
   loginPageVisible: true,
@@ -150,6 +152,7 @@ function resetSettingsForm(value: FederatedProviderSettings): void {
   providerForm.clientAuthentication = value.clientAuthentication;
   providerForm.clientId = value.clientId ?? '';
   providerForm.clientSecret = '';
+  providerForm.driver = value.driver ?? '';
   providerForm.issuer = value.issuer ?? '';
   providerForm.jwksEndpoint = value.jwksEndpoint ?? '';
   providerForm.scopes = value.scopes.join(' ');
@@ -171,6 +174,7 @@ function resetProviderForm(provider?: FederatedProvider): void {
   providerForm.clientAuthentication = 'CLIENT_SECRET_BASIC';
   providerForm.clientId = '';
   providerForm.clientSecret = '';
+  providerForm.driver = '';
   providerForm.issuer = '';
   providerForm.authorizationEndpoint = '';
   providerForm.tokenEndpoint = '';
@@ -192,6 +196,7 @@ function settingsInput() {
     clientAuthentication: providerForm.clientAuthentication,
     clientId: optional(providerForm.clientId),
     clientSecret: optional(providerForm.clientSecret),
+    driver: optional(providerForm.driver),
     issuer: optional(providerForm.issuer),
     jwksEndpoint: optional(providerForm.jwksEndpoint),
     profileMapping: profile,
@@ -398,10 +403,23 @@ watchEditor(editorOpen, (open) => {
             <a-select-option value="CLIENT_SECRET_POST">
               {{ t('clientSecretPost') }}
             </a-select-option>
-            <a-select-option value="NONE">
+            <a-select-option value="CLIENT_SECRET_SIGNED_JWT">
+              {{ t('clientSecretSignedJwt') }}
+            </a-select-option>
+            <a-select-option value="ONE">
               {{ t('clientAuthenticationNone') }}
             </a-select-option>
           </a-select>
+        </a-form-item>
+        <a-form-item
+          name="driver"
+          :label="t('driver')"
+          :extra="t('driverHint')"
+        >
+          <a-input
+            v-model:value="providerForm.driver"
+            :placeholder="t('driverPlaceholder')"
+          />
         </a-form-item>
         <a-form-item
           name="scopes"

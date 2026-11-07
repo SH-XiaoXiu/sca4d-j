@@ -122,8 +122,10 @@ export interface FederatedProviderSettings {
   readonly clientAuthentication:
     | 'CLIENT_SECRET_BASIC'
     | 'CLIENT_SECRET_POST'
-    | 'NONE';
+    | 'CLIENT_SECRET_SIGNED_JWT'
+    | 'ONE';
   readonly clientId: null | string;
+  readonly driver: null | string;
   readonly clientSecretConfigured: boolean;
   readonly issuer: null | string;
   readonly jwksEndpoint: null | string;
@@ -158,8 +160,10 @@ export interface FederatedProviderSettingsInput {
   readonly clientAuthentication:
     | 'CLIENT_SECRET_BASIC'
     | 'CLIENT_SECRET_POST'
-    | 'NONE';
+    | 'CLIENT_SECRET_SIGNED_JWT'
+    | 'ONE';
   readonly clientId: null | string;
+  readonly driver: null | string;
   readonly clientSecret: null | string;
   readonly issuer: null | string;
   readonly jwksEndpoint: null | string;

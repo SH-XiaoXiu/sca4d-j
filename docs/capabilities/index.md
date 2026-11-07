@@ -7,7 +7,7 @@
 | [基础结构](/capabilities/foundation/) | 仓库组成、Core、全局 ID、错误模型、示例应用和管理端 |
 | [数据与配置](/capabilities/data-configuration/) | 数据访问、Patch、DataGraph、字典、配置、缓存、并发和敏感数据 |
 | [身份与访问](/capabilities/identity-access/) | Subject、Account、Principal、Resource、IAM、权限和调用评估 |
-| [认证与会话](/capabilities/authentication-session/) | 认证引擎、Session、Password、TOTP、Passkey 和 Email Code |
+| [认证与会话](/capabilities/authentication-session/) | 认证引擎、Session、Password、TOTP、Passkey、Email Code 和联邦登录（含 Google 与 Apple） |
 | [消息与通知](/capabilities/messaging-notification/) | 业务消息、可靠发布、通知和邮件模板 |
 | [文件与存储](/capabilities/file-storage/) | 文件生命周期、文件服务以及 Local、MinIO 存储实现 |
 | [任务与调度](/capabilities/jobs-scheduling/) | Pipeline、Job、流程状态和 Quartz 调度 |

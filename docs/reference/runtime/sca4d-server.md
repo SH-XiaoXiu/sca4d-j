@@ -206,7 +206,7 @@ IoT Realtime 使用共享 topic `iot.device.<deviceId>` 和 STOMP destination `/
 
 `sca4dj.notification.sms.aliyun.credentials.<credentialRef>` 保存一个阿里云账号的部署凭据。每个引用包含 `access-key-id`、`access-key-secret`、`endpoint` 和 `region-id`；默认 Endpoint 是 `dysmsapi.aliyuncs.com`，默认 Region ID 是 `cn-hangzhou`。数据库 Provider 只保存同名 `credentialRef`，AccessKey 不进入 Settings、数据库、HTTP 响应或日志。
 
-`sca4dj.auth.sms-code.account-realm` 选择 PHONE Identifier 所属 Account Realm，默认 `platform`。Challenge 有效期、重发间隔和错误次数上限分别由 SystemSetting `auth.sms-code.challenge-ttl`、`auth.sms-code.resend-interval` 和 `auth.sms-code.maximum-attempts` 管理。
+`sca4dj.auth.sms-code.account-realm` 选择 PHONE Identifier 所属 Account Realm，默认 `PLATFORM`。Challenge 有效期、重发间隔和错误次数上限分别由 SystemSetting `auth.sms-code.challenge-ttl`、`auth.sms-code.resend-interval` 和 `auth.sms-code.maximum-attempts` 管理。
 
 ## 可选 TimescaleDB
 
@@ -274,7 +274,7 @@ PasswordProperties 读取 `sca4dj.auth.password` 配置：
 
 | 配置键 | 默认值 | 含义 |
 |---|---|---|
-| `account-realm` | `platform` | Password 登录标识和 bootstrap 用户名所在 Realm |
+| `account-realm` | `PLATFORM` | Password 登录标识和 bootstrap 用户名所在 Realm |
 | `login-identifier-types` | `USERNAME` | 登录时交给 AccountDirectory 解析的标识类型列表 |
 | `bootstrap.enabled` | `true` | 是否为 bootstrap Account 补充初始 Password Credential |
 | `bootstrap.username` | `admin` | bootstrap Account 的用户名 |
@@ -326,10 +326,11 @@ app:
 | `tokenEndpoint` | Discovery | 必填 | 必须是 HTTPS URL |
 | `userInfoEndpoint` | Discovery 可选 | 必填 | 必须是 HTTPS URL |
 | `jwksEndpoint` | Discovery 必填 | 不使用 | OIDC 签名密钥地址 |
-| `clientAuthentication` | `CLIENT_SECRET_POST`、`CLIENT_SECRET_BASIC` 或 `NONE` | 同左 | Secret 认证方式；默认是 `CLIENT_SECRET_POST` |
+| `clientAuthentication` | `CLIENT_SECRET_POST`、`CLIENT_SECRET_BASIC`、`CLIENT_SECRET_SIGNED_JWT` 或 `ONE`（不发送 Secret 的公开客户端，须使用 PKCE） | 同左 | Secret 认证方式；默认是 `CLIENT_SECRET_POST`。`CLIENT_SECRET_SIGNED_JWT` 必须同时配置 `driver` |
+| `driver` | 可选 | 可选 | 转换外部资料的 Driver 编码，例如 `GOOGLE`、`APPLE`；必须是已登记的 Driver，见[联邦登录](/capabilities/authentication-session/federation) |
 | `scopes` | 必须包含 `openid` | 由 Provider 要求 | 授权请求发送的作用域 |
-| `profileMapping` | 不使用 | `subject` 必填 | 允许 `subject`、`displayName`、`email`、`emailVerified`、`avatar` 五个键，值必须是 `$` 开头的 JSONPath |
-| `authorizationParameters` | OAuth2 白名单字段 | OAuth2 白名单字段 | 允许 `prompt`、`login_hint`、`ui_locales`、`max_age`、`acr_values`、`hd`、`access_type`、`audience`、`resource` |
+| `profileMapping` | 不使用 | 未选择 `driver` 时 `subject` 必填 | 允许 `subject`、`displayName`、`email`、`emailVerified`、`avatar` 五个键，值必须是 `$` 开头的 JSONPath |
+| `authorizationParameters` | OAuth2 白名单字段 | OAuth2 白名单字段 | 允许 `prompt`、`login_hint`、`ui_locales`、`max_age`、`acr_values`、`hd`、`response_mode`、`access_type`、`audience`、`resource` |
 
 `client_secret` 不与 Provider 表重复保存。配置表只保存 `provider_id`，Repository 在 Provider 仍存在且 Version 匹配的事务中替换配置；协议始终从 Provider 表读取，因此不会在两张表中分别保存协议。
 
@@ -343,6 +344,7 @@ app:
   "clientId": "123456789.apps.googleusercontent.com",
   "clientSecret": "从环境变量或 Secret 管理服务读取的值",
   "clientAuthentication": "CLIENT_SECRET_POST",
+  "driver": "GOOGLE",
   "scopes": ["openid", "profile", "email"],
   "profileMapping": {},
   "authorizationParameters": {}
@@ -375,8 +377,9 @@ OAuth2 Provider 示例：
 
 - issuer、端点不是 HTTPS URL，返回 `2606`（配置无效）。
 - OIDC 作用域缺少 `openid`，返回 `2606`。
-- OAuth2 映射包含未知键、不是 JSONPath 或缺少 `subject`，返回 `2606`。
-- 使用 `CLIENT_SECRET_BASIC` 或 `CLIENT_SECRET_POST` 却没有已保存 Secret 时，启用 Provider 返回 `2606`。
+- OAuth2 映射包含未知键、不是 JSONPath，或没有选择 `driver` 且缺少 `subject`，返回 `2606`。
+- `driver` 不是合法的冒号编码、没有登记，或 `CLIENT_SECRET_SIGNED_JWT` 没有配置 `driver`，返回 `2606`。
+- 使用 `CLIENT_SECRET_BASIC`、`CLIENT_SECRET_POST` 或 `CLIENT_SECRET_SIGNED_JWT` 却没有已保存 Secret 时，启用 Provider 返回 `2606`。
 - 查询配置只返回 `clientSecretConfigured`，不会返回 Secret、密钥标识或密文。
 
 ## 消息派发参数 {#messagingproperties}

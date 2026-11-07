@@ -22,7 +22,7 @@ docs/       使用方法、项目规范和参考
 
 `modules/` 中每个 Gradle 项目表示一项可独立选择的功能。模块拥有自己的实现、表结构片段、自动配置和测试。模块之间通过公开接口协作，不使用对方的 Repository、Mapper、数据库行类型或内部包。
 
-IAM、认证引擎和认证方法分成独立项目。`sca4dj-auth` 负责认证尝试和 Session，Password、TOTP、Passkey、Email Code、SMS Code、Federation、Shared Secret、HMAC 和 X.509 在各自的项目中实现。
+IAM、认证引擎和认证方法分成独立项目。`sca4dj-auth` 负责认证尝试和 Session，Password、TOTP、Passkey、Email Code、SMS Code、Federation、Google、Apple、Shared Secret、HMAC 和 X.509 在各自的项目中实现。Google 和 Apple 依赖 Federation，只提供各自 Provider 的资料转换 Driver。
 
 ## Apps
 

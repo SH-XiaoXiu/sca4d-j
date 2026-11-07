@@ -33,6 +33,9 @@ Provider 回跳到应用的 callback 后，应用调用 `FederatedAuthorizationS
 | `FederatedAuthorizationService` | 生成 state、nonce 和 PKCE verifier；交换 Token；校验 ID Token 与用户资料 | 建立 Session，决定 Account |
 | `FederatedAuthorizationStore` | 保存授权状态和完成结果，读取时删除原记录 | 保存 Token |
 | `RedisFederatedAuthorizationStore` | `FederatedAuthorizationStore` 的 Redis 实现 | 保存业务数据 |
+| `FederatedProviderDriver` | 由可选认证模块实现，把一类 Provider 的 claims 转换为 `FederatedProfile`，必要时签发 `client_secret` | 校验 ID Token 签名，读取 HTTP 请求 |
+| `FederatedProviderDriverRegistry` | 启动时收集全部 Driver，拒绝重复和非法编码，按编码查找 | 保存 Provider 配置 |
+| `FederatedClaims` | 保存已校验的 claims，按名称读取文本、布尔值和 `sub` | 保存 Token |
 | `FederatedAccountResolver` | 由具体应用实现，解析外部身份对应的 Account | 由模块提供默认实现 |
 | `FederatedIdentityService` | 查询、绑定、刷新和解绑外部身份 | 决定绑定由哪个 Account 发起 |
 | `FederatedAuthenticationMethod` | 消费 `LOGIN` 用途的完成结果，返回 `POSSESSION` 认证因素 | 建立 Session，消费 `LINK` 用途的完成结果 |
@@ -75,7 +78,7 @@ sequenceDiagram
 2. `callback` 首先删除并读取授权状态。授权状态不存在、已过期或 `browserBinding` 不一致时，返回 `AUTHORIZATION_UNAVAILABLE`。
 3. `callback` 在交换 Token 前比较 `redirectUri`。不一致时返回 `AUTHORIZATION_REJECTED`，此时授权状态已经被删除。
 4. OIDC 协议的 ID Token 使用 `RS256` 校验签名、Issuer、受众和 nonce。UserInfo 存在时，UserInfo 的 `sub` 必须与 ID Token 的 subject 一致。
-5. OAuth 2.0 协议使用配置的 `profileMapping` 读取 UserInfo，并把 `subject` 映射为外部资料的 subject。
+5. OAuth 2.0 协议使用配置的 `profileMapping` 读取 UserInfo，并把 `subject` 映射为外部资料的 subject。Provider 配置了 `driver` 时，OIDC 和 OAuth 2.0 都改由 Driver 转换资料，见「资料转换 Driver」。
 6. `callback` 保存不含 Token 的完成结果，并返回完成标识。
 7. `FederatedAuthenticationMethod.authenticate` 按 `LOGIN` 用途消费完成结果，然后调用 `FederatedAccountResolver.resolve`。传入的 `expectedAccount` 非空时，解析结果必须是同一 Account。
 8. 认证引擎完成前调用 `verifyCurrent`。模块调用 `FederatedAccountResolver.verifyCurrentBinding`，由具体应用的解析器复核绑定记录仍属于同一 Account，且版本未变化。
@@ -85,6 +88,8 @@ sequenceDiagram
 ## 配置
 
 联邦登录没有 `@ConfigurationProperties` 配置类。Provider 与协议配置保存在数据库中，由管理流程通过 `FederatedProviderService` 写入。
+
+可选的 Google 和 Apple 模块各有一个开关：`sca4dj.auth.google.enabled` 和 `sca4dj.auth.apple.enabled`，默认都是 `true`。设为 `false` 时，对应模块不登记 Driver，选择该 Driver 的 Provider 无法启用。
 
 ### Provider 字段
 
@@ -105,18 +110,20 @@ sequenceDiagram
 |---|---|---|
 | `issuer` | 必填，必须是 HTTPS URL | 可省略；填写时必须是 HTTPS URL |
 | `clientId` | 必填 | 必填 |
-| `clientSecret` | 启用前必须已配置，除非 `clientAuthentication` 为 `ONE` | 同左 |
+| `clientSecret` | 启用前必须已配置，除非 `clientAuthentication` 为 `ONE`。`CLIENT_SECRET_SIGNED_JWT` 时保存签名材料，格式由 Driver 规定 | 同左 |
 | `authorizationEndpoint`、`tokenEndpoint`、`userInfoEndpoint` | 不读取，端点来自 Discovery 文档 | 必填，必须是 HTTPS URL |
 | `jwksEndpoint` | 不读取，`jwks_uri` 来自 Discovery 文档 | 不使用 |
-| `clientAuthentication` | `CLIENT_SECRET_BASIC`、`CLIENT_SECRET_POST`、`ONE` | 同左 |
+| `clientAuthentication` | `CLIENT_SECRET_BASIC`、`CLIENT_SECRET_POST`、`CLIENT_SECRET_SIGNED_JWT`、`ONE` | 同左 |
+| `driver` | 可选；选择已登记的 Driver 转换资料 | 同左；选择 Driver 后不再要求 `profileMapping` 包含 `subject` |
 | `scopes` | 必须包含 `openid` | 无模块级校验 |
-| `profileMapping` | 不使用 | 必须包含 `subject`，允许的键为 `subject`、`displayName`、`email`、`emailVerified`、`avatar`，值必须以 `$` 开头 |
-| `authorizationParameters` | 允许 `prompt`、`login_hint`、`ui_locales`、`max_age`、`acr_values`、`hd`、`access_type`、`audience`、`resource` | 同左 |
+| `profileMapping` | 不使用 | 未选择 `driver` 时必须包含 `subject`，允许的键为 `subject`、`displayName`、`email`、`emailVerified`、`avatar`，值必须以 `$` 开头 |
+| `authorizationParameters` | 允许 `prompt`、`login_hint`、`ui_locales`、`max_age`、`acr_values`、`hd`、`response_mode`、`access_type`、`audience`、`resource` | 同左 |
 
 `clientAuthentication` 的含义如下。
 
 - `CLIENT_SECRET_BASIC`：在 `Authorization` 请求头中以 HTTP Basic 发送 `clientId` 与 `clientSecret`。
 - `CLIENT_SECRET_POST`：在表单正文中发送 `client_secret`。
+- `CLIENT_SECRET_SIGNED_JWT`：在表单正文中发送 `client_secret`，其值由 `driver` 选择的 Driver 在每次授权码交换时用已保存的签名材料签发。必须同时配置 `driver`。
 - `ONE`：不发送 Client Secret，供带 PKCE 的公开客户端使用。
 
 `authorizationParameters` 中以下键不允许出现。出现时返回 `CONFIGURATION_INVALID`：`client_id`、`redirect_uri`、`response_type`、`scope`、`state`、`nonce`、`code_challenge`、`code_challenge_method`。取值为空白的参数同样不允许。
@@ -127,7 +134,7 @@ sequenceDiagram
 
 - 替换展示字段（`replace`）和替换协议配置（`replaceConfiguration`）要求 Provider 为 `DISABLED`。Provider 为 `ACTIVE` 时，返回 `CONFIGURATION_INVALID`。
 - 替换协议配置时，`protocol` 必须与 Provider 当前协议相同。
-- 启用（`changeStatus` 设为 `ACTIVE`）时，协议配置必须存在，必须通过 `validate` 校验，并且除 `ONE` 外必须已配置 Client Secret。
+- 启用（`changeStatus` 设为 `ACTIVE`）时，协议配置必须存在，必须通过 `validate` 校验，并且除 `ONE` 外必须已配置 Client Secret。`validate` 还要求 `driver` 已登记，并要求 `CLIENT_SECRET_SIGNED_JWT` 同时配置 `driver`。
 - 停用不执行上述校验。
 - 替换协议配置时若未提供新的 Client Secret，原有 Secret 保留，并使用当前密钥重新加密。
 - Client Secret 加密后保存在 `auth_federated_provider_configuration` 表的 `client_secret_key_id` 与 `client_secret_ciphertext` 字段中。管理读取只返回 `clientSecretConfigured`，不返回明文。
@@ -158,12 +165,13 @@ HTTP 客户端 Bean `federatedRestClient` 带有 `@ConditionalOnMissingBean`。�
 | `AUTHORIZATION_UNAVAILABLE`（2600） | 认证 | 授权状态不存在、已消费、已过期或 `browserBinding` 不一致；完成结果不存在或用途不是 `LOGIN` | 重新调用 `start`，不复用同一 state |
 | `AUTHORIZATION_REJECTED`（2601） | 认证 | Provider 返回 `error` 或未返回 `code`；`redirectUri` 不一致；Token 响应含 `error` 或缺少 `access_token`；完成结果的 Account 与 `expectedAccount` 不一致；绑定记录已不存在 | 重新开始登录 |
 | `PROVIDER_UNAVAILABLE`（2602） | 资源不存在 | Provider 不存在、未启用，或没有协议配置 | 不向用户展示该 Provider |
-| `PROFILE_INVALID`（2603） | 认证 | ID Token 解析或校验失败；UserInfo 的 `sub` 与 ID Token 不一致；OAuth 2.0 资料缺少 `subject` | 重新开始登录，并检查 Provider 配置 |
+| `PROFILE_INVALID`（2603） | 认证 | ID Token 解析或校验失败；UserInfo 的 `sub` 与 ID Token 不一致；OAuth 2.0 资料缺少 `subject`；Driver 收到的 claims 缺少 `sub` | 重新开始登录，并检查 Provider 配置 |
 | `UPSTREAM_FAILED`（2604） | 不可用 | 上游网络失败；Discovery 缺少必填字段；响应超过长度上限 | 稍后重试，并检查 Provider 地址 |
 | `UNLINKED_IDENTITY`（2605） | 认证 | 错误码已定义，但模块内没有抛出位置。外部身份未绑定时，是否使用该错误码由具体应用的解析器决定 | 按具体应用的解析器说明处理 |
-| `CONFIGURATION_INVALID`（2606） | 校验 | 配置不满足 `validate` 规则；状态不允许替换；`protocol` 不一致；未配置 Client Secret 时启用 | 修正配置后重试 |
+| `CONFIGURATION_INVALID`（2606） | 校验 | 配置不满足 `validate` 规则；状态不允许替换；`protocol` 不一致；未配置 Client Secret 时启用；`driver` 未登记；Driver 无法签发 `client_secret`（签名材料缺字段或私钥无效） | 修正配置后重试 |
 | `PROVIDER_CONFLICT`（2607） | 冲突 | 写入 Provider 时违反唯一约束 | 更换编码 |
 | `IDENTITY_CONFLICT`（2608） | 冲突 | 外部身份已绑定其他 Account；写入绑定时违反唯一约束 | 确认外部身份归属，不自动覆盖绑定 |
+| `PROFILE_DOMAIN_REJECTED`（2609） | 认证 | Driver 拒绝外部资料所属的域，例如 Google 的 `hd` 与 Provider 配置不一致 | 使用允许域名内的账号重新登录 |
 
 其他异常如下。
 
@@ -232,6 +240,91 @@ AuthenticationProgress progress =
 `BusinessException` 与 `FederatedErrorCode` 的使用方式与模块内部一致，`UNLINKED_IDENTITY` 是否使用由解析器决定。
 
 ## 扩展方式
+
+### 资料转换 Driver
+
+`FederatedProviderDriver` 把一类 Provider 的 claims 转换为 `FederatedProfile`。Driver 由可选认证模块作为 Spring Bean 提供，`FederatedProviderDriverRegistry` 在启动时收集它们并按 `code()` 登记。
+
+Driver 编码是冒号分隔的大写节点（`TreeCode`），例如 `GOOGLE`，不能含通配节点，冒号文本不超过 64 个字符。两个 Driver 编码相同时，应用启动失败并抛出 `IllegalStateException`。
+
+Provider 的协议配置字段 `driver` 选择 Driver：
+
+1. `FederatedAuthorizationService.start` 和 `callback` 读取协议配置时，`driver` 未登记返回 `CONFIGURATION_INVALID`，用户不会先完成外部登录再失败。
+2. OIDC 的 ID Token 通过签名、Issuer、受众和 nonce 校验后（OAuth 2.0 读取 UserInfo 后），`FederatedAuthorizationService` 把 claims 包装成 `FederatedClaims`，连同协议配置交给 Driver。
+3. Driver 返回 `FederatedProfile`。资料的 `issuer` 取自 Provider 配置，不写在 Driver 中。
+4. 没有配置 `driver` 的 Provider 继续使用标准 OIDC claims（`sub`、`name`、`email`、`email_verified`、`picture`）或 `profileMapping`。
+
+Driver 不读取 HTTP 请求、不访问 Mapper，也不接触 Account。`FederatedProfile.emailVerified` 为 `true` 表示邮箱已验证且 Driver 认为可以用于自动关联；Driver 可以保留邮箱并把它设为 `false`。
+
+Driver 还可以覆盖 `clientSecret(configuration)`。`clientAuthentication` 为 `CLIENT_SECRET_SIGNED_JWT` 时，`FederatedAuthorizationService` 在每次授权码交换前调用它，并把返回值作为表单字段 `client_secret` 发送。没有覆盖该方法的 Driver 被这样使用时返回 `CONFIGURATION_INVALID`。
+
+### 接入 Google
+
+引入 `sca4dj-auth-google` 后，应用获得 Driver `GOOGLE`。接入 Google 登录需要完成三件事：在 Google Cloud 控制台创建 OAuth 客户端，在 Google 登记 callback，再写入 Provider。
+
+1. 创建类型为 Web 应用的 OAuth 客户端。「已获授权的重定向 URI」填 `app.authentication.federated-login.callback-uri` 的值，必须完全一致。
+2. 创建 Provider（示例编码 `GOOGLE`，协议 `OIDC`），保持停用。
+3. 替换协议配置，字段如下，然后启用 Provider。
+
+| 字段 | 值 |
+|---|---|
+| `issuer` | `https://accounts.google.com` |
+| `clientId` | Google 控制台生成的客户端 ID |
+| `clientSecret` | Google 控制台生成的客户端密钥，加密保存 |
+| `clientAuthentication` | `CLIENT_SECRET_POST` |
+| `scopes` | `["openid", "profile", "email"]` |
+| `driver` | `GOOGLE` |
+| `authorizationParameters` | 可选。`{"hd": "example.com"}` 限制登录账号的 Google Workspace 域名 |
+
+`GoogleProviderDriver` 的转换规则如下。
+
+- `sub`、`name`、`email`、`email_verified`、`picture` 分别转换为 `subject`、`displayName`、`email`、`emailVerified`、`avatarUrl`；缺少 `sub` 返回 `PROFILE_INVALID`。
+- `authorizationParameters.hd` 非空时，授权地址带上 `hd`，同时 ID Token 的 `hd` 必须与它相同（忽略大小写），否则返回 `PROFILE_DOMAIN_REJECTED`。授权地址里的 `hd` 只是登录页提示，用户可以改掉，真正的限制是这次比较。`hd` 为 `*` 时只要求 ID Token 带有 `hd`。个人 Gmail 账号没有 `hd`，配置了 `hd` 后会被拒绝。
+
+### 接入 Apple
+
+引入 `sca4dj-auth-apple` 后，应用获得 Driver `APPLE`。Apple 不使用固定的 Client Secret，Token 端点要求的 `client_secret` 是一个由 Apple Developer 私钥签名的短期 JWT，所以 Provider 使用 `CLIENT_SECRET_SIGNED_JWT`。
+
+在 Apple Developer 中准备：Services ID（作为 `clientId`）、Team ID、Sign in with Apple 私钥的 Key ID，以及下载的 `.p8` 私钥文件；Services ID 的 Return URL 填 `app.authentication.federated-login.callback-uri` 的值。
+
+Provider（示例编码 `APPLE`，协议 `OIDC`）的协议配置如下。
+
+| 字段 | 值 |
+|---|---|
+| `issuer` | `https://appleid.apple.com` |
+| `clientId` | Services ID |
+| `clientSecret` | 签名材料 JSON，见下文 |
+| `clientAuthentication` | `CLIENT_SECRET_SIGNED_JWT` |
+| `scopes` | `["openid"]` |
+| `driver` | `APPLE` |
+
+签名材料是一个 JSON 对象，三个字段都必填，`privateKey` 是 `.p8` 文件的完整内容：
+
+```json
+{
+  "teamId": "ABCDE12345",
+  "keyId": "FGHIJ67890",
+  "privateKey": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+}
+```
+
+`teamId`、`keyId` 和私钥都属于 Provider 的 Client Secret。写入时由 `FederatedSecretCryptography` 通过 `SecretKeyring` 加密，保存在 `client_secret_key_id` 和 `client_secret_ciphertext`；管理读取只返回 `clientSecretConfigured`。它们不写入 `application.yml`，也不会进入日志。更换私钥时，停用 Provider 后替换协议配置，再启用。
+
+每次授权码交换时，`AppleClientSecretGenerator` 用解密后的材料签发 JWT：头部 `alg=ES256`、`kid=keyId`，claims 为 `iss=teamId`、`sub=clientId`、`aud=issuer`、`iat` 为当前时间、`exp` 为 5 分钟后。材料缺字段、不是 JSON 或私钥不是 P-256 EC 私钥时返回 `CONFIGURATION_INVALID`。
+
+`AppleProviderDriver` 的转换规则如下。
+
+- `email_verified` 和 `is_private_email` 可能是文本 `"true"`，两者都按布尔值处理。
+- `is_private_email` 为真时，邮箱是 Apple 的转发地址：资料保留该邮箱，但 `emailVerified` 为 `false`，因此 `autoLinkVerifiedEmail` 不会按它自动关联已有 Account。
+- 缺少 `sub` 返回 `PROFILE_INVALID`。
+
+Apple 只在用户第一次授权时返回姓名，并且只通过 `response_mode=form_post` 的回调表单字段 `user`（JSON）返回，ID Token 不含姓名。Apple 还规定请求 `name` 或 `email` 作用域时必须使用 `response_mode=form_post`。示例 App 的 callback 是 `GET /login/federated-authorizations/callback`，`FederatedAuthorizationService.callback` 也没有接收 `user` 的参数，所以：
+
+- Apple 的 `displayName` 始终为空，应用需要自己向用户收集名称。
+- 示例 App 的 Apple Provider 只请求 `openid`，ID Token 不带邮箱，`email` 为空。
+- 需要邮箱的具体应用自己增加 `POST` 路由，读取表单字段 `state`、`code`、`error` 后调用 `callback`，并在 `authorizationParameters` 中配置 `response_mode=form_post`、在 `scopes` 中加入 `email`。`SameSite=Lax`（浏览器默认值）的 Cookie 不会随跨站 `POST` 发送，应用需要自己保证 `browserBinding` 在该路由中仍然成立。姓名仍然拿不到。
+
+### 账号解析器与 HTTP 客户端
 
 具体应用必须提供一个 `FederatedAccountResolver` Bean。
 `FederatedAutoConfiguration` 对 `FederatedAuthenticationMethod` 使用 `@ConditionalOnBean(FederatedAccountResolver.class)`，没有解析器时该认证方法不注册。

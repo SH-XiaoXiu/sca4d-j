@@ -7,6 +7,7 @@
 - [数据访问与持久化设计](/capabilities/data-configuration/data-access-and-persistence)
 - [DataGraph](/capabilities/data-configuration/data-graph)
 - [DataOps](/capabilities/data-configuration/data-operations)
+- [JsonCodec 读写器](/capabilities/data-configuration/json-codec-reader)
 - [Patch 更新](/capabilities/data-configuration/patch-updates)
 - [查询与分页](/capabilities/data-configuration/query-and-pagination)
 - [字典与系统设置](/capabilities/data-configuration/dictionaries-and-settings)
