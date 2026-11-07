@@ -48,4 +48,6 @@ TimescaleDB 写入不参与主 PostgreSQL 事务。Telemetry 发布失败可能�
 2. 把模块提供的 `META-INF/sca4dj/timescale/schema.sql` 纳入历史库初始化迁移，结构变化时新增向前迁移。
 3. 设置 `sca4dj.iot.timescale.enabled=true` 及保留期配置。
 
+Sca4d Server 示例把基线复制到 `apps/sca4d-server/src/main/resources/db/iot-history/V1__init_iot_history.sql`，并由 `IotHistoryMigrationConfiguration` 创建 `@IotTimescale` 限定的 Flyway 执行该目录迁移。
+
 模块提供 `TimescaleDeviceHistoryStore`，IoT 历史查询通过它读取 Telemetry、事件和 ACK。应用不替换该实现，需要不同的查询结果时在应用层转换。
