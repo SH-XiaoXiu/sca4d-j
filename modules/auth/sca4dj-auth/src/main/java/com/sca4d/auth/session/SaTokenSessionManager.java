@@ -4,6 +4,7 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
+import com.sca4d.auth.exception.AuthException;
 import com.sca4d.auth.session.codec.SessionCodec;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
@@ -288,7 +289,14 @@ public class SaTokenSessionManager {
         Session session;
         try {
             session = codec.decode(value);
-        } catch (IllegalStateException exception) {
+        } catch (AuthException | IllegalStateException exception) {
+            // Codec 把 wire 损坏、版本未知和 realmKey 大小写等校验失败统一包装为 AuthException。
+            // 旧版本写入的 Session 无法再解码时，注销该 Token 让残留数据立即清除，
+            // 避免每次请求都重复解码失败；用户重新登录即可恢复。日志不含 Token 和 Session 内容。
+            LOG.debug(
+                    "Session 无法解码，按未登录处理 | accountId={} reason={}",
+                    loginId,
+                    exception.getClass().getSimpleName());
             invalidToken.run();
             return Optional.empty();
         }
