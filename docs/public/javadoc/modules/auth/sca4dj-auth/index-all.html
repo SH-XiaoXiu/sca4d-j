@@ -228,6 +228,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">删除 Session Token 索引。</div>
 </dd>
+<dt><a href="com/sca4d/auth/session/SaTokenSessionManager.html#device(com.sca4d.core.api.authentication.SessionId)" class="member-name-link">device(SessionId)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionManager.html" title="class in com.sca4d.auth.session">SaTokenSessionManager</a></dt>
+<dd>
+<div class="block">读取 Session 建立时登记的设备或客户端名称。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/SessionService.html#device(com.sca4d.core.api.authentication.SessionId)" class="member-name-link">device(SessionId)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
@@ -245,9 +250,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建 Sa-Token 登录状态，并保存完整 Core Session 和当前失效代次。</div>
 </dd>
+<dt><a href="com/sca4d/auth/session/SaTokenSessionManager.html#establish(com.sca4d.core.api.authentication.Session,java.time.Duration,long,java.lang.String)" class="member-name-link">establish(Session, Duration, long, String)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionManager.html" title="class in com.sca4d.auth.session">SaTokenSessionManager</a></dt>
+<dd>
+<div class="block">创建 Sa-Token 登录状态并登记设备或客户端名称，其余行为与三参数方法相同。</div>
+</dd>
 <dt><a href="com/sca4d/auth/session/SessionService.html#establish(com.sca4d.core.api.identity.Account,java.util.List)" class="member-name-link">establish(Account, List&lt;Authentication&gt;)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
 <dd>
 <div class="block">使用至少一条成功认证建立 Session 并签发 Token。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/SessionService.html#establish(com.sca4d.core.api.identity.Account,java.util.List,java.lang.String)" class="member-name-link">establish(Account, List&lt;Authentication&gt;, String)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
+<dd>
+<div class="block">使用至少一条成功认证建立 Session 并登记设备或客户端名称。</div>
 </dd>
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>

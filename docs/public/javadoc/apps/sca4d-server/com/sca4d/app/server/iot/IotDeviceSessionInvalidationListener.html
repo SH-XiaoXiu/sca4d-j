@@ -131,7 +131,7 @@ implements com.sca4d.core.api.authentication.SessionInvalidationListener</span><
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidated(long)" class="member-name-link">invalidated</a><wbr>(long&nbsp;accountId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">断开 `iot-device` Realm Account 对应 Device 的当前连接。</div>
+<div class="block">断开 `DEVICE` Realm Account 对应 Device 的当前连接。</div>
 </div>
 </div>
 </div>
@@ -177,7 +177,7 @@ implements com.sca4d.core.api.authentication.SessionInvalidationListener</span><
 <section class="detail" id="invalidated(long)">
 <h3>invalidated</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">invalidated</span><wbr><span class="parameters">(long&nbsp;accountId)</span></div>
-<div class="block">断开 `iot-device` Realm Account 对应 Device 的当前连接。
+<div class="block">断开 `DEVICE` Realm Account 对应 Device 的当前连接。
 
  <p>非 Device Account 不产生断连消息。断连消息保存明确连接代次，重复消费不会断开后来建立的连接。</div>
 <dl class="notes">

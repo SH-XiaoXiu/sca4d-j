@@ -255,6 +255,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存启动期校验完成的 OpenAPI 路由元数据，为 HTTP、Call 和 Springdoc 提供同一份查询快照。</div>
 </dd>
+<dt><a href="com/sca4d/openapi/web/OpenApiRouteCatalog.html#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider,com.sca4d.core.api.permission.OperationCatalog,org.springframework.beans.factory.ObjectProvider)" class="member-name-link">OpenApiRouteCatalog(ObjectProvider&lt;RequestMappingHandlerMapping&gt;, OperationCatalog, ObjectProvider&lt;OpenApiRouteRegistrar&gt;)</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRouteCatalog.html" title="class in com.sca4d.openapi.web">OpenApiRouteCatalog</a></dt>
+<dd>
+<div class="block">延迟获取 Spring MVC 映射，避免 OpenAPI 路由目录在 MVC 完成注册前触发映射 Bean 初始化。</div>
+</dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRouteCatalog.html#%3Cinit%3E(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,com.sca4d.core.api.permission.OperationCatalog,java.util.List)" class="member-name-link">OpenApiRouteCatalog(RequestMappingHandlerMapping, OperationCatalog, List&lt;? extends OpenApiRouteRegistrar&gt;)</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRouteCatalog.html" title="class in com.sca4d.openapi.web">OpenApiRouteCatalog</a></dt>
 <dd>
 <div class="block">创建供测试或非 Spring 装配使用的路由目录。</div>

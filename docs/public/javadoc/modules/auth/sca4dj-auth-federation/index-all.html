@@ -146,6 +146,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表单正文中发送 client_id 和 client_secret。</div>
 </dd>
+<dt><a href="com/sca4d/auth/federation/FederatedClientAuthentication.html#CLIENT_SECRET_SIGNED_JWT" class="member-name-link">CLIENT_SECRET_SIGNED_JWT</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></dt>
+<dd>
+<div class="block">表单正文发送 client_secret，其值是 Provider Driver 用已保存的签名材料即时签发的 JWT。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#clientAuthentication()" class="member-name-link">clientAuthentication()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html#clientAuthentication()" class="member-name-link">clientAuthentication()</a> - Method in class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderSettingsState</a></dt>
@@ -156,6 +160,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#clientSecret()" class="member-name-link">clientSecret()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriver.html#clientSecret(com.sca4d.auth.federation.FederatedProviderConfiguration)" class="member-name-link">clientSecret(FederatedProviderConfiguration)</a> - Method in interface com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderDriver.html" title="interface in com.sca4d.auth.federation">FederatedProviderDriver</a></dt>
+<dd>
+<div class="block">签发 Token 端点使用的 client_secret。仅 <a href="com/sca4d/auth/federation/FederatedClientAuthentication.html#CLIENT_SECRET_SIGNED_JWT"><code>FederatedClientAuthentication.CLIENT_SECRET_SIGNED_JWT</code></a> 的 Provider 调用，
+ 每次授权码交换调用一次。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#clientSecretConfigured()" class="member-name-link">clientSecretConfigured()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html" title="class in com.sca4d.auth.federation">FederatedAuthenticationMethod</a></dt>
@@ -164,6 +173,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProvider.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProvider.html" title="class in com.sca4d.auth.federation">FederatedProvider</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriver.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderDriver.html" title="interface in com.sca4d.auth.federation">FederatedProviderDriver</a></dt>
+<dd>
+<div class="block">返回登记和 Provider 配置使用的 Driver 编码，例如 <code>GOOGLE</code>。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderState</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthenticationMethod.html" title="class in com.sca4d.auth.federation">FederatedAuthenticationMethod</a></dt>
@@ -209,6 +222,8 @@ loadScripts(document, 'script');</script>
 <div class="block">消费已完成的资料。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html#consumeCompletion(java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedAuthorizationPurpose)" class="member-name-link">consumeCompletion(String, String, FederatedAuthorizationPurpose)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriverRegistry.html#contains(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">contains(TreeCode)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderDriverRegistry.html" title="class in com.sca4d.auth.federation">FederatedProviderDriverRegistry</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderService.html#create(java.lang.String,com.sca4d.auth.federation.FederatedProviderProtocol,boolean,int,com.sca4d.auth.federation.FederatedUnlinkedIdentityAction,boolean,java.util.Map,java.lang.String)" class="member-name-link">create(String, FederatedProviderProtocol, boolean, int, FederatedUnlinkedIdentityAction, boolean, Map&lt;String, Map&lt;String, String&gt;&gt;, String)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a></dt>
 <dd>
@@ -275,6 +290,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html#displayOrder()" class="member-name-link">displayOrder()</a> - Method in class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderState</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#driver()" class="member-name-link">driver()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html#driver()" class="member-name-link">driver()</a> - Method in class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderSettingsState</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
@@ -336,7 +355,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">执行 OIDC/OAuth2 授权码、PKCE、Token 交换和用户资料标准化。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/FederatedAuthorizationService.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderService,com.sca4d.auth.federation.FederatedAuthorizationStore,com.fasterxml.jackson.databind.ObjectMapper,org.springframework.web.client.RestClient,java.time.Clock)" class="member-name-link">FederatedAuthorizationService(FederatedProviderService, FederatedAuthorizationStore, ObjectMapper, RestClient, Clock)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorizationService.html" title="class in com.sca4d.auth.federation">FederatedAuthorizationService</a></dt>
+<dt><a href="com/sca4d/auth/federation/FederatedAuthorizationService.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderService,com.sca4d.auth.federation.FederatedProviderDriverRegistry,com.sca4d.auth.federation.FederatedAuthorizationStore,com.fasterxml.jackson.databind.ObjectMapper,org.springframework.web.client.RestClient,java.time.Clock)" class="member-name-link">FederatedAuthorizationService(FederatedProviderService, FederatedProviderDriverRegistry, FederatedAuthorizationStore, ObjectMapper, RestClient, Clock)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorizationService.html" title="class in com.sca4d.auth.federation">FederatedAuthorizationService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorizationStore.html" class="type-name-link" title="interface in com.sca4d.auth.federation">FederatedAuthorizationStore</a> - Interface in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
@@ -348,6 +367,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">FederatedAutoConfiguration()</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAutoConfiguration.html" title="class in com.sca4d.auth.federation">FederatedAutoConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedClaims.html" class="type-name-link" title="class in com.sca4d.auth.federation">FederatedClaims</a> - Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
+<dd>
+<div class="block">保存外部 Provider 返回并已完成协议校验的 claims，按名称读取文本和布尔值；不包含 Token。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedClaims.html#%3Cinit%3E(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">FederatedClaims(JsonNode)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClaims.html" title="class in com.sca4d.auth.federation">FederatedClaims</a></dt>
+<dd>
+<div class="block">包装已经完成签名、受众和 nonce 校验的 claims 节点。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedClientAuthentication.html" class="type-name-link" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a> - Enum Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
 <div class="block">OAuth/OIDC Token Endpoint 接受 Client 凭据的方式。</div>
@@ -418,13 +445,25 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 OIDC 或 OAuth2 Provider 的协议端点、作用域和资料映射。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderProtocol,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.util.List,java.util.Map,java.util.Map)" class="member-name-link">FederatedProviderConfiguration(FederatedProviderProtocol, String, String, String, String, String, String, String, FederatedClientAuthentication, List&lt;String&gt;, Map&lt;String, String&gt;, Map&lt;String, String&gt;)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderProtocol,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.util.List,java.util.Map,java.util.Map,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">FederatedProviderConfiguration(FederatedProviderProtocol, String, String, String, String, String, String, String, FederatedClientAuthentication, List&lt;String&gt;, Map&lt;String, String&gt;, Map&lt;String, String&gt;, TreeCode)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
 <dd>
 <div class="block">创建协议配置；Secret 只在保存或发送到上游时短暂存在内存中。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderProtocol,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.util.List,java.util.Map,java.util.Map,boolean)" class="member-name-link">FederatedProviderConfiguration(FederatedProviderProtocol, String, String, String, String, String, String, String, FederatedClientAuthentication, List&lt;String&gt;, Map&lt;String, String&gt;, Map&lt;String, String&gt;, boolean)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderProtocol,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.util.List,java.util.Map,java.util.Map,com.sca4d.core.api.name.code.TreeCode,boolean)" class="member-name-link">FederatedProviderConfiguration(FederatedProviderProtocol, String, String, String, String, String, String, String, FederatedClientAuthentication, List&lt;String&gt;, Map&lt;String, String&gt;, Map&lt;String, String&gt;, TreeCode, boolean)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
 <dd>
 <div class="block">创建可以脱敏返回但仍保留 Secret 配置状态的协议配置。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriver.html" class="type-name-link" title="interface in com.sca4d.auth.federation">FederatedProviderDriver</a> - Interface in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
+<dd>
+<div class="block">把一类外部 Provider 返回的 claims 转换为 <a href="com/sca4d/auth/federation/FederatedProfile.html" title="class in com.sca4d.auth.federation"><code>FederatedProfile</code></a>。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriverRegistry.html" class="type-name-link" title="class in com.sca4d.auth.federation">FederatedProviderDriverRegistry</a> - Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
+<dd>
+<div class="block">保存 Spring 容器中全部 <a href="com/sca4d/auth/federation/FederatedProviderDriver.html" title="interface in com.sca4d.auth.federation"><code>FederatedProviderDriver</code></a>，按编码查找；启动时拒绝重复和非法编码。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriverRegistry.html#%3Cinit%3E(java.util.List)" class="member-name-link">FederatedProviderDriverRegistry(List&lt;FederatedProviderDriver&gt;)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderDriverRegistry.html" title="class in com.sca4d.auth.federation">FederatedProviderDriverRegistry</a></dt>
+<dd>
+<div class="block">登记 Driver。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderProtocol.html" class="type-name-link" title="enum class in com.sca4d.auth.federation">FederatedProviderProtocol</a> - Enum Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
@@ -438,7 +477,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">编排联邦 Provider 的配置、启停、发现和外部身份访问。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/FederatedProviderService.html#%3Cinit%3E(com.sca4d.auth.federation.provider.FederatedProviderRepository,com.sca4d.core.api.i18n.LocaleCatalog)" class="member-name-link">FederatedProviderService(FederatedProviderRepository, LocaleCatalog)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a></dt>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderService.html#%3Cinit%3E(com.sca4d.auth.federation.provider.FederatedProviderRepository,com.sca4d.auth.federation.FederatedProviderDriverRegistry,com.sca4d.core.api.i18n.LocaleCatalog)" class="member-name-link">FederatedProviderService(FederatedProviderRepository, FederatedProviderDriverRegistry, LocaleCatalog)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a></dt>
 <dd>
 <div class="block">创建 Provider 服务。</div>
 </dd>
@@ -482,6 +521,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/provider/FederatedProviderRepository.html#findLoginProviders()" class="member-name-link">findLoginProviders()</a> - Method in interface com.sca4d.auth.federation.provider.<a href="com/sca4d/auth/federation/provider/FederatedProviderRepository.html" title="interface in com.sca4d.auth.federation.provider">FederatedProviderRepository</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedClaims.html#flag(java.lang.String)" class="member-name-link">flag(String)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClaims.html" title="class in com.sca4d.auth.federation">FederatedClaims</a></dt>
+<dd>
+<div class="block">读取一个布尔 claim。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
@@ -525,7 +568,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#insert(java.lang.String,com.sca4d.auth.federation.FederatedProviderProtocol,com.sca4d.auth.federation.FederatedProviderStatus,boolean,int,com.sca4d.auth.federation.FederatedUnlinkedIdentityAction,boolean,java.lang.String,java.lang.String)" class="member-name-link">insert(String, FederatedProviderProtocol, FederatedProviderStatus, boolean, int, FederatedUnlinkedIdentityAction, boolean, String, String)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings(long, String, String, String, byte[], String, String, String, String, FederatedClientAuthentication, String, String, String)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
+<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings(long, String, String, String, byte[], String, String, String, String, FederatedClientAuthentication, String, String, String, String)</a> - Method in interface com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a></dt>
 <dd>
 <div class="block">写入新的协议配置。</div>
 </dd>
@@ -607,6 +650,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedIdentity.html#profile()" class="member-name-link">profile()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedIdentity.html" title="class in com.sca4d.auth.federation">FederatedIdentity</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriver.html#profile(com.sca4d.auth.federation.FederatedClaims,com.sca4d.auth.federation.FederatedProviderConfiguration)" class="member-name-link">profile(FederatedClaims, FederatedProviderConfiguration)</a> - Method in interface com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderDriver.html" title="interface in com.sca4d.auth.federation">FederatedProviderDriver</a></dt>
+<dd>
+<div class="block">校验并转换 claims。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedErrorCode.html#PROFILE_DOMAIN_REJECTED" class="member-name-link">PROFILE_DOMAIN_REJECTED</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedErrorCode.html" title="enum class in com.sca4d.auth.federation">FederatedErrorCode</a></dt>
+<dd>
+<div class="block">外部资料所属的域不在 Provider 配置允许的范围内。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedErrorCode.html#PROFILE_INVALID" class="member-name-link">PROFILE_INVALID</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedErrorCode.html" title="enum class in com.sca4d.auth.federation">FederatedErrorCode</a></dt>
 <dd>
 <div class="block">OIDC 身份断言或 OAuth2 用户资料无效。</div>
@@ -647,7 +698,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 MyBatis 从 Provider 与配置表连接结果读取的持久化状态。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderProtocol,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">ProviderSettingsState(FederatedProviderProtocol, String, String, String, byte[], String, String, String, String, FederatedClientAuthentication, String, String, String)</a> - Constructor for class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderSettingsState</a></dt>
+<dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderProtocol,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">ProviderSettingsState(FederatedProviderProtocol, String, String, String, byte[], String, String, String, String, FederatedClientAuthentication, String, String, String, String)</a> - Constructor for class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderSettingsState</a></dt>
 <dd>
 <div class="block">创建 Provider 配置持久化状态。</div>
 </dd>
@@ -697,6 +748,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderService.html#replaceConfiguration(java.lang.String,com.sca4d.auth.federation.FederatedProviderConfiguration)" class="member-name-link">replaceConfiguration(String, FederatedProviderConfiguration)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a></dt>
 <dd>
 <div class="block">保存停用 Provider 的协议配置。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProviderDriverRegistry.html#require(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">require(TreeCode)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderDriverRegistry.html" title="class in com.sca4d.auth.federation">FederatedProviderDriverRegistry</a></dt>
+<dd>
+<div class="block">按编码读取 Driver。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAccountResolver.html#resolve(com.sca4d.auth.federation.FederatedProvider,com.sca4d.auth.federation.FederatedProfile)" class="member-name-link">resolve(FederatedProvider, FederatedProfile)</a> - Method in interface com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAccountResolver.html" title="interface in com.sca4d.auth.federation">FederatedAccountResolver</a></dt>
 <dd>
@@ -765,11 +820,19 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderState</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedClaims.html#subject()" class="member-name-link">subject()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClaims.html" title="class in com.sca4d.auth.federation">FederatedClaims</a></dt>
+<dd>
+<div class="block">读取外部 Provider 内稳定的用户标识。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProfile.html#subject()" class="member-name-link">subject()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProfile.html" title="class in com.sca4d.auth.federation">FederatedProfile</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
+<dt><a href="com/sca4d/auth/federation/FederatedClaims.html#text(java.lang.String)" class="member-name-link">text(String)</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClaims.html" title="class in com.sca4d.auth.federation">FederatedClaims</a></dt>
+<dd>
+<div class="block">读取一个标量 claim 的文本。</div>
+</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html#tokenEndpoint()" class="member-name-link">tokenEndpoint()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderConfiguration.html" title="class in com.sca4d.auth.federation">FederatedProviderConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html#tokenEndpoint()" class="member-name-link">tokenEndpoint()</a> - Method in class com.sca4d.auth.federation.provider.mapper.<a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html" title="class in com.sca4d.auth.federation.provider.mapper">ProviderSettingsState</a></dt>

@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;iconReference)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings</a><wbr>(long&nbsp;providerId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertSettings</a><wbr>(long&nbsp;providerId,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;issuer,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secretKeyId,
@@ -135,7 +135,8 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../../FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a>&nbsp;clientAuthentication,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scopes,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;profileMapping,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authorizationParameters)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authorizationParameters,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;driver)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">写入新的协议配置。</div>
 </div>
@@ -281,7 +282,7 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte[],java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String)">
+<section class="detail" id="insertSettings(long,java.lang.String,java.lang.String,java.lang.String,byte[],java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedClientAuthentication,java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
 <h3>insertSettings</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insertSettings</span><wbr><span class="parameters">(@Param("providerId")
  long&nbsp;providerId,
@@ -307,7 +308,9 @@ loadScripts(document, 'script');</script>
  @Param("profileMapping") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;profileMapping,
  @Param("authorizationParameters") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authorizationParameters)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authorizationParameters,
+ @Param("driver") @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;driver)</span></div>
 <div class="block">写入新的协议配置。</div>
 </section>
 </li>

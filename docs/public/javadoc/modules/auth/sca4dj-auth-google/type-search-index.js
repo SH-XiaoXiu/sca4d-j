@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.auth.google.config","l":"GoogleAutoConfiguration"},{"p":"com.sca4d.auth.google","l":"GoogleProviderDriver"}];updateSearchResults();

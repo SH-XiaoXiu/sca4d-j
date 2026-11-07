@@ -108,16 +108,22 @@ implements org.springframework.beans.factory.SmartInitializingSingleton</span></
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,com.sca4d.core.api.permission.OperationCatalog,java.util.List)" class="member-name-link">OpenApiRouteCatalog</a><wbr>(@NotNull org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&nbsp;mappings,
- @NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;operations,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="OpenApiRouteRegistrar.html" title="interface in com.sca4d.openapi.web">OpenApiRouteRegistrar</a>&gt;&nbsp;registrars)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建供测试或非 Spring 装配使用的路由目录。</div>
-</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,com.sca4d.core.api.permission.OperationCatalog,org.springframework.beans.factory.ObjectProvider)" class="member-name-link">OpenApiRouteCatalog</a><wbr>(@NotNull org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&nbsp;mappings,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider,com.sca4d.core.api.permission.OperationCatalog,org.springframework.beans.factory.ObjectProvider)" class="member-name-link">OpenApiRouteCatalog</a><wbr>(@NotNull org.springframework.beans.factory.ObjectProvider&lt;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&gt;&nbsp;mappings,
  @NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;operations,
  @NotNull org.springframework.beans.factory.ObjectProvider&lt;<a href="OpenApiRouteRegistrar.html" title="interface in com.sca4d.openapi.web">OpenApiRouteRegistrar</a>&gt;&nbsp;registrars)</code></div>
+<div class="col-last even-row-color">
+<div class="block">延迟获取 Spring MVC 映射，避免 OpenAPI 路由目录在 MVC 完成注册前触发映射 Bean 初始化。</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,com.sca4d.core.api.permission.OperationCatalog,java.util.List)" class="member-name-link">OpenApiRouteCatalog</a><wbr>(@NotNull org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&nbsp;mappings,
+ @NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;operations,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="OpenApiRouteRegistrar.html" title="interface in com.sca4d.openapi.web">OpenApiRouteRegistrar</a>&gt;&nbsp;registrars)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">创建供测试或非 Spring 装配使用的路由目录。</div>
+</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping,com.sca4d.core.api.permission.OperationCatalog,org.springframework.beans.factory.ObjectProvider)" class="member-name-link">OpenApiRouteCatalog</a><wbr>(@NotNull org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&nbsp;mappings,
+ @NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;operations,
+ @NotNull org.springframework.beans.factory.ObjectProvider&lt;<a href="OpenApiRouteRegistrar.html" title="interface in com.sca4d.openapi.web">OpenApiRouteRegistrar</a>&gt;&nbsp;registrars)</code></div>
+<div class="col-last even-row-color">
 <div class="block">保存 Spring MVC 映射、Operation 目录和路由注册器；所有注册器完成后冻结路由快照。</div>
 </div>
 </div>
@@ -207,6 +213,24 @@ implements org.springframework.beans.factory.SmartInitializingSingleton</span></
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>mappings</code> - Spring MVC 已注册的 Handler 映射</dd>
+<dd><code>operations</code> - 已安装且完成结构校验的 Operation 目录</dd>
+<dd><code>registrars</code> - 注解适配器和具体应用提供的注册器</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(org.springframework.beans.factory.ObjectProvider,com.sca4d.core.api.permission.OperationCatalog,org.springframework.beans.factory.ObjectProvider)">
+<h3>OpenApiRouteCatalog</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">OpenApiRouteCatalog</span><wbr><span class="parameters">(@NotNull
+ @NotNull org.springframework.beans.factory.ObjectProvider&lt;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&gt;&nbsp;mappings,
+ @NotNull
+ @NotNull com.sca4d.core.api.permission.OperationCatalog&nbsp;operations,
+ @NotNull
+ @NotNull org.springframework.beans.factory.ObjectProvider&lt;<a href="OpenApiRouteRegistrar.html" title="interface in com.sca4d.openapi.web">OpenApiRouteRegistrar</a>&gt;&nbsp;registrars)</span></div>
+<div class="block">延迟获取 Spring MVC 映射，避免 OpenAPI 路由目录在 MVC 完成注册前触发映射 Bean 初始化。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>mappings</code> - Spring MVC 映射提供器</dd>
 <dd><code>operations</code> - 已安装且完成结构校验的 Operation 目录</dd>
 <dd><code>registrars</code> - 注解适配器和具体应用提供的注册器</dd>
 </dl>

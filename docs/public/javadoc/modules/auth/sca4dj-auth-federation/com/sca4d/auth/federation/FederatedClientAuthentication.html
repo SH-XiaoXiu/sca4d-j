@@ -127,8 +127,12 @@ implements com.sca4d.core.api.enums.BaseEnum</span></div>
 <div class="col-last odd-row-color">
 <div class="block">表单正文中发送 client_id 和 client_secret。</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#ONE" class="member-name-link">ONE</a></code></div>
+<div class="col-first even-row-color"><code><a href="#CLIENT_SECRET_SIGNED_JWT" class="member-name-link">CLIENT_SECRET_SIGNED_JWT</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">表单正文发送 client_secret，其值是 Provider Driver 用已保存的签名材料即时签发的 JWT。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#ONE" class="member-name-link">ONE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">不发送 Client Secret，仅允许带 PKCE 的公开客户端。</div>
 </div>
 </div>
@@ -194,6 +198,13 @@ the order they are declared.</div>
 <h3>CLIENT_SECRET_POST</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></span>&nbsp;<span class="element-name">CLIENT_SECRET_POST</span></div>
 <div class="block">表单正文中发送 client_id 和 client_secret。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="CLIENT_SECRET_SIGNED_JWT">
+<h3>CLIENT_SECRET_SIGNED_JWT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></span>&nbsp;<span class="element-name">CLIENT_SECRET_SIGNED_JWT</span></div>
+<div class="block">表单正文发送 client_secret，其值是 Provider Driver 用已保存的签名材料即时签发的 JWT。</div>
 </section>
 </li>
 <li>

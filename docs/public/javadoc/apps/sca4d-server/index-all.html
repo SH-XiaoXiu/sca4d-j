@@ -2053,6 +2053,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/request/ReplaceProviderRequest.html#getDisplayOrder()" class="member-name-link">getDisplayOrder()</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ReplaceProviderRequest.html" title="class in com.sca4d.app.server.platform.request">ReplaceProviderRequest</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/authentication/view/FederatedProviderSettingsView.html#getDriver()" class="member-name-link">getDriver()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/FederatedProviderSettingsView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderSettingsView</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html#getDriver()" class="member-name-link">getDriver()</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html" title="class in com.sca4d.app.server.platform.request">ProviderSettingsRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.ValueType.html#getElementType()" class="member-name-link">getElementType()</a> - Method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotThingModelView.ValueType.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.ValueType</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/request/EmailCodeChallengeRequest.html#getEmail()" class="member-name-link">getEmail()</a> - Method in class com.sca4d.app.server.authentication.request.<a href="com/sca4d/app/server/authentication/request/EmailCodeChallengeRequest.html" title="class in com.sca4d.app.server.authentication.request">EmailCodeChallengeRequest</a></dt>
@@ -3194,7 +3198,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotDeviceSessionInvalidationListener.html#invalidated(long)" class="member-name-link">invalidated(long)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotDeviceSessionInvalidationListener.html" title="class in com.sca4d.app.server.iot">IotDeviceSessionInvalidationListener</a></dt>
 <dd>
-<div class="block">断开 `iot-device` Realm Account 对应 Device 的当前连接。</div>
+<div class="block">断开 `DEVICE` Realm Account 对应 Device 的当前连接。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotAcknowledgementView.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotAcknowledgementView</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
@@ -3390,7 +3394,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html" class="type-name-link" title="class in com.sca4d.app.server.iot">IotDeviceSessionIdentityLoader</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">重新读取 Sca4d Server 中 `iot-device` Realm Account 的 Device Subject。</div>
+<div class="block">重新读取 Sca4d Server 中 `DEVICE` Realm Account 的 Device Subject。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html#%3Cinit%3E(com.sca4d.iam.identity.IdentityService)" class="member-name-link">IotDeviceSessionIdentityLoader(IdentityService)</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html" title="class in com.sca4d.app.server.iot">IotDeviceSessionIdentityLoader</a></dt>
 <dd>
@@ -3432,6 +3436,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">从 OpenAPI 的稳定 Device 转换为 GraphQL 返回对象。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/iot/IotHistoryMigrationConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.iot">IotHistoryMigrationConfiguration</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
+<dd>
+<div class="block">在启用 IoT 历史库时对 iot-history 数据源执行应用自己维护的历史库迁移。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/iot/IotHistoryMigrationConfiguration.html#%3Cinit%3E()" class="member-name-link">IotHistoryMigrationConfiguration()</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHistoryMigrationConfiguration.html" title="class in com.sca4d.app.server.iot">IotHistoryMigrationConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html" class="type-name-link" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
 <div class="block">定义示例应用的 Device MAC 和 EMQX HTTP 请求使用的 Header。</div>
@@ -5261,6 +5271,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/platform/request/CreateProviderRequest.html#setDisplayOrder(int)" class="member-name-link">setDisplayOrder(int)</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/CreateProviderRequest.html" title="class in com.sca4d.app.server.platform.request">CreateProviderRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/request/ReplaceProviderRequest.html#setDisplayOrder(int)" class="member-name-link">setDisplayOrder(int)</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ReplaceProviderRequest.html" title="class in com.sca4d.app.server.platform.request">ReplaceProviderRequest</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html#setDriver(java.lang.String)" class="member-name-link">setDriver(String)</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html" title="class in com.sca4d.app.server.platform.request">ProviderSettingsRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/request/EmailCodeChallengeRequest.html#setEmail(java.lang.String)" class="member-name-link">setEmail(String)</a> - Method in class com.sca4d.app.server.authentication.request.<a href="com/sca4d/app/server/authentication/request/EmailCodeChallengeRequest.html" title="class in com.sca4d.app.server.authentication.request">EmailCodeChallengeRequest</a></dt>
 <dd>&nbsp;</dd>

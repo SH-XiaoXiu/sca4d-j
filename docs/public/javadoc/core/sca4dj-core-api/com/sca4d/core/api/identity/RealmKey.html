@@ -91,7 +91,10 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RealmKey</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存账号所属认证域的键。</div>
+<div class="block">保存账号所属认证域的键。
+
+ <p>键值只能由大写字母、数字和下划线组成，以大写字母开头，长度不超过 128，与 <code>realm_key</code> 列一致。
+ 不符合规则时抛出 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>，不做大小写转换或空白清理。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -133,7 +136,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#value()" class="member-name-link">value</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">清除首尾空白后的键值。</div>
+<div class="block">认证域键值。</div>
 </div>
 </div>
 </div>
@@ -159,7 +162,9 @@ loadScripts(document, 'script');</script>
 <div class="block">创建认证域键。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - 非空白键值</dd>
+<dd><code>value</code> - 以大写字母开头，仅含大写字母、数字和下划线，长度不超过 128 的键值</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 键值为空、过长或不符合大写格式时抛出</dd>
 </dl>
 </section>
 </li>
@@ -175,10 +180,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="value()">
 <h3>value</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">value</span>()</div>
-<div class="block">清除首尾空白后的键值。</div>
+<div class="block">认证域键值。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>清除首尾空白后的键值</dd>
+<dd>认证域键值</dd>
 </dl>
 </section>
 </li>

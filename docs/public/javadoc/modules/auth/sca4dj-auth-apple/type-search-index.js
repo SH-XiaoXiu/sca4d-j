@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.auth.apple.config","l":"AppleAutoConfiguration"},{"p":"com.sca4d.auth.apple","l":"AppleClientSecretGenerator"},{"p":"com.sca4d.auth.apple","l":"AppleProviderDriver"}];updateSearchResults();

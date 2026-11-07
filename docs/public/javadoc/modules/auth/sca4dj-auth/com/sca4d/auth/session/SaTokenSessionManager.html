@@ -147,12 +147,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">读取 Account 当前 Session 失效代次。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#establish(com.sca4d.core.api.authentication.Session,java.time.Duration,long)" class="member-name-link">establish</a><wbr>(@NotNull com.sca4d.core.api.authentication.Session&nbsp;session,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#device(com.sca4d.core.api.authentication.SessionId)" class="member-name-link">device</a><wbr>(@NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取 Session 建立时登记的设备或客户端名称。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#establish(com.sca4d.core.api.authentication.Session,java.time.Duration,long)" class="member-name-link">establish</a><wbr>(@NotNull com.sca4d.core.api.authentication.Session&nbsp;session,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
  long&nbsp;expectedGeneration)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">创建 Sa-Token 登录状态，并保存完整 Core Session 和当前失效代次。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#establish(com.sca4d.core.api.authentication.Session,java.time.Duration,long,java.lang.String)" class="member-name-link">establish</a><wbr>(@NotNull com.sca4d.core.api.authentication.Session&nbsp;session,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
+ long&nbsp;expectedGeneration,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;device)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">创建 Sa-Token 登录状态并登记设备或客户端名称，其余行为与三参数方法相同。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminate(com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminate</a><wbr>(@NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId,
@@ -244,6 +257,32 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="establish(com.sca4d.core.api.authentication.Session,java.time.Duration,long,java.lang.String)">
+<h3>establish</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">establish</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.authentication.Session&nbsp;session,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
+ long&nbsp;expectedGeneration,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;device)</span></div>
+<div class="block">创建 Sa-Token 登录状态并登记设备或客户端名称，其余行为与三参数方法相同。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>session</code> - 已经完成身份和 Resource 装载的 Session</dd>
+<dd><code>ttl</code> - Token 和 Token-Session 有效期</dd>
+<dd><code>expectedGeneration</code> - 身份和 Resource 装载前读取到的 Account Session 失效代次</dd>
+<dd><code>device</code> - 登录所用的设备或客户端名称，写入 Sa-Token 登录设备；为空或空白时不登记</dd>
+<dt>Returns:</dt>
+<dd>新建在线 Session 的不透明 Token</dd>
+<dt>Throws:</dt>
+<dd><code>com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException</code> - Account 在装载期间被失效，此时不返回 Token</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="currentGeneration(long)">
 <h3>currentGeneration</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
@@ -301,6 +340,22 @@ loadScripts(document, 'script');</script>
 <dd><code>sessionId</code> - Session 标识</dd>
 <dt>Returns:</dt>
 <dd>Session 已终止、过期或索引不存在时为空</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="device(com.sca4d.core.api.authentication.SessionId)">
+<h3>device</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">device</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId)</span></div>
+<div class="block">读取 Session 建立时登记的设备或客户端名称。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>sessionId</code> - Session 标识</dd>
+<dt>Returns:</dt>
+<dd>已登记的名称；索引不存在、Token 已失效或没有登记时为空</dd>
 </dl>
 </section>
 </li>

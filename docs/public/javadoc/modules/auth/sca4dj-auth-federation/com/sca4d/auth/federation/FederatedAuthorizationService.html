@@ -103,7 +103,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderService,com.sca4d.auth.federation.FederatedAuthorizationStore,com.fasterxml.jackson.databind.ObjectMapper,org.springframework.web.client.RestClient,java.time.Clock)" class="member-name-link">FederatedAuthorizationService</a><wbr>(<a href="FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a>&nbsp;providers,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderService,com.sca4d.auth.federation.FederatedProviderDriverRegistry,com.sca4d.auth.federation.FederatedAuthorizationStore,com.fasterxml.jackson.databind.ObjectMapper,org.springframework.web.client.RestClient,java.time.Clock)" class="member-name-link">FederatedAuthorizationService</a><wbr>(<a href="FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a>&nbsp;providers,
+ <a href="FederatedProviderDriverRegistry.html" title="class in com.sca4d.auth.federation">FederatedProviderDriverRegistry</a>&nbsp;drivers,
  <a href="FederatedAuthorizationStore.html" title="interface in com.sca4d.auth.federation">FederatedAuthorizationStore</a>&nbsp;store,
  com.fasterxml.jackson.databind.ObjectMapper&nbsp;mapper,
  org.springframework.web.client.RestClient&nbsp;restClient,
@@ -158,9 +159,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.auth.federation.FederatedProviderService,com.sca4d.auth.federation.FederatedAuthorizationStore,com.fasterxml.jackson.databind.ObjectMapper,org.springframework.web.client.RestClient,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.auth.federation.FederatedProviderService,com.sca4d.auth.federation.FederatedProviderDriverRegistry,com.sca4d.auth.federation.FederatedAuthorizationStore,com.fasterxml.jackson.databind.ObjectMapper,org.springframework.web.client.RestClient,java.time.Clock)">
 <h3>FederatedAuthorizationService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">FederatedAuthorizationService</span><wbr><span class="parameters">(<a href="FederatedProviderService.html" title="class in com.sca4d.auth.federation">FederatedProviderService</a>&nbsp;providers,
+ <a href="FederatedProviderDriverRegistry.html" title="class in com.sca4d.auth.federation">FederatedProviderDriverRegistry</a>&nbsp;drivers,
  <a href="FederatedAuthorizationStore.html" title="interface in com.sca4d.auth.federation">FederatedAuthorizationStore</a>&nbsp;store,
  com.fasterxml.jackson.databind.ObjectMapper&nbsp;mapper,
  org.springframework.web.client.RestClient&nbsp;restClient,
@@ -227,7 +229,8 @@ loadScripts(document, 'script');</script>
 <dd>完成资料的标识，之后由认证或绑定流程消费一次</dd>
 <dt>Throws:</dt>
 <dd><code>com.sca4d.core.api.error.exception.BusinessException</code> - 授权状态不存在或已消费时抛出 AUTHORIZATION_UNAVAILABLE；Provider 返回错误、缺少授权码或 redirectUri 不一致时抛出 AUTHORIZATION_REJECTED；
-                           Token 交换或资料读取失败时抛出 UPSTREAM_FAILED；资料缺少 subject 或校验失败时抛出 PROFILE_INVALID</dd>
+                           Token 交换或资料读取失败时抛出 UPSTREAM_FAILED；资料缺少 subject 或校验失败时抛出 PROFILE_INVALID；
+                           Provider 配置的 Driver 没有登记时抛出 CONFIGURATION_INVALID，Driver 拒绝资料时抛出 Driver 指定的错误码</dd>
 </dl>
 </section>
 </li>

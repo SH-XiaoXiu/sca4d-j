@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">IotDeviceSessionIdentityLoader</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.authentication.SessionIdentityLoader</span></div>
-<div class="block">重新读取 Sca4d Server 中 `iot-device` Realm Account 的 Device Subject。</div>
+<div class="block">重新读取 Sca4d Server 中 `DEVICE` Realm Account 的 Device Subject。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -197,11 +197,11 @@ implements com.sca4d.core.api.authentication.SessionIdentityLoader</span></div>
 <dt>Specified by:</dt>
 <dd><code>load</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.authentication.SessionIdentityLoader</code></dd>
 <dt>Parameters:</dt>
-<dd><code>account</code> - Session 中保存的 `iot-device` Realm Account</dd>
+<dd><code>account</code> - Session 中保存的 `DEVICE` Realm Account</dd>
 <dt>Returns:</dt>
 <dd>当前可用的 Device Subject 和 Account</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Account 不属于 `iot-device` Realm 时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Account 不属于 `DEVICE` Realm 时抛出</dd>
 <dd><code>com.sca4d.core.api.authentication.exception.SessionIdentityUnavailableException</code> - Account、Subject 或 Device Subject 类型已经不可用时抛出</dd>
 </dl>
 </section>

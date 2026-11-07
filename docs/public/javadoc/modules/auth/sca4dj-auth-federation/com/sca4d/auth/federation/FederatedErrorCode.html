@@ -137,24 +137,28 @@ implements com.sca4d.core.api.error.ErrorCode</span></div>
 <div class="col-last odd-row-color">
 <div class="block">外部身份已绑定其他账号或违反唯一约束。</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#PROFILE_INVALID" class="member-name-link">PROFILE_INVALID</a></code></div>
+<div class="col-first even-row-color"><code><a href="#PROFILE_DOMAIN_REJECTED" class="member-name-link">PROFILE_DOMAIN_REJECTED</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">外部资料所属的域不在 Provider 配置允许的范围内。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#PROFILE_INVALID" class="member-name-link">PROFILE_INVALID</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">OIDC 身份断言或 OAuth2 用户资料无效。</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#PROVIDER_CONFLICT" class="member-name-link">PROVIDER_CONFLICT</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#PROVIDER_CONFLICT" class="member-name-link">PROVIDER_CONFLICT</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Provider 编码已被其他未删除 Provider 使用。</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#PROVIDER_UNAVAILABLE" class="member-name-link">PROVIDER_UNAVAILABLE</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#PROVIDER_UNAVAILABLE" class="member-name-link">PROVIDER_UNAVAILABLE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Provider 当前没有可用配置。</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#UNLINKED_IDENTITY" class="member-name-link">UNLINKED_IDENTITY</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#UNLINKED_IDENTITY" class="member-name-link">UNLINKED_IDENTITY</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">外部身份没有本地账号且 Provider 禁止自动创建。</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#UPSTREAM_FAILED" class="member-name-link">UPSTREAM_FAILED</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#UPSTREAM_FAILED" class="member-name-link">UPSTREAM_FAILED</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">上游网络或响应失败。</div>
 </div>
 </div>
@@ -272,6 +276,13 @@ the order they are declared.</div>
 <h3>IDENTITY_CONFLICT</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FederatedErrorCode.html" title="enum class in com.sca4d.auth.federation">FederatedErrorCode</a></span>&nbsp;<span class="element-name">IDENTITY_CONFLICT</span></div>
 <div class="block">外部身份已绑定其他账号或违反唯一约束。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="PROFILE_DOMAIN_REJECTED">
+<h3>PROFILE_DOMAIN_REJECTED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FederatedErrorCode.html" title="enum class in com.sca4d.auth.federation">FederatedErrorCode</a></span>&nbsp;<span class="element-name">PROFILE_DOMAIN_REJECTED</span></div>
+<div class="block">外部资料所属的域不在 Provider 配置允许的范围内。</div>
 </section>
 </li>
 </ul>
