@@ -66,7 +66,7 @@ class PrincipalIdLoadersTest {
 
     private static SessionIdentity identity() {
         Subject subject = new Subject(11, SubjectType.HUMAN);
-        return new SessionIdentity(subject, new Account(22, subject.subjectId(), new RealmKey("test")));
+        return new SessionIdentity(subject, new Account(22, subject.subjectId(), new RealmKey("TEST")));
     }
 
     /** 为测试返回固定 Principal 类型和标识。 */

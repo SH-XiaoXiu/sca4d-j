@@ -32,7 +32,7 @@ public class PlatformSessionIdentityLoader implements SessionIdentityLoader {
     }
 
     /**
-     * 重新读取可用 platform realm Account 和 Subject。
+     * 重新读取可用 PLATFORM realm Account 和 Subject。
      *
      * @throws SessionIdentityUnavailableException Account 或 Subject 已停用时抛出
      */
@@ -41,7 +41,7 @@ public class PlatformSessionIdentityLoader implements SessionIdentityLoader {
     public @NotNull SessionIdentity load(@NotNull Account account) {
         Account checked = Objects.requireNonNull(account, "Account 不能为空");
         if (!supports(checked)) {
-            throw new IllegalArgumentException("Platform Session Loader 收到非 platform realm Account");
+            throw new IllegalArgumentException("Platform Session Loader 收到非 PLATFORM realm Account");
         }
         try {
             Account current = identities.activeAccountById(checked.accountId());

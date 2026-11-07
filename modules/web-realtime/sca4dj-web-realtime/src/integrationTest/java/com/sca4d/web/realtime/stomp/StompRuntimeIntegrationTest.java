@@ -112,7 +112,7 @@ class StompRuntimeIntegrationTest {
                     new Session(
                             new SessionId("auth-session"),
                             new Subject(11, SubjectType.HUMAN),
-                            new Account(21, 11, new RealmKey("test")),
+                            new Account(21, 11, new RealmKey("TEST")),
                             List.of(principal),
                             List.of(),
                             List.of(

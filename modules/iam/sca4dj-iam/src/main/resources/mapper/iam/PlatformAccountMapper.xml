@@ -14,7 +14,7 @@
             ON principal.id = account_principal.principal_id
             AND principal.principal_type = #{principalType}
             AND principal.deleted = 0
-        WHERE account.realm_key = 'platform'
+        WHERE account.realm_key = 'PLATFORM'
           AND account.deleted = 0
     </sql>
 

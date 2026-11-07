@@ -323,7 +323,7 @@ class StompInboundInterceptorTest {
      */
     private static Session session(Instant issuedAt, Instant expiresAt) {
         Subject subject = new Subject(11, SubjectType.HUMAN);
-        Account account = new Account(21, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(21, subject.subjectId(), new RealmKey("TEST"));
         Principal principal = () -> 31;
         return new Session(
                 new SessionId("session-1"),

@@ -54,7 +54,7 @@ class RedisAuthenticationAttemptsTest {
 
     private static final Instant NOW = Instant.parse("2026-07-26T00:00:00Z");
 
-    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("platform"));
+    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("PLATFORM"));
 
     private static final AuthenticationActionCode ACTION = new AuthenticationActionCode("account.login");
 

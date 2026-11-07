@@ -95,7 +95,7 @@ describe('admin controllers', () => {
         issuedAt: '2025-01-01T00:00:00Z',
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
-        account: { accountId: '2', realmKey: 'platform' },
+        account: { accountId: '2', realmKey: 'PLATFORM' },
         permissions: ['PLATFORM:ACCOUNTS:MANAGE'],
       }),
     ];
@@ -328,7 +328,7 @@ describe('admin controllers', () => {
         issuedAt: '2025-01-01T00:00:00Z',
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
-        account: { accountId: '2', realmKey: 'platform' },
+        account: { accountId: '2', realmKey: 'PLATFORM' },
         permissions: ['PLATFORM:ACCOUNTS:MANAGE'],
       },
       {
@@ -336,7 +336,7 @@ describe('admin controllers', () => {
         issuedAt: '2025-01-01T00:00:00Z',
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
-        account: { accountId: '2', realmKey: 'platform' },
+        account: { accountId: '2', realmKey: 'PLATFORM' },
         permissions: [],
       },
     ];
@@ -396,7 +396,7 @@ describe('admin controllers', () => {
         issuedAt: '2025-01-01T00:00:00Z',
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
-        account: { accountId: '2', realmKey: 'platform' },
+        account: { accountId: '2', realmKey: 'PLATFORM' },
         permissions: ['PLATFORM:ACCOUNTS:READ'],
       }),
       {
@@ -425,7 +425,7 @@ describe('admin controllers', () => {
         issuedAt: '2025-01-01T00:00:00Z',
         expiresAt: '2026-01-01T00:00:00Z',
         subject: { subjectId: '1', type: 'HUMAN' },
-        account: { accountId: '2', realmKey: 'platform' },
+        account: { accountId: '2', realmKey: 'PLATFORM' },
         permissions: ['PLATFORM:ACCOUNTS:READ'],
       }),
       {
@@ -471,7 +471,7 @@ describe('admin controllers', () => {
             issuedAt: '2025-01-01T00:00:00Z',
             expiresAt,
             subject: { subjectId: '1', type: 'HUMAN' },
-            account: { accountId: '2', realmKey: 'platform' },
+            account: { accountId: '2', realmKey: 'PLATFORM' },
             permissions: [],
           }),
       },

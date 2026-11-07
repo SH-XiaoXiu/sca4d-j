@@ -1,5 +1,6 @@
 package com.sca4d.auth.password.config;
 
+import com.sca4d.core.api.identity.RealmKey;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.LinkedHashSet;
@@ -12,7 +13,7 @@ public class PasswordProperties {
 
     private final Bootstrap bootstrap = new Bootstrap();
 
-    private String accountRealm = "platform";
+    private String accountRealm = "PLATFORM";
 
     private List<String> loginIdentifierTypes = List.of("USERNAME");
 
@@ -40,7 +41,7 @@ public class PasswordProperties {
     /**
      * 用户名登录和 bootstrap 查找 Account 使用的认证域。
      *
-     * @return 认证域，默认为 {@code platform}
+     * @return 认证域，默认为 {@code PLATFORM}
      */
     public String getAccountRealm() {
         return accountRealm;
@@ -49,13 +50,10 @@ public class PasswordProperties {
     /**
      * 设置用户名登录和 bootstrap 查找 Account 使用的认证域。
      *
-     * @param accountRealm 非空白认证域
+     * @param accountRealm 符合 {@link RealmKey} 格式的认证域
      */
     public void setAccountRealm(String accountRealm) {
-        if (accountRealm == null || accountRealm.isBlank()) {
-            throw new IllegalArgumentException("Password 账号认证域不能为空");
-        }
-        this.accountRealm = accountRealm;
+        this.accountRealm = new RealmKey(accountRealm).value();
     }
 
     /**

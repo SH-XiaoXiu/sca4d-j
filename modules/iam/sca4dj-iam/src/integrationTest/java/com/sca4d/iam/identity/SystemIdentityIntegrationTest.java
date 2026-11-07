@@ -128,7 +128,7 @@ class SystemIdentityIntegrationTest {
         jdbc.update(
                 "INSERT INTO iam_subject (id,subject_type,status) VALUES (101,'DEVICE','ACTIVE'),(102,'HUMAN','DISABLED'),(103,'DEVICE','ACTIVE')");
         jdbc.update(
-                "INSERT INTO iam_account (id,subject_id,realm_key,status) VALUES (201,101,'iot-device','ACTIVE'),(202,102,'platform','DISABLED'),(203,101,'platform','ACTIVE')");
+                "INSERT INTO iam_account (id,subject_id,realm_key,status) VALUES (201,101,'DEVICE','ACTIVE'),(202,102,'PLATFORM','DISABLED'),(203,101,'PLATFORM','ACTIVE')");
         jdbc.update("UPDATE iam_subject SET deleted=1 WHERE id=103");
         assertThat(identities.findSubjects(List.of(101L, 102L, 103L, 999L))).containsOnlyKeys(101L, 102L);
         var accounts = identities.findAccounts(List.of(101L, 102L, 999L, 101L));
@@ -138,7 +138,7 @@ class SystemIdentityIntegrationTest {
         assertThat(accounts.get(999L)).isEmpty();
         assertThat(identities.findAccounts(List.of())).isEmpty();
         jdbc.update(
-                "INSERT INTO iam_account_identifier (id,account_id,realm_key,identifier_type,value,normalized_value,status) VALUES (301,201,'iot-device','USERNAME','before','before','DISABLED')");
+                "INSERT INTO iam_account_identifier (id,account_id,realm_key,identifier_type,value,normalized_value,status) VALUES (301,201,'DEVICE','USERNAME','before','before','DISABLED')");
         var changed = identities.changeIdentifierValue(301L, "After", "after").orElseThrow();
         assertThat(changed.value()).isEqualTo("After");
         assertThat(changed.normalizedValue()).isEqualTo("after");

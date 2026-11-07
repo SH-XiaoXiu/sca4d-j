@@ -24,7 +24,7 @@ public class PlatformIdentityService {
     private static final Logger LOG = LoggerFactory.getLogger(PlatformIdentityService.class);
 
     /** Platform 账号固定使用的认证域。 */
-    public static final @NotNull RealmKey PLATFORM_REALM = new RealmKey("platform");
+    public static final @NotNull RealmKey PLATFORM_REALM = new RealmKey("PLATFORM");
 
     private final @NotNull IdentityService identities;
 
@@ -67,7 +67,7 @@ public class PlatformIdentityService {
      *
      * @param type 登录标识类型
      * @param rawValue 原始登录标识值
-     * @return 匹配且完整可用的 platform realm Account
+     * @return 匹配且完整可用的 PLATFORM realm Account
      */
     @CheckReturnValue
     @Transactional(readOnly = true)
@@ -87,7 +87,7 @@ public class PlatformIdentityService {
      * 读取必须存在、启用且属于 Platform realm 的 Account。
      *
      * @param accountId Account 标识
-     * @return platform realm Account
+     * @return PLATFORM realm Account
      */
     @CheckReturnValue
     @Transactional(readOnly = true)
@@ -141,7 +141,7 @@ public class PlatformIdentityService {
      * 读取 Principal 关联且属于 Platform realm 的启用 Account。
      *
      * @param principalId Principal 标识
-     * @return 不可修改的 platform realm Account 列表
+     * @return 不可修改的 PLATFORM realm Account 列表
      */
     @CheckReturnValue
     @Transactional(readOnly = true)
@@ -162,7 +162,7 @@ public class PlatformIdentityService {
      * 返回既有初始化账号，或新建一套没有默认角色绑定的 Platform 身份。
      *
      * @param username 原始用户名
-     * @return 初始化后的 platform realm Account
+     * @return 初始化后的 PLATFORM realm Account
      */
     @CheckReturnValue
     @Transactional

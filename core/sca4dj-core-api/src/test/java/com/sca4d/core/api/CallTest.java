@@ -131,7 +131,7 @@ class CallTest {
     // Session 准备、选择和拒绝结果共同表达一个公开行为。
     void bindsARuntimePrincipalOnlyAfterCompactSessionValidation() {
         Subject subject = new Subject(10, SubjectType.HUMAN);
-        Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(20, subject.subjectId(), new RealmKey("TEST"));
         Session session = new Session(
                 new SessionId("session-compact"),
                 subject,
@@ -237,7 +237,7 @@ class CallTest {
 
         private Identity(long subjectId, long accountId, long principalId) {
             this.subject = new Subject(subjectId, SubjectType.HUMAN);
-            this.account = new Account(accountId, subjectId, new RealmKey("test"));
+            this.account = new Account(accountId, subjectId, new RealmKey("TEST"));
             this.principal = new TestPrincipal(principalId);
         }
     }

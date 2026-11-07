@@ -38,7 +38,7 @@ class SessionContractTest {
     @DisplayName("Keeps concrete identity and resources without inferring principal subjects")
     void keepsConcreteIdentityAndResourceInstancesWithoutPrincipalSubjectInference() {
         Subject subject = new Subject(10, SubjectType.HUMAN);
-        Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(20, subject.subjectId(), new RealmKey("TEST"));
         TestPrincipal principal = new TestPrincipal(30);
         TestResource resource = new TestResource("operation", "platform:account:read");
         Session session = session(subject, account, principal, List.of(resource));
@@ -54,7 +54,7 @@ class SessionContractTest {
     @DisplayName("Rejects Duplicate Resources And Principals")
     void rejectsDuplicateResourcesAndPrincipals() {
         Subject subject = new Subject(10, SubjectType.HUMAN);
-        Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(20, subject.subjectId(), new RealmKey("TEST"));
         TestPrincipal principal = new TestPrincipal(30);
 
         assertThrows(
@@ -83,7 +83,7 @@ class SessionContractTest {
     @DisplayName("Validates Runtime Principals By Exact Type And Compact ID")
     void validatesRuntimePrincipalsByExactTypeAndCompactId() {
         Subject subject = new Subject(10, SubjectType.HUMAN);
-        Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(20, subject.subjectId(), new RealmKey("TEST"));
         TestPrincipal complete = new TestPrincipal(30);
         Session session = new Session(
                 new SessionId("session-1"),
@@ -114,7 +114,7 @@ class SessionContractTest {
     @DisplayName("Matches Compact Numeric Resources Without Changing Text Resources")
     void matchesCompactNumericResourcesWithoutChangingTextResources() {
         Subject subject = new Subject(10, SubjectType.HUMAN);
-        Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(20, subject.subjectId(), new RealmKey("TEST"));
         TestPrincipal principal = new TestPrincipal(30);
         Session session = new Session(
                 new SessionId("session-1"),
@@ -150,14 +150,14 @@ class SessionContractTest {
     @DisplayName("Requires Session Identity Account To Belong To Subject")
     void requiresSessionIdentityAccountToBelongToSubject() {
         Subject subject = new Subject(10, SubjectType.HUMAN);
-        Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(20, subject.subjectId(), new RealmKey("TEST"));
         SessionIdentity identity = new SessionIdentity(subject, account);
 
         assertSame(subject, identity.subject());
         assertSame(account, identity.account());
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new SessionIdentity(subject, new Account(21, 99, new RealmKey("test"))));
+                () -> new SessionIdentity(subject, new Account(21, 99, new RealmKey("TEST"))));
     }
 
     private static Session session(

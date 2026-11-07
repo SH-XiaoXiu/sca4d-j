@@ -43,7 +43,7 @@ class EmailCodeChallengeServiceTest {
 
     @Test
     void sharesCooldownAcrossEmailVariantsResolvedToSameAccount() {
-        RealmKey realm = new RealmKey("platform");
+        RealmKey realm = new RealmKey("PLATFORM");
         Account account = new Account(42, 52, realm);
         AccountDirectory accounts = mock(AccountDirectory.class);
         when(
@@ -131,7 +131,7 @@ class EmailCodeChallengeServiceTest {
         when(hasher.hash(anyString())).thenReturn("dummy-hash");
         EmailCodeChallengeService service = new EmailCodeChallengeService(
                 accounts,
-                new RealmKey("platform"),
+                new RealmKey("PLATFORM"),
                 mock(Notifications.class),
                 store,
                 hasher,

@@ -125,7 +125,7 @@ class AuthenticationFactorTest {
 
         private final Subject subject = new Subject(10, SubjectType.HUMAN);
 
-        private final Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
+        private final Account account = new Account(20, subject.subjectId(), new RealmKey("TEST"));
 
         private final Principal principal = new TestPrincipal();
 

@@ -73,7 +73,7 @@ class PlatformRbacLockingTest {
         DistributedLock distributedLock = executingLock(new ArrayList<>(), events);
         PlatformIdentityService identities = mock(PlatformIdentityService.class);
         PlatformRbacService rbac = mock(PlatformRbacService.class);
-        Account account = new Account(10L, 20L, new RealmKey("platform"));
+        Account account = new Account(10L, 20L, new RealmKey("PLATFORM"));
         when(identities.initializePlatformAccount("admin")).thenAnswer(invocation -> {
             events.add("identity");
             return account;

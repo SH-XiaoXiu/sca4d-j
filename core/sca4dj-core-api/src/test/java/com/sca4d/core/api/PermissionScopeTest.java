@@ -148,7 +148,7 @@ class PermissionScopeTest {
         long accountId = 20L;
         long principalId = 30L;
         Subject subject = new Subject(subjectId, SubjectType.HUMAN);
-        Account account = new Account(accountId, subjectId, new RealmKey("test"));
+        Account account = new Account(accountId, subjectId, new RealmKey("TEST"));
         TestPrincipal principal = new TestPrincipal(principalId);
         Session session = new Session(
                 new SessionId("permission-scope"),

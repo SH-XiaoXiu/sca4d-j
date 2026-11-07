@@ -27,7 +27,7 @@ class PasskeyAuthenticationMethodTest {
     @DisplayName("discoverable Passkey 识别账号并只贡献 POSSESSION")
     void identifiesAccountAndContributesOnlyPossession() {
         Instant now = Instant.parse("2026-07-31T00:00:00Z");
-        Account account = new Account(20, 10, new RealmKey("platform"));
+        Account account = new Account(20, 10, new RealmKey("PLATFORM"));
         PasskeyCredential credential = credential();
         PasskeyAssertionService assertions = mock(PasskeyAssertionService.class);
         PasskeyProof proof = new PasskeyProof(new PasskeyCeremonyId("ceremony"), "response");

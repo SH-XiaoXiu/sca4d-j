@@ -24,7 +24,7 @@ import java.util.Set;
 /** 验证 X.509 认证证据始终绑定 Account、Credential 版本和证书有效状态。 */
 class X509AuthenticationMethodTest {
 
-    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("machine"));
+    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("MACHINE"));
 
     private static final Instant NOW = Instant.parse("2026-08-11T00:00:00Z");
 

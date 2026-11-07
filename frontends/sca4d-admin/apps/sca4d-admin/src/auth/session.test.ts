@@ -62,7 +62,7 @@ describe('session Token 契约', () => {
 
   it('使用个人资料显示名称和本地化账号说明生成 Vben 用户信息', () => {
     const session: CurrentSession = {
-      account: { accountId: '9007199254740993', realmKey: 'platform' },
+      account: { accountId: '9007199254740993', realmKey: 'PLATFORM' },
       expiresAt: '2026-07-30T02:00:00.000Z',
       issuedAt: '2026-07-30T01:00:00.000Z',
       permissions: ['PLATFORM:ACCOUNTS:READ'],

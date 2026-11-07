@@ -4,7 +4,7 @@ import { expect, test } from 'playwright/test';
 
 const EMAIL = 'admin@example.com';
 const SESSION = {
-  account: { accountId: '9007199254740993', realmKey: 'platform' },
+  account: { accountId: '9007199254740993', realmKey: 'PLATFORM' },
   expiresAt: '2099-01-01T02:00:00.000Z',
   issuedAt: '2099-01-01T01:00:00.000Z',
   permissions: [

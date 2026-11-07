@@ -73,7 +73,7 @@ Page<Device> firstPage = devices.find(
 四个对象分别解决不同问题：
 
 - **Device** 是产品、物模型和设备协议组成的设备台账；只有直接连接时才包含 DeviceConnectionBinding 和 DeviceAccessMethod。
-- **Account** 是 Device Subject 在 `iot-device` Realm 中使用的认证账号。`ANONYMOUS` 可以没有 Account；`SESSION` 或 `ACCOUNT:AUTHENTICATION:<method>` 必须有 Account。
+- **Account** 是 Device Subject 在 `DEVICE` Realm 中使用的认证账号。`ANONYMOUS` 可以没有 Account；`SESSION` 或 `ACCOUNT:AUTHENTICATION:<method>` 必须有 Account。
 - **Session** 保存 HMAC 等登录认证的结果。Shared Secret 和 X.509 可以直接验证连接，无需建立 Session。
 - **Connection** 是 Broker 当前观测到的一代协议连接，包含不透明连接代次、Device、协议、接入方式和可选 Session ID。
 

@@ -25,7 +25,7 @@ import java.util.Set;
 /** 验证 Shared Secret 只认证已确定的 Account，并用凭据版本使旧证据失效。 */
 class SharedSecretAuthenticationMethodTest {
 
-    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("machine"));
+    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("MACHINE"));
 
     private static final Instant NOW = Instant.parse("2026-08-11T00:00:00Z");
 

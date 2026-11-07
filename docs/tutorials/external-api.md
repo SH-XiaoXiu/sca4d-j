@@ -187,7 +187,7 @@ public class DocumentSyncClientService {
 
 服务会依次完成以下处理：
 
-1. 创建 `SubjectType.APPLICATION` 的 Subject 和 `openapi` Realm 中的 Account；
+1. 创建 `SubjectType.APPLICATION` 的 Subject 和 `OPEN` Realm 中的 Account；
 2. 把创建者 Session 中可选的 Principal 关系复制到新建 Account；
 3. 只接受创建者当前拥有、且已经声明为开放路由的 Operation；
 4. 保存 Client 与 Operation 的显式子集，并一次性返回认证凭据。

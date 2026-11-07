@@ -36,9 +36,9 @@ class PasswordAuthenticationMethodTest {
     private static final Account ACCOUNT = new Account(
             20,
             10,
-            new RealmKey("platform"));
+            new RealmKey("PLATFORM"));
 
-    private static final RealmKey ACCOUNT_REALM = new RealmKey("platform");
+    private static final RealmKey ACCOUNT_REALM = new RealmKey("PLATFORM");
 
     private static final Instant NOW = Instant.parse("2026-07-26T00:00:00Z");
 

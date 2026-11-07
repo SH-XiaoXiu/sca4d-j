@@ -42,7 +42,7 @@ class SmsCodeChallengeServiceTest {
     @Test
     @DisplayName("已知 PHONE Account 签发 Challenge 并只把验证码放入类型化通知")
     void issuesTypedNotificationForKnownAccount() {
-        RealmKey realm = new RealmKey("platform");
+        RealmKey realm = new RealmKey("PLATFORM");
         Account account = new Account(42, 52, realm);
         AccountDirectory accounts = mock(AccountDirectory.class);
         when(accounts.resolve(realm, SmsCodeAuthenticationMethod.PHONE_IDENTIFIER_TYPE, "+8613800138000"))
@@ -100,7 +100,7 @@ class SmsCodeChallengeServiceTest {
     @Test
     @DisplayName("验证码正确时原子消费并返回当前启用 Account")
     void consumesValidChallengeOnce() {
-        RealmKey realm = new RealmKey("platform");
+        RealmKey realm = new RealmKey("PLATFORM");
         Account account = new Account(42, 52, realm);
         var challengeId = new SmsCodeChallengeId("00000000-0000-0000-0000-000000000001");
         var state = new SmsCodeChallengeState(

@@ -346,7 +346,7 @@ export const useAuthStore = defineStore('auth', () => {
       accountDescription: $t('page.business.accountIdentifier', { accountId }),
       fallbackName: $t('page.business.accountFallbackName', { accountId }),
       realmDescription: $t(
-        session.account.realmKey === 'platform'
+        session.account.realmKey === 'PLATFORM'
           ? 'page.business.platformRealm'
           : 'page.business.otherRealm',
         { realmKey: session.account.realmKey },

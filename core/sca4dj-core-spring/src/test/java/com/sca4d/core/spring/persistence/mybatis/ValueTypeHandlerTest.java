@@ -49,14 +49,14 @@ class ValueTypeHandlerTest {
         ResultSet resultSet = mock(ResultSet.class);
         CallableStatement callableStatement = mock(CallableStatement.class);
 
-        when(resultSet.getString("realm_key")).thenReturn("platform");
+        when(resultSet.getString("realm_key")).thenReturn("PLATFORM");
         when(resultSet.getString(2)).thenReturn(null);
         when(callableStatement.getString(3)).thenReturn("customer");
 
         handler.setNonNullParameter(preparedStatement, 1, "default", JdbcType.VARCHAR);
 
         verify(preparedStatement).setString(1, "default");
-        assertThat(handler.getNullableResult(resultSet, "realm_key")).isEqualTo("platform");
+        assertThat(handler.getNullableResult(resultSet, "realm_key")).isEqualTo("PLATFORM");
         assertThat(handler.getNullableResult(resultSet, 2)).isNull();
         assertThat(handler.getNullableResult(callableStatement, 3)).isEqualTo("customer");
     }

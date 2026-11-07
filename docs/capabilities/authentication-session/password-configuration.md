@@ -6,7 +6,7 @@ PasswordProperties 读取 `sca4dj.auth.password` 配置：
 
 | 配置键 | 默认值 | 含义 |
 |---|---|---|
-| `account-realm` | `platform` | Password 登录标识和 bootstrap 用户名所在 Realm |
+| `account-realm` | `PLATFORM` | Password 登录标识和 bootstrap 用户名所在 Realm |
 | `login-identifier-types` | `USERNAME` | 登录时交给 AccountDirectory 解析的标识类型列表 |
 | `bootstrap.enabled` | `true` | 是否为 bootstrap Account 补充初始 Password Credential |
 | `bootstrap.username` | `admin` | bootstrap Account 的用户名 |
@@ -23,7 +23,7 @@ PasswordProperties 读取 `sca4dj.auth.password` 配置：
 sca4dj:
   auth:
     password:
-      account-realm: platform
+      account-realm: PLATFORM
       login-identifier-types:
         - USERNAME
         - EMAIL

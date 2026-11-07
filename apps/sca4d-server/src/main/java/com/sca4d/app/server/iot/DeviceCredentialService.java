@@ -31,7 +31,7 @@ import java.util.Set;
 public class DeviceCredentialService {
 
     /** Sca4d Server 的 Device Account 固定认证域。 */
-    public static final @NotNull RealmKey DEVICE_REALM = new RealmKey("iot-device");
+    public static final @NotNull RealmKey DEVICE_REALM = new RealmKey("DEVICE");
 
     /** 不需要 Device Account 的匿名接入方式。 */
     public static final @NotNull DeviceAccessMethod ANONYMOUS = DeviceAccessMethod.anonymous();

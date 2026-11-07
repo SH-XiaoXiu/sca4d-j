@@ -149,7 +149,7 @@ class IdentityServiceTest {
                 () -> Id.of(1L),
                 new PrincipalTypes(List.of(platformPrincipalCodec())),
                 List.of());
-        RealmKey realm = new RealmKey("platform");
+        RealmKey realm = new RealmKey("PLATFORM");
         PrincipalType principalType = new PrincipalType("platform");
         when(
                 mapper.selectPrincipalIds(
@@ -188,7 +188,7 @@ class IdentityServiceTest {
                 new PrincipalTypes(List.of()),
                 List.of(normalizer));
 
-        assertThatThrownBy(() -> identities.resolveAccount(new RealmKey("customer"), EMAIL, "mail@example.com"))
+        assertThatThrownBy(() -> identities.resolveAccount(new RealmKey("CUSTOMER"), EMAIL, "mail@example.com"))
                 .isInstanceOf(failureType);
         verifyNoInteractions(mapper);
     }

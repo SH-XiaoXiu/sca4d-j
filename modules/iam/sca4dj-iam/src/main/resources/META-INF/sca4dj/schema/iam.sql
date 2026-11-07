@@ -129,7 +129,7 @@ COMMENT ON COLUMN iam_subject.deleted IS '逻辑删除标记；0 表示保留，
 COMMENT ON TABLE iam_account IS '记录接入者在认证域内使用的账号';
 COMMENT ON COLUMN iam_account.id IS '账号全局标识';
 COMMENT ON COLUMN iam_account.subject_id IS '使用该账号完成认证的接入者标识';
-COMMENT ON COLUMN iam_account.realm_key IS '账号所属认证域的稳定键';
+COMMENT ON COLUMN iam_account.realm_key IS '账号所属认证域的稳定键，仅含大写字母、数字和下划线';
 COMMENT ON COLUMN iam_account.status IS '账号当前状态';
 COMMENT ON COLUMN iam_account.created_at IS '账号创建时间';
 COMMENT ON COLUMN iam_account.updated_at IS '账号最近更新时间';
@@ -152,7 +152,7 @@ COMMENT ON COLUMN iam_account_principal.created_at IS '账号与业务主体关�
 COMMENT ON TABLE iam_account_identifier IS '记录认证域内用于定位账号的登录标识';
 COMMENT ON COLUMN iam_account_identifier.id IS '登录标识全局主键';
 COMMENT ON COLUMN iam_account_identifier.account_id IS '登录标识所属账号';
-COMMENT ON COLUMN iam_account_identifier.realm_key IS '登录标识所属认证域的稳定键';
+COMMENT ON COLUMN iam_account_identifier.realm_key IS '登录标识所属认证域的稳定键，仅含大写字母、数字和下划线';
 COMMENT ON COLUMN iam_account_identifier.identifier_type IS '登录标识类型';
 COMMENT ON COLUMN iam_account_identifier.value IS '保留用于展示的用户输入值';
 COMMENT ON COLUMN iam_account_identifier.normalized_value IS '账号查询和唯一约束使用的规范值';

@@ -92,7 +92,7 @@ class OpenApiAuthenticationInterceptorTest {
         when(clients.loadByClientId("client-1"))
                 .thenReturn(
                         new OpenClient("client-1", 22, "test", OpenClientStatus.ACTIVE));
-        when(clients.account(22)).thenReturn(new Account(22, 11, new RealmKey("open")));
+        when(clients.account(22)).thenReturn(new Account(22, 11, new RealmKey("OPEN")));
         doThrow(new BusinessException(AuthErrorCode.AUTHENTICATION_FAILED))
                 .when(hmac)
                 .authenticate(any(), any(HmacProof.class));

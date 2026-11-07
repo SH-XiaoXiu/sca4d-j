@@ -24,13 +24,13 @@ RBAC 按角色授予权限。Principal 确定当前业务身份后，权限策�
 
 ## 贯穿示例
 
-下面以一个同时提供平台管理和租户业务的应用为例。`admin` 和 `tenant` 是这个示例应用定义的 RealmKey，不是 Sca4d-J 的内置值。
+下面以一个同时提供平台管理和租户业务的应用为例。`ADMIN` 和 `TENANT` 是这个示例应用定义的 RealmKey，不是 Sca4d-J 的内置值。
 
 | 数据 | 表示的内容 |
 |---|---|
 | Subject #1001 | 张三这个自然人 |
-| Account #2001 | 张三的管理账号，`realmKey = admin` |
-| Account #2002 | 张三的租户账号，`realmKey = tenant` |
+| Account #2001 | 张三的管理账号，`realmKey = ADMIN` |
+| Account #2002 | 张三的租户账号，`realmKey = TENANT` |
 | Principal #3001 | 张三的平台业务身份 |
 | Principal #3002 | 张三在租户 A 中的成员身份 |
 
@@ -63,8 +63,8 @@ flowchart TB
 
 | 登录入口 | 找到的 Account | 认证要求 | Session 中的 Principal |
 |---|---|---|---|
-| 管理入口，`realmKey = admin` | Account #2001 | Password + TOTP | #3001、#3002 |
-| 租户入口，`realmKey = tenant` | Account #2002 | Password | 只有 #3002 |
+| 管理入口，`realmKey = ADMIN` | Account #2001 | Password + TOTP | #3001、#3002 |
+| 租户入口，`realmKey = TENANT` | Account #2002 | Password | 只有 #3002 |
 
 以管理账号执行平台操作为例，一次调用按下面的顺序完成：
 
@@ -77,7 +77,7 @@ sequenceDiagram
     participant Call as 平台业务调用
     participant Permission as 权限判断
 
-    Login->>IAM: admin + 登录标识
+    Login->>IAM: ADMIN + 登录标识
     IAM-->>Login: Subject #1001、Account #2001
     Login->>Auth: 验证 Password 和 TOTP
     Auth->>IAM: 读取 Account #2001 可选的 Principal
@@ -179,11 +179,11 @@ Sca4d-J 当前直接使用三个 Realm：
 
 | RealmKey | 对应接入方式 | 认证成功后的结果 |
 |---|---|---|
-| `platform` | 管理端等自然人登录入口 | 读取 Account 关联的 Platform Principal |
-| `open` | 平台开放 Client 调用 | 读取 Client 关联的业务身份和 OpenAPI 操作范围 |
-| `iot-device` | IoT 设备直接接入 | 确认 Device Subject 并建立设备 Session |
+| `PLATFORM` | 管理端等自然人登录入口 | 读取 Account 关联的 Platform Principal |
+| `OPEN` | 平台开放 Client 调用 | 读取 Client 关联的业务身份和 OpenAPI 操作范围 |
+| `DEVICE` | IoT 设备直接接入 | 确认 Device Subject 并建立设备 Session |
 
-RealmKey 是开放字符串，具体应用可以定义自己的 Realm。新增字符串本身不会产生认证行为；应用还要同时定义登录入口、账号查找、认证规则和 Principal 读取规则。
+RealmKey 是开放字符串，格式规则见 [Account](/capabilities/identity-access/account#realmkey-的格式)。具体应用可以定义自己的 Realm。新增字符串本身不会产生认证行为；应用还要同时定义登录入口、账号查找、认证规则和 Principal 读取规则。
 
 ### 用户名、邮箱和密码怎样关联账号
 
@@ -193,15 +193,15 @@ RealmKey 是开放字符串，具体应用可以定义自己的 Realm。新增�
 
 | 数据 | 保存的内容 |
 |---|---|
-| Account #2001 | `subjectId = 1001`，`realmKey = admin` |
-| 用户名标识 | `admin + USERNAME + zhangsan -> Account #2001` |
-| 邮箱标识 | `admin + EMAIL + zhangsan@example.com -> Account #2001` |
+| Account #2001 | `subjectId = 1001`，`realmKey = ADMIN` |
+| 用户名标识 | `ADMIN + USERNAME + zhangsan -> Account #2001` |
+| 邮箱标识 | `ADMIN + EMAIL + zhangsan@example.com -> Account #2001` |
 | Password 凭据 | Account #2001 的密码摘要 |
 
 ```mermaid
 flowchart TB
-    Username["输入 zhangsan"] -->|"admin + USERNAME"| Account["Account #2001"]
-    Email["输入 zhangsan@example.com"] -->|"admin + EMAIL"| Account
+    Username["输入 zhangsan"] -->|"ADMIN + USERNAME"| Account["Account #2001"]
+    Email["输入 zhangsan@example.com"] -->|"ADMIN + EMAIL"| Account
     Account -->|"accountId = 2001"| Password["同一份 Password 凭据"]
     Password -->|"验证成功"| Next["继续执行 TOTP"]
 ```
@@ -256,7 +256,7 @@ Sca4d-J 使用 [Principal](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/iden
 | 数据 | 表示的内容 |
 |---|---|
 | Subject #1101 | 李四这个自然人 |
-| Account #2101 | 李四在配送应用中的账号，`realmKey = delivery` |
+| Account #2101 | 李四在配送应用中的账号，`realmKey = DELIVERY` |
 | Principal #3101 | 李四的顾客身份 |
 | Principal #3102 | 李四的骑手身份 |
 
@@ -374,7 +374,7 @@ Session 保存建立时的 Principal 快照。新增或删除 Account-Principal 
 
 认证域把一套登录入口、账号查找规则、认证要求和 Session 身份装载规则关联在一起。登录入口先确定认证域，再在这个范围内查找 Account；Account 创建后会一直保存所属认证域。
 
-Sca4d-J 使用 [RealmKey](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/identity/RealmKey.html) 表示认证域的稳定键。RealmKey 是非空白字符串，具体应用按照自己的登录入口和认证流程定义需要的值。
+Sca4d-J 使用 [RealmKey](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/identity/RealmKey.html) 表示认证域的稳定键。RealmKey 是大写字符串（格式规则见 [Account](/capabilities/identity-access/account#realmkey-的格式)），具体应用按照自己的登录入口和认证流程定义需要的值。
 
 ### 为什么账号查找需要认证域
 
@@ -384,13 +384,13 @@ Sca4d-J 使用 [RealmKey](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/ident
 
 | 登录入口 | RealmKey | 查找条件 | 结果 |
 |---|---|---|---|
-| 管理入口 | `admin` | `admin + USERNAME + zhangsan` | 管理 Account #2001 |
-| 租户入口 | `tenant` | `tenant + USERNAME + zhangsan` | 租户 Account #2002 |
+| 管理入口 | `ADMIN` | `ADMIN + USERNAME + zhangsan` | 管理 Account #2001 |
+| 租户入口 | `TENANT` | `TENANT + USERNAME + zhangsan` | 租户 Account #2002 |
 
 ```mermaid
 flowchart TB
-    AdminLogin["管理登录入口"] -->|"admin"| AdminLookup["AccountDirectory.resolve"]
-    TenantLogin["租户登录入口"] -->|"tenant"| TenantLookup["AccountDirectory.resolve"]
+    AdminLogin["管理登录入口"] -->|"ADMIN"| AdminLookup["AccountDirectory.resolve"]
+    TenantLogin["租户登录入口"] -->|"TENANT"| TenantLookup["AccountDirectory.resolve"]
     Identifier["USERNAME + zhangsan"] --> AdminLookup
     Identifier --> TenantLookup
     AdminLookup --> AdminAccount["Account #2001"]
@@ -399,7 +399,7 @@ flowchart TB
 
 两个入口收到相同文本，但各自使用已经确定的 RealmKey 调用 [AccountDirectory](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/identity/AccountDirectory.html)。账号目录再结合登录标识类型和规范化后的值查找 Account，不会跨认证域尝试其他结果。
 
-登录页面通常已经代表一个确定的认证域，不需要让用户额外选择。在这个示例中，管理登录接口固定使用 `admin`，租户登录接口固定使用 `tenant`；页面上的用户名只是该认证域内的账号标识。
+登录页面通常已经代表一个确定的认证域，不需要让用户额外选择。在这个示例中，管理登录接口固定使用 `ADMIN`，租户登录接口固定使用 `TENANT`；页面上的用户名只是该认证域内的账号标识。
 
 ### 认证域内的数据约束
 
@@ -411,7 +411,7 @@ IAM 使用下面的数据库约束保持查询结果明确：
 - 同一个认证域内，登录标识类型和规范化值的组合只能指向一个未删除的 Account；
 - 相同的规范化值可以在不同认证域中分别使用，也可以作为不同类型的登录标识使用。
 
-因此，`admin + USERNAME + zhangsan` 和 `tenant + USERNAME + zhangsan` 可以同时存在，`admin + USERNAME + zhangsan` 不能再指向第二个未删除 Account。Account 的 RealmKey 创建后不修改；需要进入另一套认证流程时，应在对应认证域创建新的 Account。
+因此，`ADMIN + USERNAME + zhangsan` 和 `TENANT + USERNAME + zhangsan` 可以同时存在，`ADMIN + USERNAME + zhangsan` 不能再指向第二个未删除 Account。Account 的 RealmKey 创建后不修改；需要进入另一套认证流程时，应在对应认证域创建新的 Account。
 
 ### 从认证域到 Session
 
@@ -444,7 +444,7 @@ sequenceDiagram
 
 以 Password 为例，具体应用为 PasswordAuthenticationMethod 配置账号所属的 RealmKey。认证方法用这个键和用户输入查找 Account，再按 `accountId` 读取 Password Credential。后续认证因素必须继续使用同一个 Account，不能切换到另一认证域中的账号。
 
-认证完成后，SessionIdentityLoadService 要求恰好一个 SessionIdentityLoader 认领这个 Account。内置 PlatformSessionIdentityLoader 只认领 `platform` Account；具体应用增加其他认证域时，需要提供相应 Loader，重新读取当前可用的 Subject 和 Account。PrincipalLoader 随后读取这个 Account 可以选择的 Principal。
+认证完成后，SessionIdentityLoadService 要求恰好一个 SessionIdentityLoader 认领这个 Account。内置 PlatformSessionIdentityLoader 只认领 `PLATFORM` Account；具体应用增加其他认证域时，需要提供相应 Loader，重新读取当前可用的 Subject 和 Account。PrincipalLoader 随后读取这个 Account 可以选择的 Principal。
 
 没有 SessionIdentityLoader 认领 Account，或多个 Loader 同时认领时，Session 建立失败。Account 或 Subject 已经停用、Loader 返回了另一个 Account，或者身份装载期间发生失败时，也不能留下可用 Session。
 

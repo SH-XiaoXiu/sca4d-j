@@ -29,7 +29,7 @@ class OpenJwtTokenServiceTest {
     void issuesAndRestoresJwt() {
         SessionCodec codec = mock(SessionCodec.class);
         Session session = mock(Session.class);
-        Account account = new Account(22, 11, new RealmKey("openapi"));
+        Account account = new Account(22, 11, new RealmKey("OPEN"));
         when(session.account()).thenReturn(account);
         when(session.id()).thenReturn(new SessionId("session-1"));
         when(session.issuedAt()).thenReturn(NOW.minusSeconds(30));

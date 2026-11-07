@@ -329,7 +329,7 @@ public class WorkspaceMemberPrincipalLoader implements PrincipalLoader {
 
     @Override
     public boolean supports(SessionIdentity identity) {
-        return "workspace".equals(identity.account().realmKey().value());
+        return "WORKSPACE".equals(identity.account().realmKey().value());
     }
 
     @Override

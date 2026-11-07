@@ -564,7 +564,7 @@ public class IamAutoConfiguration {
     }
 
     /**
-     * 创建 platform realm 的 Principal 装载器。
+     * 创建 PLATFORM realm 的 Principal 装载器。
      *
      * @param identities Platform 身份服务
      * @return 读取 Account 当前全部可用 `PlatformPrincipal` 的 Loader

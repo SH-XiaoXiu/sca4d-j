@@ -90,7 +90,7 @@ stateDiagram-v2
 
 | 配置键 | 类型 | 默认值 | 作用 |
 |---|---|---|---|
-| `sca4dj.auth.sms-code.account-realm` | 文本 | `platform` | 解析 `PHONE` 标识符所使用的 Account 认证域。设置为空白时，setter 抛出 `IllegalArgumentException` |
+| `sca4dj.auth.sms-code.account-realm` | 文本 | `PLATFORM` | 解析 `PHONE` 标识符所使用的 Account 认证域。值必须符合 [RealmKey 格式](/capabilities/identity-access/account#realmkey-的格式)，否则 setter 抛出 `IllegalArgumentException` |
 
 ### 系统设置
 

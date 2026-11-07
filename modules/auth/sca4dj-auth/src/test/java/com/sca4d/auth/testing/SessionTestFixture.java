@@ -72,7 +72,7 @@ public class SessionTestFixture {
      */
     public static Session session(Instant expiresAt) {
         Subject subject = new Subject(11, SubjectType.HUMAN);
-        Account account = new Account(22, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(22, subject.subjectId(), new RealmKey("TEST"));
         TestPrincipal principal = new TestPrincipal(33, "principal-field");
         return new Session(
                 new SessionId("session-1"),

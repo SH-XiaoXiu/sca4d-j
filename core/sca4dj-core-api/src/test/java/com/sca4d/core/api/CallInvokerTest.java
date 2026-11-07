@@ -1087,7 +1087,7 @@ class CallInvokerTest {
                 Duration.ofMinutes(5),
                 Duration.ofSeconds(3));
         Subject subject = new Subject(1, SubjectType.HUMAN);
-        Account account = new Account(2, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(2, subject.subjectId(), new RealmKey("TEST"));
         Principal principal = () -> 3;
         Session session = new Session(
                 new SessionId("session-1"),
@@ -1377,7 +1377,7 @@ class CallInvokerTest {
      */
     private static Call authenticatedCall(@Nullable HttpCall httpCall) {
         Subject subject = new Subject(101, SubjectType.HUMAN);
-        Account account = new Account(102, subject.subjectId(), new RealmKey("test"));
+        Account account = new Account(102, subject.subjectId(), new RealmKey("TEST"));
         Principal principal = () -> 103;
         Session session = new Session(
                 new SessionId("rate-limit-session"),

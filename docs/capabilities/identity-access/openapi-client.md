@@ -65,7 +65,7 @@ flowchart TD
 
 1. 校验请求中的每个 Operation 已经登记到 `OpenApiRouteCatalog`，并且创建者 Session 的某个 Principal 已被授予该 Operation。
 2. 校验认证方法为 `shared-secret` 或 `hmac`。
-3. 创建 `SubjectType.APPLICATION` 类型的 Subject，并在 `openapi` 认证域中创建 Account。
+3. 创建 `SubjectType.APPLICATION` 类型的 Subject，并在 `OPEN` 认证域中创建 Account。
 4. 把创建者 Session 中的 Principal 关联到该 Account。
 5. 保存 `ACTIVE` 状态的 Client 及其 Operation 子集。
 6. 按认证方法签发 Secret 或 MAC Key，并随 `OpenClientCredentials` 一次性返回明文。

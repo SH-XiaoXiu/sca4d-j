@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 class SessionCodecTest {
 
     private static final String LEGACY_SESSION_WIRE = """
-            {"formatVersion":2,"id":"session-1","subject":{"subjectId":11,"type":"HUMAN"},"account":{"accountId":22,"subjectId":11,"realmKey":"test"},"principals":[{"type":"test.principal","payload":"eyJpZCI6MzMsImZpZWxkIjoicHJpbmNpcGFsLWZpZWxkIn0="}],"authentications":[{"accountId":22,"methodCode":"password","factorKinds":["KNOWLEDGE","POSSESSION"],"authenticatedAt":"2026-07-22T00:00:00Z"}],"resources":[{"principalId":33,"resource":{"type":"test.resource","payload":"eyJ0eXBlIjoib3BlcmF0aW9uIiwiaWQiOiJwbGF0Zm9ybS5hY2NvdW50LnJlYWQiLCJmaWVsZCI6InJlc291cmNlLWZpZWxkIn0="}}],"issuedAt":"2026-07-22T00:00:00Z","expiresAt":"2026-07-22T01:00:00Z"}
+            {"formatVersion":2,"id":"session-1","subject":{"subjectId":11,"type":"HUMAN"},"account":{"accountId":22,"subjectId":11,"realmKey":"TEST"},"principals":[{"type":"test.principal","payload":"eyJpZCI6MzMsImZpZWxkIjoicHJpbmNpcGFsLWZpZWxkIn0="}],"authentications":[{"accountId":22,"methodCode":"password","factorKinds":["KNOWLEDGE","POSSESSION"],"authenticatedAt":"2026-07-22T00:00:00Z"}],"resources":[{"principalId":33,"resource":{"type":"test.resource","payload":"eyJ0eXBlIjoib3BlcmF0aW9uIiwiaWQiOiJwbGF0Zm9ybS5hY2NvdW50LnJlYWQiLCJmaWVsZCI6InJlc291cmNlLWZpZWxkIn0="}}],"issuedAt":"2026-07-22T00:00:00Z","expiresAt":"2026-07-22T01:00:00Z"}
             """;
 
     @Test

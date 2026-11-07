@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.List;
 import java.util.Objects;
 
-/** 为 platform realm 的身份读取当前可选择的 `PlatformPrincipal`。 */
+/** 为 PLATFORM realm 的身份读取当前可选择的 `PlatformPrincipal`。 */
 public class PlatformPrincipalLoader implements PrincipalLoader {
 
     private final PlatformIdentityService identities;
@@ -34,7 +34,7 @@ public class PlatformPrincipalLoader implements PrincipalLoader {
     /**
      * 读取当前 Account 关联且可用的全部 `PlatformPrincipal`。
      *
-     * @throws IllegalArgumentException 收到非 platform realm 身份时抛出
+     * @throws IllegalArgumentException 收到非 PLATFORM realm 身份时抛出
      * @throws BusinessException Account 或 Principal 已不可用时抛出
      */
     @Override
@@ -43,7 +43,7 @@ public class PlatformPrincipalLoader implements PrincipalLoader {
             @NotNull SessionIdentity identity) {
         SessionIdentity checked = Objects.requireNonNull(identity, "SessionIdentity 不能为空");
         if (!supports(checked)) {
-            throw new IllegalArgumentException("Platform Principal Loader 收到非 platform realm 身份");
+            throw new IllegalArgumentException("Platform Principal Loader 收到非 PLATFORM realm 身份");
         }
         return identities.activePrincipals(checked.account().accountId());
     }

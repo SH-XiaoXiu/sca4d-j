@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-/** 重新读取 Sca4d Server 中 `iot-device` Realm Account 的 Device Subject。 */
+/** 重新读取 Sca4d Server 中 `DEVICE` Realm Account 的 Device Subject。 */
 @Component
 public class IotDeviceSessionIdentityLoader implements SessionIdentityLoader {
 
@@ -42,9 +42,9 @@ public class IotDeviceSessionIdentityLoader implements SessionIdentityLoader {
     /**
      * 重新读取可用 Device Account 以及对应 Device Subject。
      *
-     * @param account Session 中保存的 `iot-device` Realm Account
+     * @param account Session 中保存的 `DEVICE` Realm Account
      * @return 当前可用的 Device Subject 和 Account
-     * @throws IllegalArgumentException Account 不属于 `iot-device` Realm 时抛出
+     * @throws IllegalArgumentException Account 不属于 `DEVICE` Realm 时抛出
      * @throws SessionIdentityUnavailableException Account、Subject 或 Device Subject 类型已经不可用时抛出
      */
     @Override
@@ -52,7 +52,7 @@ public class IotDeviceSessionIdentityLoader implements SessionIdentityLoader {
     public @NotNull SessionIdentity load(@NotNull Account account) {
         Account checked = Objects.requireNonNull(account, "Account 不能为空");
         if (!supports(checked)) {
-            throw new IllegalArgumentException("Device Identity Loader 收到非 iot-device Account");
+            throw new IllegalArgumentException("Device Identity Loader 收到非 DEVICE Realm 的 Account");
         }
         try {
             Account current = identities.activeAccountById(checked.accountId());

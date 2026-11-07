@@ -73,7 +73,7 @@ public class User implements Principal {
         Subject subject = checked.subject();
         Account account = checked.account();
         if (!PlatformIdentityService.PLATFORM_REALM.equals(account.realmKey())) {
-            throw new IllegalStateException("Session Account 必须属于 platform realm");
+            throw new IllegalStateException("Session Account 必须属于 PLATFORM realm");
         }
         if (checked.principals().size() != 1
                 || !(checked.principals().getFirst() instanceof PlatformPrincipal principal)) {

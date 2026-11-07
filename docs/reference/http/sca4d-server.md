@@ -454,7 +454,7 @@ verification 必须已经满足动作要求，并且只能由绑定的 Session�
   "issuedAt": "2026-07-24T10:15:30Z",
   "expiresAt": "2026-08-23T10:15:30Z",
   "subject": { "subjectId": "2081571083508514816", "type": "HUMAN" },
-  "account": { "accountId": "2081571083525292032", "realmKey": "platform" },
+  "account": { "accountId": "2081571083525292032", "realmKey": "PLATFORM" },
   "permissions": ["platform:accounts:read"]
 }
 ```

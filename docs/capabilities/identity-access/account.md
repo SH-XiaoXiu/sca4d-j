@@ -26,6 +26,12 @@ Core Account 不保存状态、版本、登录标识、凭据、角色、当前 
 
 构造 Session 时，Account 的 `subjectId` 必须与 Session 的 Subject 一致。Session 序列化后只包含 `accountId`、`subjectId` 与 `realmKey` 三个字段。Session 不需要 Account Codec，也不保存 IAM 状态或版本。
 
+## RealmKey 的格式
+
+RealmKey 只能由大写字母、数字和下划线组成，以大写字母开头，长度不超过 128，与 `iam_account.realm_key` 列一致。例如 `PLATFORM`、`OPEN`、`DEVICE` 和 `MEMBERS` 合法，`platform`、`workspace-members`、`2FA` 不合法。构造时不转换大小写，也不清理空白，不符合规则直接抛出 `IllegalArgumentException`。
+
+脚手架内置的认证域是 `PLATFORM`、`OPEN` 和 `DEVICE`。具体应用自己定义的 RealmKey 同样遵守这条规则，配置项 `account-realm` 的值也一样。
+
 ## 示例
 
 下面的 Service 在工作区成员登录后，读取 Session 中的 Account。
@@ -45,7 +51,7 @@ public class AccountSummaryService {
     }
 
     public Account sample() {
-        return new Account(1001L, 2001L, new RealmKey("workspace-members"));
+        return new Account(1001L, 2001L, new RealmKey("MEMBERS"));
     }
 }
 ```

@@ -31,7 +31,7 @@ public class IotDeviceSessionInvalidationListener implements SessionInvalidation
     }
 
     /**
-     * 断开 `iot-device` Realm Account 对应 Device 的当前连接。
+     * 断开 `DEVICE` Realm Account 对应 Device 的当前连接。
      *
      * <p>非 Device Account 不产生断连消息。断连消息保存明确连接代次，重复消费不会断开后来建立的连接。
      *

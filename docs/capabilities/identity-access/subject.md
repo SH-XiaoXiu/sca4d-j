@@ -119,11 +119,11 @@ WorkspaceMemberPrincipal 表示成员身份，不会把 Workspace 资源变成 P
 
 ```java
 Subject subject = new Subject(1001L, SubjectType.HUMAN);
-Account account = new Account(2001L, subject.subjectId(), new RealmKey("workspace"));
+Account account = new Account(2001L, subject.subjectId(), new RealmKey("WORKSPACE"));
 SessionIdentity identity = new SessionIdentity(subject, account);
 ```
 
-`SessionIdentity` 在构造时检查 `account.subjectId()` 与 `subject.subjectId()` 一致，不一致抛出 IllegalArgumentException。`new RealmKey("workspace")` 中的认证域名称由应用定义。
+`SessionIdentity` 在构造时检查 `account.subjectId()` 与 `subject.subjectId()` 一致，不一致抛出 IllegalArgumentException。`new RealmKey("WORKSPACE")` 中的认证域名称由应用定义。
 
 ### 判断数据应关联谁
 

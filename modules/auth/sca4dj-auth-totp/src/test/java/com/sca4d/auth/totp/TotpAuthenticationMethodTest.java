@@ -118,7 +118,7 @@ class TotpAuthenticationMethodTest {
     }
 
     private static Account account() {
-        return new Account(10, 20, new RealmKey("platform"));
+        return new Account(10, 20, new RealmKey("PLATFORM"));
     }
 
     private static SecretKeyring keyring() {

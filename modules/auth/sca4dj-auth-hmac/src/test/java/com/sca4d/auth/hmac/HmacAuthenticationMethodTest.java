@@ -24,7 +24,7 @@ import java.time.ZoneOffset;
 /** 验证 MAC Key 轮换和撤销使用独立 Credential，并使旧 Session 失效。 */
 class HmacAuthenticationMethodTest {
 
-    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("machine"));
+    private static final Account ACCOUNT = new Account(20, 10, new RealmKey("MACHINE"));
 
     private static final Instant NOW = Instant.parse("2026-08-11T00:00:00Z");
 

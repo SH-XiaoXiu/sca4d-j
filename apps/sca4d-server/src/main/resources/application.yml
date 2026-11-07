@@ -276,7 +276,7 @@ sca4dj:
       failure-window: ${SCA4DJ_AUTH_HMAC_FAILURE_WINDOW:PT1M}
       failure-limit: ${SCA4DJ_AUTH_HMAC_FAILURE_LIMIT:10}
     email-code:
-      account-realm: ${SCA4DJ_AUTH_EMAIL_CODE_ACCOUNT_REALM:platform}
+      account-realm: ${SCA4DJ_AUTH_EMAIL_CODE_ACCOUNT_REALM:PLATFORM}
     password:
       bootstrap:
         enabled: ${SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_ENABLED:true}

@@ -28,7 +28,7 @@ class ResourceRefTest {
     @DisplayName("资源引用不与其他 Resource 实现跨类型相等")
     void doesNotCompareEqualToAnotherResourceImplementation() {
         Object reference = new Resource.Ref("ACCOUNT/RESOURCE", "12");
-        Object file = new Account(12L, 13L, new RealmKey("test"));
+        Object file = new Account(12L, 13L, new RealmKey("TEST"));
 
         assertNotEquals(reference, file);
         assertNotEquals(file, reference);

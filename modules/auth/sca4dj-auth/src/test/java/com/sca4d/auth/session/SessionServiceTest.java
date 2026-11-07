@@ -186,7 +186,7 @@ class SessionServiceTest {
     }
 
     private static Account account() {
-        return new Account(22, 11, new RealmKey("test"));
+        return new Account(22, 11, new RealmKey("TEST"));
     }
 
     private static SessionIdentity identity(Account account) {

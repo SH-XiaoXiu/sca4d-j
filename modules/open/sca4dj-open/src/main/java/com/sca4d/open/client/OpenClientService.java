@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 public class OpenClientService {
 
-    private static final @NotNull RealmKey REALM = new RealmKey("open");
+    private static final @NotNull RealmKey REALM = new RealmKey("OPEN");
 
     private final @NotNull IdentityService identities;
 

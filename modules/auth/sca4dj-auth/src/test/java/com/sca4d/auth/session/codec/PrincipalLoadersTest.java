@@ -24,7 +24,7 @@ class PrincipalLoadersTest {
         Subject subject = new Subject(11, SubjectType.HUMAN);
         SessionIdentity identity = new SessionIdentity(
                 subject,
-                new Account(22, subject.subjectId(), new RealmKey("test")));
+                new Account(22, subject.subjectId(), new RealmKey("TEST")));
         PrincipalLoaders principals = new PrincipalLoaders(
                 List.of(new EmptyPrincipalLoader()));
 

@@ -8,7 +8,7 @@
 
 ```text
 OpenClient
-  └── accountId → Account（open 认证域）
+  └── accountId → Account（OPEN 认证域）
                     └── subjectId → Subject（APPLICATION）
                                       └── Principal
                                             └── Operation 权限
@@ -20,7 +20,7 @@ OpenClient
 
 ## Client 生命周期
 
-`OpenClientService.create(...)` 创建 `APPLICATION Subject`、`open` Realm 的 `Account` 和 OpenClient，并复制创建者当前的 Principal 关联。Client 的 Operation 必须来自 `OperationCatalog`，且不能超过创建者当前拥有的权限。
+`OpenClientService.create(...)` 创建 `APPLICATION Subject`、`OPEN` Realm 的 `Account` 和 OpenClient，并复制创建者当前的 Principal 关联。Client 的 Operation 必须来自 `OperationCatalog`，且不能超过创建者当前拥有的权限。
 
 Client 停用后不能签发新 Token，也不能调用已经发布的 OpenAPI 路由或 GraphQL 字段。Client 的 Operation 授权是协议无关的；具体应用是否发布某个 Operation 由 OpenAPI 路由或 GraphQL Schema 决定。
 

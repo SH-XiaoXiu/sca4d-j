@@ -74,7 +74,7 @@ class PlatformPrincipalSelectionTest {
         Session session = session(List.of(new PlatformPrincipal(31)));
 
         assertThat(selection.select(null, null, null, Map.of())).isNull();
-        Account other = new Account(99, session.subject().subjectId(), new RealmKey("other"));
+        Account other = new Account(99, session.subject().subjectId(), new RealmKey("OTHER"));
         assertThat(selection.select(session, session.subject(), other, Map.of())).isNull();
     }
 

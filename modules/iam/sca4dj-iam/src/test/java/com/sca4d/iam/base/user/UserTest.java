@@ -80,10 +80,10 @@ class UserTest {
         Account account = account(subject.subjectId());
         PlatformPrincipal principal = principal(31);
 
-        Account otherAccount = new Account(account.accountId(), subject.subjectId(), new RealmKey("other"));
+        Account otherAccount = new Account(account.accountId(), subject.subjectId(), new RealmKey("OTHER"));
         assertThatThrownBy(() -> User.from(session(subject, otherAccount, List.of(principal))))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("platform realm");
+                .hasMessageContaining("PLATFORM realm");
         assertThatThrownBy(() -> User.from(session(subject, account, List.of(new OtherPrincipal()))))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("PlatformPrincipal");

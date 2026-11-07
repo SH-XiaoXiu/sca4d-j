@@ -138,7 +138,7 @@ sequenceDiagram
 
 SessionIdentityLoadService 先从所有 [SessionIdentityLoader](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/authentication/SessionIdentityLoader.html) 中，找到唯一一个 `supports(account)` 返回 `true` 的实现。
 
-[PlatformSessionIdentityLoader](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/PlatformSessionIdentityLoader.html) 只支持 Realm 为 `platform` 的 Account，并重新查询 Account 和 Subject。
+[PlatformSessionIdentityLoader](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/PlatformSessionIdentityLoader.html) 只支持 Realm 为 `PLATFORM` 的 Account，并重新查询 Account 和 Subject。
 
 PrincipalLoaders 随后找到唯一一个支持该 SessionIdentity 的 [PlatformPrincipalLoader](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/PlatformPrincipalLoader.html)。然后，它查询这个 Account 关联且启用的全部 PlatformPrincipal。
 
@@ -186,7 +186,7 @@ PlatformRbacService 只负责批量把 Platform Account 转换成 PlatformPrinci
 Set<Long> active = identities.findPrincipalIds(
         PrincipalQuery.forIds(profilePrincipalIds)
                 .status(IdentityStatus.ACTIVE)
-                .linkedAccount(LinkedAccountCondition.activeIn(new RealmKey("platform")))
+                .linkedAccount(LinkedAccountCondition.activeIn(new RealmKey("PLATFORM")))
                 .build());
 ```
 
@@ -236,9 +236,9 @@ IAM 不删除 Password、TOTP、Passkey Credential，也不删除具体应用保
 
 ## PlatformIdentityService 和 User
 
-[PlatformIdentityService](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/PlatformIdentityService.html) 固定使用 `platform` Realm。它在一个事务中创建 HUMAN Subject、Account、USERNAME AccountIdentifier、PlatformPrincipal 和 Account-Principal 关系。它只调用 IdentityService，不访问 Repository 或 Mapper，也不创建 Credential 或绑定 Role。
+[PlatformIdentityService](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/PlatformIdentityService.html) 固定使用 `PLATFORM` Realm。它在一个事务中创建 HUMAN Subject、Account、USERNAME AccountIdentifier、PlatformPrincipal 和 Account-Principal 关系。它只调用 IdentityService，不访问 Repository 或 Mapper，也不创建 Credential 或绑定 Role。
 
-[User](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/user/User.html) 把一个 Core Subject、一个 Core Account 和一个 Principal 放在同一个 Java 对象中。`User.of(...)` 接受这三个对象。`User.from(Session)` 只接受 `platform` Realm 的 Account，并且 Session 中必须恰好有一个 PlatformPrincipal。
+[User](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/user/User.html) 把一个 Core Subject、一个 Core Account 和一个 Principal 放在同一个 Java 对象中。`User.of(...)` 接受这三个对象。`User.from(Session)` 只接受 `PLATFORM` Realm 的 Account，并且 Session 中必须恰好有一个 PlatformPrincipal。
 
 Account 关联多个 Principal，或者多个 Account 共享一个 Principal 时，应直接使用 Session 和 Call 中已经选择的 Principal。不能用 User 表示这些关系。
 
@@ -286,7 +286,7 @@ public class WorkspaceMemberPrincipalCodec implements PrincipalCodec<WorkspaceMe
 
 public class WorkspaceMemberPrincipalLoader implements PrincipalLoader {
 
-    private static final RealmKey WORKSPACE_REALM = new RealmKey("workspace");
+    private static final RealmKey WORKSPACE_REALM = new RealmKey("WORKSPACE");
 
     private final WorkspaceMembershipService memberships;
 

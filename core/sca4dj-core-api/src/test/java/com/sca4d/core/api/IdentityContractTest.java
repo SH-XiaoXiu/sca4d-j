@@ -18,12 +18,25 @@ class IdentityContractTest {
     @DisplayName("Requires Positive Identity IDs And Compares By Value")
     void requiresPositiveIdentityIdsAndComparesByValue() {
         assertThrows(IllegalArgumentException.class, () -> new Subject(0, SubjectType.HUMAN));
-        assertThrows(IllegalArgumentException.class, () -> new Account(0, 1, new RealmKey("test")));
-        assertThrows(IllegalArgumentException.class, () -> new Account(1, 0, new RealmKey("test")));
+        assertThrows(IllegalArgumentException.class, () -> new Account(0, 1, new RealmKey("TEST")));
+        assertThrows(IllegalArgumentException.class, () -> new Account(1, 0, new RealmKey("TEST")));
 
         long first = 42L;
         long second = 42L;
         assertEquals(first, second);
+    }
+
+    @Test
+    @DisplayName("Accepts Only Uppercase Realm Keys")
+    void acceptsOnlyUppercaseRealmKeys() {
+        assertEquals("PLATFORM", new RealmKey("PLATFORM").value());
+        assertEquals("WORKSPACE_2", new RealmKey("WORKSPACE_2").value());
+        assertEquals(128, new RealmKey("A".repeat(128)).value().length());
+        for (String invalid : new String[] {
+                null, "", " ", "platform", "Platform", "PLATFORM ", "2FA", "_A", "WORK-SPACE", "A".repeat(129)
+        }) {
+            assertThrows(IllegalArgumentException.class, () -> new RealmKey(invalid), String.valueOf(invalid));
+        }
     }
 
     @Test

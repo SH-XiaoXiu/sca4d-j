@@ -23,7 +23,7 @@ class EmailCodeAuthenticationMethodTest {
     @Test
     void identifiesAccountFromConsumedChallenge() {
         EmailCodeChallengeService challenges = mock(EmailCodeChallengeService.class);
-        Account account = new Account(42, 21, new RealmKey("platform"));
+        Account account = new Account(42, 21, new RealmKey("PLATFORM"));
         EmailCodeChallengeId challengeId = new EmailCodeChallengeId(UUID.randomUUID().toString());
         EmailCodeProof proof = new EmailCodeProof(challengeId, "123456");
         when(challenges.consume(proof))

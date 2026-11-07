@@ -37,7 +37,7 @@ class RedisAuthenticationAttemptStoreTest {
     void preservesCredentialValidityDeadline() {
         Instant authenticatedAt = Instant.parse("2026-08-12T00:00:00Z");
         Instant validUntil = authenticatedAt.plusSeconds(300);
-        Account account = new Account(20, 10, new RealmKey("device"));
+        Account account = new Account(20, 10, new RealmKey("DEVICE"));
         Authentication authentication = new Authentication(
                 account.accountId(),
                 TreeCode.ofSlash("AUTHENTICATION/X509"),

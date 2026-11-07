@@ -136,9 +136,9 @@ public class PlatformRoleController {
 }
 ```
 
-该选择器只接受 Account realm 为 `platform` 的 Session，并支持在多个 PlatformPrincipal 中按显式标识选择：
+该选择器只接受 Account realm 为 `PLATFORM` 的 Session，并支持在多个 PlatformPrincipal 中按显式标识选择：
 
-- 没有 Session，或当前 Account 不属于 `platform` realm：返回 `null`。
+- 没有 Session，或当前 Account 不属于 `PLATFORM` realm：返回 `null`。
 - 恰好一个 PlatformPrincipal：返回该 Principal。
 - 没有 PlatformPrincipal：抛出 IllegalStateException。
 - 存在多个 PlatformPrincipal：依次读取顶层、路径、查询参数中的 `principalId`，再读取请求头 `x-principal-id`；返回 Session 中标识匹配的 Principal。
