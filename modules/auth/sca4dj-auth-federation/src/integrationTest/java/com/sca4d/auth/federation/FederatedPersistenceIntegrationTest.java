@@ -12,6 +12,7 @@ import com.sca4d.auth.federation.provider.mapper.ProviderMapper;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.exception.OptimisticLockException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
@@ -186,6 +187,7 @@ class FederatedPersistenceIntegrationTest {
         assertThat(after.version()).isEqualTo(saved.version());
         assertThat(providers.configuration(after).authorizationEndpoint())
                 .isEqualTo("https://issuer.example/authorize");
+        assertThat(providers.configuration(after).driver()).isEqualTo(TreeCode.ofColon("TEST:DRIVER"));
         providers.replace("first", false, 0, FederatedUnlinkedIdentityAction.REJECT, false, Map.of(), null);
         providers.changeStatus("first", FederatedProviderStatus.ACTIVE);
         assertThat(providers.findLoginProviders()).isEmpty();
@@ -207,6 +209,7 @@ class FederatedPersistenceIntegrationTest {
                 FederatedClientAuthentication.ONE,
                 List.of("openid"),
                 Map.of(),
-                Map.of());
+                Map.of(),
+                TreeCode.ofColon("TEST:DRIVER"));
     }
 }

@@ -2,6 +2,7 @@ package com.sca4d.app.server.authentication.view;
 
 import com.sca4d.auth.federation.FederatedProviderConfiguration;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.spring.web.annotation.ETag;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +30,8 @@ public class FederatedProviderSettingsView {
 
     private final String clientAuthentication;
 
+    private final String driver;
+
     private final List<String> scopes;
 
     private final Map<String, String> profileMapping;
@@ -48,6 +51,7 @@ public class FederatedProviderSettingsView {
         userInfoEndpoint = configuration.userInfoEndpoint();
         jwksEndpoint = configuration.jwksEndpoint();
         clientAuthentication = configuration.clientAuthentication().name();
+        driver = configuration.driver() == null ? null : configuration.driver().format(NameFormat.COLON);
         scopes = configuration.scopes();
         profileMapping = configuration.profileMapping();
         authorizationParameters = configuration.authorizationParameters();
@@ -103,6 +107,11 @@ public class FederatedProviderSettingsView {
     /** @return Client 认证方式 */
     public String getClientAuthentication() {
         return clientAuthentication;
+    }
+
+    /** @return 资料转换 Driver 编码；没有 Driver 时为空 */
+    public String getDriver() {
+        return driver;
     }
 
     /** @return 作用域 */

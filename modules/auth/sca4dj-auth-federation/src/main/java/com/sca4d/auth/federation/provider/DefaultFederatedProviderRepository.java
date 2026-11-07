@@ -17,6 +17,8 @@ import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.data.DataOps;
 import com.sca4d.core.api.error.exception.BusinessException;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.Patch;
@@ -216,7 +218,8 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                         checked.clientAuthentication(),
                         json(checked.scopes()),
                         json(checked.profileMapping()),
-                        json(checked.authorizationParameters())),
+                        json(checked.authorizationParameters()),
+                        checked.driver() == null ? null : checked.driver().format(NameFormat.COLON)),
                 ZeroRowPolicy.ERROR,
                 "保存联邦 Provider 协议配置");
         return findByCode(checkedCode)
@@ -251,6 +254,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                 readList(state.scopes()),
                 readMap(state.profileMapping()),
                 readMap(state.authorizationParameters()),
+                readDriver(state.driver()),
                 ciphertext != null);
     }
 
@@ -280,6 +284,18 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
             return Objects.requireNonNull(DataOps.j(objectMapper.writeValueAsString(value)).get(), "JSON 文本不能为空");
         } catch (Exception exception) {
             throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID, exception);
+        }
+    }
+
+    /** 读取冒号文本形式的 Driver 编码；空值表示没有 Driver。 */
+    private @Nullable TreeCode readDriver(@Nullable String value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return TreeCode.ofColon(value);
+        } catch (IllegalArgumentException exception) {
+            throw new AuthFederationException("联邦 Provider 的 Driver 编码损坏", exception);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.sca4d.auth.federation;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public class FederatedProviderConfiguration {
 
     private final String userInfoEndpoint;
 
+    private final @Nullable TreeCode driver;
+
     private boolean clientSecretConfigured;
 
     /** 创建协议配置；Secret 只在保存或发送到上游时短暂存在内存中。 */
@@ -48,7 +51,8 @@ public class FederatedProviderConfiguration {
             FederatedClientAuthentication clientAuthentication,
             @Nullable List<String> scopes,
             @Nullable Map<String, String> profileMapping,
-            @Nullable Map<String, String> authorizationParameters) {
+            @Nullable Map<String, String> authorizationParameters,
+            @Nullable TreeCode driver) {
         this.protocol = Objects.requireNonNull(protocol, "Provider 协议不能为空");
         this.issuer = clean(issuer);
         this.clientId = clean(clientId);
@@ -63,6 +67,7 @@ public class FederatedProviderConfiguration {
                 : scopes.stream().map(String::strip).filter(s -> !s.isEmpty()).distinct().toList();
         this.profileMapping = profileMapping == null ? Map.of() : Map.copyOf(profileMapping);
         this.authorizationParameters = authorizationParameters == null ? Map.of() : Map.copyOf(authorizationParameters);
+        this.driver = driver;
         this.clientSecretConfigured = this.clientSecret != null;
     }
 
@@ -80,6 +85,7 @@ public class FederatedProviderConfiguration {
             @Nullable List<String> scopes,
             @Nullable Map<String, String> profileMapping,
             @Nullable Map<String, String> authorizationParameters,
+            @Nullable TreeCode driver,
             boolean clientSecretConfigured) {
         this(
                 protocol,
@@ -93,7 +99,8 @@ public class FederatedProviderConfiguration {
                 clientAuthentication,
                 scopes,
                 profileMapping,
-                authorizationParameters);
+                authorizationParameters,
+                driver);
         this.clientSecretConfigured = clientSecretConfigured || this.clientSecret != null;
     }
 
@@ -155,6 +162,11 @@ public class FederatedProviderConfiguration {
     /** @return 经过白名单校验的附加授权参数 */
     public Map<String, String> authorizationParameters() {
         return authorizationParameters;
+    }
+
+    /** @return 转换外部资料的 Driver 编码；为空时使用标准 OIDC claims 或 {@link #profileMapping()} */
+    public @Nullable TreeCode driver() {
+        return driver;
     }
 
     /** @return 是否提供了 Client Secret */

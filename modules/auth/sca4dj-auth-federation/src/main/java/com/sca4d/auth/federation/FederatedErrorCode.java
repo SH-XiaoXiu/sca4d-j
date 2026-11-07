@@ -25,7 +25,9 @@ public enum FederatedErrorCode implements ErrorCode {
     /** Provider 编码已被其他未删除 Provider 使用。 */
     PROVIDER_CONFLICT("2607", ErrorCategory.CONFLICT, "error.auth-federation.provider-conflict"),
     /** 外部身份已绑定其他账号或违反唯一约束。 */
-    IDENTITY_CONFLICT("2608", ErrorCategory.CONFLICT, "error.auth-federation.identity-conflict");
+    IDENTITY_CONFLICT("2608", ErrorCategory.CONFLICT, "error.auth-federation.identity-conflict"),
+    /** 外部资料所属的域不在 Provider 配置允许的范围内。 */
+    PROFILE_DOMAIN_REJECTED("2609", ErrorCategory.AUTHENTICATION, "error.auth-federation.profile.domain.rejected");
 
     private final @NotNull String code;
 

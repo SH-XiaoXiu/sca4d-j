@@ -75,7 +75,8 @@ public interface ProviderMapper {
             @Param("clientAuthentication") @NotNull FederatedClientAuthentication clientAuthentication,
             @Param("scopes") @NotNull String scopes,
             @Param("profileMapping") @NotNull String profileMapping,
-            @Param("authorizationParameters") @NotNull String authorizationParameters);
+            @Param("authorizationParameters") @NotNull String authorizationParameters,
+            @Param("driver") @Nullable String driver);
 
     /** @return 修改行数；按期望版本原子递增 Provider 版本，版本不匹配或 Provider 已删除时为零 */
     int updateConfigurationVersion(

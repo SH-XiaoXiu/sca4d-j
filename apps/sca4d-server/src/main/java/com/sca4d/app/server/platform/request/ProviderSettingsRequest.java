@@ -1,8 +1,11 @@
 package com.sca4d.app.server.platform.request;
 
 import com.sca4d.auth.federation.FederatedClientAuthentication;
+import com.sca4d.auth.federation.FederatedErrorCode;
 import com.sca4d.auth.federation.FederatedProviderConfiguration;
 import com.sca4d.auth.federation.FederatedProviderProtocol;
+import com.sca4d.core.api.error.exception.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.validation.Req;
 
 import java.util.ArrayList;
@@ -30,6 +33,8 @@ public class ProviderSettingsRequest {
 
     @Req.NotNull
     private FederatedClientAuthentication clientAuthentication = FederatedClientAuthentication.CLIENT_SECRET_POST;
+
+    private String driver;
 
     private List<String> scopes = new ArrayList<>();
 
@@ -121,6 +126,16 @@ public class ProviderSettingsRequest {
         clientAuthentication = value;
     }
 
+    /** @return 资料转换 Driver 的冒号编码；为空表示不使用 Driver */
+    public String getDriver() {
+        return driver;
+    }
+
+    /** @param value 资料转换 Driver 的冒号编码 */
+    public void setDriver(String value) {
+        driver = value;
+    }
+
     /** @return 作用域 */
     public List<String> getScopes() {
         return new ArrayList<>(scopes);
@@ -151,8 +166,18 @@ public class ProviderSettingsRequest {
         authorizationParameters = value == null ? new LinkedHashMap<>() : new LinkedHashMap<>(value);
     }
 
-    /** 转换为模块协议配置。 */
+    /**
+     * 转换为模块协议配置。
+     *
+     * @throws BusinessException Driver 编码不是合法的冒号编码时抛出 CONFIGURATION_INVALID
+     */
     public FederatedProviderConfiguration toConfiguration(FederatedProviderProtocol protocol) {
+        TreeCode driverCode;
+        try {
+            driverCode = driver == null || driver.isBlank() ? null : TreeCode.ofColon(driver.strip());
+        } catch (IllegalArgumentException exception) {
+            throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID, exception);
+        }
         return new FederatedProviderConfiguration(
                 protocol,
                 issuer,
@@ -165,6 +190,7 @@ public class ProviderSettingsRequest {
                 clientAuthentication,
                 scopes,
                 profileMapping,
-                authorizationParameters);
+                authorizationParameters,
+                driverCode);
     }
 }

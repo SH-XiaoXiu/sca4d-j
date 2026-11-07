@@ -19,6 +19,8 @@ public class ProviderSettingsState {
 
     private final @Nullable String clientId;
 
+    private final @Nullable String driver;
+
     private final @Nullable String issuer;
 
     private final @Nullable String jwksEndpoint;
@@ -49,7 +51,8 @@ public class ProviderSettingsState {
             @NotNull FederatedClientAuthentication clientAuthentication,
             @NotNull String scopes,
             @NotNull String profileMapping,
-            @NotNull String authorizationParameters) {
+            @NotNull String authorizationParameters,
+            @Nullable String driver) {
         this.protocol = protocol;
         this.issuer = issuer;
         this.clientId = clientId;
@@ -63,6 +66,7 @@ public class ProviderSettingsState {
         this.scopes = scopes;
         this.profileMapping = profileMapping;
         this.authorizationParameters = authorizationParameters;
+        this.driver = driver;
     }
 
     /** @return 协议类型 */
@@ -128,5 +132,10 @@ public class ProviderSettingsState {
     /** @return JSONB 授权参数对象 */
     public @NotNull String authorizationParameters() {
         return authorizationParameters;
+    }
+
+    /** @return Driver 编码的冒号文本；没有 Driver 时为空 */
+    public @Nullable String driver() {
+        return driver;
     }
 }

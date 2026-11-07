@@ -16,6 +16,7 @@ import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -29,6 +30,13 @@ import java.time.Clock;
 @AutoConfiguration
 @MapperScan(basePackageClasses = {ProviderMapper.class, FederatedIdentityMapper.class})
 public class FederatedAutoConfiguration {
+
+    /** 登记可选认证模块提供的 Driver；没有任何 Driver 时目录为空。 */
+    @Bean
+    FederatedProviderDriverRegistry federatedProviderDriverRegistry(
+            @NotNull ObjectProvider<FederatedProviderDriver> drivers) {
+        return new FederatedProviderDriverRegistry(drivers.orderedStream().toList());
+    }
 
     /** 创建 Provider Secret 加密器。 */
     @Bean
@@ -62,8 +70,9 @@ public class FederatedAutoConfiguration {
     @Bean
     FederatedProviderService federatedProviderService(
             @NotNull FederatedProviderRepository repository,
+            @NotNull FederatedProviderDriverRegistry drivers,
             @NotNull LocaleCatalog locales) {
-        return new FederatedProviderService(repository, locales);
+        return new FederatedProviderService(repository, drivers, locales);
     }
 
     /** 创建 Redis 授权状态存储。 */
@@ -84,11 +93,12 @@ public class FederatedAutoConfiguration {
     @Bean
     FederatedAuthorizationService federatedAuthorizationService(
             @NotNull FederatedProviderService providers,
+            @NotNull FederatedProviderDriverRegistry drivers,
             @NotNull FederatedAuthorizationStore store,
             @NotNull ObjectMapper mapper,
             @NotNull RestClient restClient,
             @NotNull Clock clock) {
-        return new FederatedAuthorizationService(providers, store, mapper, restClient, clock);
+        return new FederatedAuthorizationService(providers, drivers, store, mapper, restClient, clock);
     }
 
     /** 只有具体应用提供账号解析器后才注册认证方法。 */

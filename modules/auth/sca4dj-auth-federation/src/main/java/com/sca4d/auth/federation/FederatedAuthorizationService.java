@@ -50,6 +50,8 @@ public class FederatedAuthorizationService {
 
     private final RestClient restClient;
 
+    private final FederatedProviderDriverRegistry drivers;
+
     private final Clock clock;
 
     private final FederatedAuthorizationStore store;
@@ -58,11 +60,13 @@ public class FederatedAuthorizationService {
 
     public FederatedAuthorizationService(
             FederatedProviderService providers,
+            FederatedProviderDriverRegistry drivers,
             FederatedAuthorizationStore store,
             ObjectMapper mapper,
             RestClient restClient,
             Clock clock) {
         this.providers = Objects.requireNonNull(providers, "Provider 服务不能为空");
+        this.drivers = Objects.requireNonNull(drivers, "Driver 目录不能为空");
         this.store = Objects.requireNonNull(store, "授权状态存储不能为空");
         this.mapper = Objects.requireNonNull(mapper, "ObjectMapper 不能为空");
         this.restClient = Objects.requireNonNull(restClient, "RestClient 不能为空");
@@ -134,7 +138,8 @@ public class FederatedAuthorizationService {
      * @param redirectUri 当前 callback 地址，必须与授权开始时保存的地址一致
      * @return 完成资料的标识，之后由认证或绑定流程消费一次
      * @throws BusinessException 授权状态不存在或已消费时抛出 AUTHORIZATION_UNAVAILABLE；Provider 返回错误、缺少授权码或 redirectUri 不一致时抛出 AUTHORIZATION_REJECTED；
-     *                           Token 交换或资料读取失败时抛出 UPSTREAM_FAILED；资料缺少 subject 或校验失败时抛出 PROFILE_INVALID
+     *                           Token 交换或资料读取失败时抛出 UPSTREAM_FAILED；资料缺少 subject 或校验失败时抛出 PROFILE_INVALID；
+     *                           Provider 配置的 Driver 没有登记时抛出 CONFIGURATION_INVALID，Driver 拒绝资料时抛出 Driver 指定的错误码
      */
     public @NotNull String callback(
             @NotNull String state,
@@ -180,11 +185,16 @@ public class FederatedAuthorizationService {
         return completionId;
     }
 
-    /** 读取已启用 Provider 的协议配置；没有配置时返回统一不可用错误。 */
+    /**
+     * 读取已启用 Provider 的协议配置；没有配置时返回统一不可用错误。
+     * 配置选择的 Driver 没有登记时在授权开始前失败，避免用户完成外部登录后才发现无法转换资料。
+     */
     private FederatedProviderConfiguration authorizationConfiguration(FederatedProvider provider) {
         FederatedProviderConfiguration config = providers.authorizationConfiguration(provider);
         if (config == null)
             throw new BusinessException(FederatedErrorCode.PROVIDER_UNAVAILABLE);
+        if (config.driver() != null)
+            drivers.require(config.driver());
         return config;
     }
 
@@ -232,6 +242,13 @@ public class FederatedAuthorizationService {
         if (config.clientAuthentication() == FederatedClientAuthentication.CLIENT_SECRET_POST
                 && config.clientSecret() != null)
             form.add("client_secret", config.clientSecret());
+        // 签名凭据由 Driver 即时签发；Provider 没有选择 Driver 时无法签发，按配置无效处理。
+        if (config.clientAuthentication() == FederatedClientAuthentication.CLIENT_SECRET_SIGNED_JWT) {
+            if (config.driver() == null)
+                throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
+            LOG.trace("使用 Driver 签发 client_secret | driver={}", config.driver());
+            form.add("client_secret", drivers.require(config.driver()).clientSecret(config));
+        }
         RestClient.RequestBodySpec request = restClient.post()
                 .uri(URI.create(tokenEndpoint))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -278,7 +295,7 @@ public class FederatedAuthorizationService {
                     throw new BusinessException(FederatedErrorCode.PROFILE_INVALID);
                 profile = mergeProfile(claims.toJSONObject(), userInfo);
             }
-            return oidcProfile(config.issuer(), profile);
+            return config.driver() == null ? oidcProfile(config.issuer(), profile) : driverProfile(config, profile);
         } catch (BusinessException exception) {
             throw exception;
         } catch (ParseException | BadJOSEException | JOSEException exception) {
@@ -291,6 +308,8 @@ public class FederatedAuthorizationService {
     /** 使用配置的字段映射读取 OAuth2 UserInfo，并转换为统一外部资料。 */
     private FederatedProfile oauth2Profile(FederatedProviderConfiguration config, JsonNode token) {
         JsonNode profile = readUserInfo(config.userInfoEndpoint(), token.path("access_token").asText());
+        if (config.driver() != null)
+            return driverProfile(config, profile);
         String subjectPath = config.profileMapping().get("subject");
         String subject = scalar(profile, subjectPath);
         if (subject == null)
@@ -302,6 +321,12 @@ public class FederatedAuthorizationService {
                 scalar(profile, config.profileMapping().get("email")),
                 "true".equalsIgnoreCase(scalar(profile, config.profileMapping().get("emailVerified"))),
                 scalar(profile, config.profileMapping().get("avatar")));
+    }
+
+    /** 使用 Provider 配置选择的 Driver 转换已经完成协议校验的 claims。 */
+    private FederatedProfile driverProfile(FederatedProviderConfiguration config, JsonNode claims) {
+        LOG.trace("使用 Driver 转换外部资料 | driver={}", config.driver());
+        return drivers.require(config.driver()).profile(new FederatedClaims(claims), config);
     }
 
     /** 从已经验证签名、受众和 nonce 的 OIDC Claims 转换统一外部资料。 */

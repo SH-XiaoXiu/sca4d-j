@@ -32,6 +32,7 @@ CREATE TABLE auth_federated_provider_configuration (
     scopes JSONB NOT NULL DEFAULT '[]'::jsonb,
     profile_mapping JSONB NOT NULL DEFAULT '{}'::jsonb,
     authorization_parameters JSONB NOT NULL DEFAULT '{}'::jsonb,
+    driver_code VARCHAR(64),
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     deleted SMALLINT NOT NULL DEFAULT 0
 );
@@ -88,6 +89,7 @@ COMMENT ON COLUMN auth_federated_provider_configuration.client_authentication IS
 COMMENT ON COLUMN auth_federated_provider_configuration.scopes IS '发起授权请求时申请的 scope 数组';
 COMMENT ON COLUMN auth_federated_provider_configuration.profile_mapping IS '把外部 claims 映射到本地资料字段的 JSON 对象';
 COMMENT ON COLUMN auth_federated_provider_configuration.authorization_parameters IS '发起授权请求时追加的参数 JSON 对象';
+COMMENT ON COLUMN auth_federated_provider_configuration.driver_code IS '转换外部资料的 Driver 编码，冒号分隔的大写节点；为空时使用标准 OIDC claims 或 profile_mapping';
 COMMENT ON COLUMN auth_federated_provider_configuration.created_at IS '该 Provider 配置版本创建时间';
 COMMENT ON COLUMN auth_federated_provider_configuration.deleted IS '配置版本失效标记；0 表示当前版本，1 表示历史版本';
 

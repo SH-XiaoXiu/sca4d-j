@@ -37,6 +37,7 @@ public class FederatedProviderService {
             "max_age",
             "acr_values",
             "hd",
+            "response_mode",
             "access_type",
             "audience",
             "resource");
@@ -53,13 +54,17 @@ public class FederatedProviderService {
 
     private final FederatedProviderRepository repository;
 
+    private final FederatedProviderDriverRegistry drivers;
+
     private final LocaleCatalog locales;
 
     /** 创建 Provider 服务。 */
     public FederatedProviderService(
             @NotNull FederatedProviderRepository repository,
+            @NotNull FederatedProviderDriverRegistry drivers,
             @NotNull LocaleCatalog locales) {
         this.repository = Objects.requireNonNull(repository, "Provider Repository 不能为空");
+        this.drivers = Objects.requireNonNull(drivers, "Driver 目录不能为空");
         this.locales = Objects.requireNonNull(locales, "LocaleCatalog 不能为空");
     }
 
@@ -261,7 +266,8 @@ public class FederatedProviderService {
      * 校验协议端点、映射和授权参数，不读写数据库。
      *
      * @param configuration 待校验的协议配置
-     * @throws BusinessException 端点不是 HTTPS URL、必填字段为空、映射或授权参数不在允许范围内时抛出 CONFIGURATION_INVALID
+     * @throws BusinessException 端点不是 HTTPS URL、必填字段为空、映射或授权参数不在允许范围内、Driver 没有登记、
+     *                           签名凭据认证方式没有选择 Driver 时抛出 CONFIGURATION_INVALID
      */
     public void validate(@NotNull FederatedProviderConfiguration configuration) {
         FederatedProviderConfiguration checked = Objects.requireNonNull(configuration, "协议配置不能为空");
@@ -274,7 +280,7 @@ public class FederatedProviderService {
             requireUrl(checked.authorizationEndpoint(), true);
             requireUrl(checked.tokenEndpoint(), true);
             requireUrl(checked.userInfoEndpoint(), true);
-            if (checked.profileMapping().get("subject") == null)
+            if (checked.driver() == null && checked.profileMapping().get("subject") == null)
                 throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
             checked.profileMapping().forEach((key, path) -> {
                 if (!Set.of("subject", "displayName", "email", "emailVerified", "avatar").contains(key)
@@ -283,6 +289,11 @@ public class FederatedProviderService {
                     throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
             });
         }
+        if (checked.driver() != null && !drivers.contains(checked.driver()))
+            throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
+        if (checked.clientAuthentication() == FederatedClientAuthentication.CLIENT_SECRET_SIGNED_JWT
+                && checked.driver() == null)
+            throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
         checked.authorizationParameters().forEach((key, value) -> {
             if (!ALLOWED_AUTHORIZATION_PARAMETERS.contains(key)
                     || RESERVED_AUTHORIZATION_PARAMETERS.contains(key)

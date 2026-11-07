@@ -8,6 +8,8 @@ public enum FederatedClientAuthentication implements BaseEnum {
     CLIENT_SECRET_BASIC,
     /** 表单正文中发送 client_id 和 client_secret。 */
     CLIENT_SECRET_POST,
+    /** 表单正文发送 client_secret，其值是 Provider Driver 用已保存的签名材料即时签发的 JWT。 */
+    CLIENT_SECRET_SIGNED_JWT,
     /** 不发送 Client Secret，仅允许带 PKCE 的公开客户端。 */
     ONE;
 
@@ -23,6 +25,7 @@ public enum FederatedClientAuthentication implements BaseEnum {
         return switch (this) {
             case CLIENT_SECRET_BASIC -> "HTTP Basic";
             case CLIENT_SECRET_POST -> "请求正文";
+            case CLIENT_SECRET_SIGNED_JWT -> "Driver 签发的 JWT";
             case ONE -> "不发送 Client Secret";
         };
     }

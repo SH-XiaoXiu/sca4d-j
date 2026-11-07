@@ -55,7 +55,7 @@ public class FederatedProfile {
         return email;
     }
 
-    /** @return Provider 明确声明邮箱已验证 */
+    /** @return Provider 明确声明邮箱已验证，且 Driver 认为它可用于自动关联；Apple 隐藏邮箱为 false */
     public boolean emailVerified() {
         return emailVerified;
     }
