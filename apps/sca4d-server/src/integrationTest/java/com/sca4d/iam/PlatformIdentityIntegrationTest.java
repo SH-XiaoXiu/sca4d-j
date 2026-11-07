@@ -10,7 +10,7 @@ import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionIdentity;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
+import com.sca4d.core.api.concurrent.exception.VersionPreconditionFailedException;
 import com.sca4d.core.api.error.exception.BusinessException;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
@@ -18,8 +18,10 @@ import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.spring.web.RequestVersionConditions;
 import com.sca4d.iam.base.PlatformAccountEntry;
 import com.sca4d.iam.base.PlatformAccountQuery;
@@ -64,8 +66,10 @@ import java.util.Set;
 @Sql(statements = "TRUNCATE TABLE auth_password_secret, auth_password_credential, platform_acl_entry, platform_principal_role, platform_role_permission, platform_role, iam_account_identifier, iam_account_principal, iam_principal, iam_account, iam_subject CASCADE", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @SpringBootTest(classes = PlatformIdentityIntegrationTest.TestApplication.class, properties = {
         "sca4dj.iam.bootstrap.enabled=false",
+        "sca4dj.plugin.enabled=false",
+        "sca4dj.instance.capabilities=MAIN:API",
         "sca4dj.auth.password.bootstrap.enabled=false",
-        "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration,com.sca4d.web.realtime.config.WebRealtimeAutoConfiguration,com.sca4d.notification.config.NotificationAutoConfiguration,com.sca4d.notification.email.config.EmailNotificationAutoConfiguration,com.sca4d.auth.email.config.EmailCodeAutoConfiguration,com.sca4d.iot.config.IotAutoConfiguration,com.sca4d.iot.config.IotWorkerAutoConfiguration,com.sca4d.iot.emqx.config.EmqxAutoConfiguration,com.sca4d.iot.config.TimescaleIotAutoConfiguration"
+        "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration,com.sca4d.web.realtime.config.WebRealtimeAutoConfiguration,com.sca4d.notification.config.NotificationAutoConfiguration,com.sca4d.notification.email.config.EmailNotificationAutoConfiguration,com.sca4d.auth.email.config.EmailCodeAutoConfiguration,com.sca4d.iot.config.IotAutoConfiguration,com.sca4d.iot.config.IotWorkerAutoConfiguration,com.sca4d.iot.emqx.config.EmqxAutoConfiguration,com.sca4d.iot.config.TimescaleIotAutoConfiguration,com.sca4d.auth.sms.config.SmsCodeAutoConfiguration,com.sca4d.notification.inbox.config.InboxNotificationAutoConfiguration,com.sca4d.notification.sms.config.SmsNotificationAutoConfiguration,com.sca4d.notification.sms.aliyun.config.AliyunSmsAutoConfiguration,com.sca4d.storage.file.config.FileAutoConfiguration,com.sca4d.storage.local.LocalStorageAutoConfiguration,com.sca4d.storage.minio.MinioStorageAutoConfiguration,org.springframework.boot.autoconfigure.graphql.GraphQlAutoConfiguration"
 })
 @SuppressWarnings({
         "DuplicatedCode",
@@ -81,6 +85,12 @@ class PlatformIdentityIntegrationTest {
     @SpringBootConfiguration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class TestApplication {
+        /** 声明最小应用必须提供的业务 API 实例能力，使 {@code sca4dj.instance.capabilities=MAIN:API} 可以被启用。 */
+        @Bean
+        InstanceCapability mainApiCapability() {
+            return new InstanceCapability(TreeCode.ofColon("MAIN:API"), SystemPrincipals.MAIN, List.of("/"));
+        }
+
         /**
          * 为不执行认证流程的 IAM 集成测试声明具体 App 必须提供的固定认证策略。
          */
@@ -177,7 +187,7 @@ class PlatformIdentityIntegrationTest {
                 jdbc.sql("SELECT principal_type FROM iam_principal")
                         .query(String.class)
                         .single())
-                .isEqualTo("iam.platform-principal");
+                .isEqualTo("IAM.PLATFORM_PRINCIPAL");
     }
 
     @Test
@@ -239,7 +249,7 @@ class PlatformIdentityIntegrationTest {
                         .param(principal.principalId())
                         .query(String.class)
                         .single())
-                .isEqualTo("iam.platform-principal");
+                .isEqualTo("IAM.PLATFORM_PRINCIPAL");
 
         assertThatThrownBy(() -> {
             Account unexpected = identities.activeAccountById(account.accountId());

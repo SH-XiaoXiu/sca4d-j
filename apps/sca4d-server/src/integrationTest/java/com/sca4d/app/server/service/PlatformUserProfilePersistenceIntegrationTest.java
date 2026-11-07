@@ -33,6 +33,10 @@ import com.sca4d.core.api.storage.FileUse;
 import com.sca4d.core.api.storage.StorageObject;
 import com.sca4d.core.api.storage.StorageObjectMetadata;
 import com.sca4d.core.api.storage.StorageUpload;
+import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
+import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
+import com.sca4d.core.spring.persistence.batch.SqlBatches;
+import com.sca4d.core.spring.persistence.mybatis.CoreMyBatisAutoConfiguration;
 import com.sca4d.core.spring.security.ConfiguredSecretKeyring;
 import com.sca4d.core.spring.security.SecretKeyringProperties;
 import com.sca4d.iam.base.PlatformPrincipal;
@@ -261,6 +265,8 @@ class PlatformUserProfilePersistenceIntegrationTest {
             TransactionAutoConfiguration.class,
             FlywayAutoConfiguration.class,
             MybatisAutoConfiguration.class,
+            CoreJacksonAutoConfiguration.class,
+            CoreMyBatisAutoConfiguration.class,
             FileAutoConfiguration.class
     })
     @MapperScan(basePackageClasses = PlatformUserProfileMapper.class)
@@ -270,6 +276,11 @@ class PlatformUserProfilePersistenceIntegrationTest {
         @Bean
         Clock clock() {
             return Clock.fixed(NOW, ZoneOffset.UTC);
+        }
+
+        @Bean
+        SqlBatches sqlBatches() {
+            return new SqlBatches(new SqlBatchProperties());
         }
 
         @Bean

@@ -25,6 +25,7 @@ import com.sca4d.core.api.plugin.exception.PluginUnavailableException;
 import com.sca4d.core.spring.setting.YamlCodec;
 import com.sca4d.plugin.pf4j.Pf4jPluginLoader;
 import com.sca4d.plugin.runtime.DefaultPluginRuntime;
+import com.sca4d.plugin.runtime.exception.PluginException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -134,10 +135,10 @@ class MfaPluginRuntimeTest {
         try (var runtime = runtime()) {
             runtime.replace(artifact(), Duration.ZERO);
             Path badEntry = candidate(document -> ((ObjectNode) document.path("plugin")).put("main", "missing.Plugin"));
-            assertThrows(IllegalStateException.class, () -> runtime.replace(badEntry, Duration.ZERO));
+            assertThrows(PluginException.class, () -> runtime.replace(badEntry, Duration.ZERO));
             Path incompatible = candidate(
                     document -> ((ObjectNode) document.path("plugin")).put("requires", ">=2.0.0"));
-            assertThrows(IllegalStateException.class, () -> runtime.replace(incompatible, Duration.ZERO));
+            assertThrows(PluginException.class, () -> runtime.replace(incompatible, Duration.ZERO));
             assertEquals(1, runtime.statuses().size());
             assertEquals(PluginStatus.State.ACTIVE, runtime.statuses().getFirst().state());
             assertEquals(
@@ -231,7 +232,7 @@ class MfaPluginRuntimeTest {
             Path invalid = candidate(
                     document -> ((ObjectNode) document.path("policy"))
                             .put("reuse-sensitive-authentication", "false"));
-            assertThrows(IllegalStateException.class, () -> runtime.replace(invalid, Duration.ZERO));
+            assertThrows(PluginException.class, () -> runtime.replace(invalid, Duration.ZERO));
             assertEquals(1, runtime.statuses().size());
             var action = new AuthenticationActionCode(AuthenticationActions.PASSWORD_REPLACE_CODE);
             assertTrue(

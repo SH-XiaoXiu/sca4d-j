@@ -22,15 +22,20 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
-import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationAxes;
+import com.sca4d.core.api.permission.OperationCode;
+import com.sca4d.core.api.permission.OperationModule;
+import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionAssessment;
 import com.sca4d.core.api.permission.PermissionDecision;
 import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.resource.Resource;
+import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.spring.identity.PrincipalSelection;
 import com.sca4d.iam.acl.AclEntry;
 import com.sca4d.iam.acl.AclPermissionPolicy;
@@ -38,11 +43,11 @@ import com.sca4d.iam.acl.AclRepository;
 import com.sca4d.iam.acl.AclService;
 import com.sca4d.iam.identity.AccountIdentifierNormalizer;
 import com.sca4d.iam.identity.IdentityService;
-import com.sca4d.iam.rbac.PermissionSelections;
 import com.sca4d.iam.rbac.PermissionSelector;
 import com.sca4d.iam.rbac.PrincipalRoles;
 import com.sca4d.iam.rbac.RbacDomain;
 import com.sca4d.iam.rbac.RbacErrorCode;
+import com.sca4d.iam.rbac.RbacGrantable;
 import com.sca4d.iam.rbac.RbacRepository;
 import com.sca4d.iam.rbac.RbacScope;
 import com.sca4d.iam.rbac.RbacService;
@@ -89,8 +94,10 @@ import java.util.stream.Collectors;
 @Sql(statements = "TRUNCATE TABLE auth_password_secret, auth_password_credential, platform_principal_role, iam_account_identifier, iam_account_principal, iam_principal, iam_account, iam_subject CASCADE", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @SpringBootTest(classes = IdentityLayeringExtensionIntegrationTest.TestApplication.class, properties = {
         "sca4dj.iam.bootstrap.enabled=false",
+        "sca4dj.plugin.enabled=false",
+        "sca4dj.instance.capabilities=MAIN:API",
         "sca4dj.auth.password.bootstrap.enabled=false",
-        "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration,com.sca4d.web.realtime.config.WebRealtimeAutoConfiguration,com.sca4d.notification.config.NotificationAutoConfiguration,com.sca4d.notification.email.config.EmailNotificationAutoConfiguration,com.sca4d.auth.email.config.EmailCodeAutoConfiguration,com.sca4d.iot.config.IotAutoConfiguration,com.sca4d.iot.config.IotWorkerAutoConfiguration,com.sca4d.iot.emqx.config.EmqxAutoConfiguration,com.sca4d.iot.config.TimescaleIotAutoConfiguration"
+        "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration,com.sca4d.web.realtime.config.WebRealtimeAutoConfiguration,com.sca4d.notification.config.NotificationAutoConfiguration,com.sca4d.notification.email.config.EmailNotificationAutoConfiguration,com.sca4d.auth.email.config.EmailCodeAutoConfiguration,com.sca4d.iot.config.IotAutoConfiguration,com.sca4d.iot.config.IotWorkerAutoConfiguration,com.sca4d.iot.emqx.config.EmqxAutoConfiguration,com.sca4d.iot.config.TimescaleIotAutoConfiguration,com.sca4d.auth.sms.config.SmsCodeAutoConfiguration,com.sca4d.notification.inbox.config.InboxNotificationAutoConfiguration,com.sca4d.notification.sms.config.SmsNotificationAutoConfiguration,com.sca4d.notification.sms.aliyun.config.AliyunSmsAutoConfiguration,com.sca4d.storage.file.config.FileAutoConfiguration,com.sca4d.storage.local.LocalStorageAutoConfiguration,com.sca4d.storage.minio.MinioStorageAutoConfiguration,org.springframework.boot.autoconfigure.graphql.GraphQlAutoConfiguration"
 })
 @SuppressWarnings({
         "DuplicatedCode",
@@ -102,7 +109,7 @@ class IdentityLayeringExtensionIntegrationTest {
 
     private static final AccountIdentifierType PHONE = new AccountIdentifierType("PHONE");
 
-    private static final RealmKey RIDER_REALM = new RealmKey("rider");
+    private static final RealmKey RIDER_REALM = new RealmKey("RIDER");
 
     private static final DomainScope DELIVERY = new DomainScope("DELIVERY");
 
@@ -119,6 +126,12 @@ class IdentityLayeringExtensionIntegrationTest {
     @SpringBootConfiguration(proxyBeanMethods = false)
     @EnableAutoConfiguration
     static class TestApplication {
+        /** 声明最小应用必须提供的业务 API 实例能力，使 {@code sca4dj.instance.capabilities=MAIN:API} 可以被启用。 */
+        @Bean
+        InstanceCapability mainApiCapability() {
+            return new InstanceCapability(TreeCode.ofColon("MAIN:API"), SystemPrincipals.MAIN, List.of("/"));
+        }
+
         /**
          * 为不执行认证步骤的 IAM 集成测试声明具体 App 必须提供的固定认证策略。
          */
@@ -173,8 +186,8 @@ class IdentityLayeringExtensionIntegrationTest {
         }
 
         @Bean
-        PermissionSelections deliveryPermissionSelections(OperationCatalog operations) {
-            return new PermissionSelections(DELIVERY_RBAC, operations);
+        OperationModule deliveryOperations() {
+            return new DeliveryOperations();
         }
 
         @Bean
@@ -223,9 +236,6 @@ class IdentityLayeringExtensionIntegrationTest {
     @Autowired
     private AclPermissionPolicy aclPolicy;
 
-    @Autowired
-    private OperationCatalog operations;
-
     @Test
     @DisplayName("Extends Identity Login Principal Selection Rbac Acl And Abac Without Iam Changes")
     void extendsCompleteIdentityAndPermissionChain() {
@@ -251,7 +261,7 @@ class IdentityLayeringExtensionIntegrationTest {
                 Map.of("principalId", rider.principalId()));
         assertThat(selected).isInstanceOf(Rider.class);
 
-        TreeCode operationCode = operations.actions().getFirst().operation().code();
+        OperationCode operationCode = DeliveryOperations.ORDERS_READ;
         Role role = rbac.createRole(DELIVERY_ROLES, "DISPATCHER", List.of(operationCode)).role();
         rbac.bindRole(DELIVERY_ROLES, rider.principalId(), role.code(), false);
         assertThat(rbac.findGrantedOperations(DELIVERY_ROLES, List.of(rider.principalId())).get(rider.principalId()))
@@ -274,6 +284,28 @@ class IdentityLayeringExtensionIntegrationTest {
         assertThat(permissionAssessment.assess(call, orderRead).isAllowed()).isTrue();
         assertThat(permissionAssessment.assess(call, ownStoreRead).isAllowed()).isTrue();
         assertThat(permissionAssessment.assess(call, otherStoreRead).isAllowed()).isFalse();
+    }
+
+    /** 声明 DELIVERY RBAC 领域可授予的 Operation，使应用安装 DELIVERY 权限选择规则。 */
+    private static final class DeliveryOperations implements OperationModule {
+
+        private static final OperationCode ORDERS_READ = new OperationCode("DELIVERY:ORDERS:READ");
+
+        @Override
+        public @NotNull OperationNode.Group operationTree() {
+            return OperationNode.root(
+                    TreeCode.ofSegment("DELIVERY"),
+                    900,
+                    OperationNode.group(
+                            TreeCode.ofSegment("ORDERS"),
+                            100,
+                            OperationNode.leaf(
+                                    Action.READ,
+                                    100,
+                                    OperationAxes.Intent.READ,
+                                    OperationAxes.Nature.FUNCTION,
+                                    RbacGrantable.of(DELIVERY_RBAC))));
+        }
     }
 
     private Session login(Long accountId) {

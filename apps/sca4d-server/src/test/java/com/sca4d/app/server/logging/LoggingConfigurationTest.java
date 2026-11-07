@@ -19,7 +19,7 @@ class LoggingConfigurationTest {
 
         assertThat(logback)
                 .contains("<springProfile name=\"prod\">", "<logger name=\"com.sca4d\" level=\"DEBUG\"/>")
-                .contains("<springProfile name=\"dev | local\">", "<logger name=\"com.sca4d\" level=\"TRACE\"/>")
+                .contains("<springProfile name=\"dev | local\">", "<logger name=\"com.sca4d\" level=\"DEBUG\"/>")
                 .contains("<root level=\"INFO\">")
                 .doesNotContain("<root level=\"DEBUG\">", "<root level=\"TRACE\">");
     }
@@ -43,10 +43,11 @@ class LoggingConfigurationTest {
     }
 
     @Test
-    @DisplayName("Enables MyBatis Slf4j SQL Logging Only For Local And Dev")
-    void enablesMyBatisSlf4jSqlLoggingOnlyForLocalAndDev() throws IOException {
+    @DisplayName("Enables MyBatis Slf4j SQL Logging Only For Dev")
+    void enablesMyBatisSlf4jSqlLoggingOnlyForDev() throws IOException {
         assertThat(resource("application-local.yml"))
-                .contains("log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl");
+                .contains("log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl")
+                .doesNotContain("org.apache.ibatis.logging.slf4j.Slf4jImpl");
         assertThat(resource("application-dev.yml"))
                 .contains("log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl");
         assertThat(resource("application.yml"))

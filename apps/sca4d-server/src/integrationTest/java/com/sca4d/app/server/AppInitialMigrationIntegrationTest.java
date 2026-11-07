@@ -23,16 +23,16 @@ class AppInitialMigrationIntegrationTest {
                             .withNanoCPUs(500_000_000L));
 
     @Test
-    @DisplayName("空数据库执行 V1、V2 并建立设置、字典、身份和重试结构")
+    @DisplayName("空数据库执行全部迁移并建立设置、字典、身份和重试结构")
     void createsCurrentSchemaAndDoesNotRepeatMigrations() {
         Flyway flyway = Flyway.configure()
                 .dataSource(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword())
                 .locations("classpath:db/migration")
                 .load();
 
-        assertThat(flyway.migrate().migrationsExecuted).isEqualTo(2);
-        assertThat(flyway.info().applied()).hasSize(2);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("2");
+        assertThat(flyway.migrate().migrationsExecuted).isEqualTo(5);
+        assertThat(flyway.info().applied()).hasSize(5);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("5");
         assertThat(flyway.migrate().migrationsExecuted).isZero();
         flyway.validate();
 

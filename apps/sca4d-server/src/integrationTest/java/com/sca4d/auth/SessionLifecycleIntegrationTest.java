@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
@@ -18,9 +19,9 @@ import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.AccountIdentifierType;
-import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationCode;
 import com.sca4d.iam.base.PlatformIdentityService;
 import com.sca4d.iam.base.PlatformPrincipal;
 import com.sca4d.iam.base.rbac.PlatformRbacService;
@@ -267,6 +268,7 @@ class SessionLifecycleIntegrationTest {
                         "/platform/roles/{roleId}/i18n",
                         "/platform/roles/{roleId}/permissions",
                         "/platform/roles/{roleId}/status",
+                        "/platform/roles/{roleId}/accounts",
                         "/files/uploads",
                         "/files/uploads/{fileId}/completion",
                         "/files/access-urls",
@@ -567,7 +569,7 @@ class SessionLifecycleIntegrationTest {
                                         "en-US",
                                         Map.of("name", "Managed Flow Role")),
                                 "permissionCodes",
-                                List.of("platform:accounts:read")),
+                                List.of("PLATFORM:ACCOUNTS:READ")),
                         adminHeaders),
                 JsonNode.class);
         assertThat(createdRoleResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -607,11 +609,11 @@ class SessionLifecycleIntegrationTest {
                         Objects.requireNonNull(rolePermissionsResponse.getBody())
                                 .path("data")
                                 .path("permissionCodes")))
-                .containsExactlyInAnyOrder("platform:accounts:read");
+                .containsExactlyInAnyOrder("PLATFORM:ACCOUNTS:READ");
         ResponseEntity<JsonNode> missingPermissionsVersion = http.exchange(
                 "/platform/roles/" + roleId + "/permissions",
                 HttpMethod.PUT,
-                new HttpEntity<>(Map.of("permissionCodes", List.of("platform:accounts:manage")), adminHeaders),
+                new HttpEntity<>(Map.of("permissionCodes", List.of("PLATFORM:ACCOUNTS:UPDATE")), adminHeaders),
                 JsonNode.class);
         assertThat(missingPermissionsVersion.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_REQUIRED);
         HttpHeaders replacePermissionsHeaders = copyHeaders(adminHeaders);
@@ -623,7 +625,7 @@ class SessionLifecycleIntegrationTest {
                 new HttpEntity<>(
                         Map.of(
                                 "permissionCodes",
-                                List.of("platform:accounts:read", "platform:accounts:manage")),
+                                List.of("PLATFORM:ACCOUNTS:READ", "PLATFORM:ACCOUNTS:UPDATE")),
                         replacePermissionsHeaders),
                 JsonNode.class);
         assertThat(replacedPermissions.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -633,12 +635,12 @@ class SessionLifecycleIntegrationTest {
                         Objects.requireNonNull(replacedPermissions.getBody())
                                 .path("data")
                                 .path("permissionCodes")))
-                .containsExactlyInAnyOrder("platform:accounts:read", "platform:accounts:manage");
+                .containsExactlyInAnyOrder("PLATFORM:ACCOUNTS:READ", "PLATFORM:ACCOUNTS:UPDATE");
         ResponseEntity<JsonNode> stalePermissions = http.exchange(
                 "/platform/roles/" + roleId + "/permissions",
                 HttpMethod.PUT,
                 new HttpEntity<>(
-                        Map.of("permissionCodes", List.of("platform:accounts:read")),
+                        Map.of("permissionCodes", List.of("PLATFORM:ACCOUNTS:READ")),
                         replacePermissionsHeaders),
                 JsonNode.class);
         assertThat(stalePermissions.getStatusCode()).isEqualTo(HttpStatus.PRECONDITION_FAILED);
@@ -791,7 +793,7 @@ class SessionLifecycleIntegrationTest {
         assertThat(passwordResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(passwordResponse.getHeaders().getETag()).isNull();
         JsonNode passwordView = Objects.requireNonNull(passwordResponse.getBody()).path("data");
-        assertThat(passwordView.path("status").asText()).isEqualTo("SET");
+        assertThat(passwordView.path("status").asText()).isEqualTo("ACTIVE");
         assertThat(passwordView.has("version")).isFalse();
         assertThat(passwordView.has("passwordHash")).isFalse();
 
@@ -868,7 +870,7 @@ class SessionLifecycleIntegrationTest {
         assertThat(initial.resources(principal.principalId())).isEmpty();
         long establishedGeneration = generations.current(account.accountId());
 
-        TreeCode operationCode = operations.actions().getFirst().operation().code();
+        OperationCode operationCode = operations.leaves().getFirst().operation().code();
         Role refreshRole = rbac.createRole(
                 "SESSION_REFRESH_TEST",
                 LocalizedFields.of(
@@ -1000,7 +1002,7 @@ class SessionLifecycleIntegrationTest {
                         "redis-cli",
                         "--scan",
                         "--pattern",
-                        "sca4d-server:sca4dj:auth:totp-enrollment:*")
+                        "*AUTH:TOTP_ENROLLMENT*")
                         .getStdout())
                 .isNotBlank();
     }
@@ -1401,7 +1403,8 @@ class SessionLifecycleIntegrationTest {
     private static String decodeQr(byte[] png) throws Exception {
         var image = ImageIO.read(new ByteArrayInputStream(png));
         var bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(image)));
-        return new MultiFormatReader().decode(bitmap).getText();
+        // 服务端输出的是无旋转、无噪点的标准二维码；按普通图片检测探测图形时，个别 Secret 会因为定位失败而随机失败。
+        return new MultiFormatReader().decode(bitmap, Map.of(DecodeHintType.PURE_BARCODE, Boolean.TRUE)).getText();
     }
 
     private static String querySecret(String uri) {
