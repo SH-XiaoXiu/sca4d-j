@@ -111,6 +111,9 @@ CREATE TRIGGER set_sys_dictionary_option_updated_at
 -- 结构：audit.sql
 CREATE TABLE audit_record (
     id BIGINT PRIMARY KEY,
+    audit_id VARCHAR(128) NOT NULL UNIQUE,
+    trail_id VARCHAR(128) NOT NULL,
+    parent_id VARCHAR(128),
     request_id VARCHAR(128) NOT NULL,
     subject_id BIGINT NOT NULL,
     account_id BIGINT,
@@ -131,6 +134,8 @@ CREATE TABLE audit_record (
 );
 
 CREATE INDEX idx_audit_record_request ON audit_record (request_id);
+CREATE INDEX idx_audit_record_trail ON audit_record (trail_id, occurred_at DESC, id DESC);
+CREATE INDEX idx_audit_record_parent ON audit_record (parent_id, occurred_at DESC, id DESC);
 CREATE INDEX idx_audit_record_account_time ON audit_record (account_id, occurred_at DESC, id DESC)
     WHERE account_id IS NOT NULL;
 CREATE INDEX idx_audit_record_principal_time ON audit_record (principal_id, occurred_at DESC, id DESC);
@@ -158,6 +163,18 @@ COMMENT ON COLUMN audit_record.client_ip IS '可选直连客户端地址，不�
 COMMENT ON COLUMN audit_record.user_agent IS '可选且完成控制字符清理和长度限制的 User-Agent';
 COMMENT ON COLUMN audit_record.occurred_at IS '被审计操作产生最终结果的时间';
 COMMENT ON COLUMN audit_record.instance_id IS '实际执行实例标识，不是 IAM 身份；历史记录允许为空';
+
+-- 只关联审计行，不关联业务资源外键，保留资源删除和移动前的历史。
+CREATE TABLE audit_record_resource (
+    audit_id BIGINT NOT NULL REFERENCES audit_record(id) ON DELETE CASCADE,
+    resource_type VARCHAR(128) NOT NULL,
+    resource_id VARCHAR(128) NOT NULL,
+    occurred_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    PRIMARY KEY (audit_id, resource_type, resource_id)
+);
+CREATE INDEX idx_audit_record_resource_scope_time
+    ON audit_record_resource(resource_type, resource_id, occurred_at DESC, audit_id DESC);
+COMMENT ON TABLE audit_record_resource IS '操作发生时关联的资源标识快照；不随当前业务归属变化';
 
 -- 组件：project :modules:auth:sca4dj-auth-federation
 -- 结构：auth-federation.sql
@@ -563,6 +580,7 @@ COMMENT ON TABLE iam_system_identity IS '整个业务系统的稳定领域身份
 COMMENT ON COLUMN iam_system_identity.code IS '代码常量声明的系统身份编码';
 COMMENT ON COLUMN iam_system_identity.principal_id IS '配置指定且禁止自动改写的全局 Principal ID';
 COMMENT ON COLUMN iam_system_identity.subject_id IS '整个业务系统唯一的 SYSTEM Subject';
+COMMENT ON COLUMN iam_system_identity.created_at IS '系统身份记录创建时间';
 
 CREATE TABLE iam_account_principal (
     account_id BIGINT NOT NULL,
@@ -1208,6 +1226,51 @@ COMMENT ON COLUMN job.job_run.error_summary IS '根 Job 失败时保存的受限
 COMMENT ON COLUMN job.job_run.created_at IS 'Job run 创建时间';
 COMMENT ON COLUMN job.job_run.started_at IS '根 Job 首次进入运行状态的时间';
 COMMENT ON COLUMN job.job_run.completed_at IS '根 Job 进入成功或失败最终状态的时间';
+COMMENT ON COLUMN job.job_run.capability_code IS '提交时声明的实例执行能力';
+COMMENT ON COLUMN job.job_run.system_identity IS '提交时能力绑定的 IAM 系统身份编码';
+COMMENT ON COLUMN job.job_run.work_key IS '同一 Job 和系统身份下参与并发控制的工作键';
+COMMENT ON COLUMN job.job_run.overlap_policy IS '同一工作键已有运行时允许并行、跳过或替换的策略编码';
+COMMENT ON COLUMN job.job_run.target_instance_id IS '固定实例或广播份额只能由该实例执行';
+COMMENT ON COLUMN job.job_run.target_generation_id IS '广播目标在提交时的进程启动代次';
+COMMENT ON COLUMN job.job_run.target_expires_at IS '目标实例未开始执行时的等待截止时间';
+COMMENT ON COLUMN job.job_run.dispatch_id IS '一次广播包含的所有目标份额的关联标识';
+
+COMMENT ON TABLE job.job_instance IS '供 Job 目标快照使用的在线实例及启用能力';
+COMMENT ON COLUMN job.job_instance.app_name IS '实例注册所属的运行时命名空间';
+COMMENT ON COLUMN job.job_instance.instance_id IS '实例在应用命名空间内的稳定标识';
+COMMENT ON COLUMN job.job_instance.generation_id IS '实例本次进程启动代次；重启后必须变化';
+COMMENT ON COLUMN job.job_instance.capabilities_json IS '实例当前声明的可执行能力集合';
+COMMENT ON COLUMN job.job_instance.expires_at IS '实例注册租约截止时间；过期实例不再接收目标';
+
+COMMENT ON TABLE job.job_dispatch IS '保存一次广播触发时固定的目标清单';
+COMMENT ON COLUMN job.job_dispatch.id IS '一次广播调度的数据库标识';
+COMMENT ON COLUMN job.job_dispatch.app_name IS '广播调度所属的运行时命名空间';
+COMMENT ON COLUMN job.job_dispatch.job_key IS '广播调度使用的稳定 Job 编码';
+COMMENT ON COLUMN job.job_dispatch.schedule_key IS '触发广播的计划编码；手工触发时为空';
+COMMENT ON COLUMN job.job_dispatch.scheduled_fire_time IS '广播对应的计划触发时间';
+COMMENT ON COLUMN job.job_dispatch.targets_json IS '提交时冻结的目标实例与代次清单';
+COMMENT ON COLUMN job.job_dispatch.created_at IS '广播调度创建时间';
+
+COMMENT ON TABLE job.job_delivery IS '短期协调不保留 Run 的指定实例或广播工作份额';
+COMMENT ON COLUMN job.job_delivery.id IS '广播工作份额的数据库标识';
+COMMENT ON COLUMN job.job_delivery.app_name IS '工作份额所属的运行时命名空间';
+COMMENT ON COLUMN job.job_delivery.dispatch_id IS '所属广播调度标识';
+COMMENT ON COLUMN job.job_delivery.job_key IS '工作份额执行的稳定 Job 编码';
+COMMENT ON COLUMN job.job_delivery.job_definition_version IS '工作份额采用的 Job 定义版本';
+COMMENT ON COLUMN job.job_delivery.capability_code IS '目标实例必须具备的执行能力';
+COMMENT ON COLUMN job.job_delivery.system_identity IS '工作份额绑定的 IAM 系统身份编码';
+COMMENT ON COLUMN job.job_delivery.work_key IS '参与同一工作并发控制的稳定键';
+COMMENT ON COLUMN job.job_delivery.overlap_policy IS '同一工作键已有运行时的并发策略编码';
+COMMENT ON COLUMN job.job_delivery.input_json IS '目标实例执行工作份额时读取的可选输入';
+COMMENT ON COLUMN job.job_delivery.target_instance_id IS '固定执行目标的实例标识';
+COMMENT ON COLUMN job.job_delivery.target_generation_id IS '固定执行目标的进程启动代次';
+COMMENT ON COLUMN job.job_delivery.status IS '工作份额就绪、运行、成功、失败或过期状态';
+COMMENT ON COLUMN job.job_delivery.expires_at IS '工作份额未开始执行时的截止时间';
+COMMENT ON COLUMN job.job_delivery.created_at IS '工作份额创建时间';
+COMMENT ON COLUMN job.job_delivery.started_at IS '目标实例开始执行工作份额的时间';
+COMMENT ON COLUMN job.job_delivery.lease_until IS '工作份额当前租约截止时间';
+COMMENT ON COLUMN job.job_delivery.completed_at IS '工作份额进入最终状态的时间';
+COMMENT ON COLUMN job.job_delivery.error_summary IS '工作份额失败时保存的受限原因摘要';
 
 COMMENT ON TABLE job.job_run_node IS '保存可独立领取和重试的 DirectJob 或 Pipeline 节点';
 COMMENT ON COLUMN job.job_run_node.id IS 'Job run 节点数据库标识';
@@ -1309,8 +1372,13 @@ CREATE TABLE notification_email_template (
 CREATE UNIQUE INDEX uk_notification_email_template_code
     ON notification_email_template (notification_code) WHERE deleted = 0;
 
-COMMENT ON TABLE notification_email_template IS '保存 Email 渠道使用的多语言主题、纯文本和 HTML 源码模板';
-COMMENT ON COLUMN notification_email_template.locales IS 'Locale 到 subject、text、html 源码的 JSON object';
+COMMENT ON TABLE notification_email_template IS '保存 Email 渠道使用的多语言显示名称、主题、纯文本和 HTML 源码模板';
+COMMENT ON COLUMN notification_email_template.id IS 'Email 模板全局标识';
+COMMENT ON COLUMN notification_email_template.notification_code IS '对应 NotificationType 的稳定通知编码';
+COMMENT ON COLUMN notification_email_template.locales IS 'Locale 到 displayName、subject、text、html 源码的 JSON object';
+COMMENT ON COLUMN notification_email_template.enabled IS '是否参与 Email 投递';
+COMMENT ON COLUMN notification_email_template.created_at IS 'Email 模板创建时间';
+COMMENT ON COLUMN notification_email_template.updated_at IS 'Email 模板最近更新时间，由数据库触发器维护';
 COMMENT ON COLUMN notification_email_template.version IS '模板并发修改使用的乐观版本';
 COMMENT ON COLUMN notification_email_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
 
@@ -1381,9 +1449,12 @@ CREATE UNIQUE INDEX uk_notification_inbox_template_code
     ON notification_inbox_template (notification_code) WHERE deleted = 0;
 
 COMMENT ON TABLE notification_inbox_template IS '保存 Inbox 渠道使用的多语言 Tiptap JSON 模板';
+COMMENT ON COLUMN notification_inbox_template.id IS 'Inbox 模板全局标识';
 COMMENT ON COLUMN notification_inbox_template.notification_code IS 'NotificationType 声明的稳定通知编码';
 COMMENT ON COLUMN notification_inbox_template.content IS 'Locale 到 title/body ProseMirror 文档的 JSON object';
 COMMENT ON COLUMN notification_inbox_template.enabled IS '模板是否参与 Inbox 投递';
+COMMENT ON COLUMN notification_inbox_template.created_at IS 'Inbox 模板创建时间';
+COMMENT ON COLUMN notification_inbox_template.updated_at IS 'Inbox 模板最近更新时间，由数据库触发器维护';
 COMMENT ON COLUMN notification_inbox_template.version IS '模板并发修改使用的乐观版本';
 COMMENT ON COLUMN notification_inbox_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
 
@@ -1413,11 +1484,17 @@ CREATE INDEX idx_notification_inbox_message_unread
     ON notification_inbox_message (account_id, id DESC) WHERE read_at IS NULL;
 
 COMMENT ON TABLE notification_inbox_message IS '保存发送给 Account 且不会随模板变化的站内信快照';
+COMMENT ON COLUMN notification_inbox_message.id IS '站内信快照全局标识';
 COMMENT ON COLUMN notification_inbox_message.message_id IS '原始 NotificationMessage 标识，用于消费幂等';
 COMMENT ON COLUMN notification_inbox_message.account_id IS '站内信所属 Account 标识';
 COMMENT ON COLUMN notification_inbox_message.notification_code IS '产生站内信的 NotificationType 编码';
 COMMENT ON COLUMN notification_inbox_message.language_tag IS '渲染模板使用的 BCP 47 Locale';
+COMMENT ON COLUMN notification_inbox_message.title IS '渲染后的站内信标题快照';
+COMMENT ON COLUMN notification_inbox_message.text_content IS '渲染后的纯文本正文快照';
+COMMENT ON COLUMN notification_inbox_message.html_content IS '渲染后的 HTML 正文快照';
+COMMENT ON COLUMN notification_inbox_message.created_at IS '站内信快照创建时间';
 COMMENT ON COLUMN notification_inbox_message.read_at IS '首次标记已读时间；为空表示未读';
+COMMENT ON COLUMN notification_inbox_message.version IS '站内信已读状态并发修改使用的版本';
 
 -- 组件：project :modules:notification:sca4dj-notification-sms
 -- 结构：notification-sms.sql
@@ -1478,11 +1555,43 @@ CREATE UNIQUE INDEX uk_notification_sms_delivery_attempt
     ON notification_sms_delivery (message_id, provider_id);
 
 COMMENT ON TABLE notification_sms_provider IS '保存可由 App 策略选择的 SMS Provider 实例，不保存密钥';
+COMMENT ON COLUMN notification_sms_provider.id IS 'SMS Provider 全局标识';
+COMMENT ON COLUMN notification_sms_provider.code IS 'Provider 在应用内唯一的稳定编码';
+COMMENT ON COLUMN notification_sms_provider.provider_type IS '短信厂商适配器类型编码';
 COMMENT ON COLUMN notification_sms_provider.credential_ref IS '部署配置中 Provider 凭据集合的稳定引用';
+COMMENT ON COLUMN notification_sms_provider.priority IS '同一路由选择 Provider 时使用的优先级，数值越小越优先';
+COMMENT ON COLUMN notification_sms_provider.enabled IS 'Provider 是否参与短信投递';
+COMMENT ON COLUMN notification_sms_provider.created_at IS 'SMS Provider 创建时间';
+COMMENT ON COLUMN notification_sms_provider.updated_at IS 'SMS Provider 最近更新时间，由数据库触发器维护';
+COMMENT ON COLUMN notification_sms_provider.version IS 'SMS Provider 并发修改使用的乐观版本';
+COMMENT ON COLUMN notification_sms_provider.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
+COMMENT ON COLUMN notification_sms_binding.id IS '短信模板绑定全局标识';
+COMMENT ON COLUMN notification_sms_binding.provider_id IS '关联的 SMS Provider 标识';
+COMMENT ON COLUMN notification_sms_binding.notification_code IS '对应统一通知类型的稳定编码';
 COMMENT ON COLUMN notification_sms_binding.route IS '具体应用声明的 SMS 路由编码，公共模块不预设地区分组';
+COMMENT ON COLUMN notification_sms_binding.language_tag IS '模板使用的 BCP 47 Locale';
+COMMENT ON COLUMN notification_sms_binding.sign_name IS '短信厂商要求的签名名称';
+COMMENT ON COLUMN notification_sms_binding.provider_template_code IS '短信厂商审核通过的模板编码';
 COMMENT ON TABLE notification_sms_binding IS '把统一通知变量绑定到 Provider 已审核模板，不保存业务模板正文';
 COMMENT ON COLUMN notification_sms_binding.parameter_mapping IS 'Provider 参数名到统一通知变量名的 JSON object';
+COMMENT ON COLUMN notification_sms_binding.enabled IS '短信模板绑定是否参与投递';
+COMMENT ON COLUMN notification_sms_binding.created_at IS '短信模板绑定创建时间';
+COMMENT ON COLUMN notification_sms_binding.updated_at IS '短信模板绑定最近更新时间，由数据库触发器维护';
+COMMENT ON COLUMN notification_sms_binding.version IS '短信模板绑定并发修改使用的乐观版本';
+COMMENT ON COLUMN notification_sms_binding.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
 COMMENT ON TABLE notification_sms_delivery IS '记录一个原始通知消息在各 SMS Provider 的 API 提交结果';
+COMMENT ON COLUMN notification_sms_delivery.id IS '短信投递记录全局标识';
+COMMENT ON COLUMN notification_sms_delivery.message_id IS '原始 NotificationMessage 标识';
+COMMENT ON COLUMN notification_sms_delivery.provider_id IS '实际提交使用的 SMS Provider 标识';
+COMMENT ON COLUMN notification_sms_delivery.route IS '本次投递使用的应用短信路由编码';
+COMMENT ON COLUMN notification_sms_delivery.recipient_hash IS '收件手机号的不可逆摘要，用于幂等和审计关联';
+COMMENT ON COLUMN notification_sms_delivery.recipient_masked IS '收件手机号的脱敏展示值';
+COMMENT ON COLUMN notification_sms_delivery.status IS '短信提交、成功或失败状态';
+COMMENT ON COLUMN notification_sms_delivery.request_id IS '短信厂商请求标识';
+COMMENT ON COLUMN notification_sms_delivery.biz_id IS '短信厂商业务流水标识';
+COMMENT ON COLUMN notification_sms_delivery.failure_code IS '短信提交失败时的公开错误码';
+COMMENT ON COLUMN notification_sms_delivery.created_at IS '短信投递记录创建时间';
+COMMENT ON COLUMN notification_sms_delivery.completed_at IS '短信投递进入最终状态的时间';
 
 CREATE TRIGGER set_notification_sms_provider_updated_at
     BEFORE UPDATE ON notification_sms_provider
@@ -1516,9 +1625,13 @@ COMMENT ON TABLE open_client IS '保存第三方 Open Client 与普通 APPLICATI
 COMMENT ON COLUMN open_client.client_id IS '第三方请求和 OAuth Client Credentials 使用的稳定 Client ID';
 COMMENT ON COLUMN open_client.account_id IS 'Client 对应的 IAM APPLICATION Account 标识';
 COMMENT ON COLUMN open_client.display_name IS '管理端显示的 Client 名称';
-COMMENT ON COLUMN open_client.status IS 'ACTIVE 允许认证和调用，DISABLED 拒绝新的 开放请求';
+COMMENT ON COLUMN open_client.status IS 'ACTIVE 允许认证和调用，DISABLED 拒绝新的 Open 请求';
+COMMENT ON COLUMN open_client.created_at IS 'Open Client 创建时间';
+COMMENT ON COLUMN open_client.updated_at IS 'Open Client 最近更新时间，由数据库触发器维护';
 COMMENT ON TABLE open_client_operation IS '保存 Client 已显式开放的 Operation 子集';
+COMMENT ON COLUMN open_client_operation.client_id IS '已开放 Operation 的 Open Client 标识';
 COMMENT ON COLUMN open_client_operation.operation IS 'OperationCatalog 中已经注册的 ACTION 编码';
+COMMENT ON COLUMN open_client_operation.created_at IS 'Client Operation 关系创建时间';
 
 CREATE TRIGGER set_open_client_updated_at
     BEFORE UPDATE ON open_client
