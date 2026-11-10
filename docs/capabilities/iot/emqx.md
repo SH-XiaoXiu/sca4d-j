@@ -13,7 +13,7 @@
 - 标准 MQTT 上行由 MqttDeviceProtocol 路由。具体应用也可以用 MqttMessageRoute 处理网关中继等 Topic。两者定位 Device 后都把 DeviceProtocolMessage 交给 DeviceUplinkDispatcher。具体应用路由需要返回协议 ACK 时，通过 MqttTransport 发布已经编码完成的 Topic 和 payload。
 - DeviceDownlink 和完整 Device 通过 DeviceTransport 编码为 Topic 和厂商 payload。
 - Session 失效后的可靠断连消息由断连 Consumer 消费，再通过 DeviceConnectionTerminator 调用 EMQX Management API。
-- MQTT Runtime 通过共享订阅接收 `$SYS/brokers/+/clients/+/connected` 和 `disconnected`。事件只提供 Client ID。模块立即查询 Management API 的单个 Client 当前状态，再刷新当前连接代次。
+- MQTT Runtime 通过共享订阅接收 `$SYS/brokers/+/clients/+/connected` 和 `disconnected`，从 Payload 解析 `clientid`，先通知 MqttConnectionEventObserver，再查询 Management API 的单个 Client 当前状态并刷新当前连接代次。观察器可以读取 EMQX 原始 Payload，不要求 Client 已登记为 Device。
 - 启动和定期对账在 Redis watchdog 分布式锁内从 Management API 读取完整连接快照，修复服务停机或订阅中断期间遗漏的事件，并主动断开无法映射或 ACL 指纹过期的 Device 连接。
 
 模块公开 MqttDeviceProtocol，供具体应用声明标准 MQTT 设备的 Topic、上行与下行 Pipeline，以及 DataKey 到物模型 code 的映射。模块还公开 MqttMessageRoute，让 MQTT 运行时把其他 Topic 交给具体应用负责的路由。MqttMessageObserver 和 MqttMessageProcessingObserver 观察当前 Server 的接收与处理结果。MqttInboundFailureStore 在最终 ACK 前可靠保存处理失败的消息。MqttTransport 供路由和设备下行发布已经编码完成的消息。具体应用路由可以解析网关中继帧并定位实际 Device，但实际设备协议仍由 IoT 的 DeviceUplinkDispatcher 按 Device 台账选择。
@@ -45,6 +45,7 @@ flowchart TB
     Broker --> App --> Request --> Admission
     Broker <--> Runtime
     Broker --> Lifecycle --> Runtime
+    Runtime --> ConnectionObserver[MqttConnectionEventObserver]
     Runtime --> Management --> Connection
     Runtime --> Processor
     Processor --> Observer --> App
@@ -56,6 +57,8 @@ flowchart TB
     API --> Publisher --> Runtime
 ```
 
+`$SYS` 事件从 EMQX 到达 EmqxMqttRuntime 后，按顺序通知连接观察器，再调用 Management API 刷新连接记录。观察器抛出 RuntimeException 时继续通知；解析或刷新失败时仍尝试 ACK，后续事件或周期对账负责修复当前连接状态，不会补发遗漏的观察通知。
+
 ## 拥有的运行状态
 
 模块不拥有 IoT 业务表。它在当前进程保存 MQTT 客户端和协议目录，在 Redis 保存可重建的 EMQX Client ID、Broker 节点和连接代次。完整对账只在执行期间持有运行时命名空间隔离的 watchdog 分布式锁，不保存固定时长的对账租约。IoT 基础模块另行在 Redis 保存与协议无关的当前连接信息。需要可靠断连时，DeviceConnectionService 通过通用 Messaging Outbox 发布消息，不创建 IoT 断连任务表。
@@ -64,7 +67,7 @@ flowchart TB
 
 平台显式停用 Device、结束 Session 或修改 Credential 时，可靠断连消息已经携带明确的连接代次。断连 Consumer 在协议终止成功后，立即按消息中的连接代次，删除通用 DeviceConnection 和公共 ConnectionRegistry 中保存的连接记录。EMQX `$SYS disconnected` 事件随后重复清理时保持幂等。显式断连不能先删除唯一的协议反向索引后再依赖 `$SYS` 事件定位通用连接，否则页面会在 Broker 已离线后仍读到旧的在线连接记录。
 
-MqttMessageObserver 只能记录内部 MQTT Client 实际收到的业务 Topic、payload、QoS、Retain 和观察时间。MqttMessageProcessingObserver 观察拒绝、再次处理、可靠隔离和保持未确认的结果，但观察器失败不会改变 ACK。只有 MqttInboundFailureStore 正常返回才表示最终失败已经可靠保存。`$SYS` 连接事件直接进入连接刷新，不通知这些观察器，也不进入 MqttMessageRouter。没有进入当前 Server 业务订阅的消息和其他 Client 的订阅动作不属于这些接口的记录范围。
+MqttMessageObserver 只能记录内部 MQTT Client 实际收到的业务 Topic、payload、QoS、Retain 和观察时间。MqttMessageProcessingObserver 观察拒绝、再次处理、可靠隔离和保持未确认的结果，但观察器失败不会改变 ACK。只有 MqttInboundFailureStore 正常返回才表示最终失败已经可靠保存。`$SYS` 连接事件通知独立的 MqttConnectionEventObserver 后进入连接刷新，不通知这些业务消息观察器，也不进入 MqttMessageRouter。没有进入当前 Server 业务订阅的消息和其他 Client 的订阅动作不属于这些接口的记录范围。
 
 ## 允许依赖
 
@@ -163,6 +166,16 @@ public class ReceivedMessageEvidence implements MqttMessageObserver {
 }
 ```
 
+### 连接事件观察器
+
+具体应用可登记 [MqttConnectionEventObserver](/javadoc/modules/iot/sca4dj-iot-emqx/com/sca4d/iot/emqx/transport/MqttConnectionEventObserver.html) Bean，接收成功解析 `clientid` 的连接和断开事件。不登记时无需额外配置。Spring 按 Bean 的顺序注入多个观察器，Runtime 按该顺序同步通知。
+
+[MqttConnectionEvent](/javadoc/modules/iot/sca4dj-iot-emqx/com/sca4d/iot/emqx/transport/MqttConnectionEvent.html) 保存实际 Topic、Client ID、连接或断开标志、原始 Payload 和应用观察时间。构造和读取时都复制 Payload；时间不代表 Broker 发生连接或断开的时间。通知发生在连接投影刷新前，不能根据回调断言投影已更新。
+
+回调在 HiveMQ 回调线程上同步执行，应快速返回。慢观察器会延迟后续观察器、Management API 查询及 MQTT 确认。单个观察器抛出 RuntimeException 时只记录警告并继续通知和刷新；不捕获 Error，也不保证进程崩溃后仍能确认。观察通知不进入失败消息 Store，不自动重试或持久化，不是 Broker 全量、可靠的连接历史。具体应用负责自己的证据存储，公共模块不增加业务表。
+
+手动构造 EmqxMqttRuntime 时，必须在处理结果观察器集合之后传入连接事件观察器集合，不使用时传空集合。Spring 自动配置会注入可选集合，无需为未使用观察器的应用增加 Bean。构造器参数变化不保证旧手动调用代码的源码或二进制兼容，不保留旧签名转发层。
+
 ## 失败时停止在哪里
 
 - Product 发布物模型或 Device 绑定协议前调用 MqttDeviceProtocol 校验属性、事件、命令和 Java 类型。不兼容时在进入运行流量前失败。
@@ -190,4 +203,5 @@ MQTT 入站在原 Topic 串行分片内使用 RetryExecutor。具体应用需要
 - **MqttDeviceProtocol**：声明标准 MQTT 设备的 Topic、上行与下行 Pipeline。MqttProtocolCatalog 接收全部协议 Bean，并按 code 查找。
 - **MqttMessageRoute**：处理网关中继等非标准 Topic。`MqttMessageRouter` 接收全部路由 Bean，并拒绝重叠的 Topic Filter。
 - **MqttMessageObserver**：观察当前 Server 实际收到的业务消息。Runtime 通知全部观察器 Bean。
+- **MqttConnectionEventObserver**：在刷新连接投影前同步观察当前共享订阅组收到的连接和断开事件，详见本页「连接事件观察器」。
 - **MqttInboundFailureStore**：可靠保存最终失败的消息。未提供时，失败消息保持未确认。

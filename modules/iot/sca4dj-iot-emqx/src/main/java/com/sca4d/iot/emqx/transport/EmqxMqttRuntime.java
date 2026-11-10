@@ -44,6 +44,8 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
 
     private final @NotNull EmqxConnectionReconciler connectionReconciler;
 
+    private final @NotNull List<MqttConnectionEventObserver> connectionObservers;
+
     private final @NotNull List<MqttMessageObserver> observers;
 
     private final @NotNull List<MqttMessageProcessingObserver> processingObservers;
@@ -60,13 +62,18 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
 
     private volatile boolean running;
 
-    /** 创建使用唯一 clientId 且自动重连后重新订阅的 MQTT 运行时。 */
+    /**
+     * 创建使用唯一 clientId 且自动重连后重新订阅的 MQTT 运行时。
+     *
+     * @param connectionObservers 按集合迭代顺序同步通知的连接观察器；不观察时传空集合，构造后修改集合不影响通知
+     */
     public EmqxMqttRuntime(
             @NotNull EmqxProperties properties,
             @NotNull MqttMessageRouter router,
             @NotNull Clock clock,
             @NotNull Collection<MqttMessageObserver> observers,
             @NotNull Collection<MqttMessageProcessingObserver> processingObservers,
+            @NotNull Collection<MqttConnectionEventObserver> connectionObservers,
             @Nullable MqttInboundFailureStore failureStore,
             @NotNull EmqxConnectionReconciler connectionReconciler,
             @NotNull RetryExecutor retries) {
@@ -78,6 +85,8 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
         this.observers = List.copyOf(Objects.requireNonNull(observers, "MQTT 消息观察器不能为空"));
         this.processingObservers = List.copyOf(
                 Objects.requireNonNull(processingObservers, "MQTT 处理观察器不能为空"));
+        this.connectionObservers = List.copyOf(
+                Objects.requireNonNull(connectionObservers, "MQTT 连接事件观察器不能为空"));
         this.failureStore = failureStore;
         this.connectionReconciler = Objects.requireNonNull(connectionReconciler, "EMQX 连接对账服务不能为空");
         String clientId = Objects.requireNonNull(properties.getClientId(), "EMQX clientId 不能为空");
@@ -269,11 +278,30 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
                         publish.isRetain()));
     }
 
-    /** 解析 EMQX `$SYS` Client 事件并用 Management API 当前状态刷新连接投影。 */
+    /** 解析 EMQX `$SYS` Client 事件，先通知观察器，再用 Broker 当前状态刷新连接投影。 */
     private void receiveConnectionEvent(Mqtt5Publish publish) {
         try {
-            String payload = new String(publish.getPayloadAsBytes(), StandardCharsets.UTF_8);
-            String clientId = DataOps.j(payload).requiredText("clientid");
+            byte[] payload = publish.getPayloadAsBytes();
+            String clientId = DataOps.j(new String(payload, StandardCharsets.UTF_8)).requiredText("clientid");
+            // 先记录实际收到的事件；即使随后刷新失败，观察器也能保存事件证据。
+            String topic = publish.getTopic().toString();
+            MqttConnectionEvent event = new MqttConnectionEvent(
+                    topic,
+                    clientId,
+                    topic.endsWith("/connected"),
+                    payload,
+                    clock.instant());
+            for (MqttConnectionEventObserver observer : connectionObservers) {
+                try {
+                    observer.connectionChanged(event);
+                } catch (RuntimeException exception) {
+                    LOG.warn(
+                            "MQTT 连接事件观察失败，继续通知并刷新连接投影 | observer={} clientId={} failureType={}",
+                            observer.getClass().getName(),
+                            clientId,
+                            exception.getClass().getSimpleName());
+                }
+            }
             connectionReconciler.refreshClient(clientId);
         } catch (RuntimeException exception) {
             LOG.warn(

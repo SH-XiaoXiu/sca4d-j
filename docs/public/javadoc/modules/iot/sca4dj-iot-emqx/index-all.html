@@ -108,6 +108,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html#clientId()" class="member-name-link">clientId()</a> - Method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html" title="class in com.sca4d.iot.emqx.connection">EmqxClientConnection</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html#clientId()" class="member-name-link">clientId()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html" title="class in com.sca4d.iot.emqx.transport">MqttConnectionEvent</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html#clientId(com.sca4d.iot.api.Device)" class="member-name-link">clientId(Device)</a> - Static method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html" title="class in com.sca4d.iot.emqx.connection">MqttDeviceConnection</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html#clientId(java.lang.String)" class="member-name-link">clientId(String)</a> - Static method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html" title="class in com.sca4d.iot.emqx.connection">MqttDeviceConnection</a></dt>
@@ -148,12 +150,18 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkRoute.html#command(java.lang.String,java.lang.String)" class="member-name-link">command(String, String)</a> - Static method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDownlinkRoute.html" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkRoute</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html#connected()" class="member-name-link">connected()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html" title="class in com.sca4d.iot.emqx.transport">MqttConnectionEvent</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html#connected(com.sca4d.iot.emqx.connection.EmqxClientConnection,java.time.Instant)" class="member-name-link">connected(EmqxClientConnection, Instant)</a> - Method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></dt>
 <dd>
 <div class="block">保存或刷新一条 EMQX 当前连接；较旧的对账快照不能覆盖较新的连接代次。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html#connectedAt()" class="member-name-link">connectedAt()</a> - Method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html" title="class in com.sca4d.iot.emqx.connection">EmqxClientConnection</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEventObserver.html#connectionChanged(com.sca4d.iot.emqx.transport.MqttConnectionEvent)" class="member-name-link">connectionChanged(MqttConnectionEvent)</a> - Method in interface com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttConnectionEventObserver.html" title="interface in com.sca4d.iot.emqx.transport">MqttConnectionEventObserver</a></dt>
+<dd>
+<div class="block">在连接投影刷新前同步观察事件，不要求对应 Client 已登记为 Device。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html#connectionId()" class="member-name-link">connectionId()</a> - Method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html" title="class in com.sca4d.iot.emqx.connection">EmqxClientConnection</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/EmqxDeviceConnectionRequestFactory.html#create(com.sca4d.iot.emqx.authentication.EmqxAuthenticationRequest)" class="member-name-link">create(EmqxAuthenticationRequest)</a> - Method in interface com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/EmqxDeviceConnectionRequestFactory.html" title="interface in com.sca4d.iot.emqx.authentication">EmqxDeviceConnectionRequestFactory</a></dt>
@@ -326,7 +334,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">维护单个应用实例的 MQTT 5 客户端、业务共享订阅、连接事件订阅和 QoS 1 发布。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html#%3Cinit%3E(com.sca4d.iot.emqx.config.EmqxProperties,com.sca4d.iot.emqx.transport.MqttMessageRouter,java.time.Clock,java.util.Collection,java.util.Collection,com.sca4d.iot.emqx.transport.MqttInboundFailureStore,com.sca4d.iot.emqx.connection.EmqxConnectionReconciler,com.sca4d.core.api.retry.RetryExecutor)" class="member-name-link">EmqxMqttRuntime(EmqxProperties, MqttMessageRouter, Clock, Collection&lt;MqttMessageObserver&gt;, Collection&lt;MqttMessageProcessingObserver&gt;, MqttInboundFailureStore, EmqxConnectionReconciler, RetryExecutor)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html#%3Cinit%3E(com.sca4d.iot.emqx.config.EmqxProperties,com.sca4d.iot.emqx.transport.MqttMessageRouter,java.time.Clock,java.util.Collection,java.util.Collection,java.util.Collection,com.sca4d.iot.emqx.transport.MqttInboundFailureStore,com.sca4d.iot.emqx.connection.EmqxConnectionReconciler,com.sca4d.core.api.retry.RetryExecutor)" class="member-name-link">EmqxMqttRuntime(EmqxProperties, MqttMessageRouter, Clock, Collection&lt;MqttMessageObserver&gt;, Collection&lt;MqttMessageProcessingObserver&gt;, Collection&lt;MqttConnectionEventObserver&gt;, MqttInboundFailureStore, EmqxConnectionReconciler, RetryExecutor)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></dt>
 <dd>
 <div class="block">创建使用唯一 clientId 且自动重连后重新订阅的 MQTT 运行时。</div>
 </dd>
@@ -563,6 +571,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建应用策略优先、协议 ACL 作为默认规则且使用当前 App 隔离名称的 MQTT 授权服务。</div>
 </dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">MqttConnectionEvent</a> - Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
+<dd>
+<div class="block">保存应用实例从 EMQX `$SYS` 共享订阅实际收到的 Client 连接或断开事件，不代表当前连接投影。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html#%3Cinit%3E(java.lang.String,java.lang.String,boolean,byte%5B%5D,java.time.Instant)" class="member-name-link">MqttConnectionEvent(String, String, boolean, byte[], Instant)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html" title="class in com.sca4d.iot.emqx.transport">MqttConnectionEvent</a></dt>
+<dd>
+<div class="block">创建不可变事件，复制原始 Payload；不校验 Topic 与连接标志是否一致。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEventObserver.html" class="type-name-link" title="interface in com.sca4d.iot.emqx.transport">MqttConnectionEventObserver</a> - Interface in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
+<dd>
+<div class="block">观察应用 MQTT Runtime 从 EMQX `$SYS` 共享订阅实际收到的 Client 连接和断开事件。</div>
+</dd>
 <dt><a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html" class="type-name-link" title="class in com.sca4d.iot.emqx.connection">MqttDeviceConnection</a> - Class in <a href="com/sca4d/iot/emqx/connection/package-summary.html">com.sca4d.iot.emqx.connection</a></dt>
 <dd>
 <div class="block">创建并读取 MQTT Client ID 形式的 Device 直接连接绑定。</div>
@@ -684,6 +704,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html#observedAt()" class="member-name-link">observedAt()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html" title="class in com.sca4d.iot.emqx.transport">MqttConnectionEvent</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessage.html#observedAt()" class="member-name-link">observedAt()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessage.html" title="class in com.sca4d.iot.emqx.transport">MqttMessage</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttInboundStatus.html#overloaded()" class="member-name-link">overloaded()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttInboundStatus.html" title="class in com.sca4d.iot.emqx.transport">MqttInboundStatus</a></dt>
@@ -696,6 +718,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/emqx/management/MqttPublication.html#payload()" class="member-name-link">payload()</a> - Method in class com.sca4d.iot.emqx.management.<a href="com/sca4d/iot/emqx/management/MqttPublication.html" title="class in com.sca4d.iot.emqx.management">MqttPublication</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/EncodedMqttMessage.html#payload()" class="member-name-link">payload()</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/EncodedMqttMessage.html" title="class in com.sca4d.iot.emqx.protocol">EncodedMqttMessage</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html#payload()" class="member-name-link">payload()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html" title="class in com.sca4d.iot.emqx.transport">MqttConnectionEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessage.html#payload()" class="member-name-link">payload()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessage.html" title="class in com.sca4d.iot.emqx.transport">MqttMessage</a></dt>
 <dd>&nbsp;</dd>
@@ -880,6 +904,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/emqx/management/MqttPublication.html#topic()" class="member-name-link">topic()</a> - Method in class com.sca4d.iot.emqx.management.<a href="com/sca4d/iot/emqx/management/MqttPublication.html" title="class in com.sca4d.iot.emqx.management">MqttPublication</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/EncodedMqttMessage.html#topic()" class="member-name-link">topic()</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/EncodedMqttMessage.html" title="class in com.sca4d.iot.emqx.protocol">EncodedMqttMessage</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html#topic()" class="member-name-link">topic()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttConnectionEvent.html" title="class in com.sca4d.iot.emqx.transport">MqttConnectionEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessage.html#topic()" class="member-name-link">topic()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessage.html" title="class in com.sca4d.iot.emqx.transport">MqttMessage</a></dt>
 <dd>&nbsp;</dd>

@@ -37,6 +37,7 @@ import com.sca4d.iot.emqx.protocol.MqttProtocolCatalog;
 import com.sca4d.iot.emqx.transport.EmqxMqttDeviceTransport;
 import com.sca4d.iot.emqx.transport.EmqxMqttRuntime;
 import com.sca4d.iot.emqx.transport.EmqxMqttTransport;
+import com.sca4d.iot.emqx.transport.MqttConnectionEventObserver;
 import com.sca4d.iot.emqx.transport.MqttInboundFailureStore;
 import com.sca4d.iot.emqx.transport.MqttMessageObserver;
 import com.sca4d.iot.emqx.transport.MqttMessageProcessingObserver;
@@ -113,6 +114,7 @@ public class EmqxAutoConfiguration {
             Clock clock,
             ObjectProvider<MqttMessageObserver> observers,
             ObjectProvider<MqttMessageProcessingObserver> processingObservers,
+            ObjectProvider<MqttConnectionEventObserver> connectionObservers,
             ObjectProvider<MqttInboundFailureStore> failureStore,
             EmqxConnectionReconciler connectionReconciler,
             ObjectProvider<RetryExecutor> retries) {
@@ -123,6 +125,7 @@ public class EmqxAutoConfiguration {
                 clock,
                 observers.orderedStream().toList(),
                 processingObservers.orderedStream().toList(),
+                connectionObservers.orderedStream().toList(),
                 failureStore.getIfAvailable(),
                 connectionReconciler,
                 retries.getIfAvailable(() -> {
